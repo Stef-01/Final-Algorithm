@@ -3,6 +3,8 @@ export const colors = {
   white: '#FFFFFF',
   purple: '#692F60',
   purpleText: '#763568',
+  /** The darker edge a purple button sits on (PressDepth). */
+  purpleLip: '#3F1A39',
   boost: '#7eaaa9',
   line: '#a9a9a9',
   // Secondary text. Darker than `line` so it meets WCAG AA (4.5:1) on white and the grey background.

@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ConversationStep } from '@/components/ConversationStep';
 import { Icon } from '@/components/Icon';
-import { Appear, PressScale } from '@/components/motion';
+import { Appear, PressDepth } from '@/components/motion';
 import { useGoals } from '@/features/care/goals';
 import { goalsDraft } from '@/features/care/plan';
 import { useSession } from '@/features/match/session';
@@ -23,14 +23,15 @@ export default function WhoAreYouLookingFor() {
       <View style={styles.grid}>
         {PROFESSION_INFO.map((p, i) => (
           <Appear key={p.id} index={i} style={styles.cell}>
-            <PressScale
+            <PressDepth
               onPress={p.available ? () => router.push(session.chooseProfession(p.id as ProfessionChoice, goalsDraft(p.id, goals))) : undefined}
               disabled={!p.available}
               accessibilityRole="button"
               accessibilityLabel={`${capitalised(p.one)}. ${p.for}${p.available ? '' : '. Not in the network yet'}`}
               accessibilityState={{ disabled: !p.available }}
+              lipColor={colors.chip}
+              depth={p.available ? 4 : 0}
               style={[styles.tile, !p.available && styles.tileOff]}
-              scaleTo={0.95}
             >
               <View style={styles.tileTop}>
                 <Icon name={p.icon} size={26} color={p.available ? colors.black : colors.muted} />
@@ -38,14 +39,14 @@ export default function WhoAreYouLookingFor() {
               </View>
               <Text style={[styles.name, !p.available && styles.off]}>{capitalised(p.one)}</Text>
               <Text style={styles.for}>{p.for}</Text>
-            </PressScale>
+            </PressDepth>
           </Appear>
         ))}
       </View>
       <Appear index={PROFESSION_INFO.length}>
-        <PressScale onPress={() => router.push(session.chooseProfession('either'))} accessibilityRole="button" style={styles.unsure} scaleTo={0.97}>
+        <PressDepth onPress={() => router.push(session.chooseProfession('either'))} accessibilityRole="button" style={styles.unsure} radius={150} lipColor={colors.black} depth={3} containerStyle={styles.unsureWrap}>
           <Text style={styles.unsureText}>Not sure yet</Text>
-        </PressScale>
+        </PressDepth>
       </Appear>
       <Pressable onPress={() => router.push('/discover')} accessibilityRole="button">
         <Text style={styles.demo}>Explore who does what</Text>
@@ -67,7 +68,8 @@ const styles = StyleSheet.create({
   off: { color: colors.muted },
   for: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted, marginTop: 2 },
   soon: { fontFamily: fonts.bold, fontSize: 11, color: colors.muted, borderWidth: 1, borderColor: colors.line, borderRadius: 20, paddingHorizontal: 7, paddingVertical: 1 },
-  unsure: { marginTop: 10, borderRadius: 150, borderWidth: 1, borderColor: colors.black, paddingVertical: 16, alignItems: 'center' },
+  unsureWrap: { marginTop: 10 },
+  unsure: { backgroundColor: colors.white, borderRadius: 150, borderWidth: 1, borderColor: colors.black, paddingVertical: 16, alignItems: 'center' },
   unsureText: { fontFamily: fonts.bold, fontSize: 16, color: colors.black },
   demo: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, marginTop: 8, paddingVertical: 12 },
 });

@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { colors, fonts } from '@/lib/theme';
+import { PressDepth } from './motion';
 
 type Props = {
   title: string;
@@ -17,9 +18,9 @@ export function EmptyStateCard({ title, body, action, secondary }: Props) {
       <Text style={styles.title} accessibilityRole="header">{title}</Text>
       <Text style={styles.body}>{body}</Text>
       {action ? (
-        <Pressable style={styles.button} accessibilityRole="button" onPress={action.onPress}>
+        <PressDepth style={styles.button} accessibilityRole="button" onPress={action.onPress} radius={30} lipColor={colors.purpleLip}>
           <Text style={styles.buttonText}>{action.label}</Text>
-        </Pressable>
+        </PressDepth>
       ) : null}
       {secondary ? (
         <Pressable onPress={secondary.onPress} accessibilityRole="button" hitSlop={8}>

@@ -5,10 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors, fonts } from '@/lib/theme';
 import { Icon } from './Icon';
-import { PressDepth } from './motion';
-
-/** The darker edge a purple button sits on. */
-const LIP = '#3F1A39';
+import { Appear, PressDepth } from './motion';
 
 // Grey scrim + white rounded card, the pattern the Android "dialog" activities used.
 export function Sheet({ children, closeButton }: { children: ReactNode; closeButton?: boolean }) {
@@ -16,7 +13,8 @@ export function Sheet({ children, closeButton }: { children: ReactNode; closeBut
   return (
     <View style={styles.scrim}>
       <Pressable style={StyleSheet.absoluteFill} onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Close" />
-      <View style={[styles.card, { marginTop: insets.top + 40 }]}>
+      {/* The card rises into place with a spring as the scrim fades in. */}
+      <Appear distance={90} style={[styles.card, { marginTop: insets.top + 40 }]}>
         <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 32 }]}>
           {children}
         </ScrollView>
@@ -25,7 +23,7 @@ export function Sheet({ children, closeButton }: { children: ReactNode; closeBut
             <Icon name="icClose" size={18} />
           </Pressable>
         ) : null}
-      </View>
+      </Appear>
     </View>
   );
 }
@@ -45,7 +43,7 @@ export function PillButton({
       accessibilityRole="button"
       radius={30}
       depth={variant === 'text' ? 0 : 4}
-      lipColor={variant === 'black' ? '#3A3A3A' : variant === 'text' ? 'transparent' : LIP}
+      lipColor={variant === 'black' ? '#3A3A3A' : variant === 'text' ? 'transparent' : colors.purpleLip}
       containerStyle={styles.pillWrap}
       style={[styles.pill, variant === 'black' && styles.pillBlack, variant === 'text' && styles.pillText]}
     >
