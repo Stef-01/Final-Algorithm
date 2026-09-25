@@ -65,7 +65,7 @@ export const demos: Demo[] = [
     id: 'psych-masking',
     profession: 'psychologist',
     title: 'Burnt out from masking',
-    shows: 'One follow-up, then confirming an uncertain priority before matching.',
+    shows: 'One follow-up question, then matches that put neurodiversity-affirming care first.',
     text: "I'm 26 and I think I've been masking my ADHD for years. I'm burnt out and anxious. I don't want someone who just hands me a list of strategies. I want to understand why things feel so hard.",
     signals: {
       profession: 'psychologist',
@@ -151,7 +151,7 @@ export const demos: Demo[] = [
     id: 'psych-bulk-billed',
     profession: 'psychologist',
     title: 'A bulk-billed psychologist',
-    shows: "An honest no-match: no psychologist in the network publishes bulk billing.",
+    shows: 'Bulk billing required: nobody publishes it, so those with an unpublished fee are listed with the cost flagged to check, and anyone with a known fee is left out.',
     text: 'I need a psychologist who bulk bills. I have ADHD and anxiety.',
     signals: {
       profession: 'psychologist',
