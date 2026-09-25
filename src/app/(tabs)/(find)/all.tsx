@@ -33,7 +33,7 @@ export default function AllMatches() {
           if (!c) return null;
           return (
             <View key={m.clinicianId}>
-              {i === 0 ? <Text style={styles.section}>{startsExplained ? 'I\u2019d start with' : 'Listed first'}</Text> : null}
+              {i === 0 ? <Text style={styles.section}>{startsExplained ? "I'd start with" : 'Listed first'}</Text> : null}
               {i === r.matches.length ? <Text style={styles.section}>Also a fit</Text> : null}
               <Appear index={i}>
                 <MatchRow clinician={c} match={m} rank={i + 1} onPress={() => router.push(`/clinician/${c.id}`)} />
