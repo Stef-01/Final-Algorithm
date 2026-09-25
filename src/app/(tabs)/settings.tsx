@@ -35,7 +35,7 @@ export default function Settings() {
         <ListGroup>
           <ListRow
             label="Start over"
-            value="Clears what you've told WATL on this device"
+            value="Clears your search"
             onPress={() => {
               session.reset();
               router.navigate('/');
@@ -45,14 +45,14 @@ export default function Settings() {
 
         <SectionTitle>Demo</SectionTitle>
         <ListGroup>
-          <ListRow label="Try a demo patient" value="Step through a scripted search" onPress={() => router.push('/demos')} />
+          <ListRow label="Try a demo patient" value="Scripted searches to try" onPress={() => router.push('/demos')} />
         </ListGroup>
 
         <SectionTitle>About</SectionTitle>
         <ListGroup>
           <ListRow
             label="How matching works"
-            value="WATL asks only what could change your matches, lists everyone who meets your requirements with the best fits first, and explains each one."
+            value="Best fits first, each with its reason."
           />
           <ListRow
             label="Reading what you write"
@@ -60,19 +60,17 @@ export default function Settings() {
               claude === null
                 ? 'Checking…'
                 : claude
-                  ? 'Claude reads your words to work out what matters to you. The ranking itself follows fixed rules and each clinician’s reviewed profile.'
-                  : 'Keyword matching on this device. Nothing you write leaves it.'
+                  ? 'Claude reads your words. Fixed rules do the ranking.'
+                  : 'On this device. Nothing you write leaves it.'
             }
           />
           <ListRow
             label="Where profiles come from"
-            value="GPs and psychologists in the ADHDme network. Reasons are drawn from each clinician's published profile."
+            value="The ADHDme network. Reasons quote their own profiles."
           />
           <ListRow
             label="Privacy"
-            value={`No account. What you tell WATL stays on this device for up to 24 hours so you can come back to it.${
-              claude ? ' To read it, your words are sent to Anthropic’s Claude API and not stored by WATL.' : ''
-            }`}
+            value={`No account. Your search stays on this device for 24 hours.${claude ? ' Claude (Anthropic) reads your words; WATL doesn’t store them.' : ''}`}
           />
           <ListRow label="Help and safety" onPress={() => router.push('/safety')} />
         </ListGroup>

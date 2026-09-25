@@ -222,7 +222,7 @@ describe('demo run-throughs', () => {
 describe('results headline', () => {
   it("doesn't claim to recommend when nothing the patient said picks anyone out", () => {
     expect(matchesHeadline(2, 'gp', 0)).toBe('These GPs meet what you asked for.');
-    expect(matchesSubline(2, 0)).toMatch(/^Nothing you've told me points to one over another yet/);
+    expect(matchesSubline(2, 0)).toBe('Nothing picks one out yet.');
     expect(matchesHeadline(3, 'psychologist', 2)).toBe("I found 3 psychologists I'd start with.");
     expect(matchesSubline(3, 1)).toBeNull();
     expect(matchesSubline(3, 3)).toBe('Each fits for slightly different reasons.');

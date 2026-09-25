@@ -74,7 +74,7 @@ export function matchesHeadline(count: number, p?: ProfessionChoice, explained =
 
 /** The line under the headline, or null. Never says "different reasons" when there aren't any. */
 export function matchesSubline(count: number, explained: number) {
-  if (explained === 0) return "Nothing you've told me points to one over another yet. Tell the assistant what matters to you and I'll rank them.";
+  if (explained === 0) return 'Nothing picks one out yet.';
   if (explained >= 2) return 'Each fits for slightly different reasons.';
   return null;
 }

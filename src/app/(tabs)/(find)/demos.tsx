@@ -23,8 +23,7 @@ export default function Demos() {
       <ScreenHeader title="Demo patients" back />
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.note}>
-          Each demo fills in what a patient might say. You&apos;ll see their words first, then step through the questions and
-          matches as they would. Starting one replaces your current search.
+          Fills in a patient&apos;s words. Replaces your current search.
         </Text>
         {GROUPS.map((g) => (
           <View key={g.title}>

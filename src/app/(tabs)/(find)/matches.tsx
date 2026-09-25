@@ -107,8 +107,8 @@ export default function Matches() {
           title="That's everyone I'd start with."
           body={
             more.length > 0
-              ? `${more.length} more ${more.length === 1 ? copyFor(state.profession).one : copyFor(state.profession).many} also meet what you asked for, ranked behind these.`
-              : "Save anyone you'd like to come back to. They'll be in the Saved tab."
+              ? `${more.length} more ${more.length === 1 ? copyFor(state.profession).one : copyFor(state.profession).many} fit, ranked behind these.`
+              : 'Anyone you save is in My care.'
           }
           action={more.length > 0 ? { label: `See all ${matches.length + more.length}`, onPress: () => router.push('/all') } : undefined}
           secondary={{ label: 'Start over', onPress: startOver }}

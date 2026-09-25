@@ -47,7 +47,7 @@ export default function Describe() {
     <ConversationStep
       icon="icText"
       title={copy.title}
-      note="Tell me what you're looking for. You don't need to know exactly what to ask for."
+      note="In your own words."
       onNext={submit}
       nextEnabled={ready && !reading}
       dots={1}
@@ -72,7 +72,7 @@ export default function Describe() {
         {reading ? 'Reading what you wrote…' : 'Takes about a minute'}
       </Text>
       {claude ? (
-        <Text style={styles.notice}>What you write is read by Claude (Anthropic) to find your matches. WATL doesn&apos;t store it.</Text>
+        <Text style={styles.notice}>Read by Claude (Anthropic). Not stored by WATL.</Text>
       ) : null}
     </ConversationStep>
   );
