@@ -1,14 +1,20 @@
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Stack, type ErrorBoundaryProps } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { AppError } from '@/components/AppError';
 import { AssistantButton } from '@/components/AssistantButton';
 import { VercelAnalytics } from '@/components/VercelAnalytics';
 import { SavedProvider } from '@/features/match/saved';
 import { SessionProvider } from '@/features/match/session';
 import { fontAssets } from '@/lib/theme';
+
+/** If any screen crashes: a way out instead of a blank app (see AppError). */
+export function ErrorBoundary(props: ErrorBoundaryProps) {
+  return <AppError {...props} />;
+}
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts(fontAssets);

@@ -25,6 +25,8 @@ export type Events = {
   /** The floating assistant: opened, and each message (whether a chip, and whether it changed the list). */
   assistant_opened: { hasResults: boolean };
   assistant_message: { chip: boolean; changed: boolean; claude?: boolean };
+  /** A screen crashed and the error screen showed (the error's type only). */
+  app_error: { kind: string };
 };
 
 export type EventName = keyof Events;
