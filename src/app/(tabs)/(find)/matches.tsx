@@ -12,7 +12,7 @@ import { getClinician } from '@/data/clinicians';
 import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
 import type { NoMatchAction } from '@/features/match/types';
-import { copyFor, matchesHeadline } from '@/lib/professions';
+import { copyFor, matchesHeadline, matchesSubline } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
 
 const ACTION_LABEL: Record<NoMatchAction, string> = {
@@ -92,6 +92,8 @@ export default function Matches() {
 
   const { matches, more } = result;
   const m = matches[state.index];
+  const explained = matches.filter((x) => x.reasons.length > 0).length;
+  const subline = matchesSubline(matches.length, explained);
 
   if (!m) {
     return (
@@ -120,8 +122,13 @@ export default function Matches() {
       <ScrollView key={state.index} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {state.index === 0 ? (
           <View style={styles.intro}>
-            <Text style={styles.introTitle}>{matchesHeadline(matches.length, state.profession)}</Text>
-            {matches.length > 1 ? <Text style={styles.introBody}>Each fits for slightly different reasons.</Text> : null}
+            <Text style={styles.introTitle}>{matchesHeadline(matches.length, state.profession, explained)}</Text>
+            {subline ? <Text style={styles.introBody}>{subline}</Text> : null}
+            {explained === 0 ? (
+              <Text style={styles.seeAll} onPress={() => router.push('/refine')} accessibilityRole="link">
+                Tell the assistant what matters
+              </Text>
+            ) : null}
             {more.length > 0 ? (
               <Text style={styles.seeAll} onPress={() => router.push('/all')} accessibilityRole="link">
                 See all {matches.length + more.length} who fit

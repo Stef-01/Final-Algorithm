@@ -28,11 +28,12 @@ export default function AllMatches() {
           reasons first.
         </Text>
         {all.map((m, i) => {
+          const startsExplained = r.matches.some((x) => x.reasons.length > 0);
           const c = getClinician(m.clinicianId);
           if (!c) return null;
           return (
             <View key={m.clinicianId}>
-              {i === 0 ? <Text style={styles.section}>I&apos;d start with</Text> : null}
+              {i === 0 ? <Text style={styles.section}>{startsExplained ? 'I\u2019d start with' : 'Listed first'}</Text> : null}
               {i === r.matches.length ? <Text style={styles.section}>Also a fit</Text> : null}
               <Appear index={i}>
                 <MatchRow clinician={c} match={m} rank={i + 1} onPress={() => router.push(`/clinician/${c.id}`)} />

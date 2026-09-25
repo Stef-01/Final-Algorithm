@@ -6,6 +6,7 @@ import { areaPhrase, copyProblems } from '@server/engine/explain';
 import { CONFIDENCE, DIMENSIONS, type Dimension } from '@server/engine/types';
 
 import { costLabel } from '@/components/ClinicianCards';
+import { matchesHeadline, matchesSubline } from '@/lib/professions';
 import { getClinician } from '@/data/clinicians';
 import { signalsFor } from '@/features/match/agent';
 import { demos } from '@/features/match/demos';
@@ -183,5 +184,23 @@ describe('demo run-throughs', () => {
 
   it('urgent symptom: pauses for safety first', () => {
     expect(core.runDemo('either-urgent').route).toBe('/safety');
+  });
+});
+
+describe('results headline', () => {
+  it("doesn't claim to recommend when nothing the patient said picks anyone out", () => {
+    expect(matchesHeadline(2, 'gp', 0)).toBe('These GPs meet what you asked for.');
+    expect(matchesSubline(2, 0)).toMatch(/^Nothing you've told me points to one over another yet/);
+    expect(matchesHeadline(3, 'psychologist', 2)).toBe("I found 3 psychologists I'd start with.");
+    expect(matchesSubline(3, 1)).toBeNull();
+    expect(matchesSubline(3, 3)).toBe('Each fits for slightly different reasons.');
+  });
+
+  it('a vague search gets the honest headline', () => {
+    const t = core.submitText(core.initialState('gp'), 'I need a GP');
+    const r = core.match(t.state).state.result;
+    if (r?.status !== 'matches') throw new Error('expected matches');
+    const explained = r.matches.filter((m) => m.reasons.length > 0).length;
+    expect(matchesHeadline(r.matches.length, 'gp', explained)).toMatch(/meet what you asked for/);
   });
 });
