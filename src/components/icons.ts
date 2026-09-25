@@ -59,6 +59,7 @@ export const icons = {
   icCost: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.8\"/><path d=\"M15 9.2c-.5-1.1-1.6-1.7-3-1.7c-1.7 0-2.9.9-2.9 2.2c0 3 6 1.6 6 4.6c0 1.3-1.3 2.2-3.1 2.2c-1.5 0-2.7-.7-3.1-1.8M12 6v1.5M12 16.5V18\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.8\"/></svg>",
   icVideo: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M3.5 7h11v10h-11z\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.8\"/><path d=\"M14.5 10.5l6-3.5v10l-6-3.5\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.8\"/></svg>",
   icClock: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.8\"/><path d=\"M12 7v5.5l3.5 2\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.8\"/></svg>",
+  icMic: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.8\"/><path d=\"M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.8\"/></svg>",
 } as const;
 
 export type IconName = keyof typeof icons;

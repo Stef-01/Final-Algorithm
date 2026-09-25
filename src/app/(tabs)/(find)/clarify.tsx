@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput } from 'react-native';
 
 import { ChoicePill, ConversationStep } from '@/components/ConversationStep';
+import { VoiceInput } from '@/components/VoiceInput';
 import { questionById } from '@/features/match/sessionCore';
 import { useSession } from '@/features/match/session';
 import { colors, fonts } from '@/lib/theme';
@@ -33,6 +34,8 @@ export default function Clarify() {
       nextEnabled={text.trim().length > 0}
     >
       {typing ? (
+        <>
+        <VoiceInput compact onTranscript={(said) => setText(text.trim() ? `${text.trim()} ${said}` : said)} />
         <TextInput
           value={text}
           onChangeText={setText}
@@ -43,6 +46,7 @@ export default function Clarify() {
           style={styles.input}
           accessibilityLabel="Your answer"
         />
+        </>
       ) : (
         <>
           {question.options.map((o) => (

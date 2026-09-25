@@ -4,7 +4,7 @@ WATL helps you find a GP or psychologist who fits you. Pick which you're looking
 
 This is a React Native (Expo Router) app, mobile-first on the web and deployed on Vercel. The build plan is in [`docs/PLAN.md`](docs/PLAN.md).
 
-> **Status: Phase 3 of the plan.** The matching engine runs in the app against the real GPs and psychologists in the ADHDme network, imported from their published profiles. Scripted demo patients show every path through it. Voice is Phase 4; the Claude agent that reads free text is the final stage (Phase 8). Until then, typed searches use a simple keyword reader.
+> **Status: Phase 3 of the plan.** The matching engine runs in the app against the real GPs and psychologists in the ADHDme network, imported from their published profiles. Scripted demo patients show every path through it. Voice input works where the browser supports it; the Claude agent that reads free text is the final stage (Phase 8). Until then, typed searches use a simple keyword reader.
 >
 > **Demo patients:** "Try a demo patient" on the first screen (or Settings → Try a demo patient). **Review tools:** Settings → Review screen states (`/dev/states`) opens any screen state directly; set `EXPO_PUBLIC_DEV_TOOLS=false` to hide it.
 
@@ -41,7 +41,7 @@ Three tabs: **Find**, **Saved** and **Settings**.
 | --- | --- | --- |
 | Who are you looking for? | `/` | The funnel: a GP, a psychologist, or not sure yet. Also "Try a demo patient" |
 | Demo patients | `/demos` | Scripted patients for each profession; each fills in their words, ready to run |
-| Open conversation | `/describe` | Describe what you need (text; voice arrives in Phase 4) |
+| Open conversation | `/describe` | Describe what you need by voice (where the browser supports it) or text |
 | Follow-up question | `/clarify?q=…` | Only questions whose answer could change the matches; tap an answer, or use your own words |
 | Preference confirmation | `/confirm` | Only when an uncertain guess would change the matches; tap a priority to remove it |
 | Matching | `/matching` | Moves on as soon as results are ready |

@@ -324,7 +324,7 @@ Each phase ends deployed on Vercel with CI green.
 | **1. UI with fixtures** ✅ done | All screens (§2) wired to a local fixture session: demo patient input (§52), one follow-up, 3 fixture clinicians rendered through `ClinicianCards` in the Discover layout, detail page, no-match, partial results, safety sheet. Text input only. | The PRD demo script runs end to end on Vercel with fixtures; every state reachable; a `/dev/states` page lists every state for review, standing in for the Figma frames in §51. During testing it's on in every build, including Vercel; `EXPO_PUBLIC_DEV_TOOLS=false` hides it. |
 | **2. Matching engine** ✅ done | `server/engine/*` + question bank + seed clinician JSON (10–15 fictional). Pure functions with unit tests. | Given hand-written `PatientSignals`, the engine returns the expected top 3, the question to ask, and when to stop; the explanation lints pass; the diversity, partial and empty rules pass. |
 | **3. Engine in the app, demo run-throughs, GPs + psychologists** ✅ done | The Phase 2 engine runs on the device against the real ADHDme GP and psychologist profiles (imported by `scripts/import-adhdme.py`). A funnel first screen (GP / psychologist / not sure), scripted demo patients for both professions, and a keyword extractor standing in for Claude. | Every demo runs end to end; typed searches use the real engine; only the chosen profession is matched; unpublished fees and availability stay unknown; CI green. |
-| **4. Voice** | `useSpeechToText` (web), listening state, editable transcript, fallback to text, transcription notice. | Works on iOS Safari and Android Chrome; hidden gracefully elsewhere; text flow unaffected. |
+| **4. Voice** ✅ done | `useSpeechToText` (web), listening state, editable transcript, fallback to text, transcription notice. | Works on iOS Safari and Android Chrome; hidden gracefully elsewhere; text flow unaffected. |
 | **5. Clinician pipeline** | Interview guide, `ingest-interview` and `review-clinician` scripts; at least 3 records produced through the pipeline (mock interviews are fine). | A transcript becomes an approved clinician record whose explanations cite real evidence. |
 | **6. Instrumentation + validation** | `track()` events, feedback sheet, feedback storage (Vercel KV or similar), user-testing script. | All 12 events visible in the dashboard (or PostHog); feedback stored; the testing script is ready. |
 | **7. Hardening** | Accessibility pass, performance budget, privacy review, safety copy reviewed by a clinical advisor. | WCAG AA checks pass; load under 2 s; the checklist in §9 is signed off. Ready for moderated user testing. |
@@ -343,6 +343,21 @@ Each phase ends deployed on Vercel with CI green.
 - **Constraint answer priors:** bulk-billed-only 20%, in-person-only 20%, weekend-only 10%. This keeps rare hard limits from crowding out preference questions (PRD §20), while still asking when a constraint would change the top 3.
 - **"Credible match"** means eligible, above the fit threshold *and* explainable with at least one evidence-backed reason. With too little information, neutral scores can clear the threshold, but nothing gets shown without a reason.
 - **Not wired to the app yet.** The app still uses the Phase 1 fixture agent. Phase 3 serves this engine through `/api/turn` and `/api/matches` and switches the client over, including portraits for the eight new seed clinicians.
+
+### Phase 4 notes (voice)
+
+- `src/features/voice/`: the browser's speech recogniser (Web Speech API), a `SpeechSession` that keeps a live transcript, and `useSpeechToText`.
+  - **Done** keeps the words, including the last ones the browser sends after stopping.
+  - **Cancel** discards them.
+  - Listening stops by itself after 6 s of silence or at 90 s.
+  - A blocked microphone gets a plain-language message.
+- `VoiceInput` sits on the describe screen and in "Explain in your own words". It shows:
+  - a prominent mic;
+  - a live transcript in plain text, with only Done and Cancel while listening;
+  - a pulse that is off under reduced motion;
+  - a notice that the browser's speech service does the transcription (D7).
+  - It renders nothing where the browser has no recogniser (e.g. Firefox, the native apps), so text stays first-class.
+- Native voice needs a speech module and a development build; it's left for later.
 
 ### Phase 3 notes (engine in the app)
 

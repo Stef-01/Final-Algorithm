@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { ConversationStep } from '@/components/ConversationStep';
+import { VoiceInput } from '@/components/VoiceInput';
 import { demoById } from '@/features/match/demos';
 import { useSession } from '@/features/match/session';
 import { copyFor } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
 
-// Screen 01 — open conversation. Voice arrives in a later phase; text is fully functional.
+// Screen 01 — open conversation: voice where the browser can transcribe, text always.
 export default function Describe() {
   const session = useSession();
   const { state } = session;
@@ -39,6 +40,7 @@ export default function Describe() {
           <Text style={styles.demoBody}>Tap the arrow to start, or edit the words to try your own.</Text>
         </View>
       ) : null}
+      <VoiceInput onTranscript={(said) => setText(text.trim() && draft !== null ? `${text.trim()} ${said}` : said)} />
       <TextInput
         value={text}
         onChangeText={setText}
