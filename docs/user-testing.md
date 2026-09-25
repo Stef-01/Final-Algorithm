@@ -16,6 +16,7 @@
 1. "You're looking for a [GP / psychologist] who's a good fit for you. Use this to find one." Stay quiet; note where they hesitate.
 2. When they reach the matches: "Take a look at who it suggested." Let them step through at their own pace.
 3. "Open the one you'd look at first." Then: "What would you do next?"
+4. "Say one of them isn't quite right for you. How would you change what it's showing?" See whether they find the sparkle button (the assistant), and whether its reply matches what they meant.
 
 Note: time from tapping the arrow on the describe screen to seeing the first match, the number of follow-up questions, whether they used voice, and anything they said out loud.
 
@@ -49,7 +50,9 @@ Events are Vercel Web Analytics custom events. Enable Web Analytics on the proje
 - `voice_started` / `voice_completed`: voice take-up.
 - `clinician_viewed`, `next_match_viewed`, `booking_clicked`: how people move through the matches.
 - `match_feedback_positive` / `match_feedback_negative`: per-match thumbs.
-- `match_rating`: the 1–5 credibility answer.
+- `match_rating`: the 1–5 credibility answer. With a feedback store connected, each rating (plus thumbs, match count, follow-ups and time to shortlist) is also in the Upstash list `watl:feedback`.
+- `assistant_opened` / `assistant_message`: how often people use the assistant, whether they tap a suggestion (`chip`), and whether it changed their list (`changed`).
+- `claude` on `matching_started` and `assistant_message`: whether Claude read the words (true) or the keyword matcher did.
 
 ## After each session
 
