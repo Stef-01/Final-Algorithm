@@ -15,10 +15,32 @@ import { PressScale, Pulse, useReducedMotion } from './motion';
 const SIZE = 56;
 const TAB_BAR = 58;
 /** Screens where it would cover something, or where a conversation makes no sense. */
-const HIDDEN = [/^\/refine/, /^\/matching/, /^\/safety/, /^\/book\//, /^\/dev\//];
+const HIDDEN = [/^\/refine/, /^\/matching/, /^\/safety/, /^\/book\//, /^\/dev\//, /^\/clinician\//];
 /** Screens with the round Next button bottom-right (ConversationStep). */
 const HAS_NEXT = ['/', '/describe', '/clarify', '/confirm'];
 
+/** The assistant's round sparkle button on its own, for screens with a footer (the profile page). */
+export function AssistantMark() {
+  const { state } = useSession();
+  const hasResults = state.result?.status === 'matches';
+  return (
+    <PressScale
+      onPress={() => {
+        track('assistant_opened', { hasResults });
+        router.push('/refine');
+      }}
+      accessibilityRole="button"
+      accessibilityLabel={hasResults ? 'Refine your matches with the assistant' : 'Ask the assistant'}
+      style={[styles.button, styles.flat]}
+      scaleTo={0.9}
+    >
+      <Icon name="icSparkle" size={24} color={colors.white} />
+    </PressScale>
+  );
+}
+
+// Floating on every main screen except the profile page, where it sits in the footer instead
+// (floating there, it crowded the photo card's save button).
 export function AssistantButton() {
   const path = usePathname();
   const insets = useSafeAreaInsets();
@@ -35,8 +57,7 @@ export function AssistantButton() {
 
   if (hidden) return null;
 
-  const onProfile = path.startsWith('/clinician/');
-  const bottom = onProfile ? insets.bottom + 150 : insets.bottom + TAB_BAR + (HAS_NEXT.includes(path) ? 112 : 20);
+  const bottom = insets.bottom + TAB_BAR + (HAS_NEXT.includes(path) ? 112 : 20);
   const hasResults = state.result?.status === 'matches';
   // Draw the eye once results arrive and the patient hasn't used it yet.
   const invite = hasResults && !(state.chat?.length) && path === '/matches';
@@ -64,6 +85,7 @@ export function AssistantButton() {
 
 const styles = StyleSheet.create({
   wrap: { position: 'absolute', right: 20 },
+  flat: { shadowOpacity: 0, elevation: 0 },
   button: {
     width: SIZE,
     height: SIZE,

@@ -42,6 +42,6 @@ export default function Demos() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  content: { paddingBottom: 48 },
+  content: { paddingBottom: 100 }, // clear of the floating assistant button
   note: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 20, color: colors.black, margin: 20, marginBottom: 0 },
 });

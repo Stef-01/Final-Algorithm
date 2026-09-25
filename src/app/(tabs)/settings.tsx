@@ -85,5 +85,5 @@ export default function Settings() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  content: { paddingBottom: 48 },
+  content: { paddingBottom: 100 }, // clear of the floating assistant button
 });

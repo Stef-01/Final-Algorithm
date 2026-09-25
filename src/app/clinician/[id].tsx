@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AssistantMark } from '@/components/AssistantButton';
 import { ChipsCard, NoteCard, PhotoCard, PromptCard, TagsCard, TextCard } from '@/components/cards';
 import { caveatLines, costLabel, noReasonLine, placeLine, practicalChips, reasonKicker } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
@@ -103,7 +104,12 @@ export default function ClinicianDetail() {
       </ScrollView>
 
       <View style={[styles.footer, { paddingBottom: 12 + insets.bottom }]}>
-        <PillButton label={`Book with ${c.firstName}`} onPress={() => router.push(`/book/${c.id}`)} />
+        <View style={styles.footerRow}>
+          <AssistantMark />
+          <View style={styles.book}>
+            <PillButton label={`Book with ${c.firstName}`} onPress={() => router.push(`/book/${c.id}`)} />
+          </View>
+        </View>
         {hasNext ? (
           <Pressable
             onPress={() => {
@@ -124,6 +130,8 @@ export default function ClinicianDetail() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   content: {},
+  footerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  book: { flex: 1, marginTop: -8 },
   footer: {
     position: 'absolute',
     left: 0,
