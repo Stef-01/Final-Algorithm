@@ -136,8 +136,8 @@ export function reasonsFor(c: ClinicianRecord, s: PatientSignals, max = MAX_REAS
     const e = c.expertise.find((x) => x.area.toLowerCase() === need.area.toLowerCase())!;
     const ev = approvedEvidence(c, e.evidenceIds);
     if (!ev) continue;
-    if (!need.quote && !AREA_SIGNAL[need.area]) plainAreas.set(ev.patientFacing, [...(plainAreas.get(ev.patientFacing) ?? []), need.area]);
-    const signal = need.quote ? saidLine(need.quote) : needLine(need.area);
+    if (!need.quote && !need.goal && !AREA_SIGNAL[need.area]) plainAreas.set(ev.patientFacing, [...(plainAreas.get(ev.patientFacing) ?? []), need.area]);
+    const signal = need.goal ? `Your goal: ${need.goal.charAt(0).toLowerCase()}${need.goal.slice(1)}.` : need.quote ? saidLine(need.quote) : needLine(need.area);
     candidates.push({ signal, evidenceId: ev.id, evidence: ev.patientFacing, dimension: 'expertise', weight: 0.8 * CONFIDENCE[need.confidence] });
   }
 

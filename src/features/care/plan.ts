@@ -6,20 +6,28 @@ import type { IconName } from '@/components/icons';
 // WATL doesn't see anyone's calendar or the practices' availability: the plan suggests when to
 // book, and "Add to calendar" makes a reminder to do it.
 
-export type Goal = { id: string; label: string; icon: IconName; /** Who tends to help, best first. */ professions: (Profession | 'dietitian')[] };
+export type Goal = {
+  id: string;
+  label: string;
+  icon: IconName;
+  /** Who tends to help, best first. */
+  professions: (Profession | 'dietitian')[];
+  /** Areas a goal quietly adds to a search, at low confidence, so it tilts the ranking. */
+  areas?: string[];
+};
 
 export const GOALS: Goal[] = [
-  { id: 'assessed', label: 'Get assessed', icon: 'icQuestion', professions: ['gp', 'psychologist'] },
-  { id: 'organised', label: 'Get organised', icon: 'icProCoach', professions: ['adhd_coach', 'occupational_therapist'] },
-  { id: 'focus', label: 'Focus at work', icon: 'icLightningBoltBlack', professions: ['adhd_coach', 'psychologist'] },
+  { id: 'assessed', label: 'Get assessed', icon: 'icQuestion', professions: ['gp', 'psychologist'], areas: ['ADHD assessment'] },
+  { id: 'organised', label: 'Get organised', icon: 'icProCoach', professions: ['adhd_coach', 'occupational_therapist'], areas: ['Executive functioning'] },
+  { id: 'focus', label: 'Focus at work', icon: 'icLightningBoltBlack', professions: ['adhd_coach', 'psychologist'], areas: ['Executive functioning', 'Career and performance'] },
   { id: 'medication', label: 'Review medication', icon: 'icProGp', professions: ['gp'] },
-  { id: 'stress', label: 'Manage stress', icon: 'icProPsych', professions: ['psychologist', 'adhd_coach'] },
+  { id: 'stress', label: 'Manage stress', icon: 'icProPsych', professions: ['psychologist', 'adhd_coach'], areas: ['Stress'] },
   { id: 'understand', label: 'Understand myself', icon: 'icProPsych', professions: ['psychologist'] },
-  { id: 'sleep', label: 'Sleep better', icon: 'icClock', professions: ['gp', 'psychologist'] },
-  { id: 'move', label: 'Move more', icon: 'icProExercise', professions: ['exercise_physiologist', 'physiotherapist'] },
-  { id: 'pain', label: 'Less pain', icon: 'icProPhysio', professions: ['physiotherapist', 'exercise_physiologist'] },
+  { id: 'sleep', label: 'Sleep better', icon: 'icClock', professions: ['gp', 'psychologist'], areas: ['Sleep'] },
+  { id: 'move', label: 'Move more', icon: 'icProExercise', professions: ['exercise_physiologist', 'physiotherapist'], areas: ['Movement and exercise'] },
+  { id: 'pain', label: 'Less pain', icon: 'icProPhysio', professions: ['physiotherapist', 'exercise_physiologist'], areas: ['Pain and injury', 'Chronic pain'] },
   { id: 'eat', label: 'Eat well', icon: 'icProDiet', professions: ['dietitian'] },
-  { id: 'child', label: 'Support my child', icon: 'icKids', professions: ['occupational_therapist', 'psychologist'] },
+  { id: 'child', label: 'Support my child', icon: 'icKids', professions: ['occupational_therapist', 'psychologist'], areas: ['Children', 'Parenting support'] },
 ];
 
 /** Care usually starts with a GP (assessment, referrals), then therapy, coaching and allied health. */

@@ -67,7 +67,8 @@ export type HardConstraints = {
 export type PatientSignals = {
   /** Which kind of professional the patient is looking for; unset = either. */
   profession?: Profession;
-  clinicalNeeds: { area: string; confidence: Confidence; quote?: string }[];
+  /** `goal`: set when the need comes from a goal in Profile rather than something said. */
+  clinicalNeeds: { area: string; confidence: Confidence; quote?: string; goal?: string }[];
   preferences: Partial<Record<Dimension, Preference>>;
   constraints: HardConstraints;
   complexity?: 'single' | 'multiple' | 'complex';

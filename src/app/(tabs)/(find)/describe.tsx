@@ -6,6 +6,7 @@ import { ConversationStep } from '@/components/ConversationStep';
 import { VoiceInput } from '@/components/VoiceInput';
 import { demoById } from '@/features/match/demos';
 import { claudeEnabled, extractRemote } from '@/features/match/remoteExtract';
+import { useGoals } from '@/features/care/goals';
 import { useSession } from '@/features/match/session';
 import { copyFor } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
@@ -13,6 +14,7 @@ import { colors, fonts } from '@/lib/theme';
 // Screen 01 — open conversation: voice where the browser can transcribe, text always.
 export default function Describe() {
   const session = useSession();
+  const { goals } = useGoals();
   const { state } = session;
   const copy = copyFor(state.profession);
   const demo = state.input.demoId ? demoById(state.input.demoId) : undefined;
@@ -38,7 +40,7 @@ export default function Describe() {
     setReading(true);
     const extracted = scripted ? null : await extractRemote(text.trim(), state.profession === 'either' ? undefined : state.profession);
     setReading(false);
-    router.push(session.submitText(text, extracted));
+    router.push(session.submitText(text, extracted, goals));
   };
 
   return (

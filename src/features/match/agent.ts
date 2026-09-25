@@ -5,6 +5,7 @@ import type { Extraction } from '@server/claude/types';
 import type { Dimension, PatientSignals, Profession } from '@server/engine/types';
 import { applyAnswer, NOT_SURE, questionById, type BankQuestion } from '@server/questions';
 
+import { GOALS } from '@/features/care/plan';
 import { copyFor } from '@/lib/professions';
 
 import { demoById } from './demos';
@@ -36,6 +37,8 @@ export type SessionInput = {
   refinements?: string[];
   /** Claude's reading of the opening description (Phase 8); absent = keyword extractor. */
   extracted?: Extraction;
+  /** Goals from Profile at the time of the search (ids). They add low-confidence needs. */
+  goals?: string[];
   /** Claude's reading of each refinement, parallel to `refinements` (null = keyword extractor). */
   refinementExtracts?: (Extraction | null)[];
 };
@@ -62,6 +65,12 @@ export function signalsFor(input: SessionInput): PatientSignals {
   (input.refinements ?? []).forEach((r, i) => {
     s = applyRefinement(s, r, input.refinementExtracts?.[i] ?? undefined);
   });
+  // Goals tilt the ranking a little, never outweighing what was said.
+  for (const g of GOALS.filter((x) => input.goals?.includes(x.id))) {
+    for (const area of g.areas ?? []) {
+      if (!s.clinicalNeeds.some((n) => n.area === area)) s.clinicalNeeds = [...s.clinicalNeeds, { area, confidence: 'low', goal: g.label }];
+    }
+  }
   // Loosened on the no-match screen: applied last, so they win over anything said before.
   if (input.anyCost) s.constraints = { ...s.constraints, maxGap: null };
   if (input.anyGender) s.constraints = { ...s.constraints, clinicianGender: undefined };

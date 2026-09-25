@@ -93,3 +93,25 @@ describe('goals', () => {
     expect(await screen.findByLabelText('Add an ADHD coach')).toBeOnTheScreen();
   });
 });
+
+describe('goals shape a search', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const core = require('@/features/match/sessionCore') as typeof import('@/features/match/sessionCore');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { signalsFor } = require('@/features/match/agent') as typeof import('@/features/match/agent');
+
+  it('a goal adds a low-confidence need, and the reason says it came from the goal', () => {
+    const t = core.submitText(core.chooseProfession(core.initialState(), 'adhd_coach').state, 'I need some help', null, ['organised']);
+    const need = signalsFor(t.state.input).clinicalNeeds.find((n) => n.area === 'Executive functioning');
+    expect(need).toMatchObject({ confidence: 'low', goal: 'Get organised' });
+    const r = core.match(t.state).state.result;
+    if (r?.status !== 'matches') throw new Error('expected matches');
+    expect(r.matches[0].reasons[0].signal).toBe('Your goal: get organised.');
+  });
+
+  it("doesn't add what the patient already said, and demos ignore goals", () => {
+    const said = core.submitText(core.chooseProfession(core.initialState(), 'adhd_coach').state, 'I procrastinate and cannot get organised', null, ['organised']);
+    expect(signalsFor(said.state.input).clinicalNeeds.filter((n) => n.area === 'Executive functioning')).toHaveLength(1);
+    expect(signalsFor(said.state.input).clinicalNeeds.find((n) => n.area === 'Executive functioning')!.goal).toBeUndefined();
+  });
+});

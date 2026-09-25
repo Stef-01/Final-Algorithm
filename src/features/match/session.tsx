@@ -19,7 +19,7 @@ type Session = {
   loaded: boolean;
   chooseProfession: (p: core.ProfessionChoice) => string;
   startDemo: (demoId: string) => string;
-  submitText: (text: string, extracted?: Extraction | null) => string;
+  submitText: (text: string, extracted?: Extraction | null, goals?: string[]) => string;
   answer: (questionId: string, value: string) => string;
   confirmPriorities: (removed: string[]) => string;
   acknowledgeSafety: () => string;
@@ -83,8 +83,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       loaded,
       chooseProfession: (p) => route(core.chooseProfession(current.current, p)),
       startDemo: (id) => route(core.startDemo(current.current, id)),
-      submitText: (text, extracted) => {
-        const t = core.submitText(current.current, text, extracted);
+      submitText: (text, extracted, goals) => {
+        const t = core.submitText(current.current, text, extracted, goals);
         track('text_submitted', { words: wordCount(text) });
         track('matching_started', { profession: t.state.profession ?? 'either', demo: !!t.state.input.demoId, claude: !!extracted });
         return route(t);

@@ -125,13 +125,13 @@ export function startDemo(_state: SessionState, demoId: string): Transition {
 }
 
 /** The patient's opening description. Editing a demo's words turns it into an ordinary search. */
-export function submitText(state: SessionState, text: string, extracted?: Extraction | null): Transition {
+export function submitText(state: SessionState, text: string, extracted?: Extraction | null, goals: string[] = []): Transition {
   const t = text.trim();
   const demo = state.input.demoId ? demoById(state.input.demoId) : undefined;
   const demoId = demo && demo.text === t ? demo.id : undefined;
   const s: SessionState = {
     ...initialState(state.profession),
-    input: { ...emptyInput(state.profession, demoId), texts: [t], extracted: demoId ? undefined : (extracted ?? undefined) },
+    input: { ...emptyInput(state.profession, demoId), texts: [t], extracted: demoId ? undefined : (extracted ?? undefined), goals: demoId ? [] : goals },
     startedAt: Date.now(),
   };
   return apply(s, nextStep(s.input));
