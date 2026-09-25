@@ -24,6 +24,39 @@ function relaxations(t: string): Partial<PatientSignals['constraints']> & { drop
   return out;
 }
 
+// Questions only a clinician should answer: medication, doses, diagnosis, "is this normal". The
+// assistant says so and offers to find someone, rather than guessing or ignoring the question.
+const ADVICE = [
+  /\bshould i (take|stop|start|increase|up|double|lower|reduce|change|switch|come off|try|be worried|worry|go to)\b/,
+  /\b(dose|dosage|dosing|\d+ ?mg|milligrams?)\b/,
+  /\bwhat (medication|medicine|meds|drug|dose|treatment|supplement)s?\b/,
+  /\b(is|are) (it|this|that|these|my)( \w+){0,2} (normal|safe|serious|dangerous|ok to|okay to)\b/,
+  /\bif (this|it|that) (is|means|could be) (adhd|autism|depression|anxiety|bipolar|ocd|ptsd)\b/,
+  /\b(do i|could i|might i) (have|be) (adhd|autism|autistic|anxiety|depression|depressed|bipolar|ocd|ptsd|\w+ disorder)\b/,
+  /\bam i (autistic|depressed|bipolar|adhd)\b/,
+  /\bside[- ]effects?\b|\binteract(ion)?s? with\b|\bwithdrawal\b/,
+  /\bhow (do|can|should) i (treat|cure|fix|manage|stop) (my|this|it)\b/,
+  /\bdiagnose me\b|\bwhat('?s| is) wrong with me\b/,
+  /\b(prescribe|recommend (a |an |some )?(medication|medicine|meds|drug|dose|supplement))/,
+];
+
+/** A question for a clinician rather than a change to the search. */
+export const isAdviceRequest = (text: string) => ADVICE.some((re) => re.test(text.toLowerCase()));
+
+/**
+ * What's left of a message once its medical questions are taken out ("Should I up my dose? Also
+ * online only" → "Also online only"). In a medical question a condition is the topic, not a request
+ * to search for it.
+ */
+export const withoutAdvice = (text: string) =>
+  (text.match(/[^.?!:]+[.?!:]*/g) ?? [])
+    .filter((sentence) => !sentence.trim().endsWith('?') && !isAdviceRequest(sentence))
+    .join(' ')
+    .trim();
+
+export const ADVICE_REPLY =
+  "I can't give medical advice, but a clinician can talk that through with you properly. I can help you find one who fits — tell me what matters to you, or pick a suggestion below.";
+
 /** "Actually, a GP instead" and similar. */
 export function professionSwitch(text: string): Profession | undefined {
   const t = text.toLowerCase();

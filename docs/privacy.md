@@ -28,7 +28,7 @@ What WATL does with what a patient tells it, as the code stands. Written for a r
 ## Open
 
 1. **Anthropic data retention.** Confirm the organisation's API data-retention settings (and whether zero data retention is needed) before real patients use it. Health information is sensitive under the Australian Privacy Act (APP 3, APP 11).
-2. **Consent wording.** Settings mentions Claude, but the describe screen doesn't. A short line there ("Your words are read by Claude to find matches") may be needed, depending on legal advice.
+2. **Consent wording.** When Claude is on, the describe screen and Settings both say that what patients write is read by Claude (Anthropic) and not stored by WATL. Whether that notice is enough, or explicit consent is needed, depends on legal advice.
 3. **Voice.** Browser transcription sends audio to the browser vendor. Decision D7 accepted this for the prototype, with a notice on screen. A WATL-controlled service is needed before launch.
 4. **Real clinicians.** Profiles come from the ADHDme network's published pages. Their consent to being matched and quoted in WATL still needs confirming.
 5. **Feedback storage.** Ratings and thumbs currently go only to analytics (as numbers). If `/api/feedback` stores them server-side later, it needs its own retention rule.

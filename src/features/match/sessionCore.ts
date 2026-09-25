@@ -3,7 +3,9 @@ import { bankQuestion, nextStep, normaliseAnswer, priorityLabel, runMatching, si
 import type { Extraction } from '@server/claude/types';
 
 import { copyFor } from '@/lib/professions';
-import { describeChange, listPhrase, professionSwitch, SUGGESTION_TEXT, understood, type ChatTurn } from './refine';
+
+import { isUrgent } from './extract';
+import { ADVICE_REPLY, describeChange, isAdviceRequest, withoutAdvice, listPhrase, professionSwitch, SUGGESTION_TEXT, understood, type ChatTurn } from './refine';
 import { demoById, demos } from './demos';
 import type { AgentStep, Match, MatchResult, NoMatchAction, Priority, Profession, Question } from './types';
 
@@ -198,18 +200,27 @@ export function refine(state: SessionState, message: string, extracted?: Extract
   const words = SUGGESTION_TEXT[text] ?? text;
   const you: ChatTurn = { from: 'you', text };
 
+  const advice = isAdviceRequest(words);
   if (!state.result) {
+    // A medical question isn't a description of who they're looking for: answer it honestly, keep waiting.
+    if (advice && !isUrgent(words)) return { state: say(state, you, { from: 'agent', text: ADVICE_REPLY }), route: '/refine' };
     const t = submitText({ ...state, input: { ...state.input, demoId: undefined } }, words, extracted);
     const reply: ChatTurn = { from: 'agent', text: 'Thanks — let me find people who fit that.' };
     return { state: say(t.state, ...(state.chat ?? []), you, reply), route: t.route };
   }
 
   const switchTo = professionSwitch(words);
+  // In a medical question, a condition is the topic ("what drug is best for depression?"), not a
+  // request to search for it. Only explicit changes alongside it ("…also online only") count.
+  const refinement = advice ? withoutAdvice(words) : words;
+  if (advice && !refinement) return { state: say(state, you, { from: 'agent', text: ADVICE_REPLY }), route: '/refine' };
   const input: SessionInput = {
     ...state.input,
     profession: switchTo ?? state.input.profession,
-    refinements: [...(state.input.refinements ?? []), words],
-    refinementExtracts: [...(state.input.refinementExtracts ?? state.input.refinements?.map(() => null) ?? []), extracted ?? null],
+    refinements: [...(state.input.refinements ?? []), refinement],
+    // Claude read the whole message, question included, so for a medical question use the keyword
+    // reading of what's left instead.
+    refinementExtracts: [...(state.input.refinementExtracts ?? state.input.refinements?.map(() => null) ?? []), advice ? null : (extracted ?? null)],
     safetyAcknowledged: state.input.safetyAcknowledged,
   };
   const before = signalsFor(state.input);
@@ -221,7 +232,11 @@ export function refine(state: SessionState, message: string, extracted?: Extract
 
   const changes = describeChange(before, after, priorityLabel);
   const switched = switchTo && switchTo !== state.input.profession;
+  if (advice && changes.length === 0 && !switched) {
+    return { state: say(state, you, { from: 'agent', text: ADVICE_REPLY }), route: '/refine' };
+  }
   const claudeRead =
+    !advice &&
     !!extracted &&
     (extracted.signals.clinicalNeeds.length > 0 || Object.keys(extracted.signals.preferences).length > 0 || Object.keys(extracted.signals.constraints).length > 0);
   if (changes.length === 0 && !switched && (understood(words, priorityLabel) || switchTo || claudeRead)) {
@@ -247,7 +262,7 @@ export function refine(state: SessionState, message: string, extracted?: Extract
   const { one, many } = copyFor(profession);
   const reply: ChatTurn = {
     from: 'agent',
-    text: `Done — now ${what}. ${n} ${n === 1 ? one : many} fit, and ${firstName(result.matches[0].clinicianId)} is first.`,
+    text: `${advice ? "I can't give medical advice — a clinician can help with that part. " : ''}Done — now ${what}. ${n} ${n === 1 ? one : many} fit, and ${firstName(result.matches[0].clinicianId)} is first.`,
     action: 'see_matches',
   };
   return { state: say({ ...state, profession, input, result, index: 0 }, you, reply), route: '/refine' };

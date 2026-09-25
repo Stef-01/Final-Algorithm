@@ -1,11 +1,11 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { ConversationStep } from '@/components/ConversationStep';
 import { VoiceInput } from '@/components/VoiceInput';
 import { demoById } from '@/features/match/demos';
-import { extractRemote } from '@/features/match/remoteExtract';
+import { claudeEnabled, extractRemote } from '@/features/match/remoteExtract';
 import { useSession } from '@/features/match/session';
 import { copyFor } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
@@ -23,6 +23,14 @@ export default function Describe() {
   const ready = text.trim().length > 0;
 
   const [reading, setReading] = useState(false);
+  const [claude, setClaude] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    void claudeEnabled().then((on) => alive && setClaude(on));
+    return () => {
+      alive = false;
+    };
+  }, []);
   const submit = async () => {
     if (!ready || reading) return;
     // Demo patients have scripted signals; everyone else is read by Claude when it's switched on.
@@ -61,6 +69,9 @@ export default function Describe() {
       <Text style={styles.hint} accessibilityLiveRegion="polite">
         {reading ? 'Reading what you wrote…' : 'Takes about a minute'}
       </Text>
+      {claude ? (
+        <Text style={styles.notice}>What you write is read by Claude (Anthropic) to find your matches. WATL doesn&apos;t store it.</Text>
+      ) : null}
     </ConversationStep>
   );
 }
@@ -78,6 +89,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   hint: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, marginTop: 12 },
+  notice: { fontFamily: fonts.regular, fontSize: 12, lineHeight: 17, color: colors.muted, marginTop: 8 },
   demoNote: { backgroundColor: colors.background, borderRadius: 10, padding: 14, marginBottom: 16 },
   demoLabel: { fontFamily: fonts.bold, fontSize: 14, color: colors.purpleText },
   demoBody: { fontFamily: fonts.regular, fontSize: 14, color: colors.black, marginTop: 4 },
