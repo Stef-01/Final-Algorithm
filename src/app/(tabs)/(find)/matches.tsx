@@ -17,6 +17,7 @@ import { PillButton } from '@/components/Sheet';
 import { getClinician } from '@/data/clinicians';
 import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
+import { deckOf } from '@/features/match/sessionCore';
 import type { NoMatchAction } from '@/features/match/types';
 import { copyFor, matchesHeadline, matchesSubline } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
@@ -98,7 +99,10 @@ export default function Matches() {
   }
 
   const { matches, more } = result;
-  const m = matches[state.index];
+  // The whole list, best first: the top matches, then everyone else who fits.
+  const deckList = deckOf(state);
+  const m = deckList[state.index];
+  const also = state.index >= matches.length;
   const explained = matches.filter((x) => x.reasons.length > 0).length;
   const subline = matchesSubline(matches.length, explained);
 
@@ -106,13 +110,9 @@ export default function Matches() {
     return (
       <Shell title="Your matches">
         <EmptyStateCard
-          title="That's everyone I'd start with."
-          body={
-            more.length > 0
-              ? `${more.length} more ${more.length === 1 ? copyFor(state.profession).one : copyFor(state.profession).many} fit, ranked behind these.`
-              : 'Anyone you save is in My care.'
-          }
-          action={more.length > 0 ? { label: `See all ${matches.length + more.length}`, onPress: () => router.push('/all') } : undefined}
+          title="That's everyone who fits."
+          body="Anyone you liked is in My care."
+          action={deckList.length > 1 ? { label: `See all ${deckList.length}`, onPress: () => router.push('/all') } : undefined}
           secondary={{ label: 'Start over', onPress: startOver }}
         />
         <AlsoCouldHelp />
@@ -136,10 +136,16 @@ export default function Matches() {
       <Swipeable
         key={state.index}
         ref={deck}
-        onLeft={session.nextMatch}
+        // Left is no; right is yes: like them, and go straight to booking.
+        onLeft={() => {
+          session.thumb(m.clinicianId, 'down');
+          session.nextMatch();
+        }}
         onRight={() => {
           if (!isSaved(m.clinicianId)) toggle(m);
+          session.thumb(m.clinicianId, 'up');
           session.nextMatch();
+          router.push(`/book/${m.clinicianId}`);
         }}
       >
         {/* The next match slides in from where the last one went. */}
@@ -162,7 +168,14 @@ export default function Matches() {
               </View>
             ) : (
               <View style={styles.position}>
-                <ProgressDots count={matches.length} index={state.index} label={`Match ${state.index + 1} of ${matches.length}`} />
+                {deckList.length <= 15 ? (
+                  <ProgressDots count={deckList.length} index={state.index} label={`Match ${state.index + 1} of ${deckList.length}`} />
+                ) : (
+                  <Text style={styles.count}>
+                    {state.index + 1} / {deckList.length}
+                  </Text>
+                )}
+                {also ? <Text style={styles.also}>Also a fit</Text> : null}
               </View>
             )}
             {state.index === 0 ? (
@@ -189,10 +202,18 @@ export default function Matches() {
       <Pressable
         onPress={() => deck.current?.fling(-1)}
         accessibilityRole="button"
-        accessibilityLabel="Next match"
+        accessibilityLabel="Not for me"
         style={styles.next}
       >
         <Icon name="icDecline" size={24} />
+      </Pressable>
+      <Pressable
+        onPress={() => deck.current?.fling(1)}
+        accessibilityRole="button"
+        accessibilityLabel={`Yes: book ${clinician.firstName}`}
+        style={[styles.next, styles.yes]}
+      >
+        <Icon name="icCheck" size={26} color={colors.white} />
       </Pressable>
     </View>
   );
@@ -218,6 +239,9 @@ const styles = StyleSheet.create({
   introBody: { fontFamily: fonts.regular, fontSize: 15, color: colors.black, marginTop: 6 },
   seeAll: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, marginTop: 2, paddingVertical: 14 },
   position: { marginTop: 16, marginHorizontal: 27 },
+  count: { fontFamily: fonts.medium, fontSize: 14, color: colors.muted },
+  also: { fontFamily: fonts.bold, fontSize: 13, color: colors.purpleText, marginTop: 6 },
+  yes: { left: undefined, right: 20, backgroundColor: colors.purple },
   view: { marginHorizontal: 12, marginTop: 24 },
   next: {
     position: 'absolute',

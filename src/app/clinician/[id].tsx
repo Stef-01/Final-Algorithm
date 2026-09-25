@@ -13,7 +13,7 @@ import { PillButton } from '@/components/Sheet';
 import { getClinician } from '@/data/clinicians';
 import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
-import { findMatch } from '@/features/match/sessionCore';
+import { deckOf, findMatch } from '@/features/match/sessionCore';
 import { track } from '@/lib/analytics';
 import { colors, fonts } from '@/lib/theme';
 
@@ -25,9 +25,8 @@ export default function ClinicianDetail() {
   const { saved, isSaved, toggle } = useSaved();
   const insets = useSafeAreaInsets();
   const c = getClinician(id);
-  const r0 = session.state.result;
   // Why they fit comes only from the current search; Saved keeps the label, not the reasons.
-  const match = findMatch(session.state, id) ?? (r0?.status === 'matches' ? r0.more.find((m) => m.clinicianId === id) : undefined);
+  const match = findMatch(session.state, id);
   const savedItem = saved.find((m) => m.clinicianId === id);
   const fit = match?.fit ?? savedItem?.fit ?? 'none';
   const likeTarget = match ?? savedItem;
@@ -51,10 +50,10 @@ export default function ClinicianDetail() {
     : {};
 
   // "See next match" only when this clinician is the current match and another follows.
-  const result = session.state.result;
-  const current = result?.status === 'matches' ? result.matches[session.state.index] : undefined;
+  const deck = deckOf(session.state);
+  const current = deck[session.state.index];
   const hasNext =
-    result?.status === 'matches' && current?.clinicianId === c.id && session.state.index + 1 < result.matches.length;
+    current?.clinicianId === c.id && session.state.index + 1 < deck.length;
 
   return (
     <View style={styles.root}>

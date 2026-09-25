@@ -120,10 +120,18 @@ describe('events through a run-through (PRD §48)', () => {
     fireEvent.press(await screen.findByLabelText('Next'));
     await answerUntilMatches();
     await screen.findByText('Alice Bui');
-    for (let i = 0; i < 3; i++) fireEvent.press(screen.getByLabelText('Next match'));
+    // The deck runs through everyone who fits, not just the top three.
+    let passed = 0;
+    while (screen.queryByLabelText('Not for me')) {
+      fireEvent.press(screen.getByLabelText('Not for me'));
+      passed++;
+      // Each card flies off before the next one arrives.
+      await waitFor(() => expect(sent.filter((e) => e.name === 'next_match_viewed')).toHaveLength(passed));
+    }
+    expect(passed).toBeGreaterThan(3);
     fireEvent.press(await screen.findByLabelText('4 out of 5, Well'));
     expect(await screen.findByText('Thanks for telling us.')).toBeOnTheScreen();
-    expect(sent.filter((e) => e.name === 'next_match_viewed').map((e) => e.props.position)).toEqual([2, 3, 4]);
+    expect(sent.filter((e) => e.name === 'next_match_viewed').map((e) => e.props.position)).toEqual(Array.from({ length: passed }, (_, i) => i + 2));
     expect(sent.find((e) => e.name === 'match_rating')!.props).toEqual({ rating: 4, matches: 3 });
   });
 });

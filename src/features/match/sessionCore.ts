@@ -163,8 +163,11 @@ export function match(state: SessionState): Transition {
   return { state: { ...state, result: runMatching(state.input), index: 0, updatedAt: Date.now() }, route: '/matches' };
 }
 
+/** Everyone who fits, in order: the featured three, then the rest. The swipe deck runs through all. */
+export const deckOf = (state: SessionState): Match[] => (state.result?.status === 'matches' ? [...state.result.matches, ...state.result.more] : []);
+
 export function nextMatch(state: SessionState): SessionState {
-  const total = state.result?.status === 'matches' ? state.result.matches.length : 0;
+  const total = deckOf(state).length;
   return { ...state, index: Math.min(state.index + 1, total), updatedAt: Date.now() };
 }
 
@@ -242,7 +245,7 @@ export function thumb(state: SessionState, clinicianId: string, dir: 'up' | 'dow
 }
 
 export function findMatch(state: SessionState, clinicianId: string): Match | undefined {
-  return state.result?.status === 'matches' ? state.result.matches.find((m) => m.clinicianId === clinicianId) : undefined;
+  return deckOf(state).find((m) => m.clinicianId === clinicianId);
 }
 
 // ---- Refine assistant ----

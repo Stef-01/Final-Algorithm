@@ -104,7 +104,7 @@ describe('demo run-throughs', () => {
     expect(screen.getByText('Telehealth')).toBeOnTheScreen();
     expect(screen.queryByText(/%/)).toBeNull();
 
-    fireEvent.press(screen.getByLabelText('Next match'));
+    fireEvent.press(screen.getByLabelText('Not for me'));
     expect(await screen.findByText('Paula Garrido')).toBeOnTheScreen();
     expect(screen.getByText('$104 after rebate')).toBeOnTheScreen();
   });
@@ -113,7 +113,7 @@ describe('demo run-throughs', () => {
     await startDemo('Trauma, online sessions only');
     await answerUntilMatches();
     await screen.findByText('Alice Bui');
-    fireEvent.press(screen.getByLabelText('Next match'));
+    fireEvent.press(screen.getByLabelText('Not for me'));
     fireEvent.press(await screen.findByText('View Paula'));
     await waitFor(() => expect(screen).toHavePathname('/clinician/paula-garrido'));
     expect(screen.getAllByText(/^Why they fit/)[0]).toBeOnTheScreen();
@@ -203,6 +203,6 @@ describe('review page', () => {
     }
     fireEvent.press(screen.getByText('Match 2'));
     await waitFor(() => expect(screen).toHavePathname('/matches'));
-    expect(screen.getByLabelText('Match 2 of 3')).toBeOnTheScreen();
+    expect(screen.getByLabelText(/^Match 2 of \d+$/)).toBeOnTheScreen();
   });
 });

@@ -28,7 +28,7 @@ describe('always a way back', () => {
   it('steps back through matches, then back to the search with your words ready to edit', async () => {
     renderRouter(routes, { initialUrl: '/matches' });
     expect((await screen.findAllByText('Alice Bui')).length).toBeGreaterThan(0);
-    fireEvent.press(screen.getByLabelText('Next match'));
+    fireEvent.press(screen.getByLabelText('Not for me'));
     expect(await screen.findByLabelText('Previous match')).toBeOnTheScreen();
     fireEvent.press(screen.getByLabelText('Previous match'));
     fireEvent.press(await screen.findByLabelText('Back to your search'));

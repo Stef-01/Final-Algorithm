@@ -61,6 +61,7 @@ const routes = {
   '(tabs)/saved': () => null,
   '(tabs)/settings': () => null,
   filters: require('@/app/filters').default,
+  'book/[id]': () => null,
 };
 
 describe('Filters screen', () => {
@@ -95,15 +96,18 @@ describe('swiping a match (through the screen-reader actions, which drive the sa
     await AsyncStorage.setItem('watl_session', JSON.stringify({ ...core.demoResults('psych-trauma-online'), updatedAt: Date.now() }));
   });
 
-  it('save saves and moves on; pass just moves on', async () => {
+  it('right is yes (like, then booking); left is no (thumbs down, next)', async () => {
     renderRouter(routes, { initialUrl: '/matches' });
     const deck = () => screen.UNSAFE_root.findAll((n) => Array.isArray(n.props.accessibilityActions) && n.props.accessibilityActions.some((a: { name: string }) => a.name === 'save'))[0];
     await screen.findAllByText('Alice Bui');
-    fireEvent(deck(), 'accessibilityAction', { nativeEvent: { actionName: 'save' } });
-    await waitFor(async () => expect((await AsyncStorage.getItem('watl_saved')) ?? '').toContain('alice-bui'));
-    expect(await screen.findByLabelText('Previous match')).toBeOnTheScreen();
     fireEvent(deck(), 'accessibilityAction', { nativeEvent: { actionName: 'pass' } });
-    await waitFor(async () => expect(JSON.parse((await AsyncStorage.getItem('watl_session'))!).index).toBe(2));
+    expect(await screen.findByLabelText('Previous match')).toBeOnTheScreen();
+    await waitFor(async () => expect(JSON.parse((await AsyncStorage.getItem('watl_session'))!).feedback.thumbs['alice-bui']).toBe('down'));
+    fireEvent(deck(), 'accessibilityAction', { nativeEvent: { actionName: 'save' } });
+    await waitFor(() => expect(screen).toHavePathname('/book/paula-garrido'));
+    const s = JSON.parse((await AsyncStorage.getItem('watl_session'))!);
+    expect(s.index).toBe(2);
+    expect(Object.values(s.feedback.thumbs)).toEqual(['down', 'up']);
     expect(JSON.parse((await AsyncStorage.getItem('watl_saved'))!)).toHaveLength(1);
   });
 });
