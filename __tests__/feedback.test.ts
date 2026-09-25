@@ -8,7 +8,8 @@ import { demoById } from '@/features/match/demos';
 import { feedbackBody } from '@/features/match/sendFeedback';
 import * as core from '@/features/match/sessionCore';
 
-const post = (body: unknown) => POST(new Request('http://x/api/feedback', { method: 'POST', body: JSON.stringify(body) }));
+const post = (body: unknown, origin = 'http://x') =>
+  POST(new Request('http://x/api/feedback', { method: 'POST', headers: { origin }, body: JSON.stringify(body) }));
 const good = { rating: 4, matches: 12, followups: 1, seconds: 40, profession: 'psychologist', claude: false, thumbs: { 'alice-bui': 'up' } };
 
 describe('feedback storage (PRD §49)', () => {
@@ -44,6 +45,7 @@ describe('feedback storage (PRD §49)', () => {
     expect(r.status).toBe(202);
     expect(await r.json()).toEqual({ stored: false });
     expect((await post({ rating: 'five' })).status).toBe(400);
+    expect((await post(good, 'https://evil.example')).status).toBe(403);
   });
 
   it('pushes one record to Upstash when connected', async () => {

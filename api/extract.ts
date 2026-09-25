@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 
 import { extractWithClaude, ExtractionUnavailable, MAX_CHARS } from '../server/claude/extract';
 import { PROFESSIONS, type Profession } from '../server/engine/types';
+import { allowedOrigin, underLimit } from '../server/guard';
 
 // POST /api/extract {text, profession?} → {signals, relax}. GET → {enabled}.
 // 503 whenever Claude isn't available (no key, timeout, refusal), so the app falls back to its
@@ -18,6 +19,8 @@ export function GET() {
 
 export async function POST(request: Request) {
   if (!enabled()) return json({ error: 'unavailable' }, 503);
+  if (!allowedOrigin(request)) return json({ error: 'forbidden' }, 403);
+  if (!underLimit(request)) return json({ error: 'busy' }, 429);
   let body: { text?: unknown; profession?: unknown };
   try {
     body = await request.json();

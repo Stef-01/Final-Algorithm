@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 
 import { writeReply, type ReplyFacts } from '../server/claude/reply';
+import { allowedOrigin, underLimit } from '../server/guard';
 
 // POST /api/reply {facts} → {reply}. Off unless ANTHROPIC_API_KEY is set and WATL_CLAUDE_REPLIES=on.
 // 503 whenever there's no usable reply, and the app keeps its own template.
@@ -36,6 +37,8 @@ export function GET() {
 
 export async function POST(request: Request) {
   if (!enabled()) return json({ error: 'unavailable' }, 503);
+  if (!allowedOrigin(request)) return json({ error: 'forbidden' }, 403);
+  if (!underLimit(request)) return json({ error: 'busy' }, 429);
   let facts: unknown;
   try {
     facts = ((await request.json()) as { facts?: unknown }).facts;

@@ -342,6 +342,11 @@ Each phase ends deployed on Vercel with CI green.
   - The describe screen and typed messages to the assistant use it. Demo patients and assistant chips stay scripted.
   - Places, languages and urgent wording also come from the keyword rules. Either reading can trigger the safety pause.
 - **Switching it on (you):** add `ANTHROPIC_API_KEY` to the Vercel project's environment variables and redeploy. Set `WATL_CLAUDE=off` to switch it off again without removing the key.
+- **Spend protection:** `server/guard.ts` guards `/api/extract`, `/api/reply` and `/api/feedback`.
+  - Only WATL's own pages (and localhost) are accepted. Add other hosts with `WATL_ALLOWED_ORIGINS`.
+  - Requests with no origin (native apps) are refused unless `WATL_ALLOW_NO_ORIGIN=1`.
+  - Each visitor is capped at 40 requests per 10 minutes, per function instance.
+  - The cap is a burst limit, not a bill limit, so also set a monthly spend limit on the Anthropic key.
 - **Evals:** `evals/extraction.json` (33 cases) is scored by `evals/score.ts`. The keyword extractor must pass all of them in CI. Claude is held to ≥ 90% by an opt-in live run: `WATL_LIVE_EVAL=1 ANTHROPIC_API_KEY=… npx jest claude.live` (about 35 short requests).
 - **Interview proposals:** `scripts/interview.py propose <id>` has Claude draft excerpts, values and patient-facing lines for unfilled answers. Drafts pass the same checks as `ingest`, are marked `proposedBy: claude`, and still need a reviewer (tests use a stand-in client).
 - **Medical questions:** the assistant declines them with a fixed reply (50-prompt red-team set, `evals/redteam.json`).

@@ -36,7 +36,7 @@ const blank = {
   urgent_reason: '',
 };
 const reply = (raw: object, stop_reason = 'end_turn') => ({ stop_reason, content: [{ type: 'text', text: JSON.stringify(raw) }] });
-const post = (body: unknown) => api.POST(new Request('http://x/api/extract', { method: 'POST', body: JSON.stringify(body) }));
+const post = (body: unknown) => api.POST(new Request('http://x/api/extract', { method: 'POST', headers: { origin: 'http://x' }, body: JSON.stringify(body) }));
 
 describe('validating what Claude returns', () => {
   const text = "I'm 31 with ADHD, appointments feel rushed and I want someone blunt. Online only.";
@@ -157,5 +157,22 @@ describe("the app with Claude's reading", () => {
   it('still pauses for safety if either reading flags urgent wording', () => {
     const t = core.submitText(core.initialState('gp'), 'I have chest pain', { signals: { clinicalNeeds: [], preferences: {}, constraints: {} }, relax: {} });
     expect(t.route).toBe('/safety');
+  });
+});
+
+describe('POST /api/extract guards', () => {
+  const env = process.env;
+  beforeEach(() => {
+    process.env = { ...env, ANTHROPIC_API_KEY: 'test-key' };
+    mockCreate.mockReset();
+  });
+  afterAll(() => {
+    process.env = env;
+  });
+
+  it('refuses other sites without calling Claude', async () => {
+    const r = await api.POST(new Request('http://x/api/extract', { method: 'POST', headers: { origin: 'https://evil.example' }, body: '{"text":"hi"}' }));
+    expect(r.status).toBe(403);
+    expect(mockCreate).not.toHaveBeenCalled();
   });
 });

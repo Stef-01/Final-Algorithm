@@ -22,7 +22,7 @@ const api = require('../api/reply') as typeof import('../api/reply');
 
 const facts: ReplyFacts = { said: 'online only', changes: ['online sessions only'], count: 8, noun: 'psychologists', first: 'Alice' };
 const answer = (reply: string, stop_reason = 'end_turn') => ({ stop_reason, content: [{ type: 'text', text: JSON.stringify({ reply }) }] });
-const post = (body: unknown) => api.POST(new Request('http://x/api/reply', { method: 'POST', body: JSON.stringify(body) }));
+const post = (body: unknown) => api.POST(new Request('http://x/api/reply', { method: 'POST', headers: { origin: 'http://x' }, body: JSON.stringify(body) }));
 
 describe('checking a worded reply', () => {
   it('accepts a reply that keeps the facts', () => {
