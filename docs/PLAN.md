@@ -345,7 +345,7 @@ Each phase ends deployed on Vercel with CI green.
 - **Evals:** `evals/extraction.json` (33 cases) is scored by `evals/score.ts`. The keyword extractor must pass all of them in CI. Claude is held to ≥ 90% by an opt-in live run: `WATL_LIVE_EVAL=1 ANTHROPIC_API_KEY=… npx jest claude.live` (about 35 short requests).
 - **Interview proposals:** `scripts/interview.py propose <id>` has Claude draft excerpts, values and patient-facing lines for unfilled answers. Drafts pass the same checks as `ingest`, are marked `proposedBy: claude`, and still need a reviewer (tests use a stand-in client).
 - **Medical questions:** the assistant declines them with a fixed reply (50-prompt red-team set, `evals/redteam.json`).
-- **Still to do:** Claude writing the assistant's replies (today they're built from the signal diff; rerun the red-team set if that changes), and `/api/feedback` storage (waiting on D4).
+- **Still to do:** Claude writing the assistant's replies (today they're built from the signal diff; rerun the red-team set if that changes), and connecting a feedback store (D4; the endpoint is built).
 
 ### Phase 2 notes (engine as built)
 
@@ -367,7 +367,7 @@ Each phase ends deployed on Vercel with CI green.
 - **Where events fire:** session transitions fire from the session provider (`src/features/match/session.tsx`), so `sessionCore` stays pure. Screen events fire where they happen: follow-up shown, clinician viewed, booking, voice.
 - **Derived metrics:** time to shortlist is `matching_completed.seconds`, measured from submitting the description. Follow-up burden is `matching_completed.followups`.
 - **In-app validation:** "Does this match feel right for you?" (Yes / Not really) under each match, and the 1–5 credibility question on the end-of-list card. Both are stored in the session and sent as events.
-- **Deferred:** server-side feedback storage (Vercel KV) arrives with the Phase 8 API.
+- **Feedback storage:** `api/feedback.ts` pushes each rating (with thumbs, match count, follow-ups and time to shortlist) onto the `watl:feedback` list in Upstash Redis. It stores numbers, clinician ids and the day, never anything the patient wrote. Until a store is connected (Vercel → Storage → Upstash, which sets `KV_REST_API_URL`/`KV_REST_API_TOKEN`), it accepts and drops.
 - **Testing script:** `docs/user-testing.md`, with targets from PRD §49.
 - **Two checks for you:**
   - Enable Web Analytics in the Vercel dashboard.
@@ -446,7 +446,7 @@ Each phase ends deployed on Vercel with CI green.
 - **D1 (decided):** keep the shell's tab bar with three tabs: **Find**, **Saved**, **Settings**.
 - **D2:** Region and clinician pool for testing. [fictional Brisbane GPs]
 - **D3:** Analytics provider for custom events if Vercel's plan doesn't include them. [Vercel if available, else PostHog]
-- **D4:** Feedback storage. [Vercel KV]
+- **D4:** Feedback storage. [Upstash Redis from the Vercel Marketplace, which replaced Vercel KV. Built: `api/feedback.ts`, a no-op until you connect a store.]
 - **D5:** Keep the native iOS/Android builds working, or go web-only for the prototype? [keep them building, test on web]
 - **D8 (decided): show everyone who fits, prioritised.** Every clinician who meets the patient's requirements is a match. The top three are featured one at a time (Discover layout); the rest are on a ranked "See all" list (`/all`).
   - Labels stay honest. A clinician with no evidence-backed reason is "Possible fit", never higher.

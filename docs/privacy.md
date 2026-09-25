@@ -11,6 +11,7 @@ What WATL does with what a patient tells it, as the code stands. Written for a r
 | Typed text, when Claude is on | Sent to `/api/extract`, then to Anthropic's API, to be read into signals | Not stored or logged by WATL. Anthropic's retention applies (see Open 1) | `api/extract.ts`, `server/claude/extract.ts` |
 | Voice | The browser's speech service transcribes it (in Chrome, audio goes to Google). WATL receives only the text | Not stored by WATL | `src/features/voice/` (decision D7) |
 | Analytics events | Vercel Web Analytics | Vercel's retention | `src/lib/analytics.ts` |
+| Match rating and thumbs (numbers, clinician ids, the day) | `/api/feedback` → Upstash Redis, once connected | No expiry set yet (see Open 5) | `api/feedback.ts`, `server/feedback.ts` |
 
 ## What never leaves the device
 
@@ -31,4 +32,4 @@ What WATL does with what a patient tells it, as the code stands. Written for a r
 2. **Consent wording.** When Claude is on, the describe screen and Settings both say that what patients write is read by Claude (Anthropic) and not stored by WATL. Whether that notice is enough, or explicit consent is needed, depends on legal advice.
 3. **Voice.** Browser transcription sends audio to the browser vendor. Decision D7 accepted this for the prototype, with a notice on screen. A WATL-controlled service is needed before launch.
 4. **Real clinicians.** Profiles come from the ADHDme network's published pages. Their consent to being matched and quoted in WATL still needs confirming.
-5. **Feedback storage.** Ratings and thumbs currently go only to analytics (as numbers). If `/api/feedback` stores them server-side later, it needs its own retention rule.
+5. **Feedback retention.** `/api/feedback` stores ratings with no patient text and only the day, not the time. Still, decide how long to keep them (for example, until the testing round ends) before connecting the store.

@@ -7,6 +7,7 @@ import * as core from './sessionCore';
 import type { Extraction } from '@server/claude/types';
 
 import { SUGGESTION_TEXT } from './refine';
+import { sendFeedback } from './sendFeedback';
 import type { NoMatchAction } from './types';
 
 const STORAGE_KEY = 'watl_session';
@@ -106,6 +107,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         const next = core.rateMatches(current.current, rating);
         const r = next.result;
         track('match_rating', { rating: next.feedback.rating!, matches: r?.status === 'matches' ? r.matches.length : 0 });
+        sendFeedback(next);
         commit(next);
       },
       thumb: (id, dir) => {

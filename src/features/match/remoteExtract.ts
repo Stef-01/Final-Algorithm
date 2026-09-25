@@ -8,7 +8,8 @@ import type { Profession } from '@server/engine/types';
 // waits on or breaks because of the model.
 
 /** Web calls its own origin; native builds need EXPO_PUBLIC_API_URL (e.g. https://final-algorithm.vercel.app). */
-const BASE = process.env.EXPO_PUBLIC_API_URL ?? (Platform.OS === 'web' ? '' : null);
+export const API_BASE = process.env.EXPO_PUBLIC_API_URL ?? (Platform.OS === 'web' ? '' : null);
+const BASE = API_BASE;
 export const TIMEOUT_MS = 6000;
 
 let enabledCache: Promise<boolean> | null = null;
