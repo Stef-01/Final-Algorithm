@@ -54,9 +54,11 @@ describe('feedback storage (PRD §49)', () => {
     const r = await post(good);
     expect(await r.json()).toEqual({ stored: true });
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
-    expect(url).toBe('https://kv.example');
-    const [cmd, key, value] = JSON.parse(init.body as string);
+    expect(url).toBe('https://kv.example/pipeline');
+    const [[cmd, key, value], trim] = JSON.parse(init.body as string);
     expect([cmd, key]).toEqual(['LPUSH', 'watl:feedback']);
     expect(JSON.parse(value)).toMatchObject({ rating: 4, thumbs: { 'alice-bui': 'up' } });
+    // The list is bounded until a retention period is chosen.
+    expect(trim).toEqual(['LTRIM', 'watl:feedback', '0', '4999']);
   });
 });

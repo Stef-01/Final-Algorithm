@@ -1,9 +1,12 @@
 import { parseFeedback, toRecord } from '../server/feedback';
 import { allowedOrigin, underLimit } from '../server/guard';
 
-// POST /api/feedback → stores one rating in Upstash Redis (Vercel Marketplace), list `watl:feedback`.
+// POST /api/feedback → stores one rating in Upstash Redis (Vercel Marketplace), list `watl:feedback`,
+// keeping only the newest MAX_KEPT so the list can't grow without limit (retention: docs/privacy.md).
 // Without a store connected it accepts and drops the feedback (202), so the app never waits on it.
 // Upstash's Vercel integration sets KV_REST_API_URL / KV_REST_API_TOKEN.
+
+export const MAX_KEPT = 5000;
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
@@ -26,10 +29,14 @@ export async function POST(request: Request) {
   if (!url || !token) return json({ stored: false }, 202);
 
   try {
-    const r = await fetch(url, {
+    // One round trip: push the rating, then trim to the newest MAX_KEPT (Upstash REST pipeline).
+    const r = await fetch(`${url.replace(/\/$/, '')}/pipeline`, {
       method: 'POST',
       headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
-      body: JSON.stringify(['LPUSH', 'watl:feedback', JSON.stringify(toRecord(feedback))]),
+      body: JSON.stringify([
+        ['LPUSH', 'watl:feedback', JSON.stringify(toRecord(feedback))],
+        ['LTRIM', 'watl:feedback', '0', String(MAX_KEPT - 1)],
+      ]),
       signal: AbortSignal.timeout(4000),
     });
     return json({ stored: r.ok }, r.ok ? 200 : 202);

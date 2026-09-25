@@ -11,7 +11,7 @@ What WATL does with what a patient tells it, as the code stands. Written for a r
 | Typed text, when Claude is on | Sent to `/api/extract`, then to Anthropic's API, to be read into signals | Not stored or logged by WATL. Anthropic's retention applies (see Open 1) | `api/extract.ts`, `server/claude/extract.ts` |
 | Voice | The browser's speech service transcribes it (in Chrome, audio goes to Google). WATL receives only the text | Not stored by WATL | `src/features/voice/` (decision D7) |
 | Analytics events | Vercel Web Analytics | Vercel's retention | `src/lib/analytics.ts` |
-| Match rating and thumbs (numbers, clinician ids, the day) | `/api/feedback` → Upstash Redis, once connected | No expiry set yet (see Open 5) | `api/feedback.ts`, `server/feedback.ts` |
+| Match rating and thumbs (numbers, clinician ids, the day) | `/api/feedback` → Upstash Redis, once connected | The newest 5,000 are kept; no time limit yet (see Open 5) | `api/feedback.ts`, `server/feedback.ts` |
 
 ## What never leaves the device
 
