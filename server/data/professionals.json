@@ -27,8 +27,8 @@
       ],
       "fee": 299,
       "gapAfterMedicare": 299,
-      "billingNote": "$299 first appointment, $199 follow-up; no Medicare rebate. Set and charged by the practice.",
-      "newPatients": true,
+      "billingNote": "$299 initial, $199 follow-up, no Medicare rebate; set and charged by the practice",
+      "newPatients": null,
       "ageRange": [
         0,
         120
@@ -216,8 +216,8 @@
       ],
       "fee": 299,
       "gapAfterMedicare": 299,
-      "billingNote": "$299 first appointment, $199 follow-up; no Medicare rebate. Set and charged by the practice.",
-      "newPatients": true,
+      "billingNote": "$299 initial, $199 follow-up, no Medicare rebate; set and charged by the practice",
+      "newPatients": null,
       "ageRange": [
         0,
         120
@@ -368,8 +368,8 @@
       ],
       "fee": 253,
       "gapAfterMedicare": 104,
-      "billingNote": "$253 a session, $149 Medicare rebate with a Mental Health Treatment Plan: about $104 out of pocket.",
-      "newPatients": true,
+      "billingNote": "$253 per session, $149 Medicare rebate; set and charged by the clinic (about $104 out of pocket after the rebate)",
+      "newPatients": null,
       "ageRange": [
         0,
         120
@@ -551,8 +551,8 @@
       ],
       "fee": null,
       "gapAfterMedicare": null,
-      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first.",
-      "newPatients": true,
+      "billingNote": "Set and charged by the clinic; quoted when you book",
+      "newPatients": null,
       "ageRange": [
         0,
         120
@@ -702,8 +702,8 @@
       ],
       "fee": null,
       "gapAfterMedicare": null,
-      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first.",
-      "newPatients": true,
+      "billingNote": "Set and charged by the clinic; quoted when you book",
+      "newPatients": null,
       "ageRange": [
         0,
         120
@@ -853,8 +853,8 @@
       ],
       "fee": null,
       "gapAfterMedicare": null,
-      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first.",
-      "newPatients": true,
+      "billingNote": "Set and charged by the clinic; quoted when you book",
+      "newPatients": null,
       "ageRange": [
         0,
         120
@@ -1038,8 +1038,8 @@
       ],
       "fee": null,
       "gapAfterMedicare": null,
-      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first.",
-      "newPatients": true,
+      "billingNote": "Set and charged by the clinic; quoted when you book",
+      "newPatients": null,
       "ageRange": [
         13,
         120
@@ -1206,8 +1206,8 @@
       ],
       "fee": null,
       "gapAfterMedicare": null,
-      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first.",
-      "newPatients": true,
+      "billingNote": "Set and charged by the clinic; quoted when you book",
+      "newPatients": null,
       "ageRange": [
         0,
         120
@@ -1391,8 +1391,8 @@
       ],
       "fee": null,
       "gapAfterMedicare": null,
-      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first. Provisional psychologist sessions do not attract a Medicare rebate.",
-      "newPatients": true,
+      "billingNote": "Set and charged by the clinic; quoted when you book",
+      "newPatients": null,
       "ageRange": [
         0,
         120
@@ -1559,8 +1559,8 @@
       ],
       "fee": null,
       "gapAfterMedicare": null,
-      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first.",
-      "newPatients": true,
+      "billingNote": "Set and charged by the clinic; quoted when you book",
+      "newPatients": null,
       "ageRange": [
         0,
         120
@@ -1570,7 +1570,7 @@
         "wheelchair"
       ],
       "gender": "female",
-      "initialConsultMins": 50,
+      "initialConsultMins": null,
       "weekends": null
     },
     "expertise": [
@@ -1710,8 +1710,8 @@
       ],
       "fee": 220,
       "gapAfterMedicare": null,
-      "billingNote": "$220 a session; Medicare rebate with a GP referral and Mental Health Treatment Plan.",
-      "newPatients": true,
+      "billingNote": "$220 per session, Medicare rebate with a referral and Mental Health Care Plan; set and charged by the practice",
+      "newPatients": null,
       "ageRange": [
         18,
         120
@@ -1892,8 +1892,8 @@
       ],
       "fee": null,
       "gapAfterMedicare": null,
-      "billingNote": "Not published; quoted by the practice. DVA, NDIS, private health, WorkCover and Medicare plans accepted.",
-      "newPatients": true,
+      "billingNote": "Quoted by the practice; DVA, NDIS, private health, WorkCover and Medicare plans accepted",
+      "newPatients": null,
       "ageRange": [
         0,
         120
@@ -2025,8 +2025,8 @@
       ],
       "fee": null,
       "gapAfterMedicare": null,
-      "billingNote": "Not published; quoted by the practice. DVA, NDIS, private health, WorkCover and Medicare plans accepted.",
-      "newPatients": true,
+      "billingNote": "Quoted by the practice; DVA, NDIS, private health, WorkCover and Medicare plans accepted",
+      "newPatients": null,
       "ageRange": [
         0,
         120
@@ -2140,8 +2140,8 @@
       ],
       "fee": null,
       "gapAfterMedicare": null,
-      "billingNote": "Not published; quoted by the practice. DVA, NDIS, private health, WorkCover and Medicare plans accepted. Provisional psychologist sessions do not attract a Medicare rebate.",
-      "newPatients": true,
+      "billingNote": "Quoted by the practice; DVA, NDIS, private health, WorkCover and Medicare plans accepted",
+      "newPatients": null,
       "ageRange": [
         0,
         120

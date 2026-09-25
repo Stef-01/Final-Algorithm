@@ -115,7 +115,7 @@ describe('demo run-throughs', () => {
     fireEvent.press(await screen.findByText('View Paula'));
     await waitFor(() => expect(screen).toHavePathname('/clinician/paula-garrido'));
     expect(screen.getAllByText(/^Why they fit/)[0]).toBeOnTheScreen();
-    expect(screen.getByText(/\$253 a session, \$149 Medicare rebate/)).toBeOnTheScreen();
+    expect(screen.getByText(/\$253 per session, \$149 Medicare rebate/)).toBeOnTheScreen();
     expect(screen.getByText('Wellness Psychology Clinic')).toBeOnTheScreen();
 
     const openURL = jest.spyOn(Linking, 'openURL').mockResolvedValue(true);

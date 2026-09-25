@@ -110,7 +110,8 @@ export type ClinicianRecord = {
     gapAfterMedicare: number | null;
     /** Human-readable billing line from the source, shown on the detail page. */
     billingNote?: string;
-    newPatients: boolean;
+    /** null = not published; only `false` rules someone out. */
+    newPatients: boolean | null;
     ageRange: [number, number];
     languages: string[];
     accessibility: string[];

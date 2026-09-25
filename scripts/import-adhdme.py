@@ -10,8 +10,11 @@ snapshotted into server/data/adhdme/source.json so the conversion is reproducibl
 Nothing here is invented. Every trait and every area of experience is backed by an excerpt that must
 appear word for word in that clinician's published profile; the script stops if one doesn't. Traits
 from profiles are marked reviewerStatus "profile" at medium confidence: usable for matching, but not
-yet confirmed in an onboarding interview (docs/PLAN.md §8). Fees, availability and weekend hours that a
-profile doesn't publish stay null, and the engine never counts an unknown as meeting a requirement.
+yet confirmed in an onboarding interview (docs/PLAN.md §8). Hand-entered practice facts (fees, rebates,
+suburbs, age ranges) are checked against the profile text the same way, billing notes are the profile's
+own words, and session length is read from the text. Anything a profile doesn't publish (fees,
+availability, weekend hours, whether it takes new patients) stays null, and the engine never counts an
+unknown as meeting a requirement.
 """
 import argparse
 import importlib.util
@@ -39,18 +42,17 @@ PLACES = {
 GOALS_PLACE = ('Fortitude Valley', 'Brisbane', -27.457, 153.034)
 ARC_PLACE = ('Bundall', 'Gold Coast', -28.009, 153.405)
 
-GP_BILLING = '$299 first appointment, $199 follow-up; no Medicare rebate. Set and charged by the practice.'
-FEES = {  # id: (fee, out-of-pocket after rebate, billing note). None = not published.
-    'anubhav-saxena': (299, 299, GP_BILLING),
-    'anu-saxena': (299, 299, GP_BILLING),
-    'paula-garrido': (253, 104, '$253 a session, $149 Medicare rebate with a Mental Health Treatment Plan: about $104 out of pocket.'),
-    'jessica-katsamatsas': (220, None, '$220 a session; Medicare rebate with a GP referral and Mental Health Treatment Plan.'),
+# Fees as published, checked against the profile text in check_facts(). The billing note shown to
+# patients is the profile's own "Billing" line, word for word.
+FEES = {  # id: (fee, out-of-pocket after rebate). None = not published.
+    'anubhav-saxena': (299, 299),  # "$299 initial ... no Medicare rebate"
+    'anu-saxena': (299, 299),
+    'paula-garrido': (253, 104),  # "$253 per session, $149 Medicare rebate" -> 253 - 149
+    'jessica-katsamatsas': (220, None),  # rebate amount not published
 }
-GOALS_BILLING = 'Not published; quoted when you book. A free 15-minute call is available to ask first.'
-ARC_BILLING = 'Not published; quoted by the practice. DVA, NDIS, private health, WorkCover and Medicare plans accepted.'
 
-AGE_RANGES = {'samantha-courtney': (13, 120), 'jessica-katsamatsas': (18, 120)}
-SESSION_MINS = {'paula-garrido': 60, 'jessica-katsamatsas': 50}
+# (min age, max age, the words in the profile that say so)
+AGE_RANGES = {'samantha-courtney': (13, 120, 'works with teenagers and adults'), 'jessica-katsamatsas': (18, 120, 'adults')}
 IN_PERSON = {'paula-garrido': False}
 
 # ---------------------------------------------------------------- evidence (excerpt must be verbatim)
@@ -281,6 +283,32 @@ def gender(pronouns):
     return {'she/her': 'female', 'he/him': 'male', 'they/them': 'nonbinary'}.get(pronouns or '', 'undeclared')
 
 
+def check_facts(c, text, suburb, fee, gap):
+    """Hand-entered practice facts must be in the published profile too, like the trait excerpts."""
+    cid = c['id']
+
+    def need(cond, what):
+        if not cond:
+            sys.exit(f'{cid}: {what} is not in the published profile; fix the fact or remove it')
+
+    if suburb != 'Telehealth':
+        need(suburb in text, f'suburb {suburb!r}')
+    if fee is not None:
+        need(f'${fee}' in text, f'fee ${fee}')
+        if gap == fee:
+            need('no Medicare rebate' in text, 'no Medicare rebate')
+        elif gap is not None:
+            need(f'${fee - gap}' in text, f'Medicare rebate ${fee - gap}')
+    if cid in AGE_RANGES:
+        need(AGE_RANGES[cid][2] in text, f'age range wording {AGE_RANGES[cid][2]!r}')
+
+
+def session_minutes(text):
+    """Session length only when the profile states it ("50-minute sessions")."""
+    m = re.search(r'(\d+)-min', text)
+    return int(m.group(1)) if m else None
+
+
 def convert(c):
     cid = c['id']
     text = corpus(c)
@@ -306,9 +334,12 @@ def convert(c):
     goals = c['practice'] == 'GOALS Psychology'
     arc = c['practice'] == 'Atlantis Recovery Centre'
     suburb, city, lat, lng = GOALS_PLACE if goals else ARC_PLACE if arc else PLACES[cid]
-    fee, gap, billing = FEES.get(cid, (None, None, GOALS_BILLING if goals else ARC_BILLING))
-    if c['role'].startswith('Provisional'):
-        billing += ' Provisional psychologist sessions do not attract a Medicare rebate.'
+    fee, gap = FEES.get(cid, (None, None))
+    check_facts(c, text, suburb, fee, gap)
+    published = detail(c, 'Billing').strip().rstrip(';')
+    billing = (published[0].upper() + published[1:]) if published else 'Not published; ask the practice.'
+    if fee is not None and gap is not None and gap != fee:
+        billing += f' (about ${gap} out of pocket after the rebate)'
     modes = (['in_person'] if IN_PERSON.get(cid, True) else []) + (['telehealth'] if c['telehealth'] else [])
     first = c['name'].split()[1] if c['name'].startswith('Dr ') else c['name'].split()[0]
     if cid == 'jessica-katsamatsas':
@@ -333,12 +364,12 @@ def convert(c):
             fee=fee,
             gapAfterMedicare=gap,
             billingNote=billing,
-            newPatients=True,
-            ageRange=list(AGE_RANGES.get(cid, (0, 120))),
+            newPatients=None,  # not published by any profile: unknown, not assumed
+            ageRange=list(AGE_RANGES[cid][:2]) if cid in AGE_RANGES else [0, 120],
             languages=c['languages'] or [],
             accessibility=['wheelchair'] if access.startswith('Yes') else [],
             gender=gender(c['pronouns']),
-            initialConsultMins=SESSION_MINS.get(cid, 50 if goals else None),
+            initialConsultMins=session_minutes(text),
             weekends=None,
         ),
         expertise=expertise,

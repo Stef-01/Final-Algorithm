@@ -57,6 +57,22 @@ describe('ADHDme profiles (server/data/professionals.json)', () => {
     expect(costLabel(getClinician('jessica-katsamatsas')!)).toBe('$220 a session');
   });
 
+  it("shows each practice's billing in its own published words", () => {
+    for (const c of professionals) {
+      const published = source.find((x) => x.id === c.id)!.details.find(([k]) => k === 'Billing')?.[1].trim().replace(/;$/, '');
+      if (!published) continue;
+      expect(c.practical.billingNote!.toLowerCase().startsWith(published.toLowerCase())).toBe(true);
+    }
+  });
+
+  it('records a session length only where the profile states one', () => {
+    for (const c of professionals) {
+      const said = corpus(c.id).match(/(\d+)-min/);
+      expect(c.practical.initialConsultMins).toBe(said ? Number(said[1]) : null);
+      expect(c.practical.newPatients).toBeNull();
+    }
+  });
+
   it('has a portrait for every professional', () => {
     for (const c of professionals) {
       expect(fs.existsSync(path.join(__dirname, '../assets/clinicians', c.photo))).toBe(true);

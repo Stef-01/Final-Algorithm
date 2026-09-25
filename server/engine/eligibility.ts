@@ -36,7 +36,7 @@ export function failures(c: ClinicianRecord, k: HardConstraints, profession?: Pr
   const p = c.practical;
   const out: Failure[] = [];
   if (profession && c.profession !== profession) out.push('profession');
-  if (!p.newPatients) out.push('new_patients');
+  if (p.newPatients === false) out.push('new_patients');
   if (k.age !== undefined && (k.age < p.ageRange[0] || k.age > p.ageRange[1])) out.push('age');
 
   const telehealth = p.modes.includes('telehealth');
