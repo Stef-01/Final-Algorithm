@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NOTE_MAX, WHY, whyKind } from '@server/feedback';
 
 import { Icon } from '@/components/Icon';
-import { Appear, PressScale } from '@/components/motion';
+import { Appear, PressDepth, PressScale } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { useSession } from '@/features/match/session';
 import { colors, fonts } from '@/lib/theme';
@@ -95,16 +95,18 @@ export default function Rate() {
           </Appear>
         ) : null}
 
-        <PressScale
+        <PressDepth
           onPress={() => done({ reasons: picked, ...(text ? { note: text } : {}) })}
           disabled={!any}
           accessibilityRole="button"
           accessibilityState={{ disabled: !any }}
+          containerStyle={styles.sendWrap}
           style={[styles.send, !any && styles.sendOff]}
-          scaleTo={0.97}
+          radius={28}
+          lipColor={colors.purpleLip}
         >
           <Text style={styles.sendText}>Send</Text>
-        </PressScale>
+        </PressDepth>
         <PressScale onPress={() => done()} accessibilityRole="button" style={styles.skip}>
           <Text style={styles.skipText}>Skip</Text>
         </PressScale>
@@ -143,7 +145,8 @@ const styles = StyleSheet.create({
     color: colors.black,
     textAlignVertical: 'top',
   },
-  send: { marginTop: 28, height: 56, borderRadius: 28, backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center' },
+  sendWrap: { marginTop: 28 },
+  send: { height: 56, borderRadius: 28, backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center' },
   sendOff: { opacity: 0.4 },
   sendText: { fontFamily: fonts.bold, fontSize: 16, color: colors.white },
   skip: { alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 20, marginTop: 8 },

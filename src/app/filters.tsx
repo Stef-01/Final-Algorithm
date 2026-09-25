@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/Icon';
-import { Appear, PressScale, ScreenIn } from '@/components/motion';
+import { Appear, PressDepth, PressScale, ScreenIn } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { pool, signalsFor } from '@/features/match/agent';
 import { currentValues, filterDefs, type Filters } from '@/features/match/filters';
@@ -100,19 +100,23 @@ export default function FiltersScreen() {
       </ScrollView>
       </ScreenIn>
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
-        <PressScale
+        <PressDepth
           onPress={() => {
             router.back();
             router.navigate(session.setFilters(draft) as never);
           }}
           disabled={count === 0}
           accessibilityRole="button"
+          radius={28}
+          lipColor={colors.purpleLip}
           style={[styles.show, count === 0 && styles.showOff]}
-          scaleTo={0.97}
         >
           <Icon name="icFilter" size={18} color={colors.white} />
-          <Text style={styles.showText}>{count === 0 ? 'Nobody fits all of that' : `Show ${count}`}</Text>
-        </PressScale>
+          {/* The count rises into place each time it changes. */}
+          <Appear key={count} distance={10}>
+            <Text style={styles.showText}>{count === 0 ? 'Nobody fits all of that' : `Show ${count}`}</Text>
+          </Appear>
+        </PressDepth>
       </View>
     </View>
   );

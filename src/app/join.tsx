@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/Icon';
 import { Kicker } from '@/components/cards';
-import { Appear, PressScale } from '@/components/motion';
+import { Appear, PressDepth, PressScale } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { API_BASE } from '@/features/match/remoteExtract';
 import { track } from '@/lib/analytics';
@@ -177,9 +177,9 @@ export default function Join() {
         </PressScale>
         {has('consent') ? <Text style={styles.problem}>{PROBLEM.consent}</Text> : null}
 
-        <PressScale onPress={submit} disabled={state === 'sending'} accessibilityRole="button" style={styles.submit} scaleTo={0.97}>
+        <PressDepth onPress={submit} disabled={state === 'sending'} accessibilityRole="button" containerStyle={styles.submitWrap} style={styles.submit} radius={28} lipColor={colors.purpleLip}>
           <Text style={styles.submitText}>{state === 'sending' ? 'Sending…' : 'Send for review'}</Text>
-        </PressScale>
+        </PressDepth>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -219,7 +219,8 @@ const styles = StyleSheet.create({
   box: { width: 24, height: 24, borderRadius: 6, borderWidth: 1.5, borderColor: colors.black, alignItems: 'center', justifyContent: 'center', marginTop: 1 },
   boxOn: { backgroundColor: colors.purple, borderColor: colors.purple },
   consentText: { flex: 1, fontFamily: fonts.regular, fontSize: 14, lineHeight: 20, color: colors.black },
-  submit: { marginTop: 20, height: 56, borderRadius: 28, backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center' },
+  submitWrap: { marginTop: 20 },
+  submit: { height: 56, borderRadius: 28, backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center' },
   submitText: { fontFamily: fonts.bold, fontSize: 16, color: colors.white },
   done: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32, gap: 18 },
   doneIcon: { width: 64, height: 64, borderRadius: 32, backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center' },
