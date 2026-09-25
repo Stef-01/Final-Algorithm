@@ -68,6 +68,13 @@ await check('/api/feedback lets WATL through to validation', async () => {
   expect(r.status === 400, `status ${r.status}`);
 });
 
+// Invalid on purpose (no consent): proves the portal validates, and never queues a fake submission.
+await check('/api/portal validates and refuses without consent', async () => {
+  const r = await post('/api/portal', { name: 'Smoke test' }, { origin });
+  const body = await r.json();
+  expect(r.status === 400 && body.problems.includes('consent'), `status ${r.status}`);
+});
+
 if (failures.length) {
   console.error(`\n${failures.length} check(s) failed on ${base}`);
   process.exit(1);
