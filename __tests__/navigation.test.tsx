@@ -77,7 +77,7 @@ describe('app shell', () => {
   it('has exactly three tabs: Find, Saved, Settings', async () => {
     renderRouter(routes, { initialUrl: '/' });
     const tabs = await screen.findAllByRole('tab');
-    expect(tabs.map((t) => t.props.accessibilityLabel)).toEqual(['Find', 'Saved', 'Settings']);
+    expect(tabs.map((t) => t.props.accessibilityLabel)).toEqual(['Find', 'My care', 'Profile']);
   });
 
   it('words the next screen for the chosen profession', async () => {
@@ -165,12 +165,13 @@ describe('demo run-throughs', () => {
     await waitFor(() => expect(screen.getByText(/\?$/)).toBeOnTheScreen());
   });
 
-  it('saves a clinician to the Saved tab', async () => {
+  it('saves a clinician into your care team', async () => {
     await startDemo('Straight talk about work pressure, Gold Coast');
     expect(await screen.findByText('Bart Traynor')).toBeOnTheScreen();
     fireEvent.press(screen.getAllByLabelText('Save Bart')[0]);
-    fireEvent.press(screen.getByLabelText('Saved'));
-    expect(await screen.findByText('Strong fit · Clinical Psychologist and Director · Bundall, Gold Coast')).toBeOnTheScreen();
+    fireEvent.press(screen.getByLabelText('My care'));
+    expect(await screen.findByLabelText('Bart Traynor, Psychologist')).toBeOnTheScreen();
+    expect(screen.getByText('Book Bart')).toBeOnTheScreen();
   });
 });
 
@@ -188,7 +189,7 @@ describe('typed searches', () => {
   it('start over clears the search and returns to the funnel', async () => {
     await startDemo('Straight talk about work pressure, Gold Coast');
     await screen.findByText('Bart Traynor');
-    fireEvent.press(screen.getByLabelText('Settings'));
+    fireEvent.press(screen.getByLabelText('Profile'));
     fireEvent.press(await screen.findByText('Start over'));
     expect(await screen.findByText('Who could help?')).toBeOnTheScreen();
   });

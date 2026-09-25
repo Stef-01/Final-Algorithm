@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppError } from '@/components/AppError';
 import { AssistantButton } from '@/components/AssistantButton';
 import { VercelAnalytics } from '@/components/VercelAnalytics';
+import { GoalsProvider } from '@/features/care/goals';
 import { SavedProvider } from '@/features/match/saved';
 import { SessionProvider } from '@/features/match/session';
 import { fontAssets } from '@/lib/theme';
@@ -26,17 +27,19 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <SessionProvider>
         <SavedProvider>
-          <StatusBar style="dark" />
-          <VercelAnalytics />
-          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#fff' } }}>
-            <Stack.Screen name="(tabs)" options={{ animation: 'none' }} />
-            <Stack.Screen name="clinician/[id]" />
-            <Stack.Screen name="dev/states" />
-            {['safety', 'book/[id]', 'refine'].map((name) => (
-              <Stack.Screen key={name} name={name} options={{ presentation: 'transparentModal', animation: 'fade' }} />
-            ))}
-          </Stack>
-          <AssistantButton />
+          <GoalsProvider>
+            <StatusBar style="dark" />
+            <VercelAnalytics />
+            <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#fff' } }}>
+              <Stack.Screen name="(tabs)" options={{ animation: 'none' }} />
+              <Stack.Screen name="clinician/[id]" />
+              <Stack.Screen name="dev/states" />
+              {['safety', 'book/[id]', 'refine'].map((name) => (
+                <Stack.Screen key={name} name={name} options={{ presentation: 'transparentModal', animation: 'fade' }} />
+              ))}
+            </Stack>
+            <AssistantButton />
+          </GoalsProvider>
         </SavedProvider>
       </SessionProvider>
     </SafeAreaProvider>

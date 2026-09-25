@@ -29,6 +29,9 @@ export type Events = {
   assistant_message: { chip: boolean; changed: boolean; claude?: boolean };
   /** A screen crashed and the error screen showed (the error's type only). */
   app_error: { kind: string };
+  /** My care: goals picked, and reminders added to a calendar. */
+  goal_toggled: { goal: string; on: boolean };
+  calendar_added: { profession: string; how: string };
 };
 
 export type EventName = keyof Events;

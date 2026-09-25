@@ -36,7 +36,7 @@ describe('Saved', () => {
   it('strips reasons saved by an older version when it loads', async () => {
     await AsyncStorage.setItem('watl_saved', JSON.stringify([match]));
     renderRouter(routes, { initialUrl: '/saved' });
-    expect(await screen.findByText('Alice Bui')).toBeOnTheScreen();
+    expect(await screen.findByLabelText('Alice Bui, Psychologist')).toBeOnTheScreen();
     await waitFor(async () => {
       const stored = await AsyncStorage.getItem('watl_saved');
       expect(stored).not.toMatch(/reasons|looking for help/);

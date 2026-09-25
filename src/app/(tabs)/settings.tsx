@@ -2,15 +2,19 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
+import { GoalChips } from '@/components/GoalChips';
 import { ListGroup, ListRow, SectionTitle } from '@/components/ListRow';
 import { ScreenHeader } from '@/components/ScreenHeader';
+import { useGoals } from '@/features/care/goals';
 import { claudeEnabled } from '@/features/match/remoteExtract';
 import { useSession } from '@/features/match/session';
 import { devToolsEnabled } from '@/lib/devtools';
 import { colors } from '@/lib/theme';
 
+// Profile: your goals first (they shape your care team), then settings.
 export default function Settings() {
   const session = useSession();
+  const { goals, toggle } = useGoals();
   const [claude, setClaude] = useState<boolean | null>(null);
   useEffect(() => {
     let alive = true;
@@ -22,8 +26,11 @@ export default function Settings() {
 
   return (
     <View style={styles.root}>
-      <ScreenHeader title="Settings" />
+      <ScreenHeader title="Profile" />
       <ScrollView contentContainerStyle={styles.content}>
+        <SectionTitle>Your goals</SectionTitle>
+        <GoalChips selected={goals} onToggle={toggle} />
+
         <SectionTitle>Your search</SectionTitle>
         <ListGroup>
           <ListRow
