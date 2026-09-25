@@ -343,7 +343,9 @@ Each phase ends deployed on Vercel with CI green.
   - Places, languages and urgent wording also come from the keyword rules. Either reading can trigger the safety pause.
 - **Switching it on (you):** add `ANTHROPIC_API_KEY` to the Vercel project's environment variables and redeploy. Set `WATL_CLAUDE=off` to switch it off again without removing the key.
 - **Evals:** `evals/extraction.json` (33 cases) is scored by `evals/score.ts`. The keyword extractor must pass all of them in CI. Claude is held to ≥ 90% by an opt-in live run: `WATL_LIVE_EVAL=1 ANTHROPIC_API_KEY=… npx jest claude.live` (about 35 short requests).
-- **Still to do:** Claude writing the assistant's replies (today they're built from the signal diff), `/api/feedback` storage, and Claude drafting interview proposals.
+- **Interview proposals:** `scripts/interview.py propose <id>` has Claude draft excerpts, values and patient-facing lines for unfilled answers. Drafts pass the same checks as `ingest`, are marked `proposedBy: claude`, and still need a reviewer (tests use a stand-in client).
+- **Medical questions:** the assistant declines them with a fixed reply (50-prompt red-team set, `evals/redteam.json`).
+- **Still to do:** Claude writing the assistant's replies (today they're built from the signal diff; rerun the red-team set if that changes), and `/api/feedback` storage (waiting on D4).
 
 ### Phase 2 notes (engine as built)
 
@@ -381,7 +383,7 @@ Each phase ends deployed on Vercel with CI green.
   - `collect` writes `server/data/interviews.json`.
 - **Overlay:** `server/data/overlay.ts` applies approved interviews on top of the profile records. Interview traits (`approved`) replace profile-sourced ones for the same dimension or area. Confirmed practical facts (fees, availability, weekends, new patients) replace "not published".
 - **Mock interviews:** three were run through the pipeline for fictional test clinicians. None exist yet for the real network; interviews with the ADHDme clinicians are the next real-world step.
-- **Deferred:** Claude drafting proposals from a transcript moves to Phase 8. Until then an interviewer proposes values by hand.
+- **Claude drafting proposals:** done in Phase 8 (`propose`); see the Phase 8 notes.
 - **Tests:** Python unit tests run in CI (`npm run test:py`).
 
 ### Phase 4 notes (voice)

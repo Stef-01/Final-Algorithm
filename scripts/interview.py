@@ -2,6 +2,7 @@
 """Clinician onboarding interview pipeline (docs/clinician-interview.md, PRD §22–26).
 
     python3 scripts/interview.py new <id>                      # template -> <dir>/<id>/interview.json
+    python3 scripts/interview.py propose <id>                  # Claude drafts proposals for unfilled answers (needs `pip install anthropic`)
     python3 scripts/interview.py ingest <id>                   # validate  -> <dir>/<id>/draft.json
     python3 scripts/interview.py review <id>                   # approve   -> <dir>/<id>/approved.json (interactive)
     python3 scripts/interview.py review <id> --decisions f.json  # approve non-interactively
@@ -9,7 +10,8 @@
 
 --dir defaults to server/data/interviews. Every excerpt must appear word for word in the recorded answer,
 every value must be on the dimension's scale, and patient-facing lines must follow the copy rules. Nothing
-is approved without a reviewer decision.
+is approved without a reviewer decision. Claude's proposals (`propose`) are only drafts: they go through
+the same checks in `ingest` and still need a reviewer's decision in `review`.
 """
 import argparse
 import json
@@ -137,7 +139,8 @@ def validate(doc):
         elif p.get('value') not in scale.get(dim, []):
             problems.append(f'{where}: {p.get("value")!r} is not on the {dim} scale {scale.get(dim)}')
         drafts.append(dict(scenario=sid, dimension=dim, value=p.get('value'), area=p.get('area'), level=p.get('level'),
-                           confidence=p.get('confidence'), excerpt=excerpt, patientFacing=line, prompt=a['prompt']))
+                           confidence=p.get('confidence'), excerpt=excerpt, patientFacing=line, prompt=a['prompt'],
+                           **({'proposedBy': p['proposedBy']} if p.get('proposedBy') else {})))
     practical = {}
     for k, v in (doc.get('practical') or {}).items():
         if k not in PRACTICAL_FIELDS:
@@ -147,6 +150,121 @@ def validate(doc):
         elif v is not None:
             practical[k] = v
     return drafts, practical, problems
+
+
+MODEL = 'claude-opus-5'
+
+
+def first_name(cid):
+    return cid.split('-')[0].capitalize()
+
+
+def proposal_schema(scale):
+    dims = sorted(scale)
+    return {
+        'type': 'object',
+        'additionalProperties': False,
+        'required': ['proposals'],
+        'properties': {'proposals': {'type': 'array', 'items': {
+            'type': 'object',
+            'additionalProperties': False,
+            'required': ['scenario', 'value', 'area', 'level', 'confidence', 'excerpt', 'patientFacing'],
+            'properties': {
+                'scenario': {'type': 'string', 'enum': [sid for sid, *_ in SCENARIOS]},
+                'value': {'type': 'string', 'enum': sorted({v for d in dims for v in scale[d]} | {'none'})},
+                'area': {'type': 'string'},
+                'level': {'type': 'string', 'enum': ['particular', 'general', 'none']},
+                'confidence': {'type': 'string', 'enum': list(CONFIDENCE)},
+                'excerpt': {'type': 'string'},
+                'patientFacing': {'type': 'string'},
+            },
+        }}},
+    }
+
+
+PROPOSE_SYSTEM = """You help a reviewer turn a clinician's interview answers into draft matching traits. A human reviews every draft before anything is used, so when an answer doesn't clearly show a trait, say "none" rather than guessing.
+
+For each answer you're given, return:
+- value: a point on that dimension's scale (listed with the answer), or "none" if the answer doesn't show it.
+- For the "expertise" dimension instead: area (a short name such as "Adult ADHD") and level ("particular" if it's a focus, "general" otherwise); value "none".
+- confidence: "high" if the answer states it outright, "medium" if it's a fair reading, "low" otherwise.
+- excerpt: the shortest phrase from the answer that shows it, copied exactly, character for character.
+- patientFacing: one plain sentence a patient will read, about what the clinician does, using their first name. Describe behaviour, not virtues: never "caring", "compassionate", "holistic", "warm", "thorough", "understanding" or "patient-centred", no percentages, no "best" or "perfect"."""
+
+
+def propose_answers(doc, client, name=None):
+    """Fill in Claude's draft for every answer that has text but no proposal yet. Returns (filled, skipped)."""
+    scale = scales()
+    name = name or first_name(doc['clinicianId'])
+    todo = [a for a in doc['answers'] if a.get('answer', '').strip() and a.get('dimension') not in (None, 'practical')
+            and not (a.get('proposed') or {}).get('patientFacing')]
+    if not todo:
+        return [], []
+    listing = '\n\n'.join(
+        f"scenario: {a['scenario']}\ndimension: {a['dimension']}"
+        + (f"\nscale: {' | '.join(scale[a['dimension']])}" if a['dimension'] in scale else '')
+        + f"\nquestion: {a['prompt']}\nanswer: {a['answer']}"
+        for a in todo)
+    response = client.beta.messages.create(
+        model=MODEL,
+        max_tokens=16000,
+        betas=['server-side-fallback-2026-07-01'],
+        fallbacks='default',
+        output_config={'format': {'type': 'json_schema', 'schema': proposal_schema(scale)}},
+        system=PROPOSE_SYSTEM,
+        messages=[{'role': 'user', 'content': f"The clinician's first name is {name}.\n\n{listing}"}],
+    )
+    if response.stop_reason != 'end_turn':
+        fail(f'Claude stopped early ({response.stop_reason}); fill these in by hand')
+    text = next((b.text for b in response.content if b.type == 'text'), '')
+    try:
+        proposals = {p['scenario']: p for p in json.loads(text)['proposals']}
+    except (ValueError, KeyError, TypeError):
+        fail('Claude returned something unreadable; fill these in by hand')
+    filled, skipped = [], []
+    for a in todo:
+        p = proposals.get(a['scenario'])
+        dim = a['dimension']
+        why = None
+        if not p:
+            why = 'no proposal'
+        elif p['excerpt'] not in a['answer'] or not p['excerpt'].strip():
+            why = 'excerpt not word for word'
+        elif BANNED.search(p['patientFacing']) or WINNER.search(p['patientFacing']) or re.search(r'\d\s*%', p['patientFacing']):
+            why = 'patient-facing line breaks the copy rules'
+        elif dim == 'expertise' and (not p['area'].strip() or p['level'] not in ('particular', 'general')):
+            why = 'no area or level'
+        elif dim != 'expertise' and p['value'] not in scale.get(dim, []):
+            why = 'answer does not show a point on the scale' if p['value'] == 'none' else 'value not on the scale'
+        if why:
+            skipped.append((a['scenario'], why))
+            continue
+        a['excerpt'] = p['excerpt']
+        a['proposed'] = dict(
+            value=None if dim == 'expertise' else p['value'],
+            area=p['area'].strip() if dim == 'expertise' else None,
+            level=p['level'] if dim == 'expertise' else None,
+            confidence=p['confidence'],
+            patientFacing=p['patientFacing'].strip(),
+            proposedBy='claude',
+        )
+        filled.append(a['scenario'])
+    return filled, skipped
+
+
+def cmd_propose(args):
+    d = paths(args)
+    f = d / 'interview.json'
+    doc = json.loads(f.read_text())
+    try:
+        import anthropic
+    except ImportError:
+        fail('install the Anthropic SDK first: pip install anthropic')
+    filled, skipped = propose_answers(doc, anthropic.Anthropic(), args.name)
+    f.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + '\n')
+    print(f'{len(filled)} drafted by Claude (marked proposedBy: claude); review them before ingest')
+    for sid, why in skipped:
+        print(f'  left for you: {sid} ({why})')
 
 
 def cmd_ingest(args):
@@ -163,7 +281,8 @@ def cmd_ingest(args):
 
 def ask(t):
     label = t['area'] if t['dimension'] == 'expertise' else f"{t['dimension']} = {t['value']}"
-    print(f"\n[{t['scenario']}] {label} ({t['confidence']})\n  said: “{t['excerpt']}”\n  line: {t['patientFacing']}")
+    who = ' — drafted by Claude, check it against the answer' if t.get('proposedBy') == 'claude' else ''
+    print(f"\n[{t['scenario']}] {label} ({t['confidence']}){who}\n  said: “{t['excerpt']}”\n  line: {t['patientFacing']}")
     while True:
         choice = input('  (a)pprove / (e)dit line / (r)eject? ').strip().lower()
         if choice in ('a', 'r'):
@@ -218,6 +337,9 @@ def main(argv=None):
     n = sub.add_parser('new')
     n.add_argument('id')
     n.add_argument('--force', action='store_true')
+    pr = sub.add_parser('propose')
+    pr.add_argument('id')
+    pr.add_argument('--name', help="clinician's first name for patient-facing lines (default: from the id)")
     sub.add_parser('ingest').add_argument('id')
     r = sub.add_parser('review')
     r.add_argument('id')
@@ -225,7 +347,7 @@ def main(argv=None):
     c = sub.add_parser('collect')
     c.add_argument('--out', default=str(COLLECTED))
     args = ap.parse_args(argv)
-    {'new': cmd_new, 'ingest': cmd_ingest, 'review': cmd_review, 'collect': cmd_collect}[args.cmd](args)
+    {'new': cmd_new, 'propose': cmd_propose, 'ingest': cmd_ingest, 'review': cmd_review, 'collect': cmd_collect}[args.cmd](args)
 
 
 if __name__ == '__main__':

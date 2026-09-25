@@ -15,11 +15,15 @@
 
 ```bash
 python3 scripts/interview.py new <clinician-id>          # writes server/data/interviews/<id>/interview.json
-# ...conduct the interview, fill in each answer, excerpt and proposal...
+# ...conduct the interview and fill in each answer word for word...
+python3 scripts/interview.py propose <clinician-id>      # optional: Claude drafts excerpts, values and lines for unfilled answers
+# ...check or complete the proposals...
 python3 scripts/interview.py ingest <clinician-id>       # validates → draft.json
 python3 scripts/interview.py review <clinician-id>       # approve / edit / reject each trait → approved.json
 python3 scripts/interview.py collect                      # gathers approved interviews -> server/data/interviews.json
 ```
+
+**Claude's drafts (`propose`).** This needs `pip install anthropic` and an API key. Claude only fills answers that have no proposal yet, and never overwrites the interviewer's. Each draft must pass the same checks as `ingest`: the excerpt is word for word, the value is on the scale, and the line follows the copy rules. Anything that fails is left blank and listed for you. Drafts are marked `proposedBy: claude`, and `review` flags them so the reviewer checks each one against the answer. Nothing Claude drafts is approved without a reviewer.
 
 The app applies `server/data/interviews.json` on top of the imported profiles (`server/data/overlay.ts`). Approved interview traits replace the profile-sourced ones for the same dimension or area, and are marked `approved`. Practical facts the clinician confirms (fees, availability, weekends, new patients) replace "not published".
 
