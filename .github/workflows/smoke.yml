@@ -1,16 +1,21 @@
 name: smoke
 
-# After Vercel reports a production deployment live, check the deployed site itself:
-# the page, deep links, the manifest, and each API and its guards (scripts/smoke.mjs).
+# After Vercel reports a production deployment live, check the public site itself: the page, deep
+# links, the manifest, and each API and its guards (scripts/smoke.mjs). It tests the production
+# domain, not the deployment's own URL, which sits behind Vercel's deployment protection.
 on: deployment_status
 
 jobs:
   smoke:
     if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Production'
     runs-on: ubuntu-latest
+    env:
+      SMOKE_URL: ${{ vars.SMOKE_URL || 'https://final-algorithm.vercel.app' }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - run: node scripts/smoke.mjs "${{ github.event.deployment_status.environment_url || 'https://final-algorithm.vercel.app' }}"
+      # The production domain moves to the new deployment a few seconds after it reports success.
+      - run: sleep 20
+      - run: node scripts/smoke.mjs "$SMOKE_URL"
