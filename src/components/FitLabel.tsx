@@ -15,7 +15,7 @@ export function FitLabel({ fit }: { fit: Fit }) {
 }
 
 const styles = StyleSheet.create({
-  pill: { alignSelf: 'flex-start', borderRadius: 30, paddingHorizontal: 10, paddingVertical: 4 },
+  pill: { alignSelf: 'flex-start', maxWidth: '100%', borderRadius: 30, paddingHorizontal: 10, paddingVertical: 4 },
   strong: { backgroundColor: colors.purple },
   good: { backgroundColor: colors.black },
   consider: { backgroundColor: colors.white, borderWidth: 1, borderColor: colors.line },

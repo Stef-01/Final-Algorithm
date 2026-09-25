@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   pressed: { backgroundColor: colors.background },
   photo: { width: 64, height: 64, borderRadius: 32, backgroundColor: colors.chip },
   text: { flex: 1, gap: 3 },
-  titleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
+  titleRow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   name: { flexShrink: 1, fontFamily: fonts.bold, fontSize: 16, color: colors.black },
   place: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted },
   summary: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 19, color: colors.black },

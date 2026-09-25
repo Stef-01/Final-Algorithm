@@ -226,8 +226,8 @@ const styles = StyleSheet.create({
   },
   noteTitle: { fontFamily: fonts.bold, fontSize: 13, letterSpacing: 0.3, color: colors.black, marginBottom: 6 },
   noteBody: { fontFamily: fonts.regular, fontSize: 15, lineHeight: 22, color: colors.black },
-  tags: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginHorizontal: 15, marginRight: 70 },
-  tag: { borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 14, paddingVertical: 8 },
+  tags: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginHorizontal: 15 },
+  tag: { maxWidth: '100%', borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 14, paddingVertical: 8 },
   tagText: { fontFamily: fonts.medium, fontSize: 15, color: colors.black },
   body: { fontFamily: fonts.regular, fontSize: 16, lineHeight: 24, color: colors.black, marginHorizontal: 15 },
   row: {

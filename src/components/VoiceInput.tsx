@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: 16 },
   mic: { backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center' },
   ring: { position: 'absolute', backgroundColor: colors.purple },
-  labels: { gap: 2 },
+  labels: { gap: 2, flexShrink: 1 }, // wraps at large text sizes
   label: { fontFamily: fonts.bold, fontSize: 18, color: colors.black },
   orType: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted },
   transcript: { fontFamily: fonts.regular, fontSize: 20, lineHeight: 28, color: colors.black, marginBottom: 16, minHeight: 28 },

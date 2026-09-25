@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   thanks: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, paddingVertical: 12 },
   card: { marginHorizontal: 12, marginTop: 20, borderRadius: 10, backgroundColor: colors.white, padding: 20 },
   cardTitle: { fontFamily: fonts.serifSemiBold, fontSize: 20, lineHeight: 26, color: colors.black, textAlign: 'center' },
-  scale: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 18 },
+  scale: { flexDirection: 'row', flexWrap: 'wrap', rowGap: 10, justifyContent: 'space-between', marginTop: 18 }, // wraps at large text sizes
   point: {
     width: 48,
     height: 48,
