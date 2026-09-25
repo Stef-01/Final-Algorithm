@@ -1,0 +1,37 @@
+export const colors = {
+  black: '#000000',
+  white: '#FFFFFF',
+  purple: '#692F60',
+  purpleText: '#763568',
+  boost: '#7eaaa9',
+  line: '#a9a9a9',
+  chip: '#D0D0D0',
+  tabBar: '#1A1A1A',
+  tabInactive: '#636363',
+  rose: '#C6B5C7',
+  background: '#F1F1F1',
+};
+
+export const fonts = {
+  regular: 'ModernEra-Regular',
+  medium: 'ModernEra-Medium',
+  bold: 'ModernEra-Bold',
+  serif: 'TiemposHeadline-Regular',
+  serifSemiBold: 'TiemposHeadline-SemiBold',
+};
+
+export const fontAssets = {
+  [fonts.regular]: require('../../assets/fonts/modern_era_regular.otf'),
+  [fonts.medium]: require('../../assets/fonts/modern_era_medium.otf'),
+  [fonts.bold]: require('../../assets/fonts/modern_era_bold.otf'),
+  [fonts.serif]: require('../../assets/fonts/tiempos_headline_regular.otf'),
+  [fonts.serifSemiBold]: require('../../assets/fonts/tiempos_headline_semi_bold.otf'),
+};
+
+export const urls = {
+  terms: 'https://hinge.co/terms.html',
+  privacy: 'https://hinge.co/privacy.html',
+  helpCentre: 'https://hingeapp.zendesk.com/hc/en-us',
+  safeDating: 'https://hingeapp.zendesk.com/hc/en-us/articles/360007194774-Safe-Dating-Advice',
+  licenses: 'https://hingeapp.zendesk.com/hc/en-us/articles/360013413034-Android-Open-Source-Software',
+};
