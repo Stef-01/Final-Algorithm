@@ -22,6 +22,9 @@ export type Events = {
   match_feedback_negative: { clinician: string };
   /** PRD §49 primary metric: "How well do these clinicians seem to fit what you told us?" (1–5). */
   match_rating: { rating: number; matches: number };
+  /** The floating assistant: opened, and each message (whether a chip, and whether it changed the list). */
+  assistant_opened: { hasResults: boolean };
+  assistant_message: { chip: boolean; changed: boolean };
 };
 
 export type EventName = keyof Events;

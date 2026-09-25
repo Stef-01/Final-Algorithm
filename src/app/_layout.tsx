@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { AssistantButton } from '@/components/AssistantButton';
 import { VercelAnalytics } from '@/components/VercelAnalytics';
 import { SavedProvider } from '@/features/match/saved';
 import { SessionProvider } from '@/features/match/session';
@@ -22,10 +23,11 @@ export default function RootLayout() {
             <Stack.Screen name="(tabs)" options={{ animation: 'none' }} />
             <Stack.Screen name="clinician/[id]" />
             <Stack.Screen name="dev/states" />
-            {['safety', 'book/[id]'].map((name) => (
+            {['safety', 'book/[id]', 'refine'].map((name) => (
               <Stack.Screen key={name} name={name} options={{ presentation: 'transparentModal', animation: 'fade' }} />
             ))}
           </Stack>
+          <AssistantButton />
         </SavedProvider>
       </SessionProvider>
     </SafeAreaProvider>

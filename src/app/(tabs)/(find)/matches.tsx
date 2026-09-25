@@ -114,6 +114,7 @@ export default function Matches() {
           </Text>
         )}
         <ClinicianCards
+          key={clinician.id}
           clinician={clinician}
           match={m}
           onOpen={open}

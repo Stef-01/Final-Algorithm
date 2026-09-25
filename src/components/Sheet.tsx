@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors, fonts } from '@/lib/theme';
 import { Icon } from './Icon';
+import { PressScale } from './motion';
 
 // Grey scrim + white rounded card, the pattern the Android "dialog" activities used.
 export function Sheet({ children, closeButton }: { children: ReactNode; closeButton?: boolean }) {
@@ -36,18 +37,14 @@ export function PillButton({
   variant?: 'purple' | 'black' | 'text';
 }) {
   return (
-    <Pressable
+    <PressScale
       onPress={onPress}
       accessibilityRole="button"
-      style={({ pressed }) => [
-        styles.pill,
-        variant === 'black' && styles.pillBlack,
-        variant === 'text' && styles.pillText,
-        pressed && { opacity: 0.8 },
-      ]}
+      scaleTo={0.97}
+      style={[styles.pill, variant === 'black' && styles.pillBlack, variant === 'text' && styles.pillText]}
     >
       <Text style={[styles.pillLabel, variant === 'text' && styles.pillLabelText]}>{label}</Text>
-    </Pressable>
+    </PressScale>
   );
 }
 

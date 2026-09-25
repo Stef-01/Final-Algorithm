@@ -2,6 +2,7 @@ import { Redirect, router } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { MatchRow } from '@/components/MatchRow';
+import { Appear } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { getClinician } from '@/data/clinicians';
 import { useSession } from '@/features/match/session';
@@ -33,7 +34,9 @@ export default function AllMatches() {
             <View key={m.clinicianId}>
               {i === 0 ? <Text style={styles.section}>I&apos;d start with</Text> : null}
               {i === r.matches.length ? <Text style={styles.section}>Also a fit</Text> : null}
-              <MatchRow clinician={c} match={m} rank={i + 1} onPress={() => router.push(`/clinician/${c.id}`)} />
+              <Appear index={i}>
+                <MatchRow clinician={c} match={m} rank={i + 1} onPress={() => router.push(`/clinician/${c.id}`)} />
+              </Appear>
             </View>
           );
         })}

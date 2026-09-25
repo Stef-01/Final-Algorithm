@@ -6,6 +6,7 @@ import { applyAnswer, NOT_SURE, questionById, type BankQuestion } from '@server/
 
 import { demoById } from './demos';
 import { extractSignals, mergeSignals } from './extract';
+import { applyRefinement } from './refine';
 import type { AgentStep, MatchResult, Priority, Question } from './types';
 
 // The matching agent, running the real engine on the device. Patient text becomes signals via a
@@ -25,6 +26,8 @@ export type SessionInput = {
   expandDistance: boolean;
   safetyAcknowledged: boolean;
   wantsMoreQuestions: boolean;
+  /** What the patient asked the refine assistant to change, oldest first. Newer wins. */
+  refinements?: string[];
 };
 
 export const pool = professionals;
@@ -41,6 +44,8 @@ export function signalsFor(input: SessionInput): PatientSignals {
   for (const d of input.removedPriorities) delete s.preferences[d as Dimension];
   if (input.includeTelehealth && s.constraints.mode === 'in_person_only') s.constraints = { ...s.constraints, mode: 'any' };
   if (input.expandDistance) s.constraints = { ...s.constraints, maxKm: undefined };
+  for (const r of input.refinements ?? []) s = applyRefinement(s, r);
+  s.profession = input.profession;
   if (input.safetyAcknowledged) delete s.safetyFlag;
   return s;
 }
@@ -58,7 +63,7 @@ function toQuestion(q: BankQuestion, input: SessionInput): Question {
   return { id: q.id, ack, text: q.text, options: q.options.map((o) => o.label) };
 }
 
-const PRIORITY_LABEL: Partial<Record<Dimension, Record<string, string>>> = {
+export const PRIORITY_LABEL: Partial<Record<Dimension, Record<string, string>>> = {
   consultation_pace: { unhurried: 'Longer appointments', brisk: 'Quick appointments', standard: 'Standard appointments' },
   explanation_depth: { detailed: 'Explains the reasons', brief: 'Just the key points' },
   mental_health_integration: { high: 'Mental health looked at too' },
@@ -73,6 +78,8 @@ const PRIORITY_LABEL: Partial<Record<Dimension, Record<string, string>>> = {
   continuity: { high: 'Seeing the same person' },
   follow_up_intensity: { scheduled: 'Regular check-ins', proactive: 'Active follow-up' },
 };
+
+export const priorityLabel = (d: Dimension, v: string) => PRIORITY_LABEL[d]?.[v];
 
 export function priorities(s: PatientSignals, dims: Dimension[]): Priority[] {
   const out: Priority[] = [];

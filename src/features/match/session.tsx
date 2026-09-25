@@ -4,6 +4,7 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 import { track, wordCount } from '@/lib/analytics';
 
 import * as core from './sessionCore';
+import { SUGGESTION_TEXT } from './refine';
 import type { NoMatchAction } from './types';
 
 const STORAGE_KEY = 'watl_session';
@@ -23,6 +24,8 @@ type Session = {
   noMatchAction: (action: NoMatchAction) => string;
   rateMatches: (rating: number) => void;
   thumb: (clinicianId: string, dir: 'up' | 'down') => void;
+  /** A message to the floating assistant; returns the route to show (usually '/refine'). */
+  refine: (message: string) => string;
   reset: () => void;
   load: (state: core.SessionState) => void;
 };
@@ -106,6 +109,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       thumb: (id, dir) => {
         track(dir === 'up' ? 'match_feedback_positive' : 'match_feedback_negative', { clinician: id });
         commit(core.thumb(current.current, id, dir));
+      },
+      refine: (message) => {
+        const before = current.current.result;
+        const t = core.refine(current.current, message);
+        track('assistant_message', { chip: message in SUGGESTION_TEXT, changed: t.state.result !== before });
+        return route(t);
       },
       reset: () => {
         commit(core.initialState());

@@ -1,4 +1,7 @@
-import { bankQuestion, nextStep, normaliseAnswer, runMatching, type SessionInput } from './agent';
+import { pool as clinicianPool } from './agent';
+import { bankQuestion, nextStep, normaliseAnswer, priorityLabel, runMatching, signalsFor, type SessionInput } from './agent';
+import { copyFor } from '@/lib/professions';
+import { describeChange, listPhrase, professionSwitch, SUGGESTION_TEXT, understood, type ChatTurn } from './refine';
 import { demoById, demos } from './demos';
 import type { AgentStep, Match, MatchResult, NoMatchAction, Priority, Profession, Question } from './types';
 
@@ -23,6 +26,8 @@ export type SessionState = {
   startedAt?: number;
   /** In-app validation (PRD §49): a 1–5 credibility rating and per-match thumbs. */
   feedback: { rating?: number; thumbs: Record<string, 'up' | 'down'> };
+  /** The refine assistant's conversation (floating button). */
+  chat?: ChatTurn[];
   updatedAt: number;
 };
 
@@ -157,6 +162,89 @@ export function currentMatch(state: SessionState): Match | undefined {
 
 export function findMatch(state: SessionState, clinicianId: string): Match | undefined {
   return state.result?.status === 'matches' ? state.result.matches.find((m) => m.clinicianId === clinicianId) : undefined;
+}
+
+// ---- Refine assistant ----
+
+const say = (state: SessionState, ...turns: ChatTurn[]): SessionState => ({
+  ...state,
+  chat: [...(state.chat ?? []), ...turns],
+  updatedAt: Date.now(),
+});
+
+const firstName = (id: string) => clinicianPool.find((c) => c.id === id)?.firstName ?? 'someone';
+
+/** The assistant's opening line, from where the patient is. */
+export function refineGreeting(state: SessionState): string {
+  const r = state.result;
+  const { many } = copyFor(state.profession);
+  if (r?.status === 'matches') {
+    const n = r.matches.length + r.more.length;
+    return `I've found ${n} ${n === 1 ? copyFor(state.profession).one : many} who fit. Tell me what to change and I'll re-rank them — or pick one of these.`;
+  }
+  if (r?.status === 'none') return "Nobody fits everything yet. Tell me what you could be flexible on and I'll look again.";
+  return "Tell me what you're looking for, in your own words, and I'll find people who fit.";
+}
+
+/**
+ * One message to the refine assistant. With results showing, it re-ranks in place and says exactly
+ * what changed; with nothing yet, the message starts a search like the describe screen.
+ */
+export function refine(state: SessionState, message: string): Transition {
+  const text = message.trim();
+  if (!text) return { state, route: '/refine' };
+  const words = SUGGESTION_TEXT[text] ?? text;
+  const you: ChatTurn = { from: 'you', text };
+
+  if (!state.result) {
+    const t = submitText({ ...state, input: { ...state.input, demoId: undefined } }, words);
+    const reply: ChatTurn = { from: 'agent', text: 'Thanks — let me find people who fit that.' };
+    return { state: say(t.state, ...(state.chat ?? []), you, reply), route: t.route };
+  }
+
+  const switchTo = professionSwitch(words);
+  const input: SessionInput = {
+    ...state.input,
+    profession: switchTo ?? state.input.profession,
+    refinements: [...(state.input.refinements ?? []), words],
+    safetyAcknowledged: state.input.safetyAcknowledged,
+  };
+  const before = signalsFor(state.input);
+  const after = signalsFor(input);
+
+  if (after.safetyFlag?.level === 'urgent') {
+    return { state: say({ ...state, input }, you), route: '/safety' };
+  }
+
+  const changes = describeChange(before, after, priorityLabel);
+  const switched = switchTo && switchTo !== state.input.profession;
+  if (changes.length === 0 && !switched && (understood(words, priorityLabel) || switchTo)) {
+    const reply: ChatTurn = { from: 'agent', text: "That's already part of what I'm matching on. Anything else you'd like to change?" };
+    return { state: say(state, you, reply), route: '/refine' };
+  }
+  if (changes.length === 0 && !switched) {
+    const reply: ChatTurn = {
+      from: 'agent',
+      text: "I couldn't pick out a change from that. You could say things like “online only”, “someone more direct” or “bulk billed”.",
+    };
+    return { state: say(state, you, reply), route: '/refine' };
+  }
+
+  const result = runMatching(input);
+  const what = switched ? `${copyFor(switchTo).many} instead${changes.length ? `, with ${listPhrase(changes)}` : ''}` : listPhrase(changes);
+  if (result.status !== 'matches') {
+    const reply: ChatTurn = { from: 'agent', text: `No one fits once I add ${what}, so I've kept your current list. Is there something else you could be flexible on?` };
+    return { state: say(state, you, reply), route: '/refine' };
+  }
+  const profession = switched ? switchTo : state.profession;
+  const n = result.matches.length + result.more.length;
+  const { one, many } = copyFor(profession);
+  const reply: ChatTurn = {
+    from: 'agent',
+    text: `Done — now ${what}. ${n} ${n === 1 ? one : many} fit, and ${firstName(result.matches[0].clinicianId)} is first.`,
+    action: 'see_matches',
+  };
+  return { state: say({ ...state, profession, input, result, index: 0 }, you, reply), route: '/refine' };
 }
 
 export const isKnownQuestion = (id?: string) => !!bankQuestion(id);

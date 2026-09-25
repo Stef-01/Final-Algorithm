@@ -437,6 +437,12 @@ Each phase ends deployed on Vercel with CI green.
   - Labels stay honest. A clinician with no evidence-backed reason is "Possible fit", never higher.
   - Unpublished fees or weekend hours no longer exclude anyone. They're ranked lower (−0.06 per unconfirmed requirement) and flagged "Worth checking".
   - This relaxes PRD §4.7 (max 3), at your request.
+- **D9 (decided): a floating assistant on every main screen.** A black sparkle button (bottom-right) opens "Refine with WATL", a conversation where the patient says what to change and the list re-ranks.
+  - Refinements are later turns and override what was said before ("online only", then "online or in person is fine").
+  - Replies come from a diff of the signals, so they only claim changes that happened. If a change would leave nobody, the list is kept and the reply says so.
+  - Before any results, a message starts a search.
+  - The keyword stand-in handles it today (`src/features/match/refine.ts`). In Phase 8 Claude takes over the wording and the understanding, behind the same rules.
+- **D10 (decided): motion with React Native `Animated`, not Framer Motion.** Framer Motion is web-only. Reanimated would add ~60–100 KB gzipped against the budget. `src/components/motion.tsx` has `Appear` (spring rise-in, staggered), `PressScale` and `Pulse`, and all of them respect the device's reduce-motion setting.
 - **D7:** Voice transcription: browser speech service (fast, free, but audio goes to the browser vendor in Chrome) or a server-side service WATL controls? [browser for the prototype, with a clear notice]
 - **D6:** What does WATL stand for, and is there a tagline for the open screen? [use the PRD's "Find a GP who fits you." with the WATL logo]
 

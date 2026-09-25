@@ -1,4 +1,5 @@
 import type { Caveat, Clinician, Match } from '@/features/match/types';
+import { Appear } from './motion';
 import { ChipItem, ChipsCard, NoteCard, PhotoCard, PromptCard, TagsCard, TextCard } from './cards';
 
 type Props = {
@@ -52,32 +53,46 @@ export function ClinicianCards({ clinician: c, match, onOpen, onSave, saved }: P
     liked: saved,
     likeLabel: saved ? `Saved ${c.firstName}` : `Save ${c.firstName}`,
   };
+  let i = 0;
+  const step = () => i++;
   return (
     <>
-      <PhotoCard
-        caption={placeLine(c)}
-        source={c.photo}
-        onPress={onOpen}
-        accessibilityLabel={`View ${c.firstName}`}
-        {...like}
-      />
+      <Appear index={step()}>
+        <PhotoCard
+          caption={placeLine(c)}
+          source={c.photo}
+          onPress={onOpen}
+          accessibilityLabel={`View ${c.firstName}`}
+          {...like}
+        />
+      </Appear>
       {match.reasons.length > 0 ? (
-        match.reasons.slice(0, 3).map((r, i, all) => (
-          <PromptCard key={r.evidenceId} kicker={reasonKicker(i, all.length)} title={r.signal} answer={r.evidence} {...like} />
+        match.reasons.slice(0, 3).map((r, n, all) => (
+          <Appear key={r.evidenceId} index={step()}>
+            <PromptCard kicker={reasonKicker(n, all.length)} title={r.signal} answer={r.evidence} {...like} />
+          </Appear>
         ))
       ) : (
-        <TextCard kicker="Why they're here" title="Meets what you asked for" body={noReasonLine(c)} />
+        <Appear index={step()}>
+          <TextCard kicker="Why they're here" title="Meets what you asked for" body={noReasonLine(c)} />
+        </Appear>
       )}
       {caveatLines(match).map((line) => (
-        <NoteCard key={line} title="Worth checking" body={line} />
+        <Appear key={line} index={step()}>
+          <NoteCard title="Worth checking" body={line} />
+        </Appear>
       ))}
-      <ChipsCard
-        kicker="The practicals"
-        chips={practicalChips(c)}
-        rowsTitle="Particularly experienced with"
-        rows={c.experiencedWith.slice(0, 4).map((area) => ({ icon: 'icCheck', label: area }))}
-      />
-      <TagsCard kicker="How they practise" title={`How ${c.firstName} works`} tags={c.practiceStyle.slice(0, 5)} {...like} />
+      <Appear index={step()}>
+        <ChipsCard
+          kicker="The practicals"
+          chips={practicalChips(c)}
+          rowsTitle="Particularly experienced with"
+          rows={c.experiencedWith.slice(0, 4).map((area) => ({ icon: 'icCheck', label: area }))}
+        />
+      </Appear>
+      <Appear index={step()}>
+        <TagsCard kicker="How they practise" title={`How ${c.firstName} works`} tags={c.practiceStyle.slice(0, 5)} {...like} />
+      </Appear>
     </>
   );
 }

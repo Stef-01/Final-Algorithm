@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { colors, fonts } from '@/lib/theme';
 import { Icon } from './Icon';
+import { Appear, PressScale } from './motion';
 import { IconName } from './icons';
 
 type Props = {
@@ -42,9 +43,13 @@ export function ConversationStep({ icon, title, children, onNext, nextEnabled = 
               <View key={i} style={styles.dot} />
             ))}
           </View>
-          <Text style={styles.title} accessibilityRole="header">{title}</Text>
-          {note ? <Text style={styles.note}>{note}</Text> : null}
-          {children}
+          <Appear key={title}>
+            <Text style={styles.title} accessibilityRole="header">{title}</Text>
+            {note ? <Text style={styles.note}>{note}</Text> : null}
+          </Appear>
+          <Appear key={`${title}-body`} delay={90}>
+            {children}
+          </Appear>
         </ScrollView>
         {onNext ? (
           <Pressable
@@ -81,14 +86,14 @@ export function ChoicePill({
   removed?: boolean;
 }) {
   return (
-    <Pressable
+    <PressScale
       onPress={onPress}
       accessibilityRole="button"
       accessibilityState={removed === undefined ? undefined : { selected: !removed }}
-      style={({ pressed }) => [styles.pill, pressed && styles.pillPressed, removed && styles.pillRemoved]}
+      style={[styles.pill, removed && styles.pillRemoved]}
     >
       <Text style={[styles.pillText, removed && styles.pillTextRemoved]}>{label}</Text>
-    </Pressable>
+    </PressScale>
   );
 }
 
@@ -118,7 +123,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     marginBottom: 12,
   },
-  pillPressed: { backgroundColor: colors.line },
   pillRemoved: { backgroundColor: colors.background },
   pillTextRemoved: { color: colors.muted, textDecorationLine: 'line-through' },
   pillText: { fontFamily: fonts.medium, fontSize: 18, color: colors.black },
