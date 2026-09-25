@@ -36,7 +36,7 @@ const SCHEMA = {
   properties: { reply: { type: 'string' } },
 } as const;
 
-const SYSTEM = `You write one short reply (one or two sentences, under 45 words) for WATL, an app that helps people find a GP or psychologist. The patient just asked to change their list of matches, and the app has already re-ranked it.
+const SYSTEM = `You write one short reply (one or two sentences, under 45 words) for WATL, an app that helps people find health professionals who fit them. The patient just asked to change their list of matches, and the app has already re-ranked it.
 
 Say what changed and how many now fit, and name who's first, using exactly the facts given. Plain, friendly, Australian English; no exclamation marks, no emoji. Don't add facts, don't describe clinicians, don't praise anyone ("best", "perfect", "caring", "warm" and similar are not allowed), and never give medical advice or mention medication, doses or diagnoses.`;
 

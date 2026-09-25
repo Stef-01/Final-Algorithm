@@ -385,6 +385,47 @@
       "expect": {
         "urgent": false
       }
+    },
+    {
+      "id": "organised",
+      "text": "I procrastinate on everything and can never get organised.",
+      "profession": "adhd_coach",
+      "expect": {
+        "needs": [
+          "Executive functioning"
+        ]
+      }
+    },
+    {
+      "id": "back-pain",
+      "text": "My lower back has been sore for months after an injury at the gym.",
+      "profession": "physiotherapist",
+      "expect": {
+        "needs": [
+          "Injury recovery"
+        ]
+      }
+    },
+    {
+      "id": "sensory-child",
+      "text": "My daughter is 6 and melts down over noisy places and scratchy clothes; she has sensory issues.",
+      "profession": "occupational_therapist",
+      "expect": {
+        "needs": [
+          "Sensory and daily living",
+          "Parenting support"
+        ]
+      }
+    },
+    {
+      "id": "exercise",
+      "text": "I want to get fitter and more active, exercise helps my mood.",
+      "profession": "exercise_physiologist",
+      "expect": {
+        "needs": [
+          "Movement and exercise"
+        ]
+      }
     }
   ]
 }

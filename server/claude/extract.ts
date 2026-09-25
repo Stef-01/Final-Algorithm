@@ -61,7 +61,7 @@ export const SCHEMA = {
 
 const scale = DIMS.map((d) => `- ${d}: ${DIMENSIONS[d].join(' | ')}`).join('\n');
 
-export const SYSTEM = `You read what a patient wrote while looking for a GP or psychologist, and record what they asked for, for a matching engine. You never diagnose, advise or recommend anyone.
+export const SYSTEM = `You read what a patient wrote while looking for a health professional (a GP, psychologist, ADHD coach, occupational therapist, physiotherapist, exercise physiologist or neurotherapy practitioner), and record what they asked for, for a matching engine. You never diagnose, advise or recommend anyone.
 
 Record only what the patient actually said or clearly meant. If something isn't mentioned, leave it "unset" (or 0 for numbers, an empty list for needs and preferences). Being too cautious is fine; inventing a need or preference is not.
 
@@ -150,7 +150,7 @@ export async function extractWithClaude(client: Anthropic, text: string, profess
     betas: ['server-side-fallback-2026-07-01'],
     fallbacks: 'default',
     system: SYSTEM,
-    messages: [{ role: 'user', content: `Looking for: ${profession ?? 'either a GP or a psychologist'}\n\nThe patient wrote:\n${message}` }],
+    messages: [{ role: 'user', content: `Looking for: ${profession?.replace(/_/g, ' ') ?? 'not sure yet (any kind of professional)'}\n\nThe patient wrote:\n${message}` }],
   });
   if (response.stop_reason !== 'end_turn') throw new ExtractionUnavailable(`stop_reason ${response.stop_reason}`);
   const block = response.content.find((b) => b.type === 'text');
