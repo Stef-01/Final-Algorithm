@@ -5,6 +5,7 @@ import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { Icon } from '@/components/Icon';
+import { LikeButton } from '@/components/LikeButton';
 import { SectionTitle } from '@/components/ListRow';
 import { Appear, PressScale } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
@@ -26,7 +27,7 @@ const infoFor = (p: string) => PROFESSION_INFO.find((x) => x.id === p)!;
 const DAY = new Intl.DateTimeFormat('en-AU', { weekday: 'short', day: 'numeric', month: 'short' });
 
 export default function MyCare() {
-  const { saved } = useSaved();
+  const { saved, toggle } = useSaved();
   const { goals } = useGoals();
   const session = useSession();
 
@@ -61,7 +62,14 @@ export default function MyCare() {
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.team}>
           {team.map((slot, i) => (
             <Appear key={slot.member?.clinicianId ?? slot.profession} index={i} distance={10}>
-              <TeamCard slot={slot} onFind={(p) => router.push(session.chooseProfession(p))} />
+              <TeamCard
+                slot={slot}
+                onFind={(p) => router.push(session.chooseProfession(p))}
+                onRemove={(id) => {
+                  const item = saved.find((x) => x.clinicianId === id);
+                  if (item) toggle(item);
+                }}
+              />
             </Appear>
           ))}
         </ScrollView>
@@ -84,7 +92,7 @@ export default function MyCare() {
   );
 }
 
-function TeamCard({ slot, onFind }: { slot: Slot; onFind: (p: ProfessionChoice) => void }) {
+function TeamCard({ slot, onFind, onRemove }: { slot: Slot; onFind: (p: ProfessionChoice) => void; onRemove: (id: string) => void }) {
   const info = infoFor(slot.profession);
   const m = slot.member;
   if (m) {
@@ -104,6 +112,10 @@ function TeamCard({ slot, onFind }: { slot: Slot; onFind: (p: ProfessionChoice) 
         <Text style={styles.cardRole} numberOfLines={1}>
           {capitalised(info.one)}
         </Text>
+        {/* The same filled heart as elsewhere: tap to take them off your team. */}
+        <View style={styles.remove}>
+          <LikeButton liked onPress={() => onRemove(m.clinicianId)} label={`Remove ${m.firstName} from your team`} size={34} />
+        </View>
       </PressScale>
     );
   }
@@ -179,6 +191,7 @@ const styles = StyleSheet.create({
   cardName: { fontFamily: fonts.bold, fontSize: 15, color: colors.black, marginTop: 10, textAlign: 'center' },
   cardRole: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted, marginTop: 2, textAlign: 'center' },
   off: { color: colors.muted },
+  remove: { position: 'absolute', top: 6, right: 6 },
   steps: { marginHorizontal: 12, backgroundColor: colors.white, borderRadius: 16, overflow: 'hidden' },
   // Wraps at large text sizes: the calendar buttons drop to a second line.
   step: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 12, borderTopWidth: 1, borderTopColor: colors.background },

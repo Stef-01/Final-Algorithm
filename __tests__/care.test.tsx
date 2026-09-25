@@ -115,3 +115,25 @@ describe('goals shape a search', () => {
     expect(signalsFor(said.state.input).clinicalNeeds.find((n) => n.area === 'Executive functioning')!.goal).toBeUndefined();
   });
 });
+
+describe('My care: removing someone', () => {
+  it('the heart on a team card takes them off the team', async () => {
+    await AsyncStorage.clear();
+    await AsyncStorage.setItem('watl_saved', JSON.stringify([{ clinicianId: 'alice-bui', fit: 'Good fit', savedAt: '2026-09-26' }]));
+    /* eslint-disable @typescript-eslint/no-require-imports */
+    renderRouter(
+      {
+        _layout: require('@/app/_layout'),
+        '(tabs)/_layout': require('@/app/(tabs)/_layout').default,
+        '(tabs)/(find)/_layout': require('@/app/(tabs)/(find)/_layout').default,
+        '(tabs)/(find)/index': () => null,
+        '(tabs)/saved': require('@/app/(tabs)/saved').default,
+        '(tabs)/settings': () => null,
+      },
+      { initialUrl: '/saved' },
+    );
+    fireEvent.press(await screen.findByLabelText('Remove Alice from your team'));
+    expect(await screen.findByText('Build your care team.')).toBeOnTheScreen();
+    expect(JSON.parse((await AsyncStorage.getItem('watl_saved'))!)).toEqual([]);
+  });
+});
