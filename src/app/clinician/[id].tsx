@@ -26,11 +26,11 @@ export default function ClinicianDetail() {
   const insets = useSafeAreaInsets();
   const c = getClinician(id);
   const r0 = session.state.result;
-  const match =
-    findMatch(session.state, id) ??
-    (r0?.status === 'matches' ? r0.more.find((m) => m.clinicianId === id) : undefined) ??
-    saved.find((m) => m.clinicianId === id);
-  const fit = match?.fit ?? 'none';
+  // Why they fit comes only from the current search; Saved keeps the label, not the reasons.
+  const match = findMatch(session.state, id) ?? (r0?.status === 'matches' ? r0.more.find((m) => m.clinicianId === id) : undefined);
+  const savedItem = saved.find((m) => m.clinicianId === id);
+  const fit = match?.fit ?? savedItem?.fit ?? 'none';
+  const likeTarget = match ?? savedItem;
 
   useEffect(() => {
     if (c) track('clinician_viewed', { clinician: c.id, fit });
@@ -46,8 +46,8 @@ export default function ClinicianDetail() {
   }
 
   const p = c.practical;
-  const like = match
-    ? { onLike: () => toggle(match), liked: isSaved(c.id), likeLabel: isSaved(c.id) ? `Saved ${c.firstName}` : `Save ${c.firstName}` }
+  const like = likeTarget
+    ? { onLike: () => toggle(likeTarget), liked: isSaved(c.id), likeLabel: isSaved(c.id) ? `Saved ${c.firstName}` : `Save ${c.firstName}` }
     : {};
 
   // "See next match" only when this clinician is the current match and another follows.
@@ -58,7 +58,7 @@ export default function ClinicianDetail() {
 
   return (
     <View style={styles.root}>
-      <ScreenHeader title={c.name} back right={match ? <FitLabel fit={match.fit} /> : undefined} />
+      <ScreenHeader title={c.name} back right={fit !== 'none' ? <FitLabel fit={fit} /> : undefined} />
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: 140 + insets.bottom }]}>
         <PhotoCard caption={placeLine(c)} source={c.photo} {...like} />
 

@@ -1,39 +1,51 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
-import type { Match } from './types';
+import type { FitLabel, Match } from './types';
 
 // Clinicians the patient hearted. Kept on this device only; no account (PRD §4.12).
+// Only the id, the fit label and the date are kept: a match's reasons repeat what the patient
+// said about their health, and those stay with the search (24 h), not here (docs/privacy.md).
 
 const STORAGE_KEY = 'watl_saved';
 
+export type SavedItem = { clinicianId: string; fit: FitLabel; savedAt: string };
+
+/** Keep only what Saved needs (also strips reasons from anything saved by an older version). */
+export const toSavedItem = (m: Pick<Match, 'clinicianId' | 'fit'> & { savedAt?: string }, now = new Date()): SavedItem => ({
+  clinicianId: m.clinicianId,
+  fit: m.fit,
+  savedAt: m.savedAt ?? now.toISOString().slice(0, 10),
+});
+
 type Saved = {
-  saved: Match[];
+  saved: SavedItem[];
   isSaved: (clinicianId: string) => boolean;
-  toggle: (match: Match) => void;
+  toggle: (match: Pick<Match, 'clinicianId' | 'fit'>) => void;
 };
 
 const SavedContext = createContext<Saved | null>(null);
 
 export function SavedProvider({ children }: { children: ReactNode }) {
-  const [saved, setSaved] = useState<Match[]>([]);
+  const [saved, setSaved] = useState<SavedItem[]>([]);
   const current = useRef(saved);
 
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
       .then((raw) => {
         if (!raw) return;
-        current.current = JSON.parse(raw);
+        current.current = (JSON.parse(raw) as SavedItem[]).map((m) => toSavedItem(m));
         setSaved(current.current);
+        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(current.current)).catch(() => {});
       })
       .catch(() => {});
   }, []);
 
-  const toggle = useCallback((match: Match) => {
+  const toggle = useCallback((match: Pick<Match, 'clinicianId' | 'fit'>) => {
     const exists = current.current.some((m) => m.clinicianId === match.clinicianId);
     const next = exists
       ? current.current.filter((m) => m.clinicianId !== match.clinicianId)
-      : [...current.current, match];
+      : [...current.current, toSavedItem(match)];
     current.current = next;
     setSaved(next);
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
