@@ -399,10 +399,28 @@ export const scenarios: Scenario[] = [
     id: 'no-match',
     frame: '11_No_Strong_Match',
     label: 'No strong match',
-    build: () => ({ state: demoResults('psych-bulk-billed'), route: '/matches' }),
+    // Both GPs publish a $299 fee, so a GP search that must be bulk billed leaves nobody.
+    build: () => {
+      const s = demoResults('gp-rushed');
+      const input = { ...s.input, refinements: ['bulk billed'], refinementExtracts: [null] };
+      return { state: { ...s, input, result: runMatching(input) }, route: '/matches' };
+    },
   },
   { id: 'partial', frame: '—', label: 'Only 1 fits', build: () => ({ state: demoResults('gp-female'), route: '/matches' }) },
   { id: 'safety', frame: '—', label: 'Safety pause', build: () => runDemo('either-urgent') },
   { id: 'demos', frame: '—', label: 'Demo patients', build: () => ({ state: initialState(), route: '/demos' }) },
   { id: 'all', frame: '—', label: 'Everyone who fits (ranked)', build: () => ({ state: demoResults(withMatches()), route: '/all' }) },
+  { id: 'assistant', frame: '—', label: 'Assistant (opening)', build: () => ({ state: demoResults(withMatches()), route: '/refine' }) },
+  {
+    id: 'assistant-refined',
+    frame: '—',
+    label: 'Assistant (after a change)',
+    build: () => refine(demoResults(withMatches()), 'Online only'),
+  },
+  {
+    id: 'assistant-advice',
+    frame: '—',
+    label: 'Assistant (medical question)',
+    build: () => refine(demoResults(withMatches()), 'Should I increase my dose?'),
+  },
 ];

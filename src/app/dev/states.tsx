@@ -34,7 +34,7 @@ export default function DevStates() {
               }}
             />
           ))}
-          <ListRow label="Listening (voice)" value="02_Listening · arrives with voice in Phase 4" />
+          <ListRow label="Listening (voice)" value="02_Listening · open the describe screen or the assistant and tap the mic (Chrome or Safari)" />
         </ListGroup>
       </ScrollView>
     </View>
