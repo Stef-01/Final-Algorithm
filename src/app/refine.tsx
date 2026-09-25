@@ -35,6 +35,16 @@ export default function Refine() {
   const hasResults = state.result?.status === 'matches';
   const chat: ChatTurn[] = [{ from: 'agent', text: refineGreeting(state) }, ...(state.chat ?? [])];
 
+  // Web keyboard users: Escape closes the sheet.
+  useEffect(() => {
+    if (Platform.OS !== 'web' || typeof window === 'undefined') return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') router.back();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   useEffect(() => {
     const t = setTimeout(() => scroll.current?.scrollToEnd({ animated: !reduced }), 30);
     return () => clearTimeout(t);
@@ -80,6 +90,10 @@ export default function Refine() {
           </Pressable>
         </View>
 
+        {/* Screen readers hear each new reply (only the newest, not the whole thread again). */}
+        <Text style={styles.srOnly} accessibilityLiveRegion="polite">
+          {pending ? 'The assistant is replying.' : (chat.filter((t) => t.from === 'agent').at(-1)?.text ?? '')}
+        </Text>
         <ScrollView ref={scroll} style={styles.thread} contentContainerStyle={styles.threadContent} keyboardShouldPersistTaps="handled">
           {chat.map((turn, i) => (
             <Appear key={`${i}-${turn.text}`} distance={8}>
@@ -193,6 +207,7 @@ function Typing() {
 }
 
 const styles = StyleSheet.create({
+  srOnly: { position: 'absolute', width: 1, height: 1, overflow: 'hidden', opacity: 0 },
   scrim: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'flex-end' },
   card: { flexShrink: 1, maxHeight: '88%', backgroundColor: colors.white, borderTopLeftRadius: 18, borderTopRightRadius: 18 },
   header: {
