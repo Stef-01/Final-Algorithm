@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 30,
     paddingHorizontal: 14,
-    paddingVertical: 12,
+    paddingVertical: 13,
   },
   name: { fontFamily: fonts.medium, fontSize: 14, color: colors.black },
   count: { fontFamily: fonts.bold, fontSize: 12, color: colors.white, backgroundColor: colors.black, borderRadius: 10, minWidth: 20, textAlign: 'center', paddingHorizontal: 6, paddingVertical: 1, overflow: 'hidden' },

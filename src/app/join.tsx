@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   inputBad: { borderColor: colors.black },
   problem: { fontFamily: fonts.bold, fontSize: 13, color: colors.black, marginTop: 6 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  pill: { borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 14, paddingVertical: 12, backgroundColor: colors.white },
+  pill: { minWidth: 56, minHeight: 44, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 14, backgroundColor: colors.white },
   pillOn: { backgroundColor: colors.purple, borderColor: colors.purple },
   pillText: { fontFamily: fonts.medium, fontSize: 14, color: colors.black },
   pillTextOn: { color: colors.white },

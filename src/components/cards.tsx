@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   },
   rowsTitleFirst: { borderTopWidth: 0, paddingTop: 18 },
   textCard: { paddingTop: 30, paddingBottom: 24 },
-  more: { alignSelf: 'flex-start', marginHorizontal: 15, marginTop: 4, paddingVertical: 12 },
+  more: { alignSelf: 'flex-start', minWidth: 44, minHeight: 44, justifyContent: 'center', marginHorizontal: 15, marginTop: 4 },
   moreText: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText },
   kicker: {
     fontFamily: fonts.bold,
