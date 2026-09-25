@@ -18,6 +18,20 @@ export const toSavedItem = (m: Pick<Match, 'clinicianId' | 'fit'> & { savedAt?: 
   savedAt: m.savedAt ?? now.toISOString().slice(0, 10),
 });
 
+const FITS: FitLabel[] = ['Strong fit', 'Good fit', 'Worth considering', 'Possible fit'];
+
+/** Saved clinicians from storage: valid entries only, one per clinician, in the current shape. */
+export function restoreSaved(raw: unknown): SavedItem[] {
+  if (!Array.isArray(raw)) return [];
+  const out: SavedItem[] = [];
+  for (const m of raw as Partial<SavedItem>[]) {
+    if (!m || typeof m.clinicianId !== 'string' || !m.fit || !FITS.includes(m.fit)) continue;
+    if (out.some((x) => x.clinicianId === m.clinicianId)) continue;
+    out.push(toSavedItem({ clinicianId: m.clinicianId, fit: m.fit, savedAt: typeof m.savedAt === 'string' ? m.savedAt : undefined }));
+  }
+  return out;
+}
+
 type Saved = {
   saved: SavedItem[];
   isSaved: (clinicianId: string) => boolean;
@@ -34,7 +48,8 @@ export function SavedProvider({ children }: { children: ReactNode }) {
     AsyncStorage.getItem(STORAGE_KEY)
       .then((raw) => {
         if (!raw) return;
-        current.current = (JSON.parse(raw) as SavedItem[]).map((m) => toSavedItem(m));
+        const parsed: unknown = JSON.parse(raw);
+        current.current = restoreSaved(parsed);
         setSaved(current.current);
         AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(current.current)).catch(() => {});
       })

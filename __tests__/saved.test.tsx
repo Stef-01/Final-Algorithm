@@ -44,3 +44,20 @@ describe('Saved', () => {
     });
   });
 });
+
+describe('restoring Saved', () => {
+  it('keeps valid entries only, once each', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { restoreSaved } = require('@/features/match/saved') as typeof import('@/features/match/saved');
+    expect(restoreSaved({ not: 'a list' })).toEqual([]);
+    expect(
+      restoreSaved([
+        { clinicianId: 'alice-bui', fit: 'Good fit', savedAt: '2026-09-20' },
+        { clinicianId: 'alice-bui', fit: 'Good fit' },
+        { fit: 'Good fit' },
+        { clinicianId: 'x', fit: 'Best fit ever' },
+        null,
+      ]),
+    ).toEqual([{ clinicianId: 'alice-bui', fit: 'Good fit', savedAt: '2026-09-20' }]);
+  });
+});
