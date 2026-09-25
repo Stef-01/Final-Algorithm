@@ -44,6 +44,9 @@ export default function WhoAreYouLookingFor() {
           <Text style={styles.unsureText}>Not sure yet</Text>
         </PressScale>
       </Appear>
+      <Pressable onPress={() => router.push('/discover')} accessibilityRole="button">
+        <Text style={styles.demo}>Explore who does what</Text>
+      </Pressable>
       <Pressable onPress={() => router.push('/demos')} accessibilityRole="button">
         <Text style={styles.demo}>Try a demo patient</Text>
       </Pressable>

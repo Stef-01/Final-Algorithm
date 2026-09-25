@@ -74,14 +74,22 @@ export function Appear({
 export function PressScale({
   children,
   style,
+  containerStyle,
   scaleTo = 0.96,
   ...props
-}: Omit<PressableProps, 'style' | 'children'> & { children: ReactNode; style?: StyleProp<ViewStyle>; scaleTo?: number }) {
+}: Omit<PressableProps, 'style' | 'children'> & {
+  children: ReactNode;
+  style?: StyleProp<ViewStyle>;
+  /** Layout for the pressable itself (e.g. flex: 1 in a row); `style` is the visible part. */
+  containerStyle?: StyleProp<ViewStyle>;
+  scaleTo?: number;
+}) {
   const s = useState(() => new Animated.Value(1))[0];
   const to = (toValue: number) => Animated.spring(s, { toValue, damping: 15, stiffness: 320, useNativeDriver: native }).start();
   return (
     <Pressable
       {...props}
+      style={containerStyle}
       onPressIn={(e) => {
         to(scaleTo);
         props.onPressIn?.(e);

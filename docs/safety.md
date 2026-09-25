@@ -31,4 +31,5 @@ WATL finds clinicians; it doesn't give medical advice. This is what protects a p
 2. Decide whether "concern" (non-urgent) signals such as hopelessness should show a softer support line on the results screen.
 3. Review Claude's `urgent` instruction in `server/claude/extract.ts` (`SYSTEM`).
 4. Confirm the services listed are right for every region WATL will serve (currently Australian numbers only).
-5. Sign off on the assistant's disclaimer and the match-page copy rules (`BANNED_ADJECTIVES`, `copyProblems` in `server/engine/explain.ts`).
+5. Review the discovery queue's short facts (what each profession helps with, sessions, rebates) in `INTRO`, `src/lib/professions.ts`. They're general Australian information and need checking for accuracy.
+6. Sign off on the assistant's disclaimer and the match-page copy rules (`BANNED_ADJECTIVES`, `copyProblems` in `server/engine/explain.ts`).

@@ -26,6 +26,22 @@ export const PROFESSION_INFO: ProfessionInfo[] = [
   { id: 'dietitian', one: 'dietitian', many: 'dietitians', for: 'Food, nutrition', icon: 'icProDiet', available: false },
 ];
 
+/**
+ * One-card introductions for the discovery queue: three short facts each. General Australian
+ * information (rebates depend on the person's situation), to be reviewed with a clinical advisor
+ * before launch (docs/safety.md).
+ */
+export const INTRO: Record<Exclude<ProfessionInfo['id'], 'either'>, { helps: string; sessions: string; rebates: string }> = {
+  gp: { helps: 'Diagnosis, medication, referrals', sessions: '15–30 min visits', rebates: 'Medicare rebates' },
+  psychologist: { helps: 'Talking therapy, assessments', sessions: 'About 50 min', rebates: 'Medicare rebates with a GP plan' },
+  adhd_coach: { helps: 'Routines, focus, follow-through', sessions: 'Weekly or fortnightly', rebates: 'Usually no rebates' },
+  occupational_therapist: { helps: 'Sensory needs, daily skills', sessions: 'Clinic, home or school', rebates: 'NDIS or private health' },
+  physiotherapist: { helps: 'Pain, injury, movement', sessions: 'Hands-on and exercises', rebates: 'Private health, some GP plans' },
+  exercise_physiologist: { helps: 'Exercise for health and mood', sessions: 'Programs built for you', rebates: 'Private health, some GP plans' },
+  neurotherapist: { helps: 'Brain mapping, neurofeedback', sessions: 'Assessment, then training', rebates: 'Usually no rebates' },
+  dietitian: { helps: 'Food, eating, nutrition', sessions: 'Plans that fit your life', rebates: 'Private health, some GP plans' },
+};
+
 const info = (p?: ProfessionChoice) => PROFESSION_INFO.find((x) => x.id === p);
 
 /** "a" or "an" by sound: an ADHD coach, an occupational therapist, a GP, a psychologist. */
