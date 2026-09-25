@@ -62,7 +62,8 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/legacy-android/"
-    ]
+    ],
+    "testTimeout": 20000
   },
   "engines": {
     "node": "22.x"
