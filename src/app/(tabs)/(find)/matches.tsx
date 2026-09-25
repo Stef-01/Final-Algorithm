@@ -18,8 +18,31 @@ import { colors, fonts } from '@/lib/theme';
 const ACTION_LABEL: Record<NoMatchAction, string> = {
   answer_more: 'Answer one more question',
   include_telehealth: 'Include telehealth',
-  expand_distance: 'Expand distance',
+  expand_distance: 'Look further away',
+  any_cost: 'Show them at any cost',
+  any_gender: 'Include any gender',
+  any_profession: 'Include GPs and psychologists',
 };
+
+/** What's ruling everyone out, in the patient's terms (the first change that would help). */
+function blocker(action: NoMatchAction | undefined, many: string) {
+  switch (action) {
+    case 'any_cost':
+      return `None of the ${many} here publishes a fee within what you asked for.`;
+    case 'any_gender':
+      return `Nobody who fits the rest matches the clinician gender you asked for.`;
+    case 'include_telehealth':
+      return `Nobody who fits sees people in person where you are, but some do telehealth.`;
+    case 'expand_distance':
+      return `Nobody who fits is close enough, but some are a little further away.`;
+    case 'any_profession':
+      return `No ${many} fit all of that, but someone in the other profession does.`;
+    case 'answer_more':
+      return 'One more answer could help me find someone who fits.';
+    default:
+      return 'Try describing what you need in a bit more detail, or tell the assistant what you could be flexible on.';
+  }
+}
 
 
 // Screen 05 — top matches, one clinician at a time in the Discover layout.
@@ -41,7 +64,7 @@ export default function Matches() {
       <Shell title="Your matches">
         <EmptyStateCard
           title="Tell me what you're looking for first."
-          body={`Describe what you need and I'll suggest up to three ${copyFor(state.profession).many}.`}
+          body={`Describe what you need and I'll find ${copyFor(state.profession).many} who fit, best first.`}
           action={{ label: 'Get started', onPress: () => router.navigate('/') }}
         />
       </Shell>
@@ -54,17 +77,14 @@ export default function Matches() {
     return (
       <Shell title="Your matches">
         <EmptyStateCard
-          title="I don't have a strong enough match yet."
-          body={
-            action
-              ? 'One small change could help me find someone who fits.'
-              : 'Try describing what you need in a bit more detail.'
-          }
+          title="Nobody fits all of that yet."
+          body={blocker(action, copyFor(state.profession).many)}
           action={
             action
               ? { label: ACTION_LABEL[action], onPress: () => router.push(session.noMatchAction(action)) }
-              : { label: 'Start over', onPress: startOver }
+              : { label: 'Change what I asked for', onPress: () => router.push('/refine') }
           }
+          secondary={action ? { label: 'Change something else', onPress: () => router.push('/refine') } : { label: 'Start over', onPress: startOver }}
         />
       </Shell>
     );

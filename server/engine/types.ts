@@ -144,7 +144,8 @@ export type Reason = { signal: string; evidenceId: string; evidence: string; dim
 
 export type EngineMatch = { clinicianId: string; fit: FitLabel; reasons: Reason[]; strongestLayer: Layer; caveats: Caveat[] };
 
-export type NoMatchAction = 'include_telehealth' | 'expand_distance' | 'answer_more';
+/** Loosen one requirement (only offered when that alone would let someone fit), or answer more. */
+export type NoMatchAction = 'include_telehealth' | 'expand_distance' | 'any_cost' | 'any_gender' | 'any_profession' | 'answer_more';
 
 export type Recommendation =
   | { status: 'matches'; matches: EngineMatch[]; more: EngineMatch[] }

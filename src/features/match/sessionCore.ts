@@ -143,8 +143,19 @@ export function noMatchAction(state: SessionState, action: NoMatchAction): Trans
     const s = withInput(state, { wantsMoreQuestions: true });
     return apply(s, nextStep(s.input));
   }
-  const s = withInput(state, action === 'include_telehealth' ? { includeTelehealth: true } : { expandDistance: true });
-  return match(s);
+  if (action === 'any_profession') {
+    const s = withInput({ ...state, profession: 'either' }, { profession: undefined });
+    return match(s);
+  }
+  const change: Partial<SessionInput> =
+    action === 'include_telehealth'
+      ? { includeTelehealth: true }
+      : action === 'expand_distance'
+        ? { expandDistance: true }
+        : action === 'any_cost'
+          ? { anyCost: true }
+          : { anyGender: true };
+  return match(withInput(state, change));
 }
 
 /** Seconds from submitting the description to the shortlist appearing. */

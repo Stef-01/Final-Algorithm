@@ -85,12 +85,13 @@ function toMatch(c: ClinicianRecord, x: Scored, s: PatientSignals): EngineMatch 
 function noMatchActions(s: PatientSignals, cs: ClinicianRecord[], asked: string[]): NoMatchAction[] {
   const k = s.constraints;
   const actions: NoMatchAction[] = [];
-  if (k.mode === 'in_person_only' && hasCredibleMatch({ ...s, constraints: { ...k, mode: 'any' } }, cs)) {
-    actions.push('include_telehealth');
-  }
-  if (k.maxKm !== undefined && hasCredibleMatch({ ...s, constraints: { ...k, maxKm: undefined } }, cs)) {
-    actions.push('expand_distance');
-  }
+  // D8: a match is anyone eligible, so offer each change that on its own would let someone fit.
+  const opens = (x: PatientSignals) => eligibleFor(cs, x).length > 0;
+  if (k.mode === 'in_person_only' && opens({ ...s, constraints: { ...k, mode: 'any' } })) actions.push('include_telehealth');
+  if (k.maxKm !== undefined && opens({ ...s, constraints: { ...k, maxKm: undefined } })) actions.push('expand_distance');
+  if (k.maxGap !== undefined && k.maxGap !== null && opens({ ...s, constraints: { ...k, maxGap: null } })) actions.push('any_cost');
+  if (k.clinicianGender && opens({ ...s, constraints: { ...k, clinicianGender: undefined } })) actions.push('any_gender');
+  if (s.profession && opens({ ...s, profession: undefined })) actions.push('any_profession');
   if (scoreQuestions(s, cs, asked).some((q) => q.gain > 0)) actions.push('answer_more');
   return actions;
 }

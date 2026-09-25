@@ -25,6 +25,9 @@ export type SessionInput = {
   prioritiesConfirmed: boolean;
   includeTelehealth: boolean;
   expandDistance: boolean;
+  /** Loosened from the no-match screen: cost and clinician gender no longer required. */
+  anyCost?: boolean;
+  anyGender?: boolean;
   safetyAcknowledged: boolean;
   wantsMoreQuestions: boolean;
   /** What the patient asked the refine assistant to change, oldest first. Newer wins. */
@@ -57,6 +60,9 @@ export function signalsFor(input: SessionInput): PatientSignals {
   (input.refinements ?? []).forEach((r, i) => {
     s = applyRefinement(s, r, input.refinementExtracts?.[i] ?? undefined);
   });
+  // Loosened on the no-match screen: applied last, so they win over anything said before.
+  if (input.anyCost) s.constraints = { ...s.constraints, maxGap: null };
+  if (input.anyGender) s.constraints = { ...s.constraints, clinicianGender: undefined };
   s.profession = input.profession;
   if (input.safetyAcknowledged) delete s.safetyFlag;
   return s;

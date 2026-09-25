@@ -457,6 +457,7 @@ Each phase ends deployed on Vercel with CI green.
   - Labels stay honest. A clinician with no evidence-backed reason is "Possible fit", never higher.
   - Unpublished fees or weekend hours no longer exclude anyone. They're ranked lower (−0.06 per unconfirmed requirement) and flagged "Worth checking".
   - This relaxes PRD §4.7 (max 3), at your request.
+  - When nobody is eligible, the no-match screen names what's ruling everyone out (cost, telehealth, distance, clinician gender, or the profession). It offers the single change that would let someone fit, and the assistant for anything else.
 - **D9 (decided): a floating assistant on every main screen.** A black sparkle button (bottom-right) opens "Refine with WATL", a conversation where the patient says what to change and the list re-ranks.
   - Refinements are later turns and override what was said before ("online only", then "online or in person is fine").
   - Replies come from a diff of the signals, so they only claim changes that happened. If a change would leave nobody, the list is kept and the reply says so.
