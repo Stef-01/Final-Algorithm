@@ -35,6 +35,9 @@ export type Events = {
   also_could_help: { profession: string };
   portal_submitted: { profession: string };
   filters_applied: { count: number };
+  /** Straight after picking a profession: telehealth is fine, or an area (a place name only). */
+  where_chosen: { where: string };
+  mcp_demo: { step: string; client: string };
 };
 
 export type EventName = keyof Events;

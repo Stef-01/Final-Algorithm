@@ -29,6 +29,7 @@ const routes = {
   '(tabs)/(find)/_layout': FindLayout,
   '(tabs)/(find)/index': Funnel,
   '(tabs)/(find)/describe': Describe,
+  '(tabs)/(find)/where': require('@/app/(tabs)/(find)/where').default,
   '(tabs)/(find)/demos': Demos,
   '(tabs)/(find)/all': AllMatches,
   '(tabs)/(find)/clarify': Clarify,
@@ -83,10 +84,25 @@ describe('app shell', () => {
   it('words the next screen for the chosen profession', async () => {
     renderRouter(routes, { initialUrl: '/' });
     fireEvent.press(await screen.findByText('Psychologist'));
+    expect(await screen.findByText('Does location matter?')).toBeOnTheScreen();
+    fireEvent.press(await screen.findByLabelText('Anywhere: Telehealth is fine'));
     expect(await screen.findByText('Find a psychologist who fits you.')).toBeOnTheScreen();
     expect(screen.getByPlaceholderText('What are you hoping a psychologist can help with?')).toBeOnTheScreen();
     fireEvent.press(screen.getByLabelText('Next'));
     expect(screen).toHavePathname('/describe'); // nothing typed yet
+  });
+});
+
+describe('where', () => {
+  it('asks straight after the profession; near a place opens a map to tap', async () => {
+    renderRouter(routes, { initialUrl: '/' });
+    fireEvent.press(await screen.findByText('Psychologist'));
+    expect(await screen.findByText('Most psychologists offer telehealth.')).toBeOnTheScreen();
+    fireEvent.press(screen.getByLabelText('Near a place: In person if I can'));
+    fireEvent.press(screen.getAllByLabelText('Melbourne')[0]); // the pin on the map
+    fireEvent.press(screen.getByLabelText('Next'));
+    expect(await screen.findByText('Find a psychologist who fits you.')).toBeOnTheScreen();
+    await waitFor(async () => expect(JSON.parse((await AsyncStorage.getItem('watl_session'))!).input.filters).toEqual({ near: 'melbourne' }));
   });
 });
 
@@ -187,6 +203,7 @@ describe('typed searches', () => {
   it('runs the real engine on what the patient types', async () => {
     renderRouter(routes, { initialUrl: '/' });
     fireEvent.press(await screen.findByText('Psychologist'));
+    fireEvent.press(await screen.findByLabelText('Anywhere: Telehealth is fine'));
     fireEvent.changeText(await screen.findByLabelText("What you're looking for"), "I've been through trauma and want online sessions only.");
     fireEvent.press(screen.getByLabelText('Next'));
     await screen.findAllByText(/\?$|I found|strong enough/);

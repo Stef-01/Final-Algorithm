@@ -14,6 +14,7 @@ const routes = {
   '(tabs)/(find)/index': require('@/app/(tabs)/(find)/index').default,
   '(tabs)/(find)/discover': require('@/app/(tabs)/(find)/discover').default,
   '(tabs)/(find)/describe': require('@/app/(tabs)/(find)/describe').default,
+  '(tabs)/(find)/where': require('@/app/(tabs)/(find)/where').default,
   '(tabs)/saved': () => null,
   '(tabs)/settings': () => null,
 };
@@ -35,6 +36,7 @@ describe('discovery queue', () => {
     renderRouter(routes, { initialUrl: '/discover' });
     fireEvent.press(screen.getAllByLabelText('Next')[0]); // skip GPs
     fireEvent.press(await screen.findByLabelText('Find psychologists'));
+    fireEvent.press(await screen.findByLabelText('Anywhere: Telehealth is fine'));
     expect(await screen.findByText('Find a psychologist who fits you.')).toBeOnTheScreen();
   });
 

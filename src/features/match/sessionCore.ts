@@ -2,7 +2,7 @@ import { pool as clinicianPool, nextStep, normaliseAnswer, priorityLabel, runMat
 import type { Extraction } from '@server/claude/types';
 import { PROFESSIONS } from '@server/engine/types';
 
-import type { Filters } from './filters';
+import type { AreaId, Filters } from './filters';
 
 import { copyFor } from '@/lib/professions';
 
@@ -115,7 +115,17 @@ function apply(state: SessionState, step: AgentStep): Transition {
 
 /** The funnel: which kind of professional (PRD screen 01 is next). */
 export function chooseProfession(_state: SessionState, profession: ProfessionChoice, draft?: string): Transition {
-  return { state: { ...initialState(profession), draft }, route: '/describe' };
+  return { state: { ...initialState(profession), draft }, route: '/where' };
+}
+
+/**
+ * Where the patient wants to see someone, asked straight after the profession. Telehealth is fine
+ * (no filter), or near a place: in-person options are ranked by distance, telehealth still shows.
+ */
+export function setWhere(state: SessionState, near: AreaId | null): Transition {
+  const { near: _old, distance: _d, ...rest } = state.input.filters ?? {};
+  const filters: Filters = near ? { ...rest, near } : rest;
+  return { state: { ...state, input: { ...state.input, filters }, updatedAt: Date.now() }, route: '/describe' };
 }
 
 /** Load a demo patient: their profession and words, ready to submit on the describe screen. */
@@ -133,7 +143,7 @@ export function submitText(state: SessionState, text: string, extracted?: Extrac
   const demoId = demo && demo.text === t ? demo.id : undefined;
   const s: SessionState = {
     ...initialState(state.profession),
-    input: { ...emptyInput(state.profession, demoId), texts: [t], extracted: demoId ? undefined : (extracted ?? undefined), goals: demoId ? [] : goals },
+    input: { ...emptyInput(state.profession, demoId), texts: [t], extracted: demoId ? undefined : (extracted ?? undefined), goals: demoId ? [] : goals, filters: state.input.filters },
     startedAt: Date.now(),
   };
   return apply(s, nextStep(s.input));

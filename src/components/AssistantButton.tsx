@@ -17,7 +17,7 @@ const TAB_BAR = 58;
 /** Screens where it would cover something, or where a conversation makes no sense. */
 const HIDDEN = [/^\/refine/, /^\/matching/, /^\/safety/, /^\/book\//, /^\/dev\//, /^\/clinician\//, /^\/discover/, /^\/join/, /^\/filters/, /^\/rate/];
 /** Screens with the round Next button bottom-right (ConversationStep). */
-const HAS_NEXT = ['/', '/describe', '/clarify', '/confirm'];
+const HAS_NEXT = ['/', '/where', '/describe', '/clarify', '/confirm'];
 
 /** The assistant's round sparkle button on its own, for screens with a footer (the profile page). */
 export function AssistantMark() {

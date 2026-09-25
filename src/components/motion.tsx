@@ -138,3 +138,50 @@ export function Pulse({ size, active, color = '#000' }: { size: number; active: 
     />
   );
 }
+
+/**
+ * A chunky button that sits on a lip and pushes down into it when pressed, then springs back up
+ * with a little overshoot: the tactile press from game-like apps, without the noise.
+ */
+export function PressDepth({
+  children,
+  style,
+  containerStyle,
+  lipColor = '#00000033',
+  depth = 4,
+  radius = 16,
+  ...props
+}: Omit<PressableProps, 'style' | 'children'> & {
+  children: ReactNode;
+  style?: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
+  lipColor?: string;
+  depth?: number;
+  radius?: number;
+}) {
+  const reduced = useReducedMotion();
+  const v = useState(() => new Animated.Value(0))[0];
+  const to = (toValue: number, bouncy = false) =>
+    reduced
+      ? v.setValue(toValue)
+      : Animated.spring(v, { toValue, damping: bouncy ? 8 : 20, stiffness: bouncy ? 380 : 600, useNativeDriver: native }).start();
+  return (
+    <Pressable
+      {...props}
+      style={[{ paddingBottom: depth }, containerStyle]}
+      onPressIn={(e) => {
+        to(1);
+        props.onPressIn?.(e);
+      }}
+      onPressOut={(e) => {
+        to(0, true);
+        props.onPressOut?.(e);
+      }}
+    >
+      <Animated.View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, top: depth, borderRadius: radius, backgroundColor: props.disabled ? 'transparent' : lipColor }} />
+      <Animated.View style={[{ borderRadius: radius }, style, { transform: [{ translateY: v.interpolate({ inputRange: [0, 1], outputRange: [0, depth] }) }] }]}>
+        {children}
+      </Animated.View>
+    </Pressable>
+  );
+}

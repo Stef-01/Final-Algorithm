@@ -7,7 +7,7 @@ import * as core from './sessionCore';
 import type { ReplyFacts } from '@server/claude/reply';
 import type { Extraction } from '@server/claude/types';
 
-import type { Filters } from './filters';
+import type { AreaId, Filters } from './filters';
 import { SUGGESTION_TEXT } from './refine';
 import { sendFeedback } from './sendFeedback';
 import type { NoMatchAction, Profession } from './types';
@@ -20,6 +20,7 @@ type Session = {
   loaded: boolean;
   chooseProfession: (p: core.ProfessionChoice, draft?: string) => string;
   startDemo: (demoId: string) => string;
+  setWhere: (near: AreaId | null) => string;
   submitText: (text: string, extracted?: Extraction | null, goals?: string[]) => string;
   answer: (questionId: string, value: string) => string;
   confirmPriorities: (removed: string[]) => string;
@@ -85,6 +86,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       loaded,
       chooseProfession: (p, draft) => route(core.chooseProfession(current.current, p, draft)),
       startDemo: (id) => route(core.startDemo(current.current, id)),
+      setWhere: (near) => {
+        track('where_chosen', { where: near ?? 'telehealth' });
+        return route(core.setWhere(current.current, near));
+      },
       submitText: (text, extracted, goals) => {
         const t = core.submitText(current.current, text, extracted, goals);
         track('text_submitted', { words: wordCount(text) });

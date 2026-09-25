@@ -125,10 +125,23 @@ describe('keyword extractor (stand-in for the Claude extractor)', () => {
 describe('funnel and session', () => {
   it('starts with the profession, then the description', () => {
     const t = core.chooseProfession(core.initialState(), 'psychologist');
-    expect(t.route).toBe('/describe');
+    expect(t.route).toBe('/where');
     expect(t.state.profession).toBe('psychologist');
     expect(t.state.input.profession).toBe('psychologist');
     expect(core.chooseProfession(core.initialState(), 'either').state.input.profession).toBeUndefined();
+  });
+
+  it('asks where next: telehealth is fine, or near a place (kept when they describe what they need)', () => {
+    const s = core.chooseProfession(core.initialState(), 'psychologist').state;
+    const near = core.setWhere(s, 'melbourne');
+    expect(near.route).toBe('/describe');
+    expect(near.state.input.filters).toEqual({ near: 'melbourne' });
+    const t = core.submitText(near.state, 'I want help with anxiety');
+    expect(t.state.input.filters).toEqual({ near: 'melbourne' });
+    // Telehealth still shows for a city with nobody in person.
+    const r = core.match(t.state).state.result;
+    expect(r?.status).toBe('matches');
+    expect(core.setWhere(near.state, null).state.input.filters).toEqual({});
   });
 
   it('only matches the chosen profession', () => {

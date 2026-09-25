@@ -161,12 +161,14 @@ describe('starting a search from your team', () => {
         '(tabs)/(find)/_layout': require('@/app/(tabs)/(find)/_layout').default,
         '(tabs)/(find)/index': () => null,
         '(tabs)/(find)/describe': require('@/app/(tabs)/(find)/describe').default,
+        '(tabs)/(find)/where': require('@/app/(tabs)/(find)/where').default,
         '(tabs)/saved': require('@/app/(tabs)/saved').default,
         '(tabs)/settings': () => null,
       },
       { initialUrl: '/saved' },
     );
     fireEvent.press(await screen.findByLabelText('Add a GP'));
+    fireEvent.press(await screen.findByLabelText('Anywhere: Telehealth is fine'));
     expect((await screen.findByLabelText("What you're looking for")).props.value).toBe("I'd like help to: review medication.");
   });
 });
