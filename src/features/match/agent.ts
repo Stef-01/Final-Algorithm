@@ -150,4 +150,3 @@ export function normaliseAnswer(questionId: string, value: string): { label: str
   return opt ? { label: opt.label } : { label: NOT_SURE, ownWords: value.trim() };
 }
 
-export const bankQuestion = (id?: string) => (id ? questionById(id) : undefined);

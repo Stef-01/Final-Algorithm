@@ -51,11 +51,6 @@ export async function extractRemote(text: string, profession?: Profession, timeo
   }
 }
 
-/** For tests: forget the cached "enabled" answer. */
-export function resetClaudeCache() {
-  enabledCache = null;
-}
-
 // ---- Claude-worded assistant replies (api/reply.ts), off unless WATL_CLAUDE_REPLIES=on ----
 
 let replyCache: Promise<boolean> | null = null;

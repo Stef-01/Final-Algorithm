@@ -1,5 +1,4 @@
-import { pool as clinicianPool } from './agent';
-import { bankQuestion, nextStep, normaliseAnswer, priorityLabel, runMatching, signalsFor, type SessionInput } from './agent';
+import { pool as clinicianPool, nextStep, normaliseAnswer, priorityLabel, runMatching, signalsFor, type SessionInput } from './agent';
 import type { Extraction } from '@server/claude/types';
 
 import { copyFor } from '@/lib/professions';
@@ -171,10 +170,6 @@ export function thumb(state: SessionState, clinicianId: string, dir: 'up' | 'dow
   return { ...state, feedback: { ...state.feedback, thumbs: { ...state.feedback.thumbs, [clinicianId]: dir } }, updatedAt: Date.now() };
 }
 
-export function currentMatch(state: SessionState): Match | undefined {
-  return state.result?.status === 'matches' ? state.result.matches[state.index] : undefined;
-}
-
 export function findMatch(state: SessionState, clinicianId: string): Match | undefined {
   return state.result?.status === 'matches' ? state.result.matches.find((m) => m.clinicianId === clinicianId) : undefined;
 }
@@ -294,8 +289,6 @@ export function rewordLast(state: SessionState, text: string): SessionState {
   chat[chat.length - 1] = { ...last, text, facts: undefined };
   return { ...state, chat, updatedAt: Date.now() };
 }
-
-export const isKnownQuestion = (id?: string) => !!bankQuestion(id);
 
 // ---- Review scenarios for /dev/states (stand-ins for the PRD §51 frames) ----
 
