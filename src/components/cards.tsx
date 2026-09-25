@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { ImageSourcePropType, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import type { Qualification } from '@server/engine/types';
@@ -47,12 +47,21 @@ export function PromptCard({ title, answer, kicker, ...like }: { title: string; 
 }
 
 /** Small title over regular body text (bios and other longer copy). */
-export function TextCard({ title, body, kicker }: { title: string; body: string; kicker?: string }) {
+export function TextCard({ title, body, kicker, lines }: { title: string; body: string; kicker?: string; /** Collapse long text to this many lines, with "More". */ lines?: number }) {
+  const long = !!lines && body.length > lines * 55;
+  const [open, setOpen] = useState(false);
   return (
     <View style={[styles.card, styles.textCard]}>
       {kicker ? <Kicker label={kicker} /> : null}
       <Text style={[styles.cardTitle, styles.cardTitlePadded]}>{title}</Text>
-      <Text style={styles.body}>{body}</Text>
+      <Text style={styles.body} numberOfLines={long && !open ? lines : undefined}>
+        {body}
+      </Text>
+      {long ? (
+        <Pressable onPress={() => setOpen((o) => !o)} accessibilityRole="button" style={styles.more}>
+          <Text style={styles.moreText}>{open ? 'Less' : 'More'}</Text>
+        </Pressable>
+      ) : null}
     </View>
   );
 }
@@ -69,6 +78,7 @@ export function NoteCard({ title, body }: { title: string; body: string }) {
 
 /** A title over outlined tags (how someone practises): scannable rather than one long serif line. */
 export function TagsCard({ title, tags, kicker, ...like }: { title: string; tags: string[]; kicker?: string } & LikeProps) {
+  if (tags.length === 0) return null;
   return (
     <Card title={title} kicker={kicker} {...like} padded>
       <View style={styles.tags}>
@@ -145,8 +155,11 @@ export function ChipsCard({
       ) : null}
       {rows.map((r) => (
         <View key={`${r.icon}-${r.label}`} style={styles.row}>
-          <Icon name={r.icon} size={18} color={colors.black} />
-          <Text style={styles.chipText}>{r.label}</Text>
+          {/* Fixed size: long text wraps beside it instead of squashing the icon. */}
+          <View style={styles.rowIcon}>
+            <Icon name={r.icon} size={18} color={colors.black} />
+          </View>
+          <Text style={[styles.chipText, styles.rowText]}>{r.label}</Text>
         </View>
       ))}
     </View>
@@ -214,6 +227,8 @@ const styles = StyleSheet.create({
   },
   rowsTitleFirst: { borderTopWidth: 0, paddingTop: 18 },
   textCard: { paddingTop: 30, paddingBottom: 24 },
+  more: { alignSelf: 'flex-start', marginHorizontal: 15, marginTop: 4, paddingVertical: 12 },
+  moreText: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText },
   kicker: {
     fontFamily: fonts.bold,
     fontSize: 11,
@@ -253,9 +268,11 @@ const styles = StyleSheet.create({
   tag: { maxWidth: '100%', borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 14, paddingVertical: 8 },
   tagText: { fontFamily: fonts.medium, fontSize: 15, color: colors.black },
   body: { fontFamily: fonts.regular, fontSize: 16, lineHeight: 24, color: colors.black, marginHorizontal: 15 },
+  rowIcon: { width: 18, height: 18, flexShrink: 0, marginTop: 1 },
+  rowText: { flex: 1, lineHeight: 20 },
   row: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 12,
     paddingHorizontal: 29,
     paddingVertical: 16,

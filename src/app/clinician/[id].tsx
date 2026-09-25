@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AssistantMark } from '@/components/AssistantButton';
 import { ChipsCard, NoteCard, PhotoCard, PromptCard, QualificationsCard, TagsCard, TextCard } from '@/components/cards';
-import { caveatLines, costLabel, noReasonLine, placeLine, practicalChips, reasonKicker } from '@/components/ClinicianCards';
+import { caveatLines, costLabel, noReasonLine, placeLine, placeName, practicalChips, reasonKicker } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { FitLabel } from '@/components/FitLabel';
 import { ScreenHeader } from '@/components/ScreenHeader';
@@ -92,10 +92,10 @@ export default function ClinicianDetail() {
             { icon: 'icCalendar', label: p.nextAvailable },
             { icon: 'icVideo', label: p.modes.join(' · ') },
             { icon: 'icCost', label: p.billingNote ?? costLabel(c) },
-            { icon: 'icLocation', label: `${c.suburb}, ${c.city}` },
+            { icon: 'icLocation', label: placeName(c) },
           ]}
         />
-        <TextCard kicker="In their words" title={`About ${c.firstName}`} body={c.bio} />
+        <TextCard kicker="In their words" title={`About ${c.firstName}`} body={c.bio} lines={4} />
         <QualificationsCard items={c.qualifications} />
       </ScrollView>
 

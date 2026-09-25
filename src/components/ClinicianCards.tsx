@@ -29,7 +29,10 @@ export function practicalChips(c: Clinician): ChipItem[] {
   return chips;
 }
 
-export const placeLine = (c: Clinician) => `${c.role} · ${c.suburb}, ${c.city}`;
+/** "Ashgrove, Brisbane", or just "Perth" when the suburb is the city. */
+export const placeName = (c: Clinician) => (c.suburb === c.city ? c.city : `${c.suburb}, ${c.city}`);
+
+export const placeLine = (c: Clinician) => `${c.role} · ${placeName(c)}`;
 
 const CAVEAT_TEXT: Record<Caveat, string> = {
   fee_unpublished: "The out-of-pocket cost isn't published, so it can't be checked against your budget. Ask the practice.",
