@@ -3,7 +3,6 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -52,12 +51,15 @@ export function ConversationStep({ icon, title, children, onNext, nextEnabled = 
           </Appear>
         </ScrollView>
         {onNext ? (
-          <Pressable
+          // Wakes up with a pop the moment there's enough to go on.
+          <PressScale
             onPress={onNext}
             accessibilityRole="button"
             accessibilityLabel="Next"
             accessibilityState={{ disabled: !nextEnabled }}
-            style={styles.next}
+            containerStyle={styles.next}
+            scaleTo={0.86}
+            popOn={nextEnabled}
           >
             <Image
               source={
@@ -68,7 +70,7 @@ export function ConversationStep({ icon, title, children, onNext, nextEnabled = 
               style={styles.nextImage}
               aria-hidden
             />
-          </Pressable>
+          </PressScale>
         ) : null}
       </KeyboardAvoidingView>
     </SafeAreaView>

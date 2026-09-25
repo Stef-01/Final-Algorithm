@@ -108,6 +108,7 @@ export default function Join() {
           accessibilityState={{ selected: tri[key] === v }}
           style={[styles.pill, tri[key] === v && styles.pillOn]}
           scaleTo={0.94}
+          popOn={tri[key] === v}
         >
           <Text style={[styles.pillText, tri[key] === v && styles.pillTextOn]}>{v ? 'Yes' : 'No'}</Text>
         </PressScale>
@@ -135,6 +136,7 @@ export default function Join() {
                 accessibilityState={{ selected: profession === p.id }}
                 style={[styles.pill, profession === p.id && styles.pillOn]}
                 scaleTo={0.94}
+                popOn={profession === p.id}
               >
                 <Text style={[styles.pillText, profession === p.id && styles.pillTextOn]}>{capitalised(p.one)}</Text>
               </PressScale>

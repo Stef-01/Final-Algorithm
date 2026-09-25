@@ -1,6 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { colors, fonts } from '@/lib/theme';
+import { Icon } from './Icon';
+import { Appear, Burst, PressDepth, PressScale } from './motion';
 
 // In-app validation (PRD §49), in the card style: a per-match thumbs row and the 1–5 credibility question.
 
@@ -34,21 +36,31 @@ export function RatingCard({ value, onRate }: { value?: number; onRate: (n: numb
   return (
     <View style={styles.card}>
       {value ? (
-        <Text style={styles.thanksLarge}>Thanks for telling us.</Text>
+        <Appear style={styles.done}>
+          <View style={styles.doneMark}>
+            <Burst fire={1} size={110} />
+            <View style={styles.doneCheck}>
+              <Icon name="icCheck" size={22} color={colors.white} />
+            </View>
+          </View>
+          <Text style={styles.thanksLarge}>Thanks for telling us.</Text>
+        </Appear>
       ) : (
         <>
           <Text style={styles.cardTitle}>How well do these clinicians seem to fit what you told us?</Text>
           <View style={styles.scale}>
             {SCALE.map(([n, label]) => (
-              <Pressable
+              <PressDepth
                 key={n}
                 onPress={() => onRate(n)}
                 accessibilityRole="button"
                 accessibilityLabel={`${n} out of 5, ${label}`}
-                style={({ pressed }) => [styles.point, pressed && styles.pressed]}
+                radius={24}
+                lipColor={colors.line}
+                style={styles.point}
               >
                 <Text style={styles.pointNumber}>{n}</Text>
-              </Pressable>
+              </PressDepth>
             ))}
           </View>
           <View style={styles.ends}>
@@ -63,9 +75,9 @@ export function RatingCard({ value, onRate }: { value?: number; onRate: (n: numb
 
 function Chip({ label, onPress }: { label: string; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" style={({ pressed }) => [styles.chip, pressed && styles.pressed]}>
+    <PressScale onPress={onPress} accessibilityRole="button" style={styles.chip} scaleTo={0.92}>
       <Text style={styles.chipText}>{label}</Text>
-    </Pressable>
+    </PressScale>
   );
 }
 
@@ -75,8 +87,10 @@ const styles = StyleSheet.create({
   choices: { flexDirection: 'row', gap: 10 },
   chip: { backgroundColor: colors.chip, borderRadius: 150, paddingVertical: 12, paddingHorizontal: 20, minHeight: 44 },
   chipText: { fontFamily: fonts.medium, fontSize: 15, color: colors.black },
-  pressed: { backgroundColor: colors.line },
   thanks: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, paddingVertical: 12 },
+  done: { alignItems: 'center', gap: 14, paddingVertical: 6 },
+  doneMark: { width: 56, height: 56, alignItems: 'center', justifyContent: 'center' },
+  doneCheck: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center' },
   card: { marginHorizontal: 12, marginTop: 20, borderRadius: 10, backgroundColor: colors.white, padding: 20 },
   cardTitle: { fontFamily: fonts.serifSemiBold, fontSize: 20, lineHeight: 26, color: colors.black, textAlign: 'center' },
   scale: { flexDirection: 'row', flexWrap: 'wrap', rowGap: 10, justifyContent: 'space-between', marginTop: 18 }, // wraps at large text sizes

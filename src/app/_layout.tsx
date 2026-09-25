@@ -30,13 +30,13 @@ export default function RootLayout() {
           <GoalsProvider>
             <StatusBar style="dark" />
             <VercelAnalytics />
-            <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#fff' } }}>
+            <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right', contentStyle: { backgroundColor: '#fff' } }}>
               <Stack.Screen name="(tabs)" options={{ animation: 'none' }} />
               <Stack.Screen name="clinician/[id]" />
               <Stack.Screen name="dev/states" />
               <Stack.Screen name="join" />
               <Stack.Screen name="filters" />
-              <Stack.Screen name="rate" />
+              <Stack.Screen name="rate" options={{ animation: 'slide_from_bottom' }} />
               <Stack.Screen name="connect" />
               {['safety', 'book/[id]', 'refine'].map((name) => (
                 <Stack.Screen key={name} name={name} options={{ presentation: 'transparentModal', animation: 'fade' }} />

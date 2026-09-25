@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -9,7 +9,7 @@ import { caveatLines, costLabel, noReasonLine, placeLine, placeName, practicalCh
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { FitLabel } from '@/components/FitLabel';
 import { Icon } from '@/components/Icon';
-import { PressScale } from '@/components/motion';
+import { Burst, PressScale, ScreenIn } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { PillButton } from '@/components/Sheet';
 import { getClinician } from '@/data/clinicians';
@@ -17,6 +17,7 @@ import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
 import { deckOf, findMatch } from '@/features/match/sessionCore';
 import { track } from '@/lib/analytics';
+import { tap } from '@/lib/haptics';
 import { colors, fonts } from '@/lib/theme';
 
 // Screen 06 — clinician detail, in the same card language as the matches.
@@ -60,6 +61,7 @@ export default function ClinicianDetail() {
   return (
     <View style={styles.root}>
       <ScreenHeader title={c.name} back right={fit !== 'none' ? <FitLabel fit={fit} /> : undefined} />
+      <ScreenIn>
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: 140 + insets.bottom }]}>
         <PhotoCard caption={placeLine(c)} source={c.photo} {...like} />
         {likeTarget ? <TeamToggle name={c.firstName} on={inTeam(c.id)} onPress={() => setTeam(likeTarget, !inTeam(c.id))} /> : null}
@@ -100,6 +102,7 @@ export default function ClinicianDetail() {
         <TextCard kicker="In their words" title={`About ${c.firstName}`} body={c.bio} lines={4} />
         <QualificationsCard items={c.qualifications} />
       </ScrollView>
+      </ScreenIn>
 
       <View style={[styles.footer, { paddingBottom: 12 + insets.bottom }]}>
         <View style={styles.footerRow}>
@@ -127,16 +130,27 @@ export default function ClinicianDetail() {
 
 /** Liking someone keeps them in Liked; this puts them in your care team (and likes them too). */
 function TeamToggle({ name, on, onPress }: { name: string; on: boolean; onPress: () => void }) {
+  const [fire, setFire] = useState(0);
   return (
     <PressScale
-      onPress={onPress}
+      onPress={() => {
+        if (!on) {
+          setFire((n) => n + 1);
+          tap('save');
+        }
+        onPress();
+      }}
+      popOn={on}
       accessibilityRole="switch"
       accessibilityState={{ checked: on }}
       accessibilityLabel={`${name} in your care team`}
       style={[styles.team, on && styles.teamOn]}
       scaleTo={0.97}
     >
-      <Icon name={on ? 'icCheck' : 'icUser1'} size={16} color={on ? colors.white : colors.black} />
+      <View style={styles.teamIcon}>
+        <Burst fire={fire} size={70} />
+        <Icon name={on ? 'icCheck' : 'icUser1'} size={16} color={on ? colors.white : colors.black} />
+      </View>
       <Text style={[styles.teamText, on && styles.teamTextOn]}>{on ? 'In your care team' : 'Add to care team'}</Text>
     </PressScale>
   );
@@ -157,6 +171,7 @@ const styles = StyleSheet.create({
     borderColor: colors.black,
     backgroundColor: colors.white,
   },
+  teamIcon: { alignItems: 'center', justifyContent: 'center' },
   teamOn: { backgroundColor: colors.purple, borderColor: colors.purple },
   teamText: { fontFamily: fonts.bold, fontSize: 15, color: colors.black },
   teamTextOn: { color: colors.white },

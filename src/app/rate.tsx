@@ -59,6 +59,7 @@ export default function Rate() {
                   accessibilityState={{ checked: on }}
                   style={[styles.chip, on && styles.chipOn]}
                   scaleTo={0.94}
+                  popOn={on}
                 >
                   {on ? <Icon name="icCheck" size={12} color={colors.white} /> : null}
                   <Text style={[styles.chipText, on && styles.chipTextOn]}>{o.label}</Text>
@@ -71,6 +72,7 @@ export default function Rate() {
               accessibilityState={{ checked: other }}
               style={[styles.chip, other && styles.chipOn]}
               scaleTo={0.94}
+              popOn={other}
             >
               <Text style={[styles.chipText, other && styles.chipTextOn]}>Other</Text>
             </PressScale>

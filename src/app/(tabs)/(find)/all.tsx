@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { AlsoCouldHelp } from '@/components/AlsoCouldHelp';
 import { FiltersButton } from '@/components/FiltersButton';
 import { MatchRow } from '@/components/MatchRow';
-import { Appear } from '@/components/motion';
+import { Appear, ScreenIn } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { getClinician } from '@/data/clinicians';
 import { useSession } from '@/features/match/session';
@@ -24,6 +24,7 @@ export default function AllMatches() {
   return (
     <View style={styles.root}>
       <ScreenHeader title={`All ${all.length} ${many}`} back />
+      <ScreenIn>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.note}>Everyone who fits, best first.</Text>
         <View style={styles.filters}>
@@ -45,6 +46,7 @@ export default function AllMatches() {
         })}
         <AlsoCouldHelp />
       </ScrollView>
+      </ScreenIn>
     </View>
   );
 }

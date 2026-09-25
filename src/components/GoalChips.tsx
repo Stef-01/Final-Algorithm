@@ -24,6 +24,7 @@ export function GoalChips({ selected, onToggle }: { selected: string[]; onToggle
               accessibilityState={{ selected: on }}
               style={[styles.chip, on && styles.on]}
               scaleTo={0.94}
+              popOn={on}
             >
               <Icon name={g.icon} size={16} color={on ? colors.white : colors.black} />
               <Text style={[styles.text, on && styles.textOn]}>{g.label}</Text>

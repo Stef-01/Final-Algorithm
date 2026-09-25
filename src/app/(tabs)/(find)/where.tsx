@@ -51,6 +51,7 @@ export default function Where() {
                 accessibilityState={{ selected: area === a.id }}
                 style={[styles.chip, area === a.id && styles.chipOn]}
                 scaleTo={0.92}
+                popOn={area === a.id}
               >
                 <Text style={[styles.chipText, area === a.id && styles.chipTextOn]}>{a.label}</Text>
               </PressScale>

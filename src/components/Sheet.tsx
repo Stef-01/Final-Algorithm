@@ -5,7 +5,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors, fonts } from '@/lib/theme';
 import { Icon } from './Icon';
-import { PressScale } from './motion';
+import { PressDepth } from './motion';
+
+/** The darker edge a purple button sits on. */
+const LIP = '#3F1A39';
 
 // Grey scrim + white rounded card, the pattern the Android "dialog" activities used.
 export function Sheet({ children, closeButton }: { children: ReactNode; closeButton?: boolean }) {
@@ -37,14 +40,17 @@ export function PillButton({
   variant?: 'purple' | 'black' | 'text';
 }) {
   return (
-    <PressScale
+    <PressDepth
       onPress={onPress}
       accessibilityRole="button"
-      scaleTo={0.97}
+      radius={30}
+      depth={variant === 'text' ? 0 : 4}
+      lipColor={variant === 'black' ? '#3A3A3A' : variant === 'text' ? 'transparent' : LIP}
+      containerStyle={styles.pillWrap}
       style={[styles.pill, variant === 'black' && styles.pillBlack, variant === 'text' && styles.pillText]}
     >
       <Text style={[styles.pillLabel, variant === 'text' && styles.pillLabelText]}>{label}</Text>
-    </PressScale>
+    </PressDepth>
   );
 }
 
@@ -77,12 +83,12 @@ const styles = StyleSheet.create({
   },
   content: { padding: 24, paddingTop: 40, alignItems: 'stretch' },
   close: { position: 'absolute', top: 5, left: 5, width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
+  pillWrap: { marginTop: 8 },
   pill: {
     backgroundColor: colors.purple,
     borderRadius: 30,
     paddingVertical: 18,
     alignItems: 'center',
-    marginTop: 8,
   },
   pillBlack: { backgroundColor: colors.black },
   pillText: { backgroundColor: 'transparent' },

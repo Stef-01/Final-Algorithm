@@ -4,7 +4,7 @@ import { TabBar } from '@/components/TabBar';
 
 export default function TabsLayout() {
   return (
-    <Tabs tabBar={(props) => <TabBar {...props} />} screenOptions={{ headerShown: false, animation: 'none' }}>
+    <Tabs tabBar={(props) => <TabBar {...props} />} screenOptions={{ headerShown: false, animation: 'fade' }}>
       <Tabs.Screen name="(find)" options={{ title: 'Find' }} />
       <Tabs.Screen name="saved" options={{ title: 'My care' }} />
       <Tabs.Screen name="settings" options={{ title: 'Profile' }} />

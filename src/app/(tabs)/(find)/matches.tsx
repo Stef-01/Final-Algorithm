@@ -1,12 +1,12 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { router } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { ClinicianCards } from '@/components/ClinicianCards';
 import { AlsoCouldHelp } from '@/components/AlsoCouldHelp';
 import { FiltersButton } from '@/components/FiltersButton';
 import { ProgressDots } from '@/components/ProgressDots';
-import { Appear } from '@/components/motion';
+import { Appear, Burst, PressScale } from '@/components/motion';
 import { Swipeable, type SwipeableHandle } from '@/components/Swipeable';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { MatchFeedback, RatingCard } from '@/components/Feedback';
@@ -58,6 +58,7 @@ function blocker(action: NoMatchAction | undefined, many: string) {
 export default function Matches() {
   const session = useSession();
   const deck = useRef<SwipeableHandle>(null);
+  const [yes, setYes] = useState(0);
   const { isSaved, toggle } = useSaved();
   const { state } = session;
 
@@ -201,22 +202,30 @@ export default function Matches() {
           </ScrollView>
         </Appear>
       </Swipeable>
-      <Pressable
+      <PressScale
         onPress={() => deck.current?.fling(-1)}
         accessibilityRole="button"
         accessibilityLabel="Not for me"
-        style={[styles.next, styles.no]}
+        containerStyle={[styles.corner, styles.no]}
+        style={styles.next}
+        scaleTo={0.84}
       >
         <Icon name="icDecline" size={24} />
-      </Pressable>
-      <Pressable
-        onPress={() => deck.current?.fling(1)}
+      </PressScale>
+      <PressScale
+        onPress={() => {
+          setYes((n) => n + 1);
+          deck.current?.fling(1);
+        }}
         accessibilityRole="button"
         accessibilityLabel={`Yes: book ${clinician.firstName}`}
-        style={[styles.next, styles.yes]}
+        containerStyle={[styles.corner, styles.yes]}
+        style={[styles.next, styles.yesFace]}
+        scaleTo={0.84}
       >
+        <Burst fire={yes} size={100} />
         <Icon name="icCheck" size={26} color={colors.white} />
-      </Pressable>
+      </PressScale>
     </View>
   );
 }
@@ -243,12 +252,12 @@ const styles = StyleSheet.create({
   position: { marginTop: 16, marginHorizontal: 27 },
   count: { fontFamily: fonts.medium, fontSize: 14, color: colors.muted },
   also: { fontFamily: fonts.bold, fontSize: 13, color: colors.purpleText, marginTop: 6 },
+  corner: { position: 'absolute', bottom: 20 },
   no: { left: 20 },
-  yes: { right: 20, backgroundColor: colors.purple },
+  yes: { right: 20 },
+  yesFace: { backgroundColor: colors.purple },
   view: { marginHorizontal: 12, marginTop: 24 },
   next: {
-    position: 'absolute',
-    bottom: 20,
     width: 60,
     height: 60,
     borderRadius: 30,

@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/Icon';
-import { Appear, PressScale } from '@/components/motion';
+import { Appear, PressScale, ScreenIn } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { pool, signalsFor } from '@/features/match/agent';
 import { currentValues, filterDefs, type Filters } from '@/features/match/filters';
@@ -47,6 +47,7 @@ export default function FiltersScreen() {
           </Pressable>
         }
       />
+      <ScreenIn>
       <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 110 }}>
         <View style={styles.group}>
           {defs.map((d, i) => {
@@ -84,6 +85,7 @@ export default function FiltersScreen() {
                           accessibilityState={{ selected: on }}
                           style={[styles.chip, on && styles.chipOn]}
                           scaleTo={0.94}
+                          popOn={on}
                         >
                           <Text style={[styles.chipText, on && styles.chipTextOn]}>{o.label}</Text>
                         </PressScale>
@@ -96,6 +98,7 @@ export default function FiltersScreen() {
           })}
         </View>
       </ScrollView>
+      </ScreenIn>
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
         <PressScale
           onPress={() => {

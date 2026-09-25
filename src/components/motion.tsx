@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { AccessibilityInfo, Animated, Easing, Platform, Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
 
 // Small motion kit on React Native's Animated (works on web and native, no extra bundle).
@@ -83,6 +83,7 @@ export function PressScale({
   style,
   containerStyle,
   scaleTo = 0.96,
+  popOn,
   ...props
 }: Omit<PressableProps, 'style' | 'children'> & {
   children: ReactNode;
@@ -90,9 +91,22 @@ export function PressScale({
   /** Layout for the pressable itself (e.g. flex: 1 in a row); `style` is the visible part. */
   containerStyle?: StyleProp<ViewStyle>;
   scaleTo?: number;
+  /** Pops (a quick overshoot) each time this turns true: a chip being chosen, a button waking up. */
+  popOn?: boolean;
 }) {
+  const reduced = useReducedMotion();
   const s = useState(() => new Animated.Value(1))[0];
   const to = (toValue: number) => Animated.spring(s, { toValue, damping: 15, stiffness: 320, useNativeDriver: native }).start();
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
+    if (!popOn || reduced) return;
+    s.setValue(0.9);
+    Animated.spring(s, { toValue: 1, damping: 6, stiffness: 300, mass: 0.7, useNativeDriver: native }).start();
+  }, [popOn, reduced, s]);
   return (
     <Pressable
       {...props}
@@ -244,5 +258,18 @@ export function Burst({ fire, size = 96, color = '#6B2D5C', count = 10 }: { fire
         );
       })}
     </Animated.View>
+  );
+}
+
+/**
+ * A screen's content sliding in from the right as it opens. Native stacks already animate screens,
+ * so this only moves on the web, where they don't.
+ */
+export function ScreenIn({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
+  if (native) return <>{children}</>;
+  return (
+    <Appear from="right" distance={28} style={[{ flex: 1 }, style]}>
+      {children}
+    </Appear>
   );
 }
