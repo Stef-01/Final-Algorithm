@@ -10,6 +10,7 @@ import { colors, fonts } from '@/lib/theme';
 const GROUPS: { title: string; filter: (d: Demo) => boolean }[] = [
   { title: 'Looking for a GP', filter: (d) => d.profession === 'gp' },
   { title: 'Looking for a psychologist', filter: (d) => d.profession === 'psychologist' },
+  { title: 'Other professionals', filter: (d) => !['gp', 'psychologist', 'either'].includes(d.profession) },
   { title: 'Not sure yet', filter: (d) => d.profession === 'either' },
 ];
 

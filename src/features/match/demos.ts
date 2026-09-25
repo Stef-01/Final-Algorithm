@@ -164,6 +164,58 @@ export const demos: Demo[] = [
     },
   },
   {
+    id: 'coach-organised',
+    profession: 'adhd_coach',
+    title: 'Getting organised, with a coach',
+    shows: 'An ADHD coach search: executive functioning, online, and a neurodiversity-affirming preference.',
+    text: "I've got ADHD and I procrastinate on everything. I'd love a coach to help me get organised and build routines that stick, online is easiest. I want someone who gets that my brain works differently.",
+    signals: {
+      profession: 'adhd_coach',
+      clinicalNeeds: [
+        { area: 'ADHD', confidence: 'high' },
+        { area: 'Executive functioning', confidence: 'high' },
+      ],
+      preferences: {
+        neurodiversity_affirming: { value: 'high', confidence: 'medium', quote: 'you want someone who gets that your brain works differently' },
+      },
+      constraints: { mode: 'telehealth_only' },
+    },
+  },
+  {
+    id: 'physio-back',
+    profession: 'physiotherapist',
+    title: 'Back pain on the Gold Coast',
+    shows: 'A physiotherapist search: chronic pain, in person near Southport.',
+    text: "I've had lower back pain for months and it's stopping me training. I live near Southport and want to see someone in person who can get me back to sport.",
+    signals: {
+      profession: 'physiotherapist',
+      clinicalNeeds: [
+        { area: 'Chronic pain', confidence: 'high' },
+        { area: 'Injury recovery', confidence: 'high' },
+        { area: 'Return to sport', confidence: 'medium' },
+      ],
+      preferences: {},
+      constraints: { mode: 'in_person_only', origin: GOLD_COAST, originLabel: 'Southport', maxKm: 15 },
+    },
+  },
+  {
+    id: 'ot-child',
+    profession: 'occupational_therapist',
+    title: 'Sensory support for a child',
+    shows: 'An occupational therapy search for a child: sensory needs, school visits, Brisbane.',
+    text: 'My son is 7, autistic, and gets overwhelmed by noise and clothes. School is hard. I want an OT in Brisbane who can visit school too.',
+    signals: {
+      profession: 'occupational_therapist',
+      clinicalNeeds: [
+        { area: 'Children', confidence: 'high' },
+        { area: 'Sensory and daily living', confidence: 'high' },
+        { area: 'Autism', confidence: 'high' },
+      ],
+      preferences: {},
+      constraints: { age: 7, origin: BRISBANE, originLabel: 'Brisbane', maxKm: 15 },
+    },
+  },
+  {
     id: 'either-unsure',
     profession: 'either',
     title: 'Not sure what I need yet',

@@ -138,7 +138,10 @@ export function reasonsFor(c: ClinicianRecord, s: PatientSignals, max = MAX_REAS
     if (!ev) continue;
     if (!need.quote && !need.goal && !AREA_SIGNAL[need.area]) plainAreas.set(ev.patientFacing, [...(plainAreas.get(ev.patientFacing) ?? []), need.area]);
     const signal = need.goal ? `Your goal: ${need.goal.charAt(0).toLowerCase()}${need.goal.slice(1)}.` : need.quote ? saidLine(need.quote) : needLine(need.area);
-    candidates.push({ signal, evidenceId: ev.id, evidence: ev.patientFacing, dimension: 'expertise', weight: 0.8 * CONFIDENCE[need.confidence] });
+    // Nearly everyone in this network lists ADHD, so as a reason it's the least telling: on a tie,
+    // a more specific area (executive functioning, trauma…) explains the match better.
+    const generic = need.area === 'ADHD' || need.area === 'Neurodivergent adults' ? 0.9 : 1;
+    candidates.push({ signal, evidenceId: ev.id, evidence: ev.patientFacing, dimension: 'expertise', weight: 0.8 * CONFIDENCE[need.confidence] * generic });
   }
 
   candidates.sort((a, b) => b.weight - a.weight || a.evidenceId.localeCompare(b.evidenceId));

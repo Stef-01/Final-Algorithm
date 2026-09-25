@@ -40,8 +40,8 @@ const NEEDS: [RegExp, string][] = [
   [/social skills|making friends|friendships/, 'Social skills'],
   [/exercise|fitness|get moving|getting active|strength|pilates|hydrotherapy/, 'Movement and exercise'],
   [/older adults?|elderly|seniors?\b|retiree/, 'Older adults'],
-  [/injur|sprain|back pain|neck pain|joint|physio|rehab/, 'Pain and injury'],
-  [/sports? injur|return to sport|acl\b/, 'Sports injury'],
+  [/injur|sprain|back pain|neck pain|joint|physio|rehab/, 'Injury recovery'],
+  [/sports? injur|return to sport|acl\b/, 'Return to sport'],
   [/veteran|military|defence force|army|navy|air force/, 'Veterans and military'],
   [/chronic pain|persistent pain|pain that won'?t go/, 'Chronic pain'],
 ];

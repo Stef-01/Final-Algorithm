@@ -157,8 +157,8 @@ describe('funnel and session', () => {
 });
 
 describe('demo run-throughs', () => {
-  it('has run-throughs for GPs, psychologists and unsure patients', () => {
-    expect(new Set(demos.map((d) => d.profession))).toEqual(new Set(['gp', 'psychologist', 'either']));
+  it('has run-throughs for each main profession and unsure patients', () => {
+    expect(new Set(demos.map((d) => d.profession))).toEqual(new Set(['gp', 'psychologist', 'adhd_coach', 'physiotherapist', 'occupational_therapist', 'either']));
     expect(new Set(demos.map((d) => d.id)).size).toBe(demos.length);
   });
 

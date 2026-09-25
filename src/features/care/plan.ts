@@ -25,7 +25,7 @@ export const GOALS: Goal[] = [
   { id: 'understand', label: 'Understand myself', icon: 'icProPsych', professions: ['psychologist'] },
   { id: 'sleep', label: 'Sleep better', icon: 'icClock', professions: ['gp', 'psychologist'], areas: ['Sleep'] },
   { id: 'move', label: 'Move more', icon: 'icProExercise', professions: ['exercise_physiologist', 'physiotherapist'], areas: ['Movement and exercise'] },
-  { id: 'pain', label: 'Less pain', icon: 'icProPhysio', professions: ['physiotherapist', 'exercise_physiologist'], areas: ['Pain and injury', 'Chronic pain'] },
+  { id: 'pain', label: 'Less pain', icon: 'icProPhysio', professions: ['physiotherapist', 'exercise_physiologist'], areas: ['Injury recovery', 'Chronic pain'] },
   { id: 'eat', label: 'Eat well', icon: 'icProDiet', professions: ['dietitian'] },
   { id: 'child', label: 'Support my child', icon: 'icKids', professions: ['occupational_therapist', 'psychologist'], areas: ['Children', 'Parenting support'] },
 ];

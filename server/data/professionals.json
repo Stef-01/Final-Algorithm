@@ -3490,17 +3490,17 @@
     },
     "expertise": [
       {
-        "area": "Pain and injury",
+        "area": "Injury recovery",
         "level": "particular",
         "evidenceIds": [
-          "yuri-lima-exp-pain-and-injury"
+          "yuri-lima-exp-injury-recovery"
         ]
       },
       {
-        "area": "Sports injury",
+        "area": "Return to sport",
         "level": "particular",
         "evidenceIds": [
-          "yuri-lima-exp-sports-injury"
+          "yuri-lima-exp-return-to-sport"
         ]
       }
     ],
@@ -3515,7 +3515,7 @@
     },
     "evidence": [
       {
-        "id": "yuri-lima-exp-pain-and-injury",
+        "id": "yuri-lima-exp-injury-recovery",
         "trait": "expertise",
         "excerpt": "Orthopaedic and sports rehabilitation",
         "patientFacing": "Yuri does orthopaedic and sports rehabilitation.",
@@ -3525,7 +3525,7 @@
         "reviewerStatus": "profile"
       },
       {
-        "id": "yuri-lima-exp-sports-injury",
+        "id": "yuri-lima-exp-return-to-sport",
         "trait": "expertise",
         "excerpt": "Orthopaedic and sports rehabilitation",
         "patientFacing": "Yuri does orthopaedic and sports rehabilitation.",
@@ -3590,10 +3590,10 @@
     },
     "expertise": [
       {
-        "area": "Pain and injury",
+        "area": "Injury recovery",
         "level": "particular",
         "evidenceIds": [
-          "tom-hissey-exp-pain-and-injury"
+          "tom-hissey-exp-injury-recovery"
         ]
       },
       {
@@ -3607,7 +3607,7 @@
     "phenotype": {},
     "evidence": [
       {
-        "id": "tom-hissey-exp-pain-and-injury",
+        "id": "tom-hissey-exp-injury-recovery",
         "trait": "expertise",
         "excerpt": "Occupational rehabilitation and musculoskeletal physiotherapy",
         "patientFacing": "Tom does occupational rehabilitation and musculoskeletal physiotherapy.",
@@ -3678,10 +3678,10 @@
     },
     "expertise": [
       {
-        "area": "Pain and injury",
+        "area": "Injury recovery",
         "level": "particular",
         "evidenceIds": [
-          "lester-rafanan-exp-pain-and-injury"
+          "lester-rafanan-exp-injury-recovery"
         ]
       },
       {
@@ -3692,10 +3692,10 @@
         ]
       },
       {
-        "area": "Sports injury",
+        "area": "Return to sport",
         "level": "general",
         "evidenceIds": [
-          "lester-rafanan-exp-sports-injury"
+          "lester-rafanan-exp-return-to-sport"
         ]
       },
       {
@@ -3709,7 +3709,7 @@
     "phenotype": {},
     "evidence": [
       {
-        "id": "lester-rafanan-exp-pain-and-injury",
+        "id": "lester-rafanan-exp-injury-recovery",
         "trait": "expertise",
         "excerpt": "Injury and surgery recovery, chronic pain, return to sport and NDIS supports",
         "patientFacing": "Lester helps with injury and surgery recovery, chronic pain and return to sport.",
@@ -3729,7 +3729,7 @@
         "reviewerStatus": "profile"
       },
       {
-        "id": "lester-rafanan-exp-sports-injury",
+        "id": "lester-rafanan-exp-return-to-sport",
         "trait": "expertise",
         "excerpt": "Injury and surgery recovery, chronic pain, return to sport and NDIS supports",
         "patientFacing": "Lester helps with injury and surgery recovery, chronic pain and return to sport.",
