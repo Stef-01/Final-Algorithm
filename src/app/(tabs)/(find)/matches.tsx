@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { ClinicianCards } from '@/components/ClinicianCards';
+import { AlsoCouldHelp } from '@/components/AlsoCouldHelp';
 import { Appear } from '@/components/motion';
 import { Swipeable, type SwipeableHandle } from '@/components/Swipeable';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
@@ -112,6 +113,7 @@ export default function Matches() {
           action={more.length > 0 ? { label: `See all ${matches.length + more.length}`, onPress: () => router.push('/all') } : undefined}
           secondary={{ label: 'Start over', onPress: startOver }}
         />
+        <AlsoCouldHelp />
         <RatingCard value={state.feedback.rating} onRate={session.rateMatches} />
       </Shell>
     );
@@ -161,6 +163,7 @@ export default function Matches() {
                 {state.index + 1} of {matches.length}
               </Text>
             )}
+            {state.index === 0 ? <AlsoCouldHelp /> : null}
             <ClinicianCards
               key={clinician.id}
               clinician={clinician}

@@ -333,3 +333,25 @@ describe('more kinds of professional', () => {
     expect(r?.status).toBe('none');
   });
 });
+
+describe('also could help', () => {
+  it('suggests other professions that suit what was said, and switches keeping the words', () => {
+    const s = core.demoResults('psych-masking');
+    const others = core.alsoCouldHelp(s);
+    expect(others.length).toBeGreaterThan(0);
+    expect(others.map((o) => o.profession)).not.toContain('psychologist');
+    expect(others[0].profession).toBe('adhd_coach');
+    const t = core.switchProfession(s, 'adhd_coach');
+    expect(t.route).toBe('/matches');
+    expect(t.state.profession).toBe('adhd_coach');
+    expect(t.state.input.texts).toEqual(s.input.texts);
+    const r = t.state.result;
+    if (r?.status !== 'matches') throw new Error('expected matches');
+    for (const m of [...r.matches, ...r.more]) expect(getClinician(m.clinicianId)!.profession).toBe('adhd_coach');
+  });
+
+  it('says nothing when nothing specific was asked for', () => {
+    const t = core.submitText(core.chooseProfession(core.initialState(), 'gp').state, 'I need a GP');
+    expect(core.alsoCouldHelp(core.match(t.state).state)).toEqual([]);
+  });
+});

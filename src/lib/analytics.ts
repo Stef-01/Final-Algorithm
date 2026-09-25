@@ -32,6 +32,7 @@ export type Events = {
   /** My care: goals picked, and reminders added to a calendar. */
   goal_toggled: { goal: string; on: boolean };
   calendar_added: { profession: string; how: string };
+  also_could_help: { profession: string };
 };
 
 export type EventName = keyof Events;

@@ -1,6 +1,7 @@
 import { Redirect, router } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { AlsoCouldHelp } from '@/components/AlsoCouldHelp';
 import { MatchRow } from '@/components/MatchRow';
 import { Appear } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
@@ -41,6 +42,7 @@ export default function AllMatches() {
             </View>
           );
         })}
+        <AlsoCouldHelp />
       </ScrollView>
     </View>
   );

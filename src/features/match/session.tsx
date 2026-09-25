@@ -9,7 +9,7 @@ import type { Extraction } from '@server/claude/types';
 
 import { SUGGESTION_TEXT } from './refine';
 import { sendFeedback } from './sendFeedback';
-import type { NoMatchAction } from './types';
+import type { NoMatchAction, Profession } from './types';
 
 const STORAGE_KEY = 'watl_session';
 const MAX_AGE_MS = 24 * 60 * 60 * 1000; // PRD §45: keep free text only as long as needed.
@@ -26,6 +26,7 @@ type Session = {
   match: () => string;
   nextMatch: () => void;
   prevMatch: () => void;
+  switchProfession: (p: Profession) => string;
   noMatchAction: (action: NoMatchAction) => string;
   rateMatches: (rating: number) => void;
   thumb: (clinicianId: string, dir: 'up' | 'down') => void;
@@ -112,6 +113,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         commit(next);
       },
       prevMatch: () => commit(core.prevMatch(current.current)),
+      switchProfession: (p) => {
+        track('also_could_help', { profession: p });
+        return route(core.switchProfession(current.current, p));
+      },
       noMatchAction: (a) => route(core.noMatchAction(current.current, a)),
       rateMatches: (rating) => {
         const next = core.rateMatches(current.current, rating);

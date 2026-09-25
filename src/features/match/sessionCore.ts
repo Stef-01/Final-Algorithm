@@ -1,5 +1,6 @@
 import { pool as clinicianPool, nextStep, normaliseAnswer, priorityLabel, runMatching, signalsFor, type SessionInput } from './agent';
 import type { Extraction } from '@server/claude/types';
+import { PROFESSIONS } from '@server/engine/types';
 
 import { copyFor } from '@/lib/professions';
 
@@ -163,6 +164,30 @@ export function match(state: SessionState): Transition {
 export function nextMatch(state: SessionState): SessionState {
   const total = state.result?.status === 'matches' ? state.result.matches.length : 0;
   return { ...state, index: Math.min(state.index + 1, total), updatedAt: Date.now() };
+}
+
+/**
+ * Other kinds of professional who suit what the patient said: those whose explained matches (at
+ * least one evidence-backed reason) exist for the same needs. Best first, at most three.
+ */
+export function alsoCouldHelp(state: SessionState): { profession: Profession; count: number }[] {
+  const current = state.input.profession;
+  if (!current || signalsFor(state.input).clinicalNeeds.length === 0) return [];
+  return PROFESSIONS.filter((p) => p !== current)
+    .map((p) => {
+      const r = runMatching({ ...state.input, profession: p });
+      const count = r.status === 'matches' ? [...r.matches, ...r.more].filter((m) => m.reasons.length > 0).length : 0;
+      return { profession: p, count };
+    })
+    .filter((x) => x.count > 0)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 3);
+}
+
+/** Search another profession with everything said so far (from "Also could help"). */
+export function switchProfession(state: SessionState, profession: Profession): Transition {
+  const input = { ...state.input, profession };
+  return { state: { ...state, profession, input, result: runMatching(input), index: 0, updatedAt: Date.now() }, route: '/matches' };
 }
 
 export function prevMatch(state: SessionState): SessionState {
