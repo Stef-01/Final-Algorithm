@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { ReactNode } from 'react';
 import {
   Image,
@@ -36,6 +37,19 @@ export function ConversationStep({ icon, title, children, onNext, nextEnabled = 
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           <View style={styles.progress}>
+            {/* Every step after the first has a way back (to the previous step, or the start). */}
+            {progress === undefined ? null : (
+              <PressScale
+                onPress={() => (router.canGoBack() ? router.back() : router.navigate('/'))}
+                accessibilityRole="button"
+                accessibilityLabel="Back"
+                hitSlop={10}
+                style={styles.back}
+                scaleTo={0.85}
+              >
+                <Icon name="icBaselineArrowBackIos24" size={20} />
+              </PressScale>
+            )}
             <View style={styles.iconCircle}>
               <Icon name={icon} size={22} />
             </View>
@@ -103,6 +117,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   content: { paddingHorizontal: 32, paddingTop: 48, paddingBottom: 120 },
   progress: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 28 },
+  back: { width: 32, height: 44, marginLeft: -10, alignItems: 'center', justifyContent: 'center' },
   iconCircle: {
     width: 48,
     height: 48,

@@ -94,6 +94,17 @@ describe('app shell', () => {
 });
 
 describe('where', () => {
+  it('every step has a way back', async () => {
+    renderRouter(routes, { initialUrl: '/' });
+    fireEvent.press(await screen.findByText('Psychologist'));
+    fireEvent.press(await screen.findByLabelText('Anywhere: Telehealth is fine'));
+    await screen.findByText('Find a psychologist who fits you.');
+    fireEvent.press(screen.getAllByLabelText('Back').at(-1)!);
+    expect(await screen.findByText('Does location matter?')).toBeOnTheScreen();
+    fireEvent.press(screen.getAllByLabelText('Back').at(-1)!);
+    await waitFor(() => expect(screen).toHavePathname('/'));
+  });
+
   it('asks straight after the profession; near a place opens a map to tap', async () => {
     renderRouter(routes, { initialUrl: '/' });
     fireEvent.press(await screen.findByText('Psychologist'));
