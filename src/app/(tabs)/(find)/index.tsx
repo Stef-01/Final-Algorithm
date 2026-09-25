@@ -28,5 +28,5 @@ export default function WhoAreYouLookingFor() {
 }
 
 const styles = StyleSheet.create({
-  demo: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, marginTop: 20 },
+  demo: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, marginTop: 8, paddingVertical: 12 },
 });

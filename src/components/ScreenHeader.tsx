@@ -25,11 +25,11 @@ export function ScreenHeader({ title, back, right, children }: Props) {
     <View style={[styles.card, { paddingTop: insets.top }]}>
       <View style={styles.row}>
         {back ? (
-          <Pressable onPress={onBack} hitSlop={12} accessibilityLabel="Back" style={styles.back}>
+          <Pressable onPress={onBack} hitSlop={12} accessibilityRole="button" accessibilityLabel="Back" style={styles.back}>
             <Icon name="icLeftArrow" size={20} />
           </Pressable>
         ) : null}
-        <Text style={[styles.title, !back && styles.titleNoBack]} numberOfLines={1}>
+        <Text style={[styles.title, !back && styles.titleNoBack]} numberOfLines={1} accessibilityRole="header">
           {title}
         </Text>
         <View style={styles.right}>{right}</View>
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   row: { height: 55, flexDirection: 'row', alignItems: 'center' },
-  back: { paddingHorizontal: 17 },
+  back: { paddingHorizontal: 17, minHeight: 44, justifyContent: 'center' },
   title: { flex: 1, fontFamily: fonts.bold, fontSize: 23, color: colors.black },
   titleNoBack: { marginLeft: 25 },
   right: { paddingRight: 17 },

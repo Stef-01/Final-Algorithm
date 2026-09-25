@@ -19,6 +19,8 @@ export function ListRow({ label, value, onPress, tone }: Props) {
     <Pressable
       onPress={onPress}
       disabled={!onPress}
+      accessibilityRole={onPress ? 'button' : undefined}
+      accessibilityLabel={value ? `${label}. ${value}` : label}
       style={({ pressed }) => [styles.row, pressed && styles.pressed]}
     >
       <Text style={[styles.label, tone ? { color: tone } : null]}>{label}</Text>
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
   section: {
     fontFamily: fonts.bold,
     fontSize: 13,
-    color: colors.line,
+    color: colors.muted,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginTop: 28,
@@ -51,5 +53,5 @@ const styles = StyleSheet.create({
   },
   pressed: { backgroundColor: colors.background },
   label: { fontFamily: fonts.medium, fontSize: 17, color: colors.black },
-  value: { fontFamily: fonts.regular, fontSize: 15, color: colors.line, marginTop: 4 },
+  value: { fontFamily: fonts.regular, fontSize: 15, color: colors.muted, marginTop: 4 },
 });

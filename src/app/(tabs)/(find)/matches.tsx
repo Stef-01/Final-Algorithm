@@ -152,8 +152,8 @@ const styles = StyleSheet.create({
   intro: { marginHorizontal: 12, marginTop: 20, paddingHorizontal: 15 },
   introTitle: { fontFamily: fonts.serifSemiBold, fontSize: 24, lineHeight: 30, color: colors.black },
   introBody: { fontFamily: fonts.regular, fontSize: 15, color: colors.black, marginTop: 6 },
-  seeAll: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, marginTop: 10, paddingVertical: 6 },
-  position: { fontFamily: fonts.medium, fontSize: 14, color: colors.line, marginTop: 16, marginHorizontal: 27 },
+  seeAll: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, marginTop: 2, paddingVertical: 14 },
+  position: { fontFamily: fonts.medium, fontSize: 14, color: colors.muted, marginTop: 16, marginHorizontal: 27 },
   view: { marginHorizontal: 12, marginTop: 24 },
   next: {
     position: 'absolute',

@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   chip: { backgroundColor: colors.chip, borderRadius: 150, paddingVertical: 12, paddingHorizontal: 20, minHeight: 44 },
   chipText: { fontFamily: fonts.medium, fontSize: 15, color: colors.black },
   pressed: { backgroundColor: colors.line },
-  thanks: { fontFamily: fonts.regular, fontSize: 14, color: colors.line, paddingVertical: 12 },
+  thanks: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, paddingVertical: 12 },
   card: { marginHorizontal: 12, marginTop: 20, borderRadius: 10, backgroundColor: colors.white, padding: 20 },
   cardTitle: { fontFamily: fonts.serifSemiBold, fontSize: 20, lineHeight: 26, color: colors.black, textAlign: 'center' },
   scale: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 18 },
@@ -90,6 +90,6 @@ const styles = StyleSheet.create({
   },
   pointNumber: { fontFamily: fonts.bold, fontSize: 17, color: colors.black },
   ends: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
-  endLabel: { fontFamily: fonts.regular, fontSize: 12, color: colors.line },
+  endLabel: { fontFamily: fonts.regular, fontSize: 12, color: colors.muted },
   thanksLarge: { fontFamily: fonts.serifSemiBold, fontSize: 20, color: colors.black, textAlign: 'center' },
 });

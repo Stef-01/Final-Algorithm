@@ -42,5 +42,5 @@ export default function ConfirmPreferences() {
 }
 
 const styles = StyleSheet.create({
-  edit: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, textAlign: 'center', marginTop: 20 },
+  edit: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, textAlign: 'center', marginTop: 8, paddingVertical: 12 },
 });

@@ -1,5 +1,5 @@
 import type { Caveat, Clinician, Match } from '@/features/match/types';
-import { ChipItem, ChipsCard, PhotoCard, PromptCard, TextCard } from './cards';
+import { ChipItem, ChipsCard, NoteCard, PhotoCard, PromptCard, TagsCard, TextCard } from './cards';
 
 type Props = {
   clinician: Clinician;
@@ -35,6 +35,9 @@ const CAVEAT_TEXT: Record<Caveat, string> = {
   weekend_hours_unpublished: "Weekend hours aren't published. Ask the practice.",
 };
 
+/** "WHY THEY FIT · 1 OF 3" over each reason, so the reasons read as one numbered section. */
+export const reasonKicker = (i: number, n: number) => (n > 1 ? `Why they fit · ${i + 1} of ${n}` : 'Why they fit');
+
 export const caveatLines = (m: Match) => (m.caveats ?? []).map((c) => CAVEAT_TEXT[c]);
 
 /** Shown instead of reasons when nothing the patient said matches a specific part of the profile. */
@@ -59,19 +62,22 @@ export function ClinicianCards({ clinician: c, match, onOpen, onSave, saved }: P
         {...like}
       />
       {match.reasons.length > 0 ? (
-        match.reasons.slice(0, 3).map((r) => <PromptCard key={r.evidenceId} title={r.signal} answer={r.evidence} {...like} />)
+        match.reasons.slice(0, 3).map((r, i, all) => (
+          <PromptCard key={r.evidenceId} kicker={reasonKicker(i, all.length)} title={r.signal} answer={r.evidence} {...like} />
+        ))
       ) : (
-        <TextCard title="Why they're here" body={noReasonLine(c)} />
+        <TextCard kicker="Why they're here" title="Meets what you asked for" body={noReasonLine(c)} />
       )}
       {caveatLines(match).map((line) => (
-        <TextCard key={line} title="Worth checking" body={line} />
+        <NoteCard key={line} title="Worth checking" body={line} />
       ))}
       <ChipsCard
+        kicker="The practicals"
         chips={practicalChips(c)}
         rowsTitle="Particularly experienced with"
         rows={c.experiencedWith.slice(0, 4).map((area) => ({ icon: 'icCheck', label: area }))}
       />
-      <PromptCard title={`How ${c.firstName} practises`} answer={c.practiceStyle.slice(0, 5).join(' · ')} {...like} />
+      <TagsCard kicker="How they practise" title={`How ${c.firstName} works`} tags={c.practiceStyle.slice(0, 5)} {...like} />
     </>
   );
 }

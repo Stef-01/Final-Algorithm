@@ -19,3 +19,4 @@ jobs:
       - run: npx expo lint
       - run: npm test -- --ci
       - run: npm run test:py
+      - run: npm run budget

@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { ChipsCard, PhotoCard, PromptCard, TextCard } from '@/components/cards';
-import { caveatLines, costLabel, noReasonLine, placeLine, practicalChips } from '@/components/ClinicianCards';
+import { ChipsCard, NoteCard, PhotoCard, PromptCard, TagsCard, TextCard } from '@/components/cards';
+import { caveatLines, costLabel, noReasonLine, placeLine, practicalChips, reasonKicker } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { FitLabel } from '@/components/FitLabel';
 import { ScreenHeader } from '@/components/ScreenHeader';
@@ -63,20 +63,22 @@ export default function ClinicianDetail() {
 
         {match ? (
           <>
-            <Text style={styles.section}>Why I matched you</Text>
             {match.reasons.length > 0 ? (
-              match.reasons.slice(0, 3).map((r) => <PromptCard key={r.evidenceId} title={r.signal} answer={r.evidence} {...like} />)
+              match.reasons.slice(0, 3).map((r, i, all) => (
+                <PromptCard key={r.evidenceId} kicker={reasonKicker(i, all.length)} title={r.signal} answer={r.evidence} {...like} />
+              ))
             ) : (
-              <TextCard title="Why they're here" body={noReasonLine(c)} />
+              <TextCard kicker="Why they're here" title="Meets what you asked for" body={noReasonLine(c)} />
             )}
             {caveatLines(match).map((line) => (
-              <TextCard key={line} title="Worth checking" body={line} />
+              <NoteCard key={line} title="Worth checking" body={line} />
             ))}
           </>
         ) : null}
 
-        <PromptCard title={`How ${c.firstName} practises`} answer={c.practiceStyle.slice(0, 5).join(' · ')} />
+        <TagsCard kicker="How they practise" title={`How ${c.firstName} works`} tags={c.practiceStyle.slice(0, 5)} />
         <ChipsCard
+          kicker="The practicals"
           chips={practicalChips(c)}
           rowsTitle="Particularly experienced with"
           rows={c.experiencedWith.slice(0, 4).map((area) => ({ icon: 'icCheck', label: area }))}
@@ -92,7 +94,7 @@ export default function ClinicianDetail() {
             { icon: 'icLocation', label: `${c.suburb}, ${c.city}` },
           ]}
         />
-        <TextCard title={`About ${c.firstName}`} body={c.bio} />
+        <TextCard kicker="In their words" title={`About ${c.firstName}`} body={c.bio} />
         <ChipsCard
           chips={[]}
           rowsTitle="Qualifications"
@@ -122,7 +124,6 @@ export default function ClinicianDetail() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   content: {},
-  section: { fontFamily: fonts.serifSemiBold, fontSize: 24, color: colors.black, marginTop: 28, marginHorizontal: 27 },
   footer: {
     position: 'absolute',
     left: 0,
@@ -134,5 +135,5 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.background,
   },
-  nextText: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, textAlign: 'center', paddingVertical: 12 },
+  nextText: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, textAlign: 'center', paddingVertical: 14 },
 });

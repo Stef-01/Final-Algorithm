@@ -14,7 +14,7 @@ type Props = {
 export function EmptyStateCard({ title, body, action, secondary }: Props) {
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title} accessibilityRole="header">{title}</Text>
       <Text style={styles.body}>{body}</Text>
       {action ? (
         <Pressable style={styles.button} accessibilityRole="button" onPress={action.onPress}>
@@ -59,5 +59,5 @@ const styles = StyleSheet.create({
   },
   button: { backgroundColor: colors.purple, borderRadius: 30, paddingVertical: 16, paddingHorizontal: 36 },
   buttonText: { fontFamily: fonts.bold, fontSize: 15, color: colors.white },
-  secondary: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, marginTop: 20 },
+  secondary: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, marginTop: 8, paddingVertical: 12 },
 });

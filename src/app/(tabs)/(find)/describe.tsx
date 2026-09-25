@@ -45,7 +45,7 @@ export default function Describe() {
         value={text}
         onChangeText={setText}
         placeholder={copy.prompt}
-        placeholderTextColor={colors.line}
+        placeholderTextColor={colors.muted}
         multiline
         style={styles.input}
         accessibilityLabel="What you're looking for"
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     textAlignVertical: 'top',
   },
-  hint: { fontFamily: fonts.regular, fontSize: 14, color: colors.line, marginTop: 12 },
+  hint: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, marginTop: 12 },
   demoNote: { backgroundColor: colors.background, borderRadius: 10, padding: 14, marginBottom: 16 },
   demoLabel: { fontFamily: fonts.bold, fontSize: 14, color: colors.purpleText },
   demoBody: { fontFamily: fonts.regular, fontSize: 14, color: colors.black, marginTop: 4 },

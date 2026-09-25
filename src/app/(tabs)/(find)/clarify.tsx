@@ -46,7 +46,7 @@ export default function Clarify() {
           value={text}
           onChangeText={setText}
           placeholder="In your own words"
-          placeholderTextColor={colors.line}
+          placeholderTextColor={colors.muted}
           multiline
           autoFocus
           style={styles.input}
@@ -79,5 +79,5 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     textAlignVertical: 'top',
   },
-  ownWords: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, marginTop: 12 },
+  ownWords: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, marginTop: 0, paddingVertical: 12 },
 });

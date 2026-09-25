@@ -11,13 +11,13 @@ export function Sheet({ children, closeButton }: { children: ReactNode; closeBut
   const insets = useSafeAreaInsets();
   return (
     <View style={styles.scrim}>
-      <Pressable style={StyleSheet.absoluteFill} onPress={() => router.back()} accessibilityLabel="Dismiss" />
+      <Pressable style={StyleSheet.absoluteFill} onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Close" />
       <View style={[styles.card, { marginTop: insets.top + 40 }]}>
         <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 32 }]}>
           {children}
         </ScrollView>
         {closeButton ? (
-          <Pressable onPress={() => router.back()} hitSlop={12} accessibilityLabel="Close" style={styles.close}>
+          <Pressable onPress={() => router.back()} hitSlop={12} accessibilityRole="button" accessibilityLabel="Close" style={styles.close}>
             <Icon name="icClose" size={18} />
           </Pressable>
         ) : null}
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 15,
   },
   content: { padding: 24, paddingTop: 40, alignItems: 'stretch' },
-  close: { position: 'absolute', top: 18, left: 18 },
+  close: { position: 'absolute', top: 5, left: 5, width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   pill: {
     backgroundColor: colors.purple,
     borderRadius: 30,

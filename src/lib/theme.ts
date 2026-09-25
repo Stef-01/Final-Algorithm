@@ -5,9 +5,11 @@ export const colors = {
   purpleText: '#763568',
   boost: '#7eaaa9',
   line: '#a9a9a9',
+  // Secondary text. Darker than `line` so it meets WCAG AA (4.5:1) on white and the grey background.
+  muted: '#6B6B6B',
   chip: '#D0D0D0',
   tabBar: '#1A1A1A',
-  tabInactive: '#636363',
+  tabInactive: '#7A7A7A', // ≥3:1 on the tab bar (WCAG non-text contrast)
   rose: '#C6B5C7',
   background: '#F1F1F1',
 };

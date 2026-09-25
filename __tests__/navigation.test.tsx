@@ -114,7 +114,7 @@ describe('demo run-throughs', () => {
     fireEvent.press(screen.getByLabelText('Next match'));
     fireEvent.press(await screen.findByText('View Paula'));
     await waitFor(() => expect(screen).toHavePathname('/clinician/paula-garrido'));
-    expect(screen.getByText('Why I matched you')).toBeOnTheScreen();
+    expect(screen.getAllByText(/^Why they fit/)[0]).toBeOnTheScreen();
     expect(screen.getByText(/\$253 a session, \$149 Medicare rebate/)).toBeOnTheScreen();
     expect(screen.getByText('Wellness Psychology Clinic')).toBeOnTheScreen();
 

@@ -42,7 +42,8 @@
     "lint": "expo lint",
     "test": "jest",
     "lockfile": "rm -rf node_modules package-lock.json && npm install",
-    "test:py": "python3 -m unittest discover scripts/tests"
+    "test:py": "python3 -m unittest discover scripts/tests",
+    "budget": "expo export --platform web && node scripts/check-budget.mjs"
   },
   "private": true,
   "jest": {

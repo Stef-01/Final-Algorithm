@@ -11,7 +11,7 @@ const NEEDS: [RegExp, string][] = [
   [/autism (assessment|diagnos)|(assess|diagnos)\w* (for|of) autism/, 'Autism assessment'],
   [/neurodiverg|neurodivers/, 'Neurodivergent adults'],
   [/anxi/, 'Anxiety'],
-  [/depress|low mood/, 'Depression'],
+  [/depress|low mood|feeling low|been (really |so |very )?low|really low/, 'Depression'],
   [/trauma|ptsd/, 'Trauma'],
   [/burn ?out|burnt out/, 'Burnout'],
   [/stress/, 'Stress'],
@@ -19,8 +19,8 @@ const NEEDS: [RegExp, string][] = [
   [/self[- ]esteem|confidence/, 'Self-esteem'],
   [/emotion\w* regulat|meltdown|overwhelm/, 'Emotional regulation'],
   [/eating disorder|anorexi|bulimi|binge/, 'Eating disorders'],
-  [/perinatal|postnatal|pregnan|new (mum|mother|parent)|fertility/, 'Perinatal mental health'],
-  [/parenting|my (son|daughter|child|kid)/, 'Parenting support'],
+  [/perinatal|postnatal|pregnan|new (mum|mother|parent)|fertility|had a baby|newborn/, 'Perinatal mental health'],
+  [/parenting|my (teenage |young |little )?(son|daughter|child|kid)/, 'Parenting support'],
   [/\b(child|children|kid|toddler)\b/, 'Children'],
   [/teen|young person|young people/, 'Young people'],
   [/career|work performance|performance/, 'Career and performance'],
@@ -44,7 +44,7 @@ const PREFS: PrefRule[] = [
   [/tell me what to do|just recommend|clear recommendation/, 'shared_decision_making', 'clinician_led'],
   [/my (own )?choice|let me decide|decide for myself/, 'shared_decision_making', 'patient_led'],
   [/straight|blunt|direct|no fluff/, 'communication_directness', 'direct'],
-  [/gentle|kind|soft/, 'communication_directness', 'gentle'],
+  [/gentle|\bkind\b(?! of)|soft[- ]spoken|softly/, 'communication_directness', 'gentle'],
   [/look(ed)? into it|investigat|get to the bottom|answers|properly checked/, 'diagnostic_style', 'investigative'],
   [/(don'?t|do not|without|not keen on|avoid) (want )?(more )?medication|not just medication|more than medication/, 'medication_philosophy', 'conservative'],
   [/sleep|exercise|lifestyle|nutrition|diet|routine/, 'lifestyle_integration', 'high'],
@@ -70,11 +70,21 @@ const PLACES: [RegExp, { lat: number; lng: number }][] = [
 
 const URGENT = [/chest pain/, /suicid/, /kill myself/, /self[- ]harm/, /overdos/, /can'?t breathe|cannot breathe/, /emergency/];
 
+/** Matches `re` somewhere it isn't negated ("it's not anxiety", "I'm not depressed"). */
+function mentioned(t: string, re: RegExp): boolean {
+  const g = new RegExp(re.source, 'g');
+  for (const m of t.matchAll(g)) {
+    const before = t.slice(Math.max(0, m.index - 16), m.index);
+    if (!/\b(not|no|isn'?t|never|without)\s+(\w+\s+)?$/.test(before)) return true;
+  }
+  return false;
+}
+
 export const isUrgent = (text: string) => URGENT.some((p) => p.test(text.toLowerCase()));
 
 export function extractSignals(raw: string, profession?: Profession): PatientSignals {
   const t = raw.toLowerCase();
-  const clinicalNeeds = NEEDS.filter(([re]) => re.test(t)).map(([, area]) => ({
+  const clinicalNeeds = NEEDS.filter(([re]) => mentioned(t, re)).map(([, area]) => ({
     area,
     confidence: 'high' as Confidence,
   }));
@@ -100,7 +110,7 @@ export function extractSignals(raw: string, profession?: Profession): PatientSig
   const age = t.match(/\bi'?m (\d{2})\b|\b(\d{2}) ?(years old|yo)\b/);
   if (age) constraints.age = Number(age[1] ?? age[2]);
   const place = PLACES.find(([re]) => re.test(t));
-  if (place && /near|close to|around|in /.test(t)) {
+  if (place && /near|close to|around|\blive|based|located|i'?m in|work in/.test(t)) {
     constraints.origin = place[1];
     constraints.maxKm = /walking|very close/.test(t) ? 5 : 15;
   }

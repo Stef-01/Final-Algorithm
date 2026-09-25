@@ -17,7 +17,7 @@ export function MatchRow({ clinician: c, match, rank, onPress }: { clinician: Cl
       accessibilityLabel={`${rank}. ${c.name}, ${match.fit}`}
       style={({ pressed }) => [styles.row, pressed && styles.pressed]}
     >
-      <Image source={c.photo} style={styles.photo} contentFit="cover" accessibilityIgnoresInvertColors />
+      <Image source={c.photo} style={styles.photo} contentFit="cover" accessibilityLabel="" accessibilityIgnoresInvertColors />
       <View style={styles.text}>
         <View style={styles.titleRow}>
           <Text style={styles.name} numberOfLines={1}>
@@ -53,6 +53,6 @@ const styles = StyleSheet.create({
   text: { flex: 1, gap: 3 },
   titleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   name: { flexShrink: 1, fontFamily: fonts.bold, fontSize: 16, color: colors.black },
-  place: { fontFamily: fonts.regular, fontSize: 13, color: colors.line },
+  place: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted },
   summary: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 19, color: colors.black },
 });

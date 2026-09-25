@@ -42,7 +42,7 @@ export function ConversationStep({ icon, title, children, onNext, nextEnabled = 
               <View key={i} style={styles.dot} />
             ))}
           </View>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title} accessibilityRole="header">{title}</Text>
           {note ? <Text style={styles.note}>{note}</Text> : null}
           {children}
         </ScrollView>
@@ -61,6 +61,7 @@ export function ConversationStep({ icon, title, children, onNext, nextEnabled = 
                   : require('../../assets/images/phone_next_white.png')
               }
               style={styles.nextImage}
+              aria-hidden
             />
           </Pressable>
         ) : null}
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
   },
   dot: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.chip },
   title: { fontFamily: fonts.serifSemiBold, fontSize: 30, lineHeight: 38, color: colors.black, marginBottom: 32 },
-  note: { fontFamily: fonts.regular, fontSize: 16, lineHeight: 22, color: colors.line, marginTop: -20, marginBottom: 28 },
+  note: { fontFamily: fonts.regular, fontSize: 16, lineHeight: 22, color: colors.muted, marginTop: -20, marginBottom: 28 },
   next: { position: 'absolute', right: 28, bottom: 28 },
   nextImage: { width: 64, height: 64 },
   pill: {
@@ -119,6 +120,6 @@ const styles = StyleSheet.create({
   },
   pillPressed: { backgroundColor: colors.line },
   pillRemoved: { backgroundColor: colors.background },
-  pillTextRemoved: { color: colors.line, textDecorationLine: 'line-through' },
+  pillTextRemoved: { color: colors.muted, textDecorationLine: 'line-through' },
   pillText: { fontFamily: fonts.medium, fontSize: 18, color: colors.black },
 });

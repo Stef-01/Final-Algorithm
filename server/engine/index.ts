@@ -106,7 +106,12 @@ export function recommend(s: PatientSignals, cs: ClinicianRecord[], asked: strin
 
   // Clinicians we can explain come before those we can't; within each group, the engine's order.
   const explained = new Set(scored.filter((x) => reasonsFor(byId.get(x.clinicianId)!, s).length > 0).map((x) => x.clinicianId));
-  const ranked = [...scored.filter((x) => explained.has(x.clinicianId)), ...scored.filter((x) => !explained.has(x.clinicianId))];
+  // Unexplained clinicians are "Possible fit" before diversity runs, so a near-tie swap can
+  // never lift one of them above someone we can explain.
+  const ranked = [
+    ...scored.filter((x) => explained.has(x.clinicianId)),
+    ...scored.filter((x) => !explained.has(x.clinicianId)).map((x) => ({ ...x, fit: 'Possible fit' as const })),
+  ];
 
   const featured = selectTop(ranked);
   const shown = new Set(featured.map((x) => x.clinicianId));

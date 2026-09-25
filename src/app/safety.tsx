@@ -20,7 +20,7 @@ export default function Safety() {
 
   return (
     <Sheet>
-      <Text style={sheetText.heading}>Let&apos;s pause for a moment.</Text>
+      <Text style={sheetText.heading} accessibilityRole="header">Let&apos;s pause for a moment.</Text>
       <Text style={sheetText.body}>
         WATL helps you find a GP or psychologist, but it can&apos;t help with urgent medical concerns. If you&apos;re in danger or this
         is an emergency, call 000. If you&apos;re thinking about suicide or self-harm, call Lifeline on 13 11 14.
