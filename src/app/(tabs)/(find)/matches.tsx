@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { ClinicianCards } from '@/components/ClinicianCards';
+import { Appear } from '@/components/motion';
 import { Swipeable, type SwipeableHandle } from '@/components/Swipeable';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { MatchFeedback, RatingCard } from '@/components/Feedback';
@@ -137,40 +138,43 @@ export default function Matches() {
           session.nextMatch();
         }}
       >
-        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          {state.index === 0 ? (
-            <View style={styles.intro}>
-              <Text style={styles.introTitle}>{matchesHeadline(matches.length, state.profession, explained)}</Text>
-              {subline ? <Text style={styles.introBody}>{subline}</Text> : null}
-              {explained === 0 ? (
-                <Text style={styles.seeAll} onPress={() => router.push('/refine')} accessibilityRole="link">
-                  Tell the assistant what matters
-                </Text>
-              ) : null}
-              {more.length > 0 ? (
-                <Text style={styles.seeAll} onPress={() => router.push('/all')} accessibilityRole="link">
-                  See all {matches.length + more.length} who fit
-                </Text>
-              ) : null}
+        {/* The next match slides in from where the last one went. */}
+        <Appear from="right" distance={state.index > 0 ? 60 : 0} style={styles.fill}>
+          <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+            {state.index === 0 ? (
+              <View style={styles.intro}>
+                <Text style={styles.introTitle}>{matchesHeadline(matches.length, state.profession, explained)}</Text>
+                {subline ? <Text style={styles.introBody}>{subline}</Text> : null}
+                {explained === 0 ? (
+                  <Text style={styles.seeAll} onPress={() => router.push('/refine')} accessibilityRole="link">
+                    Tell the assistant what matters
+                  </Text>
+                ) : null}
+                {more.length > 0 ? (
+                  <Text style={styles.seeAll} onPress={() => router.push('/all')} accessibilityRole="link">
+                    See all {matches.length + more.length} who fit
+                  </Text>
+                ) : null}
+              </View>
+            ) : (
+              <Text style={styles.position}>
+                {state.index + 1} of {matches.length}
+              </Text>
+            )}
+            <ClinicianCards
+              key={clinician.id}
+              clinician={clinician}
+              match={m}
+              onOpen={open}
+              saved={isSaved(clinician.id)}
+              onSave={() => toggle(m)}
+            />
+            <View style={styles.view}>
+              <PillButton label={`View ${clinician.firstName}`} onPress={open} />
             </View>
-          ) : (
-            <Text style={styles.position}>
-              {state.index + 1} of {matches.length}
-            </Text>
-          )}
-          <ClinicianCards
-            key={clinician.id}
-            clinician={clinician}
-            match={m}
-            onOpen={open}
-            saved={isSaved(clinician.id)}
-            onSave={() => toggle(m)}
-          />
-          <View style={styles.view}>
-            <PillButton label={`View ${clinician.firstName}`} onPress={open} />
-          </View>
-          <MatchFeedback value={state.feedback.thumbs[clinician.id]} onChoose={(dir) => session.thumb(clinician.id, dir)} />
-        </ScrollView>
+            <MatchFeedback value={state.feedback.thumbs[clinician.id]} onChoose={(dir) => session.thumb(clinician.id, dir)} />
+          </ScrollView>
+        </Appear>
       </Swipeable>
       <Pressable
         onPress={() => deck.current?.fling(-1)}
@@ -196,6 +200,7 @@ function Shell({ title, children }: { title: string; children: React.ReactNode }
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
+  fill: { flex: 1 },
   content: { paddingBottom: 110 },
   intro: { marginHorizontal: 12, marginTop: 20, paddingHorizontal: 15 },
   introTitle: { fontFamily: fonts.serifSemiBold, fontSize: 24, lineHeight: 30, color: colors.black },

@@ -29,12 +29,15 @@ export function Appear({
   index = 0,
   delay = 0,
   distance = 14,
+  from = 'below',
   style,
 }: {
   children: ReactNode;
   index?: number;
   delay?: number;
   distance?: number;
+  /** Where it arrives from: below (lists, cards) or the right (the next match after a swipe). */
+  from?: 'below' | 'right';
   style?: StyleProp<ViewStyle>;
 }) {
   const reduced = useReducedMotion();
@@ -50,7 +53,17 @@ export function Appear({
   }, [v, reduced, index, delay]);
   return (
     <Animated.View
-      style={[style, { opacity: v, transform: [{ translateY: v.interpolate({ inputRange: [0, 1], outputRange: [distance, 0] }) }] }]}
+      style={[
+        style,
+        {
+          opacity: v,
+          transform: [
+            from === 'right'
+              ? { translateX: v.interpolate({ inputRange: [0, 1], outputRange: [distance, 0] }) }
+              : { translateY: v.interpolate({ inputRange: [0, 1], outputRange: [distance, 0] }) },
+          ],
+        },
+      ]}
     >
       {children}
     </Animated.View>

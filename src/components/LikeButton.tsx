@@ -23,6 +23,7 @@ export function LikeButton({
 }) {
   const reduced = useReducedMotion();
   const pop = useState(() => new Animated.Value(1))[0];
+  const ring = useState(() => new Animated.Value(1))[0];
   const first = useRef(true);
   useEffect(() => {
     if (first.current) {
@@ -32,7 +33,12 @@ export function LikeButton({
     if (reduced) return;
     pop.setValue(liked ? 0.6 : 0.85);
     Animated.spring(pop, { toValue: 1, damping: 8, stiffness: 260, mass: 0.7, useNativeDriver: native }).start();
-  }, [liked, pop, reduced]);
+    // Saving also sends out a soft ring.
+    if (liked) {
+      ring.setValue(0);
+      Animated.timing(ring, { toValue: 1, duration: 520, useNativeDriver: native }).start();
+    }
+  }, [liked, pop, ring, reduced]);
 
   return (
     <PressScale
@@ -43,6 +49,17 @@ export function LikeButton({
       style={[styles.circle, { width: size, height: size, borderRadius: size / 2 }, liked && styles.on]}
       scaleTo={0.88}
     >
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          styles.ring,
+          { width: size, height: size, borderRadius: size / 2 },
+          {
+            opacity: ring.interpolate({ inputRange: [0, 0.2, 1], outputRange: [0, 0.5, 0] }),
+            transform: [{ scale: ring.interpolate({ inputRange: [0, 1], outputRange: [1, 1.9] }) }],
+          },
+        ]}
+      />
       <Animated.View style={{ transform: [{ scale: pop }] }}>
         {liked ? <Icon name="icHeartFilled" size={size * 0.48} color={colors.white} /> : <Icon name="icLike" size={size * 0.46} />}
       </Animated.View>
@@ -62,4 +79,5 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   on: { backgroundColor: colors.purple },
+  ring: { position: 'absolute', borderWidth: 2, borderColor: colors.purple },
 });

@@ -1,10 +1,12 @@
 import type { BottomTabBarProps } from 'expo-router/tabs';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Animated, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors } from '@/lib/theme';
 import { Icon } from './Icon';
 import { IconName } from './icons';
+import { useReducedMotion } from './motion';
 import { WatlLogo } from './WatlLogo';
 
 const tabIcons: Record<string, IconName | 'logo'> = {
@@ -35,16 +37,27 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             accessibilityLabel={descriptors[route.key].options.title}
             style={styles.tab}
           >
-            {icon === 'logo' ? (
-              <WatlLogo variant="mark" color={color} size={26} />
-            ) : (
-              <Icon name={icon} size={24} color={color} />
-            )}
+            <Bounce on={focused}>
+              {icon === 'logo' ? <WatlLogo variant="mark" color={color} size={26} /> : <Icon name={icon} size={24} color={color} />}
+            </Bounce>
           </Pressable>
         );
       })}
     </View>
   );
+}
+
+/** A small springy lift when a tab becomes the current one. */
+function Bounce({ on, children }: { on: boolean; children: React.ReactNode }) {
+  const reduced = useReducedMotion();
+  const v = useState(() => new Animated.Value(on ? 1 : 0))[0];
+  useEffect(() => {
+    if (reduced) return v.setValue(on ? 1 : 0);
+    Animated.spring(v, { toValue: on ? 1 : 0, damping: 9, stiffness: 220, useNativeDriver: Platform.OS !== 'web' }).start();
+  }, [on, v, reduced]);
+  const scale = v.interpolate({ inputRange: [0, 1], outputRange: [1, 1.12] });
+  const translateY = v.interpolate({ inputRange: [0, 1], outputRange: [0, -2] });
+  return <Animated.View style={{ transform: [{ translateY }, { scale }] }}>{children}</Animated.View>;
 }
 
 const styles = StyleSheet.create({
