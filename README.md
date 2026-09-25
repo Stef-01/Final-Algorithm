@@ -1,6 +1,6 @@
 # WATL
 
-WATL helps you find a GP or psychologist who fits you. Pick which you're looking for, describe what you need in your own words, answer at most a few useful questions, and see everyone who fits, best first, with a clear reason why each one does. The assistant (the sparkle button) re-ranks the list when you tell it what to change.
+WATL helps you find health professionals who fit you: GPs, psychologists, ADHD coaches, occupational therapists, physiotherapists and more. Pick who could help, describe what you need in your own words, answer at most a few useful questions, and see everyone who fits, best first, with a clear reason why each one does. The assistant (the sparkle button) re-ranks the list when you tell it what to change.
 
 This is a React Native (Expo Router) app, mobile-first on the web and deployed on Vercel. The build plan is in [`docs/PLAN.md`](docs/PLAN.md).
 

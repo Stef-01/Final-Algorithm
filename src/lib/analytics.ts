@@ -1,11 +1,13 @@
 import { track as vercelTrack } from '@vercel/analytics';
 import { Platform } from 'react-native';
 
+import type { Profession as ProfessionId } from '@server/engine/types';
+
 // High-value behavioural events only (PRD §48), sent as Vercel Web Analytics custom events on the
 // web build. Properties are short, non-sensitive values — never what the patient typed or said
 // (PRD §45). The native apps don't send anything yet.
 
-type Profession = 'gp' | 'psychologist' | 'either';
+type Profession = ProfessionId | 'either';
 
 export type Events = {
   matching_started: { profession: Profession; demo: boolean; claude?: boolean };

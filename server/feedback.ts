@@ -1,3 +1,5 @@
+import { PROFESSIONS, type Profession } from './engine/types';
+
 // Match feedback (PRD §49): the 1–5 rating and per-match thumbs, stored for the team to analyse.
 // Numbers and ids only: never anything the patient wrote. Pure validation lives here so it's
 // testable; api/feedback.ts does the storing.
@@ -7,7 +9,7 @@ export type Feedback = {
   matches: number;
   followups: number;
   seconds: number;
-  profession: 'gp' | 'psychologist' | 'either';
+  profession: Profession | 'either';
   claude: boolean;
   thumbs: Record<string, 'up' | 'down'>;
 };
@@ -22,7 +24,7 @@ export function parseFeedback(body: unknown): Feedback | null {
   const matches = int(b.matches, 0, 100);
   const followups = int(b.followups, 0, 10);
   const seconds = int(b.seconds, 0, 86_400);
-  const profession = b.profession === 'gp' || b.profession === 'psychologist' || b.profession === 'either' ? b.profession : null;
+  const profession = b.profession === 'either' || (PROFESSIONS as readonly unknown[]).includes(b.profession) ? (b.profession as Feedback['profession']) : null;
   if (rating === null || matches === null || followups === null || seconds === null || !profession) return null;
   const thumbs: Feedback['thumbs'] = {};
   for (const [id, dir] of Object.entries((b.thumbs ?? {}) as Record<string, unknown>).slice(0, 50)) {

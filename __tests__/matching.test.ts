@@ -3,7 +3,7 @@ import path from 'path';
 
 import { professionals } from '@server/data/professionals';
 import { areaPhrase, copyProblems, needLine, reasonsFor, saidLine } from '@server/engine/explain';
-import { CONFIDENCE, DIMENSIONS, type Dimension } from '@server/engine/types';
+import { CONFIDENCE, DIMENSIONS, PROFESSIONS, type Dimension } from '@server/engine/types';
 
 import { costLabel } from '@/components/ClinicianCards';
 import { matchesHeadline, matchesSubline } from '@/lib/professions';
@@ -24,9 +24,9 @@ const corpus = (id: string) => {
 };
 
 describe('ADHDme profiles (server/data/professionals.json)', () => {
-  it('imports the GPs and psychologists, nothing else', () => {
+  it('imports every profession the network has, each a known one', () => {
     expect(professionals.length).toBe(source.length);
-    expect(new Set(professionals.map((c) => c.profession))).toEqual(new Set(['gp', 'psychologist']));
+    expect(new Set(professionals.map((c) => c.profession))).toEqual(new Set(PROFESSIONS));
     expect(professionals.filter((c) => c.profession === 'gp').length).toBeGreaterThan(0);
     expect(professionals.filter((c) => c.profession === 'psychologist').length).toBeGreaterThan(0);
   });
@@ -294,5 +294,42 @@ describe('question wording follows the profession', () => {
       const s = core.demoResults(d.id);
       for (const q of s.asked) expect(q.text).not.toMatch(/\bGP\b|doctor/);
     }
+  });
+});
+
+describe('more kinds of professional', () => {
+  const search = (profession: (typeof PROFESSIONS)[number], text: string) => {
+    let t = core.submitText(core.chooseProfession(core.initialState(), profession).state, text);
+    for (let i = 0; i < 5 && t.route !== '/matching'; i++) {
+      if (t.route.startsWith('/clarify')) {
+        const q = t.state.asked.at(-1)!;
+        t = core.answer(t.state, q.id, 'Not sure');
+      } else if (t.route === '/confirm') t = core.confirmPriorities(t.state, []);
+      else break;
+    }
+    return core.match(t.state).state.result;
+  };
+
+  it.each(PROFESSIONS.map((p) => [p]))('a %s search lists only that profession', (p) => {
+    const r = search(p, 'I have ADHD');
+    if (r?.status !== 'matches') throw new Error(`expected ${p} matches`);
+    for (const m of [...r.matches, ...r.more]) expect(getClinician(m.clinicianId)!.profession).toBe(p);
+  });
+
+  it('an ADHD coach search for getting organised explains itself with executive functioning', () => {
+    const r = search('adhd_coach', "I procrastinate and can't get organised");
+    if (r?.status !== 'matches') throw new Error('expected matches');
+    expect(r.matches[0].reasons[0].signal).toBe("You're looking for help with executive functioning.");
+  });
+
+  it('physiotherapists for chronic pain', () => {
+    const r = search('physiotherapist', 'I have chronic pain in my back');
+    if (r?.status !== 'matches') throw new Error('expected matches');
+    expect(r.matches[0].clinicianId).toBe('lester-rafanan');
+  });
+
+  it('a paediatric OT is not offered to an adult', () => {
+    const r = search('occupational_therapist', "I'm 40 and struggle with sensory overload");
+    expect(r?.status).toBe('none');
   });
 });

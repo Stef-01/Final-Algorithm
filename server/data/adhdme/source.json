@@ -528,6 +528,425 @@
     ]
   },
   {
+    "id": "flynn-simonis",
+    "category": "allied",
+    "name": "Flynn Simonis",
+    "short": "Flynn Simonis",
+    "role": "Occupational Therapist",
+    "pronouns": "he/him",
+    "practice": "GOALS Psychology",
+    "place": "Brisbane & telehealth",
+    "description": "Paediatric occupational therapy led by the child’s own interests, in clinic, at home or at school.",
+    "chips": [
+      "Paediatric OT",
+      "Home & school visits",
+      "FCA report writing"
+    ],
+    "telehealth": true,
+    "book_href": "https://www.halaxy.com/book/goals-psychology/location/726621",
+    "qualifications": "Occupational therapist",
+    "languages": [],
+    "experience": [
+      "Occupational therapist, GOALS Psychology, Fortitude Valley",
+      "Paediatric occupational therapy, including play therapy and parent training",
+      "Functional Capacity Assessments (FCAs) and report writing",
+      "Group programs including LEGO, Minecraft and Ninja Warrior-style social and movement programs",
+      "Outdoor adventure and nature camps building independence, resilience and confidence",
+      "Sensory profiles, emotional regulation needs and functional challenges",
+      "Family-centred practice with caregivers, schools and multidisciplinary teams",
+      "In-clinic, home visit, kindergarten and school visit appointments"
+    ],
+    "about": [
+      "Flynn works with toddlers, children, teenagers and young adults. He is experienced working with clients who have experienced developmental trauma, neurodivergence, autism, Attention-Deficit Hyperactivity Disorder (ADHD), school refusal / school can’t, developmental delay, non-verbal communication profiles, Generalised Anxiety Disorder (GAD), emotional regulation, parenting support, intellectual disability, Oppositional Defiant Disorder (ODD), Rett Syndrome, and Muscular Dystrophy and many other presentations. Flynn enjoys supporting children with varying communication styles, sensory profiles, emotional regulation needs, and functional challenges.",
+      "Flynn is particularly passionate about paediatric occupational therapy including play therapy and parent training. He facilitates sessions that are guided by his client’s interests, recognising that children engage and learn best when therapy is meaningful and motivating towards skill development for participation in everyday life. Flynn emphasises a foundation of communication with families, schools and multidisciplinary teams, to create a safe, supportive, creative and fun therapy environment. He values family-centred practice in working with caregivers to ensure that recommended strategies are practical, achievable and able to be easily implemented into daily routines. Flynn offers in-clinic, home visits, kindergarten and school visit appointments where appropriate towards his clients’ goals.",
+      "Flynn is also experienced with Functional Capacity Assessments (FCAs) and report writing, and facilitating group programs including LEGO, Minecraft and Ninja Warrior-style social and movement programs, outdoor adventure and nature camps, all supporting goals including social skills, teamwork, and motor development, building independence, resilience, and confidence in children and young people."
+    ],
+    "details": [
+      [
+        "Reach",
+        "Clinic appointments in Fortitude Valley, telehealth Australia-wide, and home, school and community visits across Brisbane"
+      ],
+      [
+        "Appointments",
+        "Clinic, home, kindergarten and school visits; times set with the clinic"
+      ],
+      [
+        "Billing",
+        "Set and charged by the clinic; quoted when you book"
+      ],
+      [
+        "Wheelchair access",
+        "Yes: level access from the same-level car park, with free one-hour client parking in the centre"
+      ]
+    ]
+  },
+  {
+    "id": "lara-schulz",
+    "category": "allied",
+    "name": "Lara Schulz",
+    "short": "Lara Schulz",
+    "role": "Neurotherapy Practitioner and Director",
+    "pronouns": "she/her",
+    "practice": "Neurotherapy Clinics Australia",
+    "place": "Jindabyne & Snowy Mountains",
+    "description": "QEEG brain mapping and neurotherapy in the Snowy Mountains, with the scan read and discussed before any training starts.",
+    "chips": [
+      "QEEG brain mapping",
+      "ERP assessment",
+      "Neurostimulation"
+    ],
+    "telehealth": false,
+    "book_href": "https://www.ncau.com.au/contact-us/",
+    "qualifications": "Neurotherapy practitioner, GradDipPsych MBusMgt",
+    "languages": [],
+    "experience": [
+      "Director and principal neurotherapy practitioner, Neurotherapy Clinics Australia",
+      "Alpine Neurotherapy Clinic, Jindabyne, established after relocating from Perth",
+      "Neurotherapy training in Santa Barbara, California, with Dr Nicholas Dogris, founder of Neurofield Neurotherapy, and Dr Tiffany Thompson",
+      "EEG and QEEG assessment, and ERP assessment and analysis",
+      "Neurostimulation including tACS, tDCS, tAPNS and pEMF",
+      "Graduate Diploma in Psychology, University of New South Wales",
+      "Master of Business Management, Charles Sturt University",
+      "Presented her practice results at the Neurofield International Conference, Santa Barbara, September 2022",
+      "Speaks at conferences internationally and domestically, and to clinician groups on mental health awareness in regional areas"
+    ],
+    "about": [
+      "Lara Schulz established her first Neurotherapy practice in Perth in 2019 after completing her neurotherapy training in Santa Barbara, California with expert neuroscientist and founder of Neurofield Neurotherapy, Dr Nicholas Dogris and Dr Tiffany Thompson. Since relocating to Jindabyne in Alpine NSW, she has established Alpine Neurotherapy.",
+      "Lara has a Graduate Diploma in Psychology from the University of NSW and will be continuing with her Post Graduate Psychology study after a well deserved break from study between degrees. She has studied in the USA learning how to read EEG and QEEG assessment as well as ERP assessment and analysis; and a diverse range of neurostimulation techniques including tACS, tDCS, tAPNS and pEMF.",
+      "In September 2022 Lara was invited to present the results of her neurotherapy practice at the Neurofield International Conference in Santa Barbara USA. Lara has appeared on Sky News being interviewed by Erin Molan along with Dr Dogris in the hope of bringing awareness to Australia about this state of the art therapy for all Australians.",
+      "As well as speaking at conferences both internationally and domestically Lara regularly is invited to speak to groups for Mental Health information awareness for clinicians in regional areas discussing case studies and Neurostimulation.",
+      "Lara came to this work as a client, for her own learning difficulties, and changed careers after her own child needed neurofeedback. Having completed a Masters of Business Management at Charles Sturt University, she enrolled in the Graduate Diploma in Psychology through the University of New South Wales to extend her knowledge of psychological functioning, which she describes as integral to her neurotherapy practice. She says she has always felt passionately about wanting to help and reassure anyone with learning difficulties, ADHD or any other disability that they are no different from anyone else: “We just think differently and that is something to nurture and be proud of”."
+    ],
+    "details": [
+      [
+        "Reach",
+        "Clinic appointments in Jindabyne, serving the Snowy Mountains, Cooma and the Snowy Monaro region"
+      ],
+      [
+        "Appointments",
+        "A two-hour first appointment, then a 30-minute consultation on the findings; training sessions run 30 minutes"
+      ],
+      [
+        "Billing",
+        "Set and quoted by the practice for each person; payment plans can be arranged"
+      ],
+      [
+        "Wheelchair access",
+        "Not declared"
+      ]
+    ]
+  },
+  {
+    "id": "fiona-alexander",
+    "category": "coach",
+    "name": "Fiona Alexander",
+    "short": "Fiona Alexander",
+    "role": "ADHD Coach",
+    "pronouns": "",
+    "practice": "REACH ADHD Coaching and Consultancy",
+    "place": "Perth & online",
+    "description": "Twenty-five years of teaching behind the coaching, starting from how your own brain works rather than a generic plan.",
+    "chips": [
+      "Executive functioning",
+      "Students & families",
+      "Able & gifted learners"
+    ],
+    "telehealth": true,
+    "book_href": "https://www.reachadhd.com.au/contact/",
+    "qualifications": "ADHD coach, BA(Primary Ed) BEd AACC ACC",
+    "languages": [],
+    "experience": [
+      "Co-founder, REACH ADHD Coaching and Consultancy, Perth",
+      "25 years teaching in local and international schools",
+      "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York",
+      "Associate Certified Coach (ACC), International Coaching Federation",
+      "Bachelor of Arts (Primary School Education)",
+      "Bachelor of Education",
+      "Teaching and Learning for Able/Gifted Children"
+    ],
+    "about": [
+      "Throughout my 25 years in education, I’ve had the privilege of teaching children from all walks of life, each with their own strengths and unique ways of thinking. It didn’t take long for me to recognise that every student learns differently and that diversity in learning is something to be celebrated. This realisation inspired me to specialise in ADHD education, where I could focus on supporting neurodivergent students and their families.",
+      "My teaching journey has taken me across both local and international schools, and in every classroom, I’ve learned just as much as my students. Understanding how your brain works is the first step in overcoming challenges, and it’s incredibly rewarding to help students and families discover that. My coaching approach is about guiding individuals through this journey of self-discovery, helping them embrace who they are, and confidently navigating the learning process.",
+      "I’m passionate about helping clients thrive in their own way. Together, we can make learning an empowering experience that brings out the best in you."
+    ],
+    "details": [
+      [
+        "Reach",
+        "Coaching online, and in person in Perth"
+      ],
+      [
+        "Appointments",
+        "An initial consultation, then sessions weekly, fortnightly or as needed; the practice suggests starting with six fortnightly sessions"
+      ],
+      [
+        "Billing",
+        "Set and quoted by the practice; JobAccess funding may cover it"
+      ],
+      [
+        "Wheelchair access",
+        "Not declared"
+      ]
+    ]
+  },
+  {
+    "id": "debbie-hirte",
+    "category": "coach",
+    "name": "Debbie Hirte",
+    "short": "Debbie Hirte",
+    "role": "ADHD Coach",
+    "pronouns": "",
+    "practice": "REACH ADHD Coaching and Consultancy",
+    "place": "Perth & online",
+    "description": "Nearly three decades in schools, spent advocating for neurodivergent students and the families around them.",
+    "chips": [
+      "Executive functioning",
+      "Children & teens",
+      "Gifted & talented"
+    ],
+    "telehealth": true,
+    "book_href": "https://www.reachadhd.com.au/contact/",
+    "qualifications": "ADHD coach, BA(Early Childhood Ed) AACC ACC",
+    "languages": [],
+    "experience": [
+      "Co-founder, REACH ADHD Coaching and Consultancy, Perth",
+      "Nearly 30 years in independent schools as classroom teacher, specialist and Gifted and Talented Specialist",
+      "Mentoring educators, and co-designing Individual Education Plans with families and schools",
+      "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York",
+      "Associate Certified Coach (ACC), International Coaching Federation",
+      "Bachelor of Arts (Early Childhood Education)"
+    ],
+    "about": [
+      "With nearly three decades in Independent schools, my commitment to supporting neurodivergent students and their families has been a driving force throughout my career. I’ve had the opportunity to work as a classroom teacher, specialist, and later, as a Gifted and Talented Specialist, advocating for students and helping them succeed both academically and socially.",
+      "Over the years, I’ve developed a deep understanding of the unique challenges neurodivergent individuals face. My role has allowed me to mentor educators, collaborate with families, and support students through tailored strategies designed to meet their needs. Working closely with this incredible community has only strengthened my passion for helping individuals embrace their unique brain wiring.",
+      "Through ADHD coaching, my goal is to help students and families see that differences in learning are something to be embraced, not feared. I’m here to provide the tools and strategies that enable growth and success, helping every individual step into their best self with confidence."
+    ],
+    "details": [
+      [
+        "Reach",
+        "Coaching online, and in person in Perth"
+      ],
+      [
+        "Appointments",
+        "An initial consultation, then sessions weekly, fortnightly or as needed; the practice suggests starting with six fortnightly sessions"
+      ],
+      [
+        "Billing",
+        "Set and quoted by the practice; JobAccess funding may cover it"
+      ],
+      [
+        "Wheelchair access",
+        "Not declared"
+      ]
+    ]
+  },
+  {
+    "id": "romney-taylor",
+    "category": "coach",
+    "name": "Romney Taylor",
+    "short": "Romney Taylor",
+    "role": "ADHD Consultant Coach",
+    "pronouns": "",
+    "practice": "REACH ADHD Coaching and Consultancy",
+    "place": "Perth & online",
+    "description": "Twenty-three years in classrooms, and a conviction that no two minds work the same way.",
+    "chips": [
+      "Executive functioning",
+      "Students",
+      "Advocacy & inclusion"
+    ],
+    "telehealth": true,
+    "book_href": "https://www.reachadhd.com.au/contact/",
+    "qualifications": "ADHD coach, BSc GradDipEd AACC ACC",
+    "languages": [],
+    "experience": [
+      "Consultant coach, REACH ADHD Coaching and Consultancy, Perth",
+      "23 years working with students across local and interstate schools",
+      "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York",
+      "Associate Certified Coach (ACC), International Coaching Federation",
+      "Bachelor of Science",
+      "Graduate Diploma in Education",
+      "Mini-COGE, gifted and talented education"
+    ],
+    "about": [
+      "For the past 23 years, I’ve worked with students across diverse local and interstate schools, and one of the most important things I’ve learned is that no two minds work the same. Recognising this truth inspired me to pursue specialist training as an ADHD coach, allowing me to focus on supporting neurodivergent individuals in a way that celebrates their strengths and addresses their unique challenges.",
+      "As a consultant coach to REACH ADHD it provides me the opportunity to create a safe and inclusive space where neurodiverse students can feel heard and understood. It’s incredibly rewarding to help them develop strategies that fit their individual needs, whether that’s in the classroom, in relationships, or at home. My passion for advocacy drives me to promote awareness and acceptance for all neurodiverse individuals, building a culture of inclusivity in every environment I work in.",
+      "Watching my clients grow and achieve goals they once thought were out of reach is the most fulfilling part of my work. Together, we’ll work towards success in a way that is meaningful to you."
+    ],
+    "details": [
+      [
+        "Reach",
+        "Coaching online, and in person in Perth"
+      ],
+      [
+        "Appointments",
+        "An initial consultation, then sessions weekly, fortnightly or as needed; the practice suggests starting with six fortnightly sessions"
+      ],
+      [
+        "Billing",
+        "Set and quoted by the practice; JobAccess funding may cover it"
+      ],
+      [
+        "Wheelchair access",
+        "Not declared"
+      ]
+    ]
+  },
+  {
+    "id": "erin-lysle",
+    "category": "coach",
+    "name": "Erin Lysle",
+    "short": "Erin Lysle",
+    "role": "ADHD Consultant Coach",
+    "pronouns": "",
+    "practice": "REACH ADHD Coaching and Consultancy",
+    "place": "Perth & online",
+    "description": "Thirty-four years of teaching, and strategies built to fit the person rather than the diagnosis.",
+    "chips": [
+      "Executive functioning",
+      "Self-confidence",
+      "Social skills"
+    ],
+    "telehealth": true,
+    "book_href": "https://www.reachadhd.com.au/contact/",
+    "qualifications": "ADHD coach, BA BEd AACC",
+    "languages": [],
+    "experience": [
+      "Consultant coach, REACH ADHD Coaching and Consultancy, Perth",
+      "Over 34 years teaching across a wide range of educational settings",
+      "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York",
+      "Bachelor of Arts",
+      "Bachelor of Education"
+    ],
+    "about": [
+      "With over 34 years of teaching experience, I’ve had the privilege of working across a wide range of educational settings. Over time, I’ve come to understand just how varied and complex ADHD can be for each individual, and this insight has shaped my approach as an ADHD coach. I bring together my expertise in education with a deep understanding of ADHD, crafting strategies that truly connect with each client.",
+      "As a consulting coach to REACH ADHD, my priority is meeting each person where they are. I believe in creating a supportive, positive environment where clients feel encouraged to explore new strategies and tackle challenges head-on. Whether we’re focusing on building self-confidence, improving executive functioning, or enhancing social skills, my coaching is centred around empathy, patience, and understanding.",
+      "My role is to help clients not only manage ADHD traits but to help them grow in a way that aligns with their personal goals and values. I celebrate every milestone with my clients, big or small, and I’m dedicated to equipping them with tools that lead to long-lasting success."
+    ],
+    "details": [
+      [
+        "Reach",
+        "Coaching online, and in person in Perth"
+      ],
+      [
+        "Appointments",
+        "An initial consultation, then sessions weekly, fortnightly or as needed; the practice suggests starting with six fortnightly sessions"
+      ],
+      [
+        "Billing",
+        "Set and quoted by the practice; JobAccess funding may cover it"
+      ],
+      [
+        "Wheelchair access",
+        "Not declared"
+      ]
+    ]
+  },
+  {
+    "id": "donna-italiano",
+    "category": "coach",
+    "name": "Donna Italiano",
+    "short": "Donna Italiano",
+    "role": "ADHD Consultant Coach",
+    "pronouns": "she/her",
+    "practice": "REACH ADHD Coaching and Consultancy",
+    "place": "Perth & online",
+    "description": "Two decades across school communities, and a belief that connection is what makes learning possible.",
+    "chips": [
+      "Executive functioning",
+      "Emotional regulation",
+      "Neurodivergent-affirming"
+    ],
+    "telehealth": true,
+    "book_href": "https://www.reachadhd.com.au/contact/",
+    "qualifications": "ADHD coach, BA BEd AACC",
+    "languages": [],
+    "experience": [
+      "Consultant coach, REACH ADHD Coaching and Consultancy, Perth",
+      "Over two decades across Australian and international school communities",
+      "Secondary education: ATAR Economics and Business Management, Special Needs Support, Commerce and Sport",
+      "Middle-management leadership, and roles in professional services, governance and community sport",
+      "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York",
+      "Bachelor of Arts",
+      "Bachelor of Education"
+    ],
+    "about": [
+      "With over two decades of experience across Australian and international school communities, Donna Italiano is an ADHD coach, consultant, and educator with a deep understanding of how learning, wellbeing, and performance intersect. Her background spans secondary education, ATAR Economics and Business Management, Special Needs Support, Commerce, and Sport, giving her a whole-person perspective on education that integrates neuroscience, emotional safety, and compassion.",
+      "Throughout her career, Donna has taught and mentored thousands of students, led middle-management teams, supported both high-performing and neurodivergent learners, and contributed beyond the classroom through roles in professional services, governance, and community sport. These diverse experiences have shaped her belief that connection is foundational to learning, and that understanding how the brain works is key to unlocking confidence, regulation, and growth.",
+      "As a consultant coach with REACH ADHD, Donna focuses on ADHD, executive functioning, emotional regulation, and neurodivergent-affirming practice. She is passionate about creating safe, inclusive spaces where students and families feel seen, understood, and supported. Donna works alongside young people to help them understand their unique brain wiring, build practical strategies, and move toward their goals with clarity, confidence, and self-belief."
+    ],
+    "details": [
+      [
+        "Reach",
+        "Coaching online, and in person in Perth"
+      ],
+      [
+        "Appointments",
+        "An initial consultation, then sessions weekly, fortnightly or as needed; the practice suggests starting with six fortnightly sessions"
+      ],
+      [
+        "Billing",
+        "Set and quoted by the practice; JobAccess funding may cover it"
+      ],
+      [
+        "Wheelchair access",
+        "Not declared"
+      ]
+    ]
+  },
+  {
+    "id": "kate-dallimore",
+    "category": "coach",
+    "name": "Kate Dallimore",
+    "short": "Kate Dallimore",
+    "role": "ADHD Consultant Coach",
+    "pronouns": "",
+    "practice": "REACH ADHD Coaching and Consultancy",
+    "place": "Perth & online",
+    "description": "A physiotherapy and teaching background, brought to trauma-informed coaching for people who have not felt understood.",
+    "chips": [
+      "Trauma-informed",
+      "Executive functioning",
+      "Neurodiversity-affirming"
+    ],
+    "telehealth": true,
+    "book_href": "https://www.reachadhd.com.au/contact/",
+    "qualifications": "ADHD coach, BSc(Physio Hons) PGDipPhysio MTeach AACC ACC",
+    "languages": [],
+    "experience": [
+      "Consultant coach, REACH ADHD Coaching and Consultancy, Perth",
+      "Over 30 years across healthcare, secondary and tertiary education, mentoring and leadership",
+      "Supporting people through ongoing stress, anxiety, overwhelm and complex life experiences",
+      "ADHD coach training at the ADHD Coaching Academy (ADDCA), New York",
+      "Associate Certified Coach (ACC)",
+      "Bachelor of Science (Physiotherapy) with Honours",
+      "Postgraduate Diploma in Respiratory Physiotherapy",
+      "Master of Teaching (Secondary)"
+    ],
+    "about": [
+      "I bring over 30 years of experience across healthcare, secondary and tertiary education, mentoring, leadership and community involvement to my work as an ADHD Consultant Coach. Across my career, I have been drawn to supporting people who have not always felt understood, helping them feel safe enough to recognise their strengths, trust themselves and take the next step. My work with students, families, clients and professionals has always centred on creating calm, supportive spaces where people feel heard, respected and able to build confidence and belief in themselves.",
+      "As an ADHD Consultant Coach with REACH ADHD, I bring a warm, neurodiversity-affirming and trauma-informed approach to supporting individuals with ADHD and executive functioning challenges. My experience supporting people navigating ongoing stress, anxiety, overwhelm and complex life experiences has shaped the way I coach, with a strong focus on safety, trust, empathy and respect.",
+      "I believe meaningful growth begins with connection and a genuine sense of belonging. My coaching is collaborative and strengths-based, helping clients better understand their unique brain wiring, recognise what is already working, develop practical strategies and move toward their goals with greater clarity, confidence and self-trust."
+    ],
+    "details": [
+      [
+        "Reach",
+        "Coaching online, and in person in Perth"
+      ],
+      [
+        "Appointments",
+        "An initial consultation, then sessions weekly, fortnightly or as needed; the practice suggests starting with six fortnightly sessions"
+      ],
+      [
+        "Billing",
+        "Set and quoted by the practice; JobAccess funding may cover it"
+      ],
+      [
+        "Wheelchair access",
+        "Not declared"
+      ]
+    ]
+  },
+  {
     "id": "jessica-katsamatsas",
     "category": "psychologist",
     "name": "Jessica Katsamatsas",
@@ -710,6 +1129,201 @@
     ],
     "about": [
       "Michael is completing his final externship placement at Atlantis Recovery Centre as part of his Master of Clinical Psychology at Griffith University. He brings a thoughtful, creative and practical approach to his work and is continuing to build his clinical experience across a range of presentations. Outside psychology, Michael is also an Aboriginal artist and former competitive sprinter, bringing creativity, discipline and a unique perspective to the Atlantis team."
+    ],
+    "details": [
+      [
+        "Reach",
+        "Clinic appointments in Bundall, on the Gold Coast"
+      ],
+      [
+        "Appointments",
+        "Times set with the practice; booked online through HotDoc"
+      ],
+      [
+        "Billing",
+        "Quoted by the practice; DVA, NDIS, private health, WorkCover and Medicare plans accepted"
+      ],
+      [
+        "Wheelchair access",
+        "Yes: the practice describes the clinic as purpose-built and all-abilities accessible"
+      ]
+    ]
+  },
+  {
+    "id": "sarah-savage",
+    "category": "exercise-physiology",
+    "name": "Sarah Savage",
+    "short": "Sarah",
+    "role": "Senior Exercise Physiologist",
+    "pronouns": "",
+    "practice": "Atlantis Recovery Centre",
+    "place": "Bundall, Gold Coast",
+    "description": "Exercise as medicine: programs that make moving feel achievable, empowering and enjoyable.",
+    "chips": [
+      "Exercise as Medicine",
+      "Pilates & hydrotherapy",
+      "Older adults"
+    ],
+    "telehealth": false,
+    "book_href": "https://www.hotdoc.com.au/medical-centres/bundall-QLD-4217/atlantis-recovery-centre/doctors/sarah-savage",
+    "qualifications": "Exercise physiologist, BExSc GradDipExSc",
+    "languages": [],
+    "experience": [
+      "Senior exercise physiologist, Atlantis Recovery Centre, Bundall",
+      "Pilates, Functional Range Conditioning and hydrotherapy",
+      "Particular interest in supporting older adults",
+      "Bachelor and Graduate Diploma in Exercise Science, Griffith University"
+    ],
+    "about": [
+      "‘Exercise as Medicine’ … Sarah lives and breathes her mantra. Sarah is passionate about helping people move with confidence, build strength, and enjoy a better quality of life. She has a particular interest in supporting older adults and brings warmth, intelligence, and genuine care to every session.",
+      "Sarah combines her Exercise Physiology expertise with Pilates, Functional Range Conditioning, and hydrotherapy to create safe, personalised programs that make exercise feel achievable, empowering, and enjoyable."
+    ],
+    "details": [
+      [
+        "Reach",
+        "Clinic appointments in Bundall, on the Gold Coast"
+      ],
+      [
+        "Appointments",
+        "Times set with the practice; booked online through HotDoc"
+      ],
+      [
+        "Billing",
+        "Quoted by the practice; DVA, NDIS, private health, WorkCover and Medicare plans accepted"
+      ],
+      [
+        "Wheelchair access",
+        "Yes: the practice describes the clinic as purpose-built and all-abilities accessible"
+      ]
+    ]
+  },
+  {
+    "id": "yuri-lima",
+    "category": "allied",
+    "name": "Dr Yuri Lima",
+    "short": "Yuri",
+    "role": "Physiotherapist",
+    "pronouns": "",
+    "practice": "Atlantis Recovery Centre",
+    "place": "Bundall, Gold Coast",
+    "description": "Orthopaedic and sports rehabilitation, with the client educated and active in their own recovery.",
+    "chips": [
+      "Sports rehabilitation",
+      "Orthopaedic rehab",
+      "PhD, ACL injuries"
+    ],
+    "telehealth": false,
+    "book_href": "https://www.hotdoc.com.au/medical-centres/bundall-QLD-4217/atlantis-recovery-centre/doctors",
+    "qualifications": "Physiotherapist, PhD, Master in Rehabilitation Sciences",
+    "languages": [
+      "English",
+      "Portuguese"
+    ],
+    "experience": [
+      "Physiotherapist, Atlantis Recovery Centre, Bundall",
+      "Orthopaedic and sports rehabilitation",
+      "PhD investigating ACL injuries in athletes",
+      "Master in Rehabilitation Sciences"
+    ],
+    "about": [
+      "With a lifelong passion for movement and sports, Yuri’s approach combines clinical expertise in orthopaedic and sports rehabilitation and patient-centred care to help clients return to their optimal level of function and performance. He believes in empowering individuals through education and active involvement in their recovery process. He is also committed to advancing the field of physiotherapy by holding a Master in Rehabilitation Sciences and a PhD where he investigated ACL injuries in Athletes."
+    ],
+    "details": [
+      [
+        "Reach",
+        "Clinic appointments in Bundall, on the Gold Coast"
+      ],
+      [
+        "Appointments",
+        "Times set with the practice; booked online through HotDoc"
+      ],
+      [
+        "Billing",
+        "Quoted by the practice; DVA, NDIS, private health, WorkCover and Medicare plans accepted"
+      ],
+      [
+        "Wheelchair access",
+        "Yes: the practice describes the clinic as purpose-built and all-abilities accessible"
+      ]
+    ]
+  },
+  {
+    "id": "tom-hissey",
+    "category": "allied",
+    "name": "Tom Hissey",
+    "short": "Tom",
+    "role": "Senior Physiotherapist",
+    "pronouns": "",
+    "practice": "Atlantis Recovery Centre",
+    "place": "Bundall, Gold Coast",
+    "description": "Occupational rehabilitation and musculoskeletal physiotherapy from an Army veteran who has been through rehab himself.",
+    "chips": [
+      "Musculoskeletal physio",
+      "Return to function",
+      "Army veteran"
+    ],
+    "telehealth": false,
+    "book_href": "https://www.hotdoc.com.au/medical-centres/bundall-QLD-4217/atlantis-recovery-centre/doctors",
+    "qualifications": "Physiotherapist",
+    "languages": [],
+    "experience": [
+      "Senior physiotherapist, Atlantis Recovery Centre, Bundall",
+      "Occupational rehabilitation and musculoskeletal physiotherapy",
+      "Overseas work supporting UK military personnel",
+      "High-performance setting in Glasgow: runners, HYROX athletes and footballers",
+      "Australian Army veteran"
+    ],
+    "about": [
+      "Tom is an incredibly welcoming Australian Army veteran with experience in both occupational rehabilitation and musculoskeletal physiotherapy, including overseas work supporting UK military personnel. He specialises in helping people return to full function, from young athletes to older clients, drawing on experience in a high-performance setting in Glasgow working with runners, HYROX athletes, and footballers.",
+      "Having gone through back surgery and rehab himself, Tom understands what recovery really takes. He combines clinical expertise with genuine care, helping clients rebuild strength and confidence as part of Atlantis’s whole person approach to movement and wellbeing."
+    ],
+    "details": [
+      [
+        "Reach",
+        "Clinic appointments in Bundall, on the Gold Coast"
+      ],
+      [
+        "Appointments",
+        "Times set with the practice; booked online through HotDoc"
+      ],
+      [
+        "Billing",
+        "Quoted by the practice; DVA, NDIS, private health, WorkCover and Medicare plans accepted"
+      ],
+      [
+        "Wheelchair access",
+        "Yes: the practice describes the clinic as purpose-built and all-abilities accessible"
+      ]
+    ]
+  },
+  {
+    "id": "lester-rafanan",
+    "category": "allied",
+    "name": "Lester Rafanan",
+    "short": "Lester",
+    "role": "Physiotherapist",
+    "pronouns": "",
+    "practice": "Atlantis Recovery Centre",
+    "place": "Bundall, Gold Coast",
+    "description": "Evidence-based, personalised physiotherapy, from injury and chronic pain to staying active.",
+    "chips": [
+      "Doctor of Physiotherapy",
+      "Strength & conditioning",
+      "NDIS supports"
+    ],
+    "telehealth": false,
+    "book_href": "https://www.hotdoc.com.au/medical-centres/bundall-QLD-4217/atlantis-recovery-centre/doctors",
+    "qualifications": "Physiotherapist, Doctor of Physiotherapy, Bond University",
+    "languages": [],
+    "experience": [
+      "Physiotherapist, Atlantis Recovery Centre, Bundall",
+      "Doctor of Physiotherapy, Bond University",
+      "Background in personal training, strength and conditioning, and competitive sport",
+      "Injury and surgery recovery, chronic pain, return to sport and NDIS supports"
+    ],
+    "about": [
+      "Lester Rafanan graduated with a Doctor of Physiotherapy from Bond University and has a background in personal training, strength and conditioning, and competitive sport, giving Lester a strong understanding of movement, performance, and injury prevention.",
+      "He takes an evidence-based, personalised approach to physiotherapy, whether you’re recovering from an injury or surgery, managing chronic pain, returning to sport, accessing NDIS supports, or simply wanting to stay active. Every treatment plan is tailored to your goals so you can move with confidence."
     ],
     "details": [
       [

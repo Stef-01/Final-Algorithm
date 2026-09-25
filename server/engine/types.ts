@@ -25,7 +25,15 @@ export const DIMENSIONS = {
   neurodiversity_affirming: ['low', 'moderate', 'high'],
 } as const;
 
-export const PROFESSIONS = ['gp', 'psychologist'] as const;
+export const PROFESSIONS = [
+  'gp',
+  'psychologist',
+  'adhd_coach',
+  'occupational_therapist',
+  'physiotherapist',
+  'exercise_physiologist',
+  'neurotherapist',
+] as const;
 export type Profession = (typeof PROFESSIONS)[number];
 
 export type Dimension = keyof typeof DIMENSIONS;

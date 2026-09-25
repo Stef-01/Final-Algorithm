@@ -32,6 +32,18 @@ const NEEDS: [RegExp, string][] = [
   [/sleep|insomnia/, 'Sleep'],
   [/heart|blood pressure|cholesterol|metabolic/, 'Heart and metabolic health'],
   [/cognitive assess|iq test/, 'Cognitive assessment'],
+  [/executive function|procrastinat|time management|organi[sz]ation|getting organi[sz]ed|routines?\b|planning|forget(ful|ting)/, 'Executive functioning'],
+  [/sensory|daily living|handwriting|fine motor|self-care skills/, 'Sensory and daily living'],
+  [/brain mapping|neurofeedback|qeeg|neurotherap/, 'Brain mapping and neurotherapy'],
+  [/gifted|talented/, 'Gifted and talented'],
+  [/\bschool\b|study|studying|exams?\b|homework|\buni\b|university/, 'Study and school'],
+  [/social skills|making friends|friendships/, 'Social skills'],
+  [/exercise|fitness|get moving|getting active|strength|pilates|hydrotherapy/, 'Movement and exercise'],
+  [/older adults?|elderly|seniors?\b|retiree/, 'Older adults'],
+  [/injur|sprain|back pain|neck pain|joint|physio|rehab/, 'Pain and injury'],
+  [/sports? injur|return to sport|acl\b/, 'Sports injury'],
+  [/veteran|military|defence force|army|navy|air force/, 'Veterans and military'],
+  [/chronic pain|persistent pain|pain that won'?t go/, 'Chronic pain'],
 ];
 
 type PrefRule = [RegExp, Dimension, string];

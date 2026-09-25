@@ -5,6 +5,8 @@ import type { Extraction } from '@server/claude/types';
 import type { Dimension, PatientSignals, Profession } from '@server/engine/types';
 import { applyAnswer, NOT_SURE, questionById, type BankQuestion } from '@server/questions';
 
+import { copyFor } from '@/lib/professions';
+
 import { demoById } from './demos';
 import { extractSignals, mergeSignals, withKeywordExtras } from './extract';
 import { applyRefinement } from './refine';
@@ -79,7 +81,7 @@ function toQuestion(q: BankQuestion, input: SessionInput): Question {
         ? 'That helps — one thing would narrow this down.'
         : 'Thanks — one more thing would help.';
   // "{clinician}" follows the profession chosen in the funnel.
-  const who = input.profession === 'gp' ? 'your GP' : input.profession === 'psychologist' ? 'your psychologist' : 'a GP or psychologist';
+  const who = input.profession ? `your ${copyFor(input.profession).one}` : 'whoever you see';
   return { id: q.id, ack, text: q.text.replace('{clinician}', who), options: q.options.map((o) => o.label) };
 }
 

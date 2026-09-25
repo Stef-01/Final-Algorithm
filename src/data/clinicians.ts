@@ -6,7 +6,7 @@ import type { ClinicianRecord } from '@server/engine/types';
 
 import type { Clinician } from '@/features/match/types';
 
-// The app shows the ADHDme network's GPs and psychologists (server/data/professionals.json).
+// The app shows the ADHDme network's professionals (server/data/professionals.json).
 
 const photos: Record<string, ImageSourcePropType> = {
   'anubhav-saxena': require('../../assets/clinicians/anubhav-saxena.jpg'),
@@ -23,6 +23,18 @@ const photos: Record<string, ImageSourcePropType> = {
   'bart-traynor': require('../../assets/clinicians/bart-traynor.jpg'),
   'jeff-leech': require('../../assets/clinicians/jeff-leech.jpg'),
   'michael-rehardt': require('../../assets/clinicians/michael-rehardt.jpg'),
+  'flynn-simonis': require('../../assets/clinicians/flynn-simonis.jpg'),
+  'lara-schulz': require('../../assets/clinicians/lara-schulz.jpg'),
+  'fiona-alexander': require('../../assets/clinicians/fiona-alexander.jpg'),
+  'debbie-hirte': require('../../assets/clinicians/debbie-hirte.jpg'),
+  'romney-taylor': require('../../assets/clinicians/romney-taylor.jpg'),
+  'erin-lysle': require('../../assets/clinicians/erin-lysle.jpg'),
+  'donna-italiano': require('../../assets/clinicians/donna-italiano.jpg'),
+  'kate-dallimore': require('../../assets/clinicians/kate-dallimore.jpg'),
+  'sarah-savage': require('../../assets/clinicians/sarah-savage.jpg'),
+  'yuri-lima': require('../../assets/clinicians/yuri-lima.jpg'),
+  'tom-hissey': require('../../assets/clinicians/tom-hissey.jpg'),
+  'lester-rafanan': require('../../assets/clinicians/lester-rafanan.jpg'),
 };
 
 /** Short availability for the practical strip, e.g. "Tomorrow" (PRD §30). */

@@ -66,9 +66,16 @@ export const CLOSER = /\b(closer|nearer|near me|close by|nearby|not so far|less 
 export function professionSwitch(text: string): Profession | undefined {
   const t = text.toLowerCase();
   if (!/\b(switch|change|instead|rather|actually|try|show)\b/.test(t)) return undefined;
-  if (/psycholog/.test(t)) return 'psychologist';
-  if (/\bgps?\b|doctor/.test(t)) return 'gp';
-  return undefined;
+  const words: [RegExp, Profession][] = [
+    [/psycholog/, 'psychologist'],
+    [/\bgps?\b|doctor/, 'gp'],
+    [/\bcoach/, 'adhd_coach'],
+    [/occupational|\bots?\b/, 'occupational_therapist'],
+    [/physio(?!log)/, 'physiotherapist'],
+    [/exercise physiolog/, 'exercise_physiologist'],
+    [/neurotherap|neurofeedback|brain mapping/, 'neurotherapist'],
+  ];
+  return words.find(([re]) => re.test(t))?.[1];
 }
 
 /** Apply one refinement on top of everything said so far. Newer wins. */
@@ -154,6 +161,8 @@ export function refineSuggestions(profession?: Profession): string[] {
   const common = ['Online only', 'In person', 'Closer to me', 'Bulk billed only', 'Cost doesn’t matter', 'Someone more direct', 'Someone gentler', 'Longer appointments'];
   if (profession === 'psychologist') return [...common, 'Practical strategies', 'Neurodiversity-affirming', 'Show GPs instead'];
   if (profession === 'gp') return [...common, 'Mental health too', 'Weekend appointments', 'Show psychologists instead'];
+  if (profession === 'adhd_coach') return ['Online only', 'In person', 'Closer to me', 'Neurodiversity-affirming', 'Show psychologists instead'];
+  if (profession) return ['In person', 'Closer to me', 'Cost doesn’t matter', 'Show GPs instead'];
   return [...common, 'Weekend appointments'];
 }
 

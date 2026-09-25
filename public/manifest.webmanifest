@@ -1,7 +1,7 @@
 {
   "name": "WATL",
   "short_name": "WATL",
-  "description": "Find a GP or psychologist who fits you.",
+  "description": "Find health professionals who fit you.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#F1F1F1",

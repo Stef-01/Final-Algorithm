@@ -29,7 +29,17 @@ SNAPSHOT = ROOT / 'server' / 'data' / 'adhdme' / 'source.json'
 OUT = ROOT / 'server' / 'data' / 'professionals.json'
 PORTRAITS = ROOT / 'assets' / 'clinicians'
 TIMESTAMP = '2026-09-25T00:00:00+10:00'
-CATEGORY = {'gp': 'gp', 'psychologist': 'psychologist'}
+CATEGORY = {'gp': 'gp', 'psychologist': 'psychologist', 'coach': 'adhd_coach', 'exercise-physiology': 'exercise_physiologist'}
+# "allied" covers several professions; the published role says which.
+ALLIED_ROLE = [('Occupational Therapist', 'occupational_therapist'), ('Physiotherapist', 'physiotherapist'), ('Neurotherapy', 'neurotherapist')]
+
+
+def profession_of(c):
+    if c['category'] in CATEGORY:
+        return CATEGORY[c['category']]
+    if c['category'] == 'allied':
+        return next((p for word, p in ALLIED_ROLE if word in c['role']), None)
+    return None
 
 # ---------------------------------------------------------------- practice facts (from the profiles' own text)
 
@@ -38,6 +48,9 @@ PLACES = {
     'anu-saxena': ('Double Bay', 'Sydney', -33.877, 151.243),
     'paula-garrido': ('Telehealth', 'Australia-wide', None, None),
     'jessica-katsamatsas': ('Ashgrove', 'Brisbane', -27.444, 152.986),
+    'lara-schulz': ('Jindabyne', 'Snowy Mountains', -36.416, 148.622),
+    **{cid: ('Perth', 'Perth', -31.953, 115.857) for cid in (
+        'fiona-alexander', 'debbie-hirte', 'romney-taylor', 'erin-lysle', 'donna-italiano', 'kate-dallimore')},
 }
 GOALS_PLACE = ('Fortitude Valley', 'Brisbane', -27.457, 153.034)
 ARC_PLACE = ('Bundall', 'Gold Coast', -28.009, 153.405)
@@ -52,7 +65,11 @@ FEES = {  # id: (fee, out-of-pocket after rebate). None = not published.
 }
 
 # (min age, max age, the words in the profile that say so)
-AGE_RANGES = {'samantha-courtney': (13, 120, 'works with teenagers and adults'), 'jessica-katsamatsas': (18, 120, 'adults')}
+AGE_RANGES = {
+    'samantha-courtney': (13, 120, 'works with teenagers and adults'),
+    'jessica-katsamatsas': (18, 120, 'adults'),
+    'flynn-simonis': (0, 25, 'works with toddlers, children, teenagers and young adults'),
+}
 IN_PERSON = {'paula-garrido': False}
 
 # ---------------------------------------------------------------- evidence (excerpt must be verbatim)
@@ -165,6 +182,80 @@ EXPERTISE = {
         ('Career and performance', 'general', 'striving to perform at your best', 'Jeff works with people striving to perform at their best.'),
     ],
     'michael-rehardt': [],
+    # ---- occupational therapy, neurotherapy, coaching, exercise physiology, physiotherapy
+    'flynn-simonis': [
+        ('Children', 'particular', 'Paediatric occupational therapy', 'Flynn provides paediatric occupational therapy.'),
+        ('Sensory and daily living', 'particular', 'Sensory profiles, emotional regulation needs and functional challenges',
+         'Flynn works with sensory profiles and everyday functional challenges.'),
+        ('Emotional regulation', 'general', 'Sensory profiles, emotional regulation needs and functional challenges',
+         'Flynn works with emotional regulation needs.'),
+        ('ADHD', 'general', 'Attention-Deficit Hyperactivity Disorder (ADHD)', 'Flynn works with children and young people with ADHD.'),
+        ('Autism', 'general', 'neurodivergence, autism', 'Flynn works with autistic children and young people.'),
+        ('Young people', 'particular', 'works with toddlers, children, teenagers and young adults', 'Flynn works with toddlers through to young adults.'),
+    ],
+    'lara-schulz': [
+        ('Brain mapping and neurotherapy', 'particular', 'QEEG brain mapping', 'Lara offers QEEG brain mapping and neurotherapy.'),
+    ],
+    'fiona-alexander': [
+        ('Executive functioning', 'particular', 'Executive functioning', 'Fiona coaches executive functioning.'),
+        ('ADHD', 'particular', 'ADHD coach training at the ADHD Coaching Academy (ADDCA), New York', 'Fiona trained as an ADHD coach at the ADHD Coaching Academy.'),
+        ('Parenting support', 'general', 'Students & families', 'Fiona works with students and their families.'),
+        ('Gifted and talented', 'general', 'Able & gifted learners', 'Fiona works with able and gifted learners.'),
+    ],
+    'debbie-hirte': [
+        ('Executive functioning', 'particular', 'Executive functioning', 'Debbie coaches executive functioning.'),
+        ('ADHD', 'particular', 'ADHD coach training at the ADHD Coaching Academy (ADDCA), New York', 'Debbie trained as an ADHD coach at the ADHD Coaching Academy.'),
+        ('Young people', 'particular', 'Children & teens', 'Debbie coaches children and teens.'),
+        ('Gifted and talented', 'general', 'Gifted & talented', 'Debbie was a Gifted and Talented Specialist in schools.'),
+    ],
+    'romney-taylor': [
+        ('Executive functioning', 'particular', 'Executive functioning', 'Romney coaches executive functioning.'),
+        ('ADHD', 'particular', 'ADHD coach training at the ADHD Coaching Academy (ADDCA), New York', 'Romney trained as an ADHD coach at the ADHD Coaching Academy.'),
+        ('Study and school', 'particular', 'Students', 'Romney coaches students.'),
+    ],
+    'erin-lysle': [
+        ('Executive functioning', 'particular', 'Executive functioning', 'Erin coaches executive functioning.'),
+        ('ADHD', 'particular', 'ADHD coach training at the ADHD Coaching Academy (ADDCA), New York', 'Erin trained as an ADHD coach at the ADHD Coaching Academy.'),
+        ('Self-esteem', 'particular', 'Self-confidence', 'Erin works on self-confidence.'),
+        ('Social skills', 'particular', 'Social skills', 'Erin works on social skills.'),
+    ],
+    'donna-italiano': [
+        ('Executive functioning', 'particular', 'Executive functioning', 'Donna coaches executive functioning.'),
+        ('ADHD', 'particular', 'ADHD coach training at the ADHD Coaching Academy (ADDCA), New York', 'Donna trained as an ADHD coach at the ADHD Coaching Academy.'),
+        ('Emotional regulation', 'particular', 'Emotional regulation', 'Donna works on emotional regulation.'),
+    ],
+    'kate-dallimore': [
+        ('Executive functioning', 'particular', 'Executive functioning', 'Kate coaches executive functioning.'),
+        ('ADHD', 'particular', 'ADHD coach training at the ADHD Coaching Academy (ADDCA), New York', 'Kate trained as an ADHD coach at the ADHD Coaching Academy.'),
+        ('Stress', 'particular', 'Supporting people through ongoing stress, anxiety, overwhelm and complex life experiences',
+         'Kate supports people through ongoing stress, anxiety and overwhelm.'),
+        ('Anxiety', 'general', 'Supporting people through ongoing stress, anxiety, overwhelm and complex life experiences',
+         'Kate supports people through ongoing stress, anxiety and overwhelm.'),
+        ('Trauma', 'general', 'Trauma-informed', 'Kate describes her coaching as trauma-informed.'),
+    ],
+    'sarah-savage': [
+        ('Movement and exercise', 'particular', 'Exercise as Medicine', 'Sarah builds exercise programs to help you move with confidence.'),
+        ('Older adults', 'particular', 'Particular interest in supporting older adults', 'Sarah has a particular interest in supporting older adults.'),
+    ],
+    'yuri-lima': [
+        ('Pain and injury', 'particular', 'Orthopaedic and sports rehabilitation', 'Yuri does orthopaedic and sports rehabilitation.'),
+        ('Sports injury', 'particular', 'Orthopaedic and sports rehabilitation', 'Yuri does orthopaedic and sports rehabilitation.'),
+    ],
+    'tom-hissey': [
+        ('Pain and injury', 'particular', 'Occupational rehabilitation and musculoskeletal physiotherapy',
+         'Tom does occupational rehabilitation and musculoskeletal physiotherapy.'),
+        ('Veterans and military', 'particular', 'Australian Army veteran', 'Tom is an Australian Army veteran who has supported military personnel.'),
+    ],
+    'lester-rafanan': [
+        ('Pain and injury', 'particular', 'Injury and surgery recovery, chronic pain, return to sport and NDIS supports',
+         'Lester helps with injury and surgery recovery, chronic pain and return to sport.'),
+        ('Chronic pain', 'particular', 'Injury and surgery recovery, chronic pain, return to sport and NDIS supports',
+         'Lester helps with injury and surgery recovery, chronic pain and return to sport.'),
+        ('Sports injury', 'general', 'Injury and surgery recovery, chronic pain, return to sport and NDIS supports',
+         'Lester helps with injury and surgery recovery, chronic pain and return to sport.'),
+        ('NDIS support', 'general', 'Injury and surgery recovery, chronic pain, return to sport and NDIS supports',
+         'Lester works with people accessing NDIS supports.'),
+    ],
 }
 
 # id: [(dimension, value, excerpt, patient-facing line)]
@@ -240,6 +331,28 @@ TRAITS = {
     ],
     'jeff-leech': [],
     'michael-rehardt': [],
+    'flynn-simonis': [
+        ('care_coordination', 'high', 'Family-centred practice with caregivers, schools and multidisciplinary teams',
+         'Flynn works with caregivers, schools and the rest of the team.'),
+    ],
+    'lara-schulz': [],
+    'fiona-alexander': [],
+    'debbie-hirte': [],
+    'romney-taylor': [],
+    'erin-lysle': [],
+    'donna-italiano': [
+        ('neurodiversity_affirming', 'high', 'Neurodivergent-affirming', 'Donna describes her coaching as neurodivergent-affirming.'),
+    ],
+    'kate-dallimore': [
+        ('neurodiversity_affirming', 'high', 'Neurodiversity-affirming', 'Kate describes her coaching as neurodiversity-affirming.'),
+    ],
+    'sarah-savage': [],
+    'yuri-lima': [
+        ('shared_decision_making', 'shared', 'empowering individuals through education and active involvement in their recovery',
+         'Yuri keeps you informed and involved in your own recovery.'),
+    ],
+    'tom-hissey': [],
+    'lester-rafanan': [],
 }
 
 # ---------------------------------------------------------------- snapshot + conversion
@@ -258,7 +371,7 @@ def refresh_snapshot(source):
     spec.loader.exec_module(bp)
     rows = []
     for c in bp.CLINICIANS:
-        if c['category'] not in CATEGORY:
+        if not profession_of(c):
             continue
         row = {k: c.get(k) for k in FIELDS}
         row['details'] = [[k, strip_html(v)] for k, v in c['details']]
@@ -404,7 +517,7 @@ def convert(c):
         id=cid,
         name=c['name'],
         firstName=first,
-        profession=CATEGORY[c['category']],
+        profession=profession_of(c),
         role=c['role'],
         practice=c['practice'],
         location=dict(suburb=suburb, city=city, lat=lat, lng=lng),

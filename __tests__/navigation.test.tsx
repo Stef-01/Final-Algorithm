@@ -67,8 +67,10 @@ async function startDemo(title: string) {
 describe('app shell', () => {
   it('opens on the funnel: who are you looking for?', async () => {
     renderRouter(routes, { initialUrl: '/' });
-    expect(await screen.findByText('Who are you looking for?')).toBeOnTheScreen();
-    for (const o of ['A GP', 'A psychologist', 'Not sure yet']) expect(screen.getByText(o)).toBeOnTheScreen();
+    expect(await screen.findByText('Who could help?')).toBeOnTheScreen();
+    for (const o of ['GP', 'Psychologist', 'ADHD coach', 'Physiotherapist', 'Not sure yet']) expect(screen.getByText(o)).toBeOnTheScreen();
+    // Kinds with nobody in the network yet are shown but can't be searched.
+    expect(screen.getByLabelText('Dietitian. Food, nutrition. Not in the network yet').props.accessibilityState).toMatchObject({ disabled: true });
     expect(screen.queryByText(/sign in|sign up|hinge|adhdme/i)).toBeNull();
   });
 
@@ -80,7 +82,7 @@ describe('app shell', () => {
 
   it('words the next screen for the chosen profession', async () => {
     renderRouter(routes, { initialUrl: '/' });
-    fireEvent.press(await screen.findByText('A psychologist'));
+    fireEvent.press(await screen.findByText('Psychologist'));
     expect(await screen.findByText('Find a psychologist who fits you.')).toBeOnTheScreen();
     expect(screen.getByPlaceholderText('What are you hoping a psychologist can help with?')).toBeOnTheScreen();
     fireEvent.press(screen.getByLabelText('Next'));
@@ -175,7 +177,7 @@ describe('demo run-throughs', () => {
 describe('typed searches', () => {
   it('runs the real engine on what the patient types', async () => {
     renderRouter(routes, { initialUrl: '/' });
-    fireEvent.press(await screen.findByText('A psychologist'));
+    fireEvent.press(await screen.findByText('Psychologist'));
     fireEvent.changeText(await screen.findByLabelText("What you're looking for"), "I've been through trauma and want online sessions only.");
     fireEvent.press(screen.getByLabelText('Next'));
     await screen.findAllByText(/\?$|I found|strong enough/);
@@ -188,7 +190,7 @@ describe('typed searches', () => {
     await screen.findByText('Bart Traynor');
     fireEvent.press(screen.getByLabelText('Settings'));
     fireEvent.press(await screen.findByText('Start over'));
-    expect(await screen.findByText('Who are you looking for?')).toBeOnTheScreen();
+    expect(await screen.findByText('Who could help?')).toBeOnTheScreen();
   });
 });
 
