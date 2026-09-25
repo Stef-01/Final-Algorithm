@@ -1,0 +1,16 @@
+name: smoke
+
+# After Vercel reports a production deployment live, check the deployed site itself:
+# the page, deep links, the manifest, and each API and its guards (scripts/smoke.mjs).
+on: deployment_status
+
+jobs:
+  smoke:
+    if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Production'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: node scripts/smoke.mjs "${{ github.event.deployment_status.environment_url || 'https://final-algorithm.vercel.app' }}"
