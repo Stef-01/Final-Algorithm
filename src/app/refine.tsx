@@ -5,7 +5,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/Icon';
 import { Appear, PressScale, useReducedMotion } from '@/components/motion';
-import { refineSuggestions, type ChatTurn } from '@/features/match/refine';
+import { refineSuggestions, SUGGESTION_TEXT, type ChatTurn } from '@/features/match/refine';
+import { extractRemote } from '@/features/match/remoteExtract';
 import { useSession } from '@/features/match/session';
 import { refineGreeting } from '@/features/match/sessionCore';
 import { colors, fonts } from '@/lib/theme';
@@ -37,17 +38,18 @@ export default function Refine() {
     if (!text || pending) return;
     setDraft('');
     setPending(text);
-    setTimeout(
-      () => {
-        const route = session.refine(text);
-        setPending(null);
-        if (route !== '/refine') {
-          router.back();
-          router.push(route as never);
-        }
-      },
-      reduced ? 0 : THINK_MS,
-    );
+    // Chips are exact; typed messages are read by Claude when it's switched on. The reply waits
+    // at least a beat so it reads as a conversation, never longer than the reading takes.
+    const reading = text in SUGGESTION_TEXT ? Promise.resolve(null) : extractRemote(text, profession);
+    const beat = new Promise((r) => setTimeout(r, reduced ? 0 : THINK_MS));
+    void Promise.all([reading, beat]).then(([extracted]) => {
+      const route = session.refine(text, extracted);
+      setPending(null);
+      if (route !== '/refine') {
+        router.back();
+        router.push(route as never);
+      }
+    });
   };
 
   const seeMatches = () => {

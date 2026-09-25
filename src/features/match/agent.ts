@@ -1,11 +1,12 @@
 import { professionals } from '@server/data/professionals';
 import { decide, recommend } from '@server/engine';
 import { scoreQuestions } from '@server/engine/infoGain';
+import type { Extraction } from '@server/claude/types';
 import type { Dimension, PatientSignals, Profession } from '@server/engine/types';
 import { applyAnswer, NOT_SURE, questionById, type BankQuestion } from '@server/questions';
 
 import { demoById } from './demos';
-import { extractSignals, mergeSignals } from './extract';
+import { extractSignals, mergeSignals, withKeywordExtras } from './extract';
 import { applyRefinement } from './refine';
 import type { AgentStep, MatchResult, Priority, Question } from './types';
 
@@ -28,6 +29,10 @@ export type SessionInput = {
   wantsMoreQuestions: boolean;
   /** What the patient asked the refine assistant to change, oldest first. Newer wins. */
   refinements?: string[];
+  /** Claude's reading of the opening description (Phase 8); absent = keyword extractor. */
+  extracted?: Extraction;
+  /** Claude's reading of each refinement, parallel to `refinements` (null = keyword extractor). */
+  refinementExtracts?: (Extraction | null)[];
 };
 
 export const pool = professionals;
@@ -36,7 +41,12 @@ const clone = <T>(x: T): T => JSON.parse(JSON.stringify(x));
 
 export function signalsFor(input: SessionInput): PatientSignals {
   const demo = input.demoId ? demoById(input.demoId) : undefined;
-  let s = demo ? clone(demo.signals) : extractSignals(input.texts[0] ?? '');
+  const first = input.texts[0] ?? '';
+  let s = demo
+    ? clone(demo.signals)
+    : input.extracted
+      ? withKeywordExtras(clone(input.extracted.signals), extractSignals(first))
+      : extractSignals(first);
   const later = input.texts.slice(1).join(' ');
   if (later) s = mergeSignals(s, extractSignals(later));
   s.profession = input.profession;
@@ -44,7 +54,9 @@ export function signalsFor(input: SessionInput): PatientSignals {
   for (const d of input.removedPriorities) delete s.preferences[d as Dimension];
   if (input.includeTelehealth && s.constraints.mode === 'in_person_only') s.constraints = { ...s.constraints, mode: 'any' };
   if (input.expandDistance) s.constraints = { ...s.constraints, maxKm: undefined };
-  for (const r of input.refinements ?? []) s = applyRefinement(s, r);
+  (input.refinements ?? []).forEach((r, i) => {
+    s = applyRefinement(s, r, input.refinementExtracts?.[i] ?? undefined);
+  });
   s.profession = input.profession;
   if (input.safetyAcknowledged) delete s.safetyFlag;
   return s;

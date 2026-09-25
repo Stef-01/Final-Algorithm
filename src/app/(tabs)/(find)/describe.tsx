@@ -5,6 +5,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { ConversationStep } from '@/components/ConversationStep';
 import { VoiceInput } from '@/components/VoiceInput';
 import { demoById } from '@/features/match/demos';
+import { extractRemote } from '@/features/match/remoteExtract';
 import { useSession } from '@/features/match/session';
 import { copyFor } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
@@ -21,8 +22,15 @@ export default function Describe() {
   const text = draft ?? state.draft ?? state.input.texts[0] ?? '';
   const ready = text.trim().length > 0;
 
-  const submit = () => {
-    if (ready) router.push(session.submitText(text));
+  const [reading, setReading] = useState(false);
+  const submit = async () => {
+    if (!ready || reading) return;
+    // Demo patients have scripted signals; everyone else is read by Claude when it's switched on.
+    const scripted = demo && demo.text === text.trim();
+    setReading(true);
+    const extracted = scripted ? null : await extractRemote(text.trim(), state.profession === 'either' ? undefined : state.profession);
+    setReading(false);
+    router.push(session.submitText(text, extracted));
   };
 
   return (
@@ -31,7 +39,7 @@ export default function Describe() {
       title={copy.title}
       note="Tell me what you're looking for. You don't need to know exactly what to ask for."
       onNext={submit}
-      nextEnabled={ready}
+      nextEnabled={ready && !reading}
       dots={1}
     >
       {demo && draft === null ? (
@@ -50,7 +58,9 @@ export default function Describe() {
         style={styles.input}
         accessibilityLabel="What you're looking for"
       />
-      <Text style={styles.hint}>Takes about a minute</Text>
+      <Text style={styles.hint} accessibilityLiveRegion="polite">
+        {reading ? 'Reading what you wrote…' : 'Takes about a minute'}
+      </Text>
     </ConversationStep>
   );
 }

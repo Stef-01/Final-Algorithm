@@ -102,7 +102,7 @@ describe('events through a run-through (PRD §48)', () => {
     expect(done).toMatchObject({ profession: 'psychologist' });
     expect(done.followups).toBeGreaterThanOrEqual(1);
     expect(typeof done.seconds).toBe('number');
-    expect(sent.find((e) => e.name === 'matching_started')!.props).toEqual({ profession: 'psychologist', demo: true });
+    expect(sent.find((e) => e.name === 'matching_started')!.props).toEqual({ profession: 'psychologist', demo: true, claude: false });
 
     // Nothing the patient said ever leaves the device in an event.
     const words = demoById('psych-masking')!.text.toLowerCase().match(/[a-z']{5,}/g)!;

@@ -332,6 +332,19 @@ Each phase ends deployed on Vercel with CI green.
 
 ---
 
+### Phase 8 notes (Claude, final stage — in progress)
+
+- **Built:** Claude reads what the patient writes; the engine still does all the ranking.
+  - `server/claude/extract.ts` calls `claude-opus-5` at low effort with a strict JSON schema. The schema's enums are the engine's own dimensions and the clinicians' expertise areas, so Claude can only name things the engine can match.
+  - Everything is validated again after it comes back: unknown areas or values are dropped, and quotes must appear word for word in what the patient wrote.
+  - Server-side fallback is on (`fallbacks: "default"`), so a safety classifier decline is retried on another model instead of failing.
+  - `api/extract.ts` is the Vercel Function (`POST /api/extract`, `GET` reports whether it's on). It returns 503 for anything that goes wrong, and the app then uses the keyword extractor. It never logs what the patient wrote.
+  - The describe screen and typed messages to the assistant use it. Demo patients and assistant chips stay scripted.
+  - Places, languages and urgent wording also come from the keyword rules. Either reading can trigger the safety pause.
+- **Switching it on (you):** add `ANTHROPIC_API_KEY` to the Vercel project's environment variables and redeploy. Set `WATL_CLAUDE=off` to switch it off again without removing the key.
+- **Evals:** `evals/extraction.json` (33 cases) is scored by `evals/score.ts`. The keyword extractor must pass all of them in CI. Claude is held to ≥ 90% by an opt-in live run: `WATL_LIVE_EVAL=1 ANTHROPIC_API_KEY=… npx jest claude.live` (about 35 short requests).
+- **Still to do:** Claude writing the assistant's replies (today they're built from the signal diff), `/api/feedback` storage, and Claude drafting interview proposals.
+
 ### Phase 2 notes (engine as built)
 
 - **Where:** `server/engine/` (types, eligibility, score, infoGain, diversity, explain, index), `server/questions.ts` (12 behavioural questions), `server/data/clinicians/*.json` (12 fictional seed clinicians), `server/fixtures/signals.ts` (hand-written patient signals, reused as expected outputs for the Phase 3 extraction evals).

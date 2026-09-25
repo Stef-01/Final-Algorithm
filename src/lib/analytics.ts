@@ -8,7 +8,7 @@ import { Platform } from 'react-native';
 type Profession = 'gp' | 'psychologist' | 'either';
 
 export type Events = {
-  matching_started: { profession: Profession; demo: boolean };
+  matching_started: { profession: Profession; demo: boolean; claude?: boolean };
   voice_started: Record<string, never>;
   voice_completed: { words: number };
   text_submitted: { words: number };
@@ -24,7 +24,7 @@ export type Events = {
   match_rating: { rating: number; matches: number };
   /** The floating assistant: opened, and each message (whether a chip, and whether it changed the list). */
   assistant_opened: { hasResults: boolean };
-  assistant_message: { chip: boolean; changed: boolean };
+  assistant_message: { chip: boolean; changed: boolean; claude?: boolean };
 };
 
 export type EventName = keyof Events;

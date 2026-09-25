@@ -1,7 +1,9 @@
 import { areaPhrase } from '@server/engine/explain';
 import type { Dimension, PatientSignals, Profession } from '@server/engine/types';
 
-import { extractSignals } from './extract';
+import type { Extraction } from '@server/claude/types';
+
+import { extractSignals, withKeywordExtras } from './extract';
 
 // The refine assistant (the floating button): after results are showing, the patient can say what
 // to change ("online only", "someone more direct", "cost doesn't matter") and the list re-ranks.
@@ -32,15 +34,20 @@ export function professionSwitch(text: string): Profession | undefined {
 }
 
 /** Apply one refinement on top of everything said so far. Newer wins. */
-export function applyRefinement(s: PatientSignals, text: string): PatientSignals {
+export function applyRefinement(s: PatientSignals, text: string, claude?: Extraction): PatientSignals {
   const t = text.toLowerCase();
-  const x = extractSignals(t);
-  // "Less blunt" / "not so direct" mean gentler, not more direct.
-  if (/(less|not so|not too|too) (direct|blunt|straight)/.test(t)) x.preferences.communication_directness = { value: 'gentle', confidence: 'medium' };
-  if (/(less|not so|too) gentle|more direct/.test(t)) x.preferences.communication_directness = { value: 'direct', confidence: 'medium' };
+  const keyword = extractSignals(t);
+  const x = claude ? withKeywordExtras(claude.signals, keyword) : keyword;
+  if (!claude) {
+    // "Less blunt" / "not so direct" mean gentler, not more direct.
+    if (/(less|not so|not too|too) (direct|blunt|straight)/.test(t)) x.preferences.communication_directness = { value: 'gentle', confidence: 'medium' };
+    if (/(less|not so|too) gentle|more direct/.test(t)) x.preferences.communication_directness = { value: 'direct', confidence: 'medium' };
+  }
   const needs = [...s.clinicalNeeds];
   for (const n of x.clinicalNeeds) if (!needs.some((m) => m.area === n.area)) needs.push(n);
-  const { dropGender, dropDistance, ...relax } = relaxations(t);
+  const { dropGender: kwGender, dropDistance: kwDistance, ...relax } = claude ? {} : relaxations(t);
+  const dropGender = kwGender || claude?.relax.dropGender;
+  const dropDistance = kwDistance || claude?.relax.dropDistance;
   const constraints = { ...s.constraints, ...x.constraints, ...relax };
   if (dropGender) delete constraints.clinicianGender;
   if (dropDistance) delete constraints.maxKm;

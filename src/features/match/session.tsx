@@ -4,6 +4,8 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 import { track, wordCount } from '@/lib/analytics';
 
 import * as core from './sessionCore';
+import type { Extraction } from '@server/claude/types';
+
 import { SUGGESTION_TEXT } from './refine';
 import type { NoMatchAction } from './types';
 
@@ -15,7 +17,7 @@ type Session = {
   loaded: boolean;
   chooseProfession: (p: core.ProfessionChoice) => string;
   startDemo: (demoId: string) => string;
-  submitText: (text: string) => string;
+  submitText: (text: string, extracted?: Extraction | null) => string;
   answer: (questionId: string, value: string) => string;
   confirmPriorities: (removed: string[]) => string;
   acknowledgeSafety: () => string;
@@ -25,7 +27,7 @@ type Session = {
   rateMatches: (rating: number) => void;
   thumb: (clinicianId: string, dir: 'up' | 'down') => void;
   /** A message to the floating assistant; returns the route to show (usually '/refine'). */
-  refine: (message: string) => string;
+  refine: (message: string, extracted?: Extraction | null) => string;
   reset: () => void;
   load: (state: core.SessionState) => void;
 };
@@ -70,10 +72,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       loaded,
       chooseProfession: (p) => route(core.chooseProfession(current.current, p)),
       startDemo: (id) => route(core.startDemo(current.current, id)),
-      submitText: (text) => {
-        const t = core.submitText(current.current, text);
+      submitText: (text, extracted) => {
+        const t = core.submitText(current.current, text, extracted);
         track('text_submitted', { words: wordCount(text) });
-        track('matching_started', { profession: t.state.profession ?? 'either', demo: !!t.state.input.demoId });
+        track('matching_started', { profession: t.state.profession ?? 'either', demo: !!t.state.input.demoId, claude: !!extracted });
         return route(t);
       },
       answer: (q, v) => {
@@ -110,10 +112,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         track(dir === 'up' ? 'match_feedback_positive' : 'match_feedback_negative', { clinician: id });
         commit(core.thumb(current.current, id, dir));
       },
-      refine: (message) => {
+      refine: (message, extracted) => {
         const before = current.current.result;
-        const t = core.refine(current.current, message);
-        track('assistant_message', { chip: message in SUGGESTION_TEXT, changed: t.state.result !== before });
+        const t = core.refine(current.current, message, extracted);
+        track('assistant_message', { chip: message in SUGGESTION_TEXT, changed: t.state.result !== before, claude: !!extracted });
         return route(t);
       },
       reset: () => {

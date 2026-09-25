@@ -1,5 +1,7 @@
 import { pool as clinicianPool } from './agent';
 import { bankQuestion, nextStep, normaliseAnswer, priorityLabel, runMatching, signalsFor, type SessionInput } from './agent';
+import type { Extraction } from '@server/claude/types';
+
 import { copyFor } from '@/lib/professions';
 import { describeChange, listPhrase, professionSwitch, SUGGESTION_TEXT, understood, type ChatTurn } from './refine';
 import { demoById, demos } from './demos';
@@ -93,13 +95,13 @@ export function startDemo(_state: SessionState, demoId: string): Transition {
 }
 
 /** The patient's opening description. Editing a demo's words turns it into an ordinary search. */
-export function submitText(state: SessionState, text: string): Transition {
+export function submitText(state: SessionState, text: string, extracted?: Extraction | null): Transition {
   const t = text.trim();
   const demo = state.input.demoId ? demoById(state.input.demoId) : undefined;
   const demoId = demo && demo.text === t ? demo.id : undefined;
   const s: SessionState = {
     ...initialState(state.profession),
-    input: { ...emptyInput(state.profession, demoId), texts: [t] },
+    input: { ...emptyInput(state.profession, demoId), texts: [t], extracted: demoId ? undefined : (extracted ?? undefined) },
     startedAt: Date.now(),
   };
   return apply(s, nextStep(s.input));
@@ -190,14 +192,14 @@ export function refineGreeting(state: SessionState): string {
  * One message to the refine assistant. With results showing, it re-ranks in place and says exactly
  * what changed; with nothing yet, the message starts a search like the describe screen.
  */
-export function refine(state: SessionState, message: string): Transition {
+export function refine(state: SessionState, message: string, extracted?: Extraction | null): Transition {
   const text = message.trim();
   if (!text) return { state, route: '/refine' };
   const words = SUGGESTION_TEXT[text] ?? text;
   const you: ChatTurn = { from: 'you', text };
 
   if (!state.result) {
-    const t = submitText({ ...state, input: { ...state.input, demoId: undefined } }, words);
+    const t = submitText({ ...state, input: { ...state.input, demoId: undefined } }, words, extracted);
     const reply: ChatTurn = { from: 'agent', text: 'Thanks — let me find people who fit that.' };
     return { state: say(t.state, ...(state.chat ?? []), you, reply), route: t.route };
   }
@@ -207,6 +209,7 @@ export function refine(state: SessionState, message: string): Transition {
     ...state.input,
     profession: switchTo ?? state.input.profession,
     refinements: [...(state.input.refinements ?? []), words],
+    refinementExtracts: [...(state.input.refinementExtracts ?? state.input.refinements?.map(() => null) ?? []), extracted ?? null],
     safetyAcknowledged: state.input.safetyAcknowledged,
   };
   const before = signalsFor(state.input);
@@ -218,7 +221,10 @@ export function refine(state: SessionState, message: string): Transition {
 
   const changes = describeChange(before, after, priorityLabel);
   const switched = switchTo && switchTo !== state.input.profession;
-  if (changes.length === 0 && !switched && (understood(words, priorityLabel) || switchTo)) {
+  const claudeRead =
+    !!extracted &&
+    (extracted.signals.clinicalNeeds.length > 0 || Object.keys(extracted.signals.preferences).length > 0 || Object.keys(extracted.signals.constraints).length > 0);
+  if (changes.length === 0 && !switched && (understood(words, priorityLabel) || switchTo || claudeRead)) {
     const reply: ChatTurn = { from: 'agent', text: "That's already part of what I'm matching on. Anything else you'd like to change?" };
     return { state: say(state, you, reply), route: '/refine' };
   }

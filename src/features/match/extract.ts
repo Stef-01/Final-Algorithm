@@ -124,6 +124,20 @@ export function extractSignals(raw: string, profession?: Profession): PatientSig
   return signals;
 }
 
+/**
+ * Claude's signals, plus what only the keyword rules know: places (for distance) and languages.
+ * Urgent wording caught by either one pauses for safety — the stricter reading always wins.
+ */
+export function withKeywordExtras(claude: PatientSignals, keyword: PatientSignals): PatientSignals {
+  const c = { ...claude.constraints };
+  if (!c.origin && keyword.constraints.origin) {
+    c.origin = keyword.constraints.origin;
+    c.maxKm = keyword.constraints.maxKm;
+  }
+  if (!c.languages && keyword.constraints.languages) c.languages = keyword.constraints.languages;
+  return { ...claude, constraints: c, safetyFlag: claude.safetyFlag ?? keyword.safetyFlag };
+}
+
 /** Combine signals from later turns (e.g. an answer in the patient's own words) into earlier ones. */
 export function mergeSignals(a: PatientSignals, b: PatientSignals): PatientSignals {
   const needs = [...a.clinicalNeeds];
