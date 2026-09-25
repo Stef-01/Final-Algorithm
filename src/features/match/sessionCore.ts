@@ -59,6 +59,34 @@ export const initialState = (profession?: ProfessionChoice): SessionState => ({
   updatedAt: Date.now(),
 });
 
+/**
+ * A saved search from storage, if it still has the shape this version needs; otherwise undefined
+ * (start fresh rather than crash on an old or corrupted save). Missing optional parts are filled in.
+ */
+export function restoreState(raw: unknown): SessionState | undefined {
+  const s = raw as Partial<SessionState> | null;
+  const input = s?.input as Partial<SessionInput> | undefined;
+  const ok =
+    !!s &&
+    typeof s.updatedAt === 'number' &&
+    !!input &&
+    Array.isArray(input.texts) &&
+    input.texts.every((t) => typeof t === 'string') &&
+    typeof input.answers === 'object' &&
+    input.answers !== null &&
+    Array.isArray(s.asked) &&
+    Array.isArray(s.priorities) &&
+    typeof s.index === 'number' &&
+    (s.result === undefined || s.result.status === 'none' || (s.result.status === 'matches' && Array.isArray(s.result.matches) && Array.isArray(s.result.more))) &&
+    (s.chat === undefined || Array.isArray(s.chat));
+  if (!ok) return undefined;
+  return {
+    ...(s as SessionState),
+    input: { ...emptyInput(), ...input, removedPriorities: input.removedPriorities ?? [] } as SessionInput,
+    feedback: { thumbs: {}, ...s.feedback },
+  };
+}
+
 export function questionById(state: SessionState, id?: string): Question | undefined {
   return state.asked.find((q) => q.id === id);
 }

@@ -45,8 +45,15 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     AsyncStorage.getItem(STORAGE_KEY)
       .then((raw) => {
         if (!raw) return;
-        const saved: core.SessionState = { feedback: { thumbs: {} }, ...JSON.parse(raw) };
-        if (Date.now() - saved.updatedAt > MAX_AGE_MS) return AsyncStorage.removeItem(STORAGE_KEY);
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(raw);
+        } catch {
+          parsed = undefined;
+        }
+        const saved = core.restoreState(parsed);
+        // Too old, or not something this version can use: start fresh.
+        if (!saved || Date.now() - saved.updatedAt > MAX_AGE_MS) return AsyncStorage.removeItem(STORAGE_KEY);
         current.current = saved;
         setState(saved);
       })

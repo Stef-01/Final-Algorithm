@@ -37,3 +37,28 @@ describe('session storage', () => {
     await waitFor(async () => expect(await AsyncStorage.getItem('watl_session')).toBeNull());
   });
 });
+
+describe('a saved search this version can’t use', () => {
+  it.each([
+    ['invalid JSON', 'not json {'],
+    ['the wrong shape', '{"broken":true}'],
+    ['a missing input', JSON.stringify({ ...demoResults('psych-trauma-online'), input: undefined })],
+  ])('%s: starts fresh (no crash) and deletes it', async (_why, raw) => {
+    await AsyncStorage.setItem('watl_session', raw);
+    renderRouter(routes, { initialUrl: '/matches' });
+    expect(await screen.findByText("Tell me what you're looking for first.")).toBeOnTheScreen();
+    await waitFor(async () => expect(await AsyncStorage.getItem('watl_session')).toBeNull());
+  });
+
+  it('an older save without the newer fields still loads', async () => {
+    const s = demoResults('psych-trauma-online');
+    const { chat: _chat, ...old } = { ...s, updatedAt: Date.now() };
+    const input = { ...old.input } as Record<string, unknown>;
+    delete input.refinements;
+    delete input.refinementExtracts;
+    delete input.extracted;
+    await AsyncStorage.setItem('watl_session', JSON.stringify({ ...old, input, feedback: undefined }));
+    renderRouter(routes, { initialUrl: '/matches' });
+    expect((await screen.findAllByText('Alice Bui')).length).toBeGreaterThan(0);
+  });
+});
