@@ -2,7 +2,7 @@ import { professionals } from '../server/data/professionals';
 import { decide, recommend } from '../server/engine';
 import { eligibleFor, failures } from '../server/engine/eligibility';
 import { copyProblems } from '../server/engine/explain';
-import { isUsableStatus } from '../server/engine/score';
+import { score, similarity, usableTrait } from '../server/engine/score';
 import { CONFIDENCE, DIMENSIONS, type ClinicianRecord, type Confidence, type Dimension, type PatientSignals } from '../server/engine/types';
 import { fixtureClinicians } from '../server/fixtures/clinicians';
 import { QUESTIONS } from '../server/questions';
@@ -102,7 +102,7 @@ describe.each(POOLS)('engine guarantees over %s', (_name, pool) => {
         expect(m.reasons.length).toBeLessThanOrEqual(3);
         for (const reason of m.reasons) {
           const ev = c.evidence.find((e) => e.id === reason.evidenceId);
-          expect(ev && isUsableStatus(ev.reviewerStatus) && CONFIDENCE[ev.confidence] >= CONFIDENCE.medium).toBe(true);
+          expect(ev && (ev.reviewerStatus === 'approved' || ev.reviewerStatus === 'profile') && CONFIDENCE[ev.confidence] >= CONFIDENCE.medium).toBe(true);
           expect(reason.evidence).toBe(ev!.patientFacing);
           expect(copyProblems(`${reason.signal} ${reason.evidence}`)).toEqual([]);
         }
@@ -132,3 +132,64 @@ describe.each(POOLS)('engine guarantees over %s', (_name, pool) => {
     }
   });
 });
+
+describe.each(POOLS)('ranking behaves sensibly over %s', (_name, pool) => {
+  it('asking for a trait a clinician has never lowers them, or narrows their lead over its opposite', () => {
+    for (let seed = 1; seed <= 300; seed++) {
+      const rand = prng(seed * 104729);
+      const s = randomSignals(rand);
+      for (const c of pool) {
+        for (const d of DIMS) {
+          const t = usableTrait(c, d);
+          if (!t || s.preferences[d]) continue;
+          const asked: PatientSignals = { ...s, preferences: { ...s.preferences, [d]: { value: t.value, confidence: 'high' } } };
+          const before = score(c, s).total;
+          const after = score(c, asked).total;
+          expect({ seed, c: c.id, d, ok: after >= before - 1e-12 }).toEqual({ seed, c: c.id, d, ok: true });
+          for (const o of pool) {
+            const ot = usableTrait(o, d);
+            if (!ot || similarity(d, ot.value, t.value) !== 0) continue;
+            const lead = (x: PatientSignals) => score(c, x).total - score(o, x).total;
+            expect({ seed, c: c.id, o: o.id, d, ok: lead(asked) >= lead(s) - 1e-12 }).toEqual({ seed, c: c.id, o: o.id, d, ok: true });
+          }
+        }
+      }
+    }
+  });
+
+  it('adding a need a clinician particularly works with never lowers them', () => {
+    for (let seed = 1; seed <= 300; seed++) {
+      const s = randomSignals(prng(seed * 7));
+      for (const c of pool) {
+        for (const e of c.expertise.filter((x) => x.level === 'particular')) {
+          if (s.clinicalNeeds.some((n) => n.area === e.area)) continue;
+          const asked = { ...s, clinicalNeeds: [...s.clinicalNeeds, { area: e.area, confidence: 'high' as const }] };
+          expect({ seed, c: c.id, area: e.area, ok: score(c, asked).total >= score(c, s).total - 1e-12 }).toEqual({ seed, c: c.id, area: e.area, ok: true });
+        }
+      }
+    }
+  });
+
+  it('a stricter requirement never adds anyone', () => {
+    const stricter: ((k: PatientSignals['constraints']) => PatientSignals['constraints'])[] = [
+      (k) => ({ ...k, mode: 'telehealth_only' }),
+      (k) => ({ ...k, mode: 'in_person_only' }),
+      (k) => ({ ...k, maxGap: 0 }),
+      (k) => ({ ...k, needsWeekend: true }),
+      (k) => ({ ...k, clinicianGender: 'female' }),
+    ];
+    for (let seed = 1; seed <= 300; seed++) {
+      const s = randomSignals(prng(seed * 31));
+      if (s.constraints.mode && s.constraints.mode !== 'any') continue;
+      const base = new Set(eligibleFor(pool, s).map((c) => c.id));
+      for (const f of stricter) {
+        if (f === stricter[2] && s.constraints.maxGap === 0) continue;
+        // Swapping one gender for the other isn't stricter, it's different.
+        if (f === stricter[4] && s.constraints.clinicianGender) continue;
+        const narrowed = eligibleFor(pool, { ...s, constraints: f(s.constraints) }).map((c) => c.id);
+        for (const id of narrowed) expect({ seed, id, ok: base.has(id) }).toEqual({ seed, id, ok: true });
+      }
+    }
+  });
+});
+
