@@ -8,6 +8,8 @@ import { Appear, PressScale, useReducedMotion } from '@/components/motion';
 import { refineSuggestions, SUGGESTION_TEXT, type ChatTurn } from '@/features/match/refine';
 import { extractRemote } from '@/features/match/remoteExtract';
 import { useSession } from '@/features/match/session';
+import { useSpeechToText } from '@/features/voice/useSpeechToText';
+import { track, wordCount } from '@/lib/analytics';
 import { refineGreeting } from '@/features/match/sessionCore';
 import { colors, fonts } from '@/lib/theme';
 
@@ -23,6 +25,11 @@ export default function Refine() {
   const [draft, setDraft] = useState('');
   const [pending, setPending] = useState<string | null>(null);
   const scroll = useRef<ScrollView>(null);
+  // Voice fills the box (live while speaking); the patient checks the words, then sends.
+  const speech = useSpeechToText((said) => {
+    track('voice_completed', { words: wordCount(said) });
+    setDraft((d) => (d.trim() ? `${d.trim()} ${said}` : said));
+  });
   const { state } = session;
   const profession = state.profession === 'either' ? undefined : state.profession;
   const hasResults = state.result?.status === 'matches';
@@ -102,11 +109,32 @@ export default function Refine() {
         ) : null}
 
         <View style={styles.inputRow}>
+          {speech.supported ? (
+            <PressScale
+              onPress={() => {
+                if (speech.listening) speech.done();
+                else {
+                  track('voice_started', {});
+                  speech.start();
+                }
+              }}
+              accessibilityRole="button"
+              accessibilityLabel={speech.listening ? 'Stop listening' : 'Speak instead'}
+              accessibilityState={{ selected: speech.listening }}
+              style={[styles.mic, speech.listening && styles.micOn]}
+              scaleTo={0.88}
+            >
+              <Icon name="icMic" size={20} color={speech.listening ? colors.white : colors.black} />
+            </PressScale>
+          ) : null}
           <TextInput
-            value={draft}
+            value={speech.listening ? speech.transcript : draft}
             onChangeText={setDraft}
             onSubmitEditing={() => send(draft)}
-            placeholder={hasResults ? 'e.g. someone gentler, or online only' : "What's going on, and what are you hoping for?"}
+            placeholder={
+              speech.listening ? 'Listening…' : hasResults ? 'e.g. someone gentler, or online only' : "What's going on, and what are you hoping for?"
+            }
+            editable={!speech.listening}
             placeholderTextColor={colors.muted}
             style={styles.input}
             returnKeyType="send"
@@ -123,7 +151,11 @@ export default function Refine() {
             <Icon name="icSend" size={20} color={colors.white} />
           </PressScale>
         </View>
-        <Text style={styles.fine}>Suggestions only. The assistant re-ranks your list; it doesn&apos;t give medical advice.</Text>
+        {speech.error ? <Text style={styles.error}>{speech.error}</Text> : null}
+        <Text style={styles.fine}>
+          Suggestions only. The assistant re-ranks your list; it doesn&apos;t give medical advice.
+          {speech.supported ? ' Voice is transcribed by your browser’s speech service.' : ''}
+        </Text>
       </Appear>
     </KeyboardAvoidingView>
   );
@@ -203,7 +235,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.black,
   },
+  mic: { width: 48, height: 48, borderRadius: 24, borderWidth: 1, borderColor: colors.black, alignItems: 'center', justifyContent: 'center' },
+  micOn: { backgroundColor: colors.black },
   send: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.black, alignItems: 'center', justifyContent: 'center' },
   sendOff: { opacity: 0.35 },
+  error: { fontFamily: fonts.regular, fontSize: 13, color: colors.black, textAlign: 'center', marginTop: 8, paddingHorizontal: 24 },
   fine: { fontFamily: fonts.regular, fontSize: 12, color: colors.muted, textAlign: 'center', marginTop: 10, paddingHorizontal: 24 },
 });
