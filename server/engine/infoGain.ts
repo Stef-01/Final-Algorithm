@@ -1,5 +1,5 @@
 import { NOT_SURE, QUESTIONS, type BankQuestion } from '../questions';
-import { eligibleSet } from './eligibility';
+import { eligibleFor } from './eligibility';
 import { IMPORTANCE, rank } from './score';
 import { CONFIDENCE, type ClinicianRecord, type HardConstraints, type PatientSignals } from './types';
 
@@ -21,7 +21,7 @@ const CONSTRAINT_IMPORTANCE: Partial<Record<keyof HardConstraints, number>> = {
 };
 
 export function topK(cs: ClinicianRecord[], s: PatientSignals, k = TOP_K) {
-  return rank(eligibleSet(cs, s.constraints), s)
+  return rank(eligibleFor(cs, s), s)
     .filter((x) => x.fit !== null)
     .slice(0, k)
     .map((x) => x.clinicianId);
@@ -56,10 +56,13 @@ export function informationGain(q: BankQuestion, s: PatientSignals, cs: Clinicia
   if (answers.length === 0) return 0;
   const priors = answers.map((o) => o.prior ?? 1 / answers.length);
   const total = priors.reduce((a, b) => a + b, 0);
-  const expected = answers.reduce(
-    (sum, o, i) => sum + (priors[i] / total) * rankingChange(before, topK(cs, o.apply!(s))),
-    0,
-  );
+  const expected = answers.reduce((sum, o, i) => {
+    const after = topK(cs, o.apply!(s));
+    // An answer that would leave nobody to recommend doesn't help choose between clinicians (PRD §20);
+    // if the patient raises that limit themselves, the no-match state handles it honestly.
+    const change = after.length === 0 ? 0 : rankingChange(before, after);
+    return sum + (priors[i] / total) * change;
+  }, 0);
   return expected * importance(q) * u;
 }
 
@@ -67,6 +70,8 @@ export type ScoredQuestion = { question: BankQuestion; gain: number };
 
 export function scoreQuestions(s: PatientSignals, cs: ClinicianRecord[], asked: string[]): ScoredQuestion[] {
   return QUESTIONS.filter((q) => !asked.includes(q.id))
+    // Profession-specific questions only for that profession (either, when the patient hasn't said).
+    .filter((q) => !q.professions || !s.profession || q.professions.includes(s.profession))
     .map((question) => ({ question, gain: informationGain(question, s, cs) }))
     .sort((a, b) => b.gain - a.gain || a.question.id.localeCompare(b.question.id));
 }

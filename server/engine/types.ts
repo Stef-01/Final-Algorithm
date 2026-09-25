@@ -20,7 +20,13 @@ export const DIMENSIONS = {
   patient_autonomy: ['low', 'moderate', 'high'],
   continuity: ['low', 'moderate', 'high'],
   follow_up_intensity: ['as_needed', 'scheduled', 'proactive'],
+  // Psychology-specific: understanding why vs practical strategies, and a neurodiversity-affirming stance.
+  therapy_style: ['exploratory', 'balanced', 'practical'],
+  neurodiversity_affirming: ['low', 'moderate', 'high'],
 } as const;
+
+export const PROFESSIONS = ['gp', 'psychologist'] as const;
+export type Profession = (typeof PROFESSIONS)[number];
 
 export type Dimension = keyof typeof DIMENSIONS;
 export type DimensionValue<D extends Dimension = Dimension> = (typeof DIMENSIONS)[D][number];
@@ -49,6 +55,8 @@ export type HardConstraints = {
 };
 
 export type PatientSignals = {
+  /** Which kind of professional the patient is looking for; unset = either. */
+  profession?: Profession;
   clinicalNeeds: { area: string; confidence: Confidence; quote?: string }[];
   preferences: Partial<Record<Dimension, Preference>>;
   constraints: HardConstraints;
@@ -68,32 +76,46 @@ export type Evidence = {
   scenario: string;
   timestamp: string;
   confidence: Confidence;
-  reviewerStatus: 'draft' | 'approved' | 'rejected';
+  /**
+   * 'approved' = reviewed after the onboarding interview. 'profile' = taken from the clinician's own
+   * published profile and not yet interview-reviewed; usable, but capped at medium confidence.
+   */
+  reviewerStatus: 'draft' | 'approved' | 'profile' | 'rejected';
 };
 
 export type ClinicianRecord = {
   id: string;
   name: string;
   firstName: string;
-  role: 'GP';
-  location: { suburb: string; city: string; lat: number; lng: number };
+  profession: Profession;
+  /** Display role, e.g. "GP", "Clinical Psychologist". */
+  role: string;
+  practice?: string;
+  /** Coordinates are null when there are no rooms to visit (telehealth only). */
+  location: { suburb: string; city: string; lat: number | null; lng: number | null };
   photo: string;
   bio: string;
   credentials: string[];
   bookingUrl: string | null;
   practical: {
     nextAvailable: string;
-    daysUntilAvailable: number;
+    /** null = not published. */
+    daysUntilAvailable: number | null;
     modes: Mode[];
-    fee: number;
-    gapAfterMedicare: number;
+    /** null = not published ("fee on request"). */
+    fee: number | null;
+    /** Out of pocket after any Medicare rebate; null = not published. */
+    gapAfterMedicare: number | null;
+    /** Human-readable billing line from the source, shown on the detail page. */
+    billingNote?: string;
     newPatients: boolean;
     ageRange: [number, number];
     languages: string[];
     accessibility: string[];
-    gender: 'female' | 'male' | 'nonbinary';
-    initialConsultMins: number;
-    weekends: boolean;
+    gender: 'female' | 'male' | 'nonbinary' | 'undeclared';
+    initialConsultMins: number | null;
+    /** null = not declared; only `true` satisfies a weekend requirement. */
+    weekends: boolean | null;
   };
   expertise: { area: string; level: 'particular' | 'general'; evidenceIds: string[] }[];
   phenotype: Partial<Record<Dimension, { value: string; confidence: Confidence; evidenceIds: string[] }>>;

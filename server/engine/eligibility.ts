@@ -1,9 +1,10 @@
-import type { ClinicianRecord, HardConstraints } from './types';
+import type { ClinicianRecord, HardConstraints, PatientSignals, Profession } from './types';
 
 // Layer 1 (PRD §19–21): remove clinicians who can't meet a *known* hard constraint.
 // Unknown constraints are never assumed.
 
 export type Failure =
+  | 'profession'
   | 'new_patients'
   | 'age'
   | 'mode'
@@ -14,7 +15,8 @@ export type Failure =
   | 'accessibility'
   | 'language';
 
-export function distanceKm(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
+export function distanceKm(a: { lat: number; lng: number }, b: { lat: number | null; lng: number | null }) {
+  if (b.lat === null || b.lng === null) return Infinity;
   const R = 6371;
   const rad = (d: number) => (d * Math.PI) / 180;
   const dLat = rad(b.lat - a.lat);
@@ -30,9 +32,10 @@ export function inPersonReachable(c: ClinicianRecord, k: HardConstraints) {
   return distanceKm(k.origin, c.location) <= k.maxKm;
 }
 
-export function failures(c: ClinicianRecord, k: HardConstraints): Failure[] {
+export function failures(c: ClinicianRecord, k: HardConstraints, profession?: Profession): Failure[] {
   const p = c.practical;
   const out: Failure[] = [];
+  if (profession && c.profession !== profession) out.push('profession');
   if (!p.newPatients) out.push('new_patients');
   if (k.age !== undefined && (k.age < p.ageRange[0] || k.age > p.ageRange[1])) out.push('age');
 
@@ -43,14 +46,20 @@ export function failures(c: ClinicianRecord, k: HardConstraints): Failure[] {
   if (mode === 'in_person_only' && !inPerson) out.push(p.modes.includes('in_person') ? 'distance' : 'mode');
   if (mode === 'any' && !inPerson && !telehealth) out.push('distance');
 
-  if (typeof k.maxGap === 'number' && p.gapAfterMedicare > k.maxGap) out.push('cost');
+  // An unpublished fee can't be shown to meet a stated limit, so it doesn't.
+  if (typeof k.maxGap === 'number' && (p.gapAfterMedicare === null || p.gapAfterMedicare > k.maxGap)) out.push('cost');
   if (k.clinicianGender && p.gender !== k.clinicianGender) out.push('gender');
-  if (k.needsWeekend && !p.weekends) out.push('weekend');
+  if (k.needsWeekend && p.weekends !== true) out.push('weekend');
   if (k.accessibility?.some((a) => !p.accessibility.includes(a))) out.push('accessibility');
   if (k.languages?.length && !k.languages.some((l) => p.languages.includes(l))) out.push('language');
   return out;
 }
 
-export const isEligible = (c: ClinicianRecord, k: HardConstraints) => failures(c, k).length === 0;
+export const isEligible = (c: ClinicianRecord, k: HardConstraints, profession?: Profession) =>
+  failures(c, k, profession).length === 0;
 
-export const eligibleSet = (cs: ClinicianRecord[], k: HardConstraints) => cs.filter((c) => isEligible(c, k));
+export const eligibleSet = (cs: ClinicianRecord[], k: HardConstraints, profession?: Profession) =>
+  cs.filter((c) => isEligible(c, k, profession));
+
+/** Eligible clinicians for a patient: their constraints and the profession they're looking for. */
+export const eligibleFor = (cs: ClinicianRecord[], s: PatientSignals) => eligibleSet(cs, s.constraints, s.profession);

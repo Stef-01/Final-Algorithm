@@ -2,6 +2,7 @@
   "id": "daniel-reyes",
   "name": "Dr Daniel Reyes",
   "firstName": "Daniel",
+  "profession": "gp",
   "role": "GP",
   "location": {
     "suburb": "Fortitude Valley",

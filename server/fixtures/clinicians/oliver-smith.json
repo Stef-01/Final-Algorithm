@@ -2,6 +2,7 @@
   "id": "oliver-smith",
   "name": "Dr Oliver Smith",
   "firstName": "Oliver",
+  "profession": "gp",
   "role": "GP",
   "location": {
     "suburb": "Bulimba",

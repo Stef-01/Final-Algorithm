@@ -2,6 +2,7 @@
   "id": "lucy-nguyen",
   "name": "Dr Lucy Nguyen",
   "firstName": "Lucy",
+  "profession": "gp",
   "role": "GP",
   "location": {
     "suburb": "Chermside",

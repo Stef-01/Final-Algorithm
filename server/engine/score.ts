@@ -4,6 +4,7 @@ import {
   DIMENSIONS,
   type ClinicianRecord,
   type Dimension,
+  type Evidence,
   type FitLabel,
   type Layer,
   type PatientSignals,
@@ -27,6 +28,8 @@ export const IMPORTANCE: Record<Dimension, number> = {
   continuity: 0.5,
   follow_up_intensity: 0.5,
   uncertainty_tolerance: 0.4,
+  therapy_style: 0.9,
+  neurodiversity_affirming: 0.9,
 };
 
 export const LAYER_WEIGHT: Record<Layer, number> = { clinical: 0.35, practice: 0.5, practical: 0.15 };
@@ -40,14 +43,17 @@ export const FIT_THRESHOLDS: [FitLabel, number][] = [
 
 export const fitFor = (total: number): FitLabel | null => FIT_THRESHOLDS.find(([, t]) => total >= t)?.[0] ?? null;
 
+/** Evidence that may reach patients: interview-reviewed, or taken from the clinician's own published profile. */
+export const isUsableStatus = (s: Evidence['reviewerStatus']) => s === 'approved' || s === 'profile';
+
 /** Only reviewed traits at medium confidence or above may influence ranking or explanations (PRD §26). */
 export function usableTrait(c: ClinicianRecord, d: Dimension) {
   const t = c.phenotype[d];
   if (!t || CONFIDENCE[t.confidence] < CONFIDENCE.medium) return undefined;
-  const approved = t.evidenceIds.some((id) =>
-    c.evidence.some((e) => e.id === id && e.reviewerStatus === 'approved' && CONFIDENCE[e.confidence] >= CONFIDENCE.medium),
+  const usable = t.evidenceIds.some((id) =>
+    c.evidence.some((e) => e.id === id && isUsableStatus(e.reviewerStatus) && CONFIDENCE[e.confidence] >= CONFIDENCE.medium),
   );
-  return approved ? t : undefined;
+  return usable ? t : undefined;
 }
 
 /** Similarity of two positions on a dimension's ordered scale: 1 = same, 0 = opposite ends. */
@@ -64,7 +70,7 @@ const norm = (s: string) => s.trim().toLowerCase();
 export function expertiseLevel(c: ClinicianRecord, area: string) {
   const e = c.expertise.find((x) => norm(x.area) === norm(area));
   if (!e) return 0;
-  const approved = e.evidenceIds.some((id) => c.evidence.some((ev) => ev.id === id && ev.reviewerStatus === 'approved'));
+  const approved = e.evidenceIds.some((id) => c.evidence.some((ev) => ev.id === id && isUsableStatus(ev.reviewerStatus)));
   if (!approved) return 0;
   return e.level === 'particular' ? 1 : 0.5;
 }
@@ -89,29 +95,34 @@ export function clinicalScore(c: ClinicianRecord, s: PatientSignals) {
   return base;
 }
 
+/** How strongly practice scores are pulled towards neutral when evidence is thin. */
+export const PRACTICE_PRIOR = 0.6;
+
 /**
- * Layer 3: practice compatibility. Each patient preference contributes in proportion to its
- * importance and our confidence in it. Unknown or unreviewed clinician traits regress to neutral.
+ * Layer 3: practice compatibility, as an evidence-weighted average with a pull towards neutral.
+ * Each patient preference counts in proportion to its importance and both sides' confidence.
+ * A trait we know nothing about adds no evidence either way (it doesn't dilute the ones we do know),
+ * and the prior keeps one or two matching traits from looking like certainty.
  */
 export function practiceScore(c: ClinicianRecord, s: PatientSignals) {
-  let num = 0;
-  let den = 0;
+  let num = PRACTICE_PRIOR * 0.5;
+  let den = PRACTICE_PRIOR;
   for (const [d, pref] of Object.entries(s.preferences) as [Dimension, NonNullable<PatientSignals['preferences'][Dimension]>][]) {
-    const w = IMPORTANCE[d] * CONFIDENCE[pref.confidence];
     const t = usableTrait(c, d);
-    const conf = t ? CONFIDENCE[t.confidence] : 0;
-    const sim = t ? similarity(d, pref.value, t.value) : 0.5;
-    num += w * (conf * sim + (1 - conf) * 0.5);
+    if (!t) continue;
+    const w = IMPORTANCE[d] * CONFIDENCE[pref.confidence] * CONFIDENCE[t.confidence];
+    num += w * similarity(d, pref.value, t.value);
     den += w;
   }
-  return den === 0 ? 0.5 : num / den;
+  return num / den;
 }
 
 /** Layer 4: availability, cost, travel. A small adjustment, never a veto (that's Layer 1). */
 export function practicalScore(c: ClinicianRecord, s: PatientSignals) {
   const p = c.practical;
-  const availability = 1 - Math.min(p.daysUntilAvailable, 14) / 14;
-  const cost = 1 - Math.min(p.gapAfterMedicare, 100) / 100;
+  // Unpublished availability or fees are neutral, never assumed good or bad.
+  const availability = p.daysUntilAvailable === null ? 0.5 : 1 - Math.min(p.daysUntilAvailable, 14) / 14;
+  const cost = p.gapAfterMedicare === null ? 0.5 : 1 - Math.min(p.gapAfterMedicare, 150) / 150;
   const k = s.constraints;
   let travel = 0.5;
   if (k.origin && p.modes.includes('in_person') && k.mode !== 'telehealth_only') {

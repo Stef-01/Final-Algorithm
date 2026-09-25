@@ -2,6 +2,7 @@
   "id": "tom-walsh",
   "name": "Dr Tom Walsh",
   "firstName": "Tom",
+  "profession": "gp",
   "role": "GP",
   "location": {
     "suburb": "West End",

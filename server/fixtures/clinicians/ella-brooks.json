@@ -2,6 +2,7 @@
   "id": "ella-brooks",
   "name": "Dr Ella Brooks",
   "firstName": "Ella",
+  "profession": "gp",
   "role": "GP",
   "location": {
     "suburb": "Ashgrove",

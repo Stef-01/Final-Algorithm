@@ -9,12 +9,20 @@ type Props = {
   saved?: boolean;
 };
 
+/** Cost as published: never a guessed number (unpublished fees read "Fee on request"). */
+export function costLabel(c: Clinician) {
+  const { fee, gapAfterMedicare: gap } = c.practical;
+  if (gap === 0) return 'Bulk billed';
+  if (fee !== null && gap !== null) return fee === gap ? `$${fee}, no rebate` : `$${gap} after rebate`;
+  if (fee !== null) return `$${fee} a session`;
+  return 'Fee on request';
+}
+
 export function practicalChips(c: Clinician): ChipItem[] {
   const p = c.practical;
-  const chips: ChipItem[] = [
-    { icon: 'icCalendar', label: p.nextAvailableShort },
-    { icon: 'icCost', label: p.gapAfterMedicare === 0 ? 'Bulk billed' : `$${p.gapAfterMedicare} gap` },
-  ];
+  const chips: ChipItem[] = [];
+  if (p.nextAvailableShort !== 'Book online') chips.push({ icon: 'icCalendar', label: p.nextAvailableShort });
+  chips.push({ icon: 'icCost', label: costLabel(c) });
   if (p.modes.includes('Telehealth')) chips.push({ icon: 'icVideo', label: 'Telehealth' });
   if (p.modes.includes('In person')) chips.push({ icon: 'icLocation', label: c.suburb });
   return chips;

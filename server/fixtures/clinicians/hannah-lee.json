@@ -2,6 +2,7 @@
   "id": "hannah-lee",
   "name": "Dr Hannah Lee",
   "firstName": "Hannah",
+  "profession": "gp",
   "role": "GP",
   "location": {
     "suburb": "Woolloongabba",

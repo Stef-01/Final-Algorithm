@@ -2,6 +2,7 @@
   "id": "amy-chen",
   "name": "Dr Amy Chen",
   "firstName": "Amy",
+  "profession": "gp",
   "role": "GP",
   "location": {
     "suburb": "New Farm",

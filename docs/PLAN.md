@@ -2,7 +2,7 @@
 
 **Source:** `clinician_fit_prototype_PRD_v0.2.md` ("ADHDme Clinician Fit"). The product is called **WATL** throughout.
 **Starting point:** this repo — the Expo Router (React Native + web) app deployed on Vercel.
-**Goal:** turn the dating-app shell into the clinician-matching prototype the PRD describes. Talk for about 60 seconds, answer 0–3 useful questions, see up to 3 clinicians with reasons, then book.
+**Goal:** turn the dating-app shell into the clinician-matching prototype the PRD describes, for GPs and psychologists. Talk for about 60 seconds, answer 0–3 useful questions, see up to 3 clinicians with reasons, then book.
 
 ---
 
@@ -323,11 +323,12 @@ Each phase ends deployed on Vercel with CI green.
 | **0. Clean slate** ✅ done | Remove the dating features and assets (§11); rebuild the tab bar as Find / Saved / Settings. Tag the legacy code. New route skeleton with placeholder screens in the existing style. | App opens on `/` (Find tab) with no sign-in; tabs are Find / Saved / Settings; bundle size and load time recorded; CI green. |
 | **1. UI with fixtures** ✅ done | All screens (§2) wired to a local fixture session: demo patient input (§52), one follow-up, 3 fixture clinicians rendered through `ClinicianCards` in the Discover layout, detail page, no-match, partial results, safety sheet. Text input only. | The PRD demo script runs end to end on Vercel with fixtures; every state reachable; a `/dev/states` page lists every state for review, standing in for the Figma frames in §51. During testing it's on in every build, including Vercel; `EXPO_PUBLIC_DEV_TOOLS=false` hides it. |
 | **2. Matching engine** ✅ done | `server/engine/*` + question bank + seed clinician JSON (10–15 fictional). Pure functions with unit tests. | Given hand-written `PatientSignals`, the engine returns the expected top 3, the question to ask, and when to stop; the explanation lints pass; the diversity, partial and empty rules pass. |
-| **3. Agent + API** | Vercel Functions `/api/turn`, `/api/matches`, `/api/feedback`; Claude extraction with a JSON schema; safety classifier; SPA rewrite excluding `/api`. Client switches from fixtures to the API. | Real free text produces sensible follow-ups and matches; p75 latency under 3 s; the extraction eval set (§13) meets its threshold; no medical advice in 50 red-team prompts. |
+| **3. Engine in the app, demo run-throughs, GPs + psychologists** ✅ done | The Phase 2 engine runs on the device against the real ADHDme GP and psychologist profiles (imported by `scripts/import-adhdme.py`). A funnel first screen (GP / psychologist / not sure), scripted demo patients for both professions, and a keyword extractor standing in for Claude. | Every demo runs end to end; typed searches use the real engine; only the chosen profession is matched; unpublished fees and availability stay unknown; CI green. |
 | **4. Voice** | `useSpeechToText` (web), listening state, editable transcript, fallback to text, transcription notice. | Works on iOS Safari and Android Chrome; hidden gracefully elsewhere; text flow unaffected. |
 | **5. Clinician pipeline** | Interview guide, `ingest-interview` and `review-clinician` scripts; at least 3 records produced through the pipeline (mock interviews are fine). | A transcript becomes an approved clinician record whose explanations cite real evidence. |
-| **6. Instrumentation + validation** | `track()` events, feedback sheet, `/api/feedback` storage (Vercel KV/Postgres or similar), user-testing script. | All 12 events visible in the dashboard (or PostHog); feedback stored; the testing script is ready. |
+| **6. Instrumentation + validation** | `track()` events, feedback sheet, feedback storage (Vercel KV or similar), user-testing script. | All 12 events visible in the dashboard (or PostHog); feedback stored; the testing script is ready. |
 | **7. Hardening** | Accessibility pass, performance budget, privacy review, safety copy reviewed by a clinical advisor. | WCAG AA checks pass; load under 2 s; the checklist in §9 is signed off. Ready for moderated user testing. |
+| **8. Claude agent + API (final stage)** | Vercel Functions `/api/turn`, `/api/matches`, `/api/feedback`; Claude extraction with a JSON schema; safety classifier; SPA rewrite excluding `/api`. Client switches from fixtures to the API. | Real free text produces sensible follow-ups and matches; p75 latency under 3 s; the extraction eval set (§13) meets its threshold; no medical advice in 50 red-team prompts. |
 
 ---
 
@@ -342,6 +343,25 @@ Each phase ends deployed on Vercel with CI green.
 - **Constraint answer priors:** bulk-billed-only 20%, in-person-only 20%, weekend-only 10%. This keeps rare hard limits from crowding out preference questions (PRD §20), while still asking when a constraint would change the top 3.
 - **"Credible match"** means eligible, above the fit threshold *and* explainable with at least one evidence-backed reason. With too little information, neutral scores can clear the threshold, but nothing gets shown without a reason.
 - **Not wired to the app yet.** The app still uses the Phase 1 fixture agent. Phase 3 serves this engine through `/api/turn` and `/api/matches` and switches the client over, including portraits for the eight new seed clinicians.
+
+### Phase 3 notes (engine in the app)
+
+- **Decisions (from you):** demo run-throughs now, the Claude agent last; a funnel at the start to choose a GP or a psychologist; real profiles from the ADHDme site ([Stef-01/revamped-adhd.me](https://github.com/Stef-01/revamped-adhd.me)).
+- **Profiles:** `scripts/import-adhdme.py` snapshots the GP and psychologist entries from `scripts/build-profiles.py` into `server/data/adhdme/source.json`, copies portraits, and writes `server/data/professionals.json`.
+  - There are 2 GPs and 12 psychologists.
+  - Every trait and area of experience cites an excerpt that must appear word for word in the published profile.
+  - Traits are marked `reviewerStatus: "profile"` at medium confidence until the Phase 5 interviews confirm them.
+  - Fees, availability and weekend hours that a profile doesn't publish stay null. They show as "Fee on request" and never satisfy a stated limit.
+- **Engine additions:**
+  - A `profession` on patients and clinicians, filtered in eligibility.
+  - Two psychology dimensions (therapy style, neurodiversity-affirming) with matching questions.
+  - Profession-specific questions: medication, mental-health integration and diagnostic style for GPs; therapy style and affirming care for psychologists.
+- **Engine re-tuning for thinner profile data:**
+  - Practice fit is now an evidence-weighted average with a pull towards neutral (unknown traits no longer dilute known ones).
+  - Answers that would leave nobody to recommend add no information gain, so cost doesn't get asked first just to empty the list.
+- **Demo run-throughs:** `src/features/match/demos.ts` has 10 scripted patients (GP, psychologist, not sure) with hand-written signals. They double as expected outputs for the Claude extraction evals in Phase 8.
+- **Typed searches:** `src/features/match/extract.ts` is a keyword extractor standing in for Claude. It picks up preferences at medium confidence, so the engine confirms or asks when a guess matters.
+- **Fictional clinicians:** the 12 fictional clinicians moved to `server/fixtures/` and are used only by the engine tests.
 
 ## 13. Testing strategy
 

@@ -2,6 +2,7 @@
   "id": "priya-nair",
   "name": "Dr Priya Nair",
   "firstName": "Priya",
+  "profession": "gp",
   "role": "GP",
   "location": {
     "suburb": "Paddington",

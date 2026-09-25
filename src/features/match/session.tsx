@@ -10,6 +10,8 @@ const MAX_AGE_MS = 24 * 60 * 60 * 1000; // PRD §45: keep free text only as long
 type Session = {
   state: core.SessionState;
   loaded: boolean;
+  chooseProfession: (p: core.ProfessionChoice) => string;
+  startDemo: (demoId: string) => string;
   submitText: (text: string) => string;
   answer: (questionId: string, value: string) => string;
   confirmPriorities: (removed: string[]) => string;
@@ -60,6 +62,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     () => ({
       state,
       loaded,
+      chooseProfession: (p) => route(core.chooseProfession(current.current, p)),
+      startDemo: (id) => route(core.startDemo(current.current, id)),
       submitText: (text) => route(core.submitText(current.current, text)),
       answer: (q, v) => route(core.answer(current.current, q, v)),
       confirmPriorities: (removed) => route(core.confirmPriorities(current.current, removed)),

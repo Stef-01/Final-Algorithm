@@ -1,12 +1,12 @@
 # WATL
 
-WATL helps you find a GP who fits you. Describe what you need in your own words, answer at most a few useful questions, and see up to three clinicians with a clear reason why each one fits.
+WATL helps you find a GP or psychologist who fits you. Pick which you're looking for, describe what you need in your own words, answer at most a few useful questions, and see up to three clinicians with a clear reason why each one fits.
 
 This is a React Native (Expo Router) app, mobile-first on the web and deployed on Vercel. The build plan is in [`docs/PLAN.md`](docs/PLAN.md).
 
-> **Status: Phase 2 of the plan.** Every screen works end to end on fixture data (Phase 1), and the real matching engine is built and tested in `server/` (Phase 2). Phase 3 connects the two through a Vercel API with the Claude agent; voice is Phase 4.
+> **Status: Phase 3 of the plan.** The matching engine runs in the app against the real GPs and psychologists in the ADHDme network, imported from their published profiles. Scripted demo patients show every path through it. Voice is Phase 4; the Claude agent that reads free text is the final stage (Phase 8). Until then, typed searches use a simple keyword reader.
 >
-> **Testing tools are on:** a "Use the demo example" link on the first screen, and Settings → Review screen states (`/dev/states`), which opens any screen state directly. Set `EXPO_PUBLIC_DEV_TOOLS=false` to hide them.
+> **Demo patients:** "Try a demo patient" on the first screen (or Settings → Try a demo patient). **Review tools:** Settings → Review screen states (`/dev/states`) opens any screen state directly; set `EXPO_PUBLIC_DEV_TOOLS=false` to hide it.
 
 ## Getting started
 
@@ -28,10 +28,10 @@ After adding or removing packages, run `npm run lockfile` before committing. An 
 The tests in `__tests__/` cover:
 
 - **Assets:** every image and font the app `require`s exists and is a real file of its type, and every file in `assets/images` and `assets/clinicians` is used.
-- **Matching (fixture):** one follow-up for the PRD demo, preference confirmation only when uncertain, safety pause, hard-constraint filtering without padding, no-strong-match actions, "see more" only on request.
-- **Explanation rules:** every reason is backed by a clinician evidence line, at most 3 reasons, no unsupported adjectives, winner language or percentages, one-sentence agent lines, 2–6-word options.
+- **Profiles:** every imported trait is quoted word for word from the clinician's published profile, marked profile-sourced, and within the copy rules; unpublished fees and availability stay unknown; every professional has a portrait.
+- **Demos and funnel:** each demo reaches a result within the question ceiling with explained matches; only the chosen profession is matched; editing a demo's words turns it into an ordinary search; answers in the patient's own words feed back into matching.
 - **Engine (`server/`):** seed-data integrity; eligibility for each hard constraint; draft and low-confidence traits ignored; the PRD demo asks one question then returns Amy first with the three demo reasons; the question ceiling and its exceptions; preference confirmation only when it matters; diversity never costing quality; partial and no-match results with the right suggestions; no scores or interview excerpts in the output; copy rules on every reason; question-bank wording rules.
-- **Screens:** the PRD demo script end to end, stepping through matches, detail and booking handoff, saving to the Saved tab, partial and no-match results, safety, start over, and the review page.
+- **Screens:** the funnel and tabs, demo run-throughs (straight to matches, follow-up plus confirmation, one match, honest no-match, safety), real profile detail and booking handoff, saving, typed searches, start over, and the review page.
 
 ## What's in the app
 
@@ -39,18 +39,20 @@ Three tabs: **Find**, **Saved** and **Settings**.
 
 | Screen | Route | What it does |
 | --- | --- | --- |
-| Open conversation | `/` | Describe what you need (text; voice arrives in Phase 4) |
-| Follow-up question | `/clarify?q=…` | One question at a time; tapping an answer moves on, or answer in your own words |
-| Preference confirmation | `/confirm` | Only when an answer leaves things uncertain; tap a priority to remove it |
+| Who are you looking for? | `/` | The funnel: a GP, a psychologist, or not sure yet. Also "Try a demo patient" |
+| Demo patients | `/demos` | Scripted patients for each profession; each fills in their words, ready to run |
+| Open conversation | `/describe` | Describe what you need (text; voice arrives in Phase 4) |
+| Follow-up question | `/clarify?q=…` | Only questions whose answer could change the matches; tap an answer, or use your own words |
+| Preference confirmation | `/confirm` | Only when an uncertain guess would change the matches; tap a priority to remove it |
 | Matching | `/matching` | Moves on as soon as results are ready |
-| Top matches | `/matches` | Up to 3 clinicians, one at a time, in the Discover card layout: fit label, why they fit, practical details, how they practise. ✕ = next match, ♥ = save |
-| Clinician detail | `/clinician/[id]` | Why I matched you, practice, experience, practical details, bio, qualifications; Book / See next match |
-| Booking handoff | `/book/[id]` | Explains where booking would go (the clinicians are fictional) |
+| Top matches | `/matches` | Up to 3, one at a time, in the Discover card layout: fit label, why they fit, practical details, how they practise. ✕ = next match, ♥ = save |
+| Clinician detail | `/clinician/[id]` | Why I matched you, practice, experience, practical details (as published), bio, qualifications; Book / See next match |
+| Booking handoff | `/book/[id]` | Opens the practice's own booking page |
 | Safety pause | `/safety` | Shown on urgent wording; wording pending clinical review |
 | Saved | `/saved` | Clinicians you hearted, kept on this device |
-| Settings | `/settings` | Start over, about, privacy, help and safety, review screen states |
+| Settings | `/settings` | Start over, demo patients, about, privacy, help and safety, review screen states |
 
-**Fixture triggers** (for testing): the demo text gives 3 matches after one question; answering "Not sure" shows preference confirmation; mentioning "bulk bill" leaves 2 matches; "weekend" + "in person" gives no strong match (then "Include telehealth" finds 1); urgent wording such as "chest pain" pauses for safety.
+**Profiles:** the GPs and psychologists come from the ADHDme network ([revamped-adhd.me](https://github.com/Stef-01/revamped-adhd.me)). Refresh them with `python3 scripts/import-adhdme.py --source ../revamped-adhd.me`. The importer only uses what each profile publishes and stops if a quoted excerpt isn't in the profile.
 
 There's no account and no sign-in.
 
@@ -72,13 +74,14 @@ npx serve -s dist
 ```
 src/app/          Expo Router screens (one file per route)
 src/components/   Shared UI: conversation scaffold, Discover-style cards, clinician cards, tab bar, sheets, icons
-src/features/match/  Session state, fixture agent, saved clinicians
-src/data/         Fictional clinicians
+src/features/match/  Session state, engine-backed agent, keyword extractor, demo patients, saved clinicians
+src/data/         Clinician view models and portraits
 src/lib/          Theme (colours, fonts), testing-tools switch
 server/engine/    Matching engine: eligibility, scoring, question selection, top-3 selection, explanations
 server/questions.ts  Behavioural follow-up question bank
-server/data/      Fictional seed clinicians (JSON, with evidence and review status)
-server/fixtures/  Hand-written patient signals for tests and evals
+server/data/      ADHDme GPs and psychologists (professionals.json) and the source snapshot
+server/fixtures/  Fictional clinicians and hand-written patient signals, for engine tests only
+scripts/          import-adhdme.py (profile importer)
 assets/           Images, clinician portraits (illustrations) and fonts
 docs/PLAN.md      Build plan
 ```

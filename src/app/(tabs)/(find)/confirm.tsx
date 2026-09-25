@@ -26,10 +26,15 @@ export default function ConfirmPreferences() {
       note="Anything wrong? Tap one to remove it."
     >
       {priorities.map((p) => (
-        <ChoicePill key={p} label={p} removed={removed.includes(p)} onPress={() => toggle(p)} />
+        <ChoicePill
+          key={p.dimension}
+          label={p.label}
+          removed={removed.includes(p.dimension)}
+          onPress={() => toggle(p.dimension)}
+        />
       ))}
       <PillButton label="Find my matches" onPress={() => router.push(session.confirmPriorities(removed))} />
-      <Pressable onPress={() => router.navigate('/')} hitSlop={8} accessibilityRole="button">
+      <Pressable onPress={() => router.navigate('/describe')} hitSlop={8} accessibilityRole="button">
         <Text style={styles.edit}>Edit what I said</Text>
       </Pressable>
     </ConversationStep>

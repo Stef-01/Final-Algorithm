@@ -11,6 +11,7 @@ import { getClinician } from '@/data/clinicians';
 import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
 import type { NoMatchAction } from '@/features/match/types';
+import { copyFor, matchesHeadline } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
 
 const ACTION_LABEL: Record<NoMatchAction, string> = {
@@ -19,10 +20,6 @@ const ACTION_LABEL: Record<NoMatchAction, string> = {
   expand_distance: 'Expand distance',
 };
 
-function headline(count: number) {
-  if (count === 3) return "I found 3 clinicians I'd start with.";
-  return count === 1 ? "I found 1 clinician I'd recommend." : `I found ${count} clinicians I'd recommend.`;
-}
 
 // Screen 05 — top matches, one clinician at a time in the Discover layout.
 export default function Matches() {
@@ -43,8 +40,8 @@ export default function Matches() {
       <Shell title="Your matches">
         <EmptyStateCard
           title="Tell me what you're looking for first."
-          body="Describe what you need from a GP and I'll suggest up to three clinicians."
-          action={{ label: 'Find a GP', onPress: () => router.navigate('/') }}
+          body={`Describe what you need and I'll suggest up to three ${copyFor(state.profession).many}.`}
+          action={{ label: 'Get started', onPress: () => router.navigate('/') }}
         />
       </Shell>
     );
@@ -101,7 +98,7 @@ export default function Matches() {
       <ScrollView key={state.index} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {state.index === 0 ? (
           <View style={styles.intro}>
-            <Text style={styles.introTitle}>{headline(matches.length)}</Text>
+            <Text style={styles.introTitle}>{matchesHeadline(matches.length, state.profession)}</Text>
             {matches.length > 1 ? <Text style={styles.introBody}>Each fits for slightly different reasons.</Text> : null}
           </View>
         ) : (

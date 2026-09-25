@@ -1,4 +1,4 @@
-import type { Dimension, HardConstraints, PatientSignals } from './engine/types';
+import type { Dimension, HardConstraints, PatientSignals, Profession } from './engine/types';
 
 // Curated follow-up questions (PRD §13–15). Each asks about behaviour, not labels, and
 // every option says how it changes the patient's signals so the engine can simulate answers.
@@ -14,6 +14,8 @@ export type BankQuestion = {
   target: Target;
   text: string;
   options: Option[];
+  /** Only asked when looking for one of these professions (all, if omitted). */
+  professions?: Profession[];
 };
 
 export const NOT_SURE = 'Not sure';
@@ -69,6 +71,7 @@ export const QUESTIONS: BankQuestion[] = [
   },
   {
     id: 'mental_health',
+    professions: ['gp'],
     target: { kind: 'preference', dimension: 'mental_health_integration' },
     text: 'Would you like your GP to look at mental health alongside everything else?',
     options: [
@@ -80,6 +83,7 @@ export const QUESTIONS: BankQuestion[] = [
   },
   {
     id: 'uncertainty',
+    professions: ['gp'],
     target: { kind: 'preference', dimension: 'diagnostic_style' },
     text: "When something's unclear, what would you prefer?",
     options: [
@@ -91,6 +95,7 @@ export const QUESTIONS: BankQuestion[] = [
   },
   {
     id: 'medication',
+    professions: ['gp'],
     target: { kind: 'preference', dimension: 'medication_philosophy' },
     text: 'If medication is an option, how do you usually feel about it?',
     options: [
@@ -130,6 +135,29 @@ export const QUESTIONS: BankQuestion[] = [
       { label: 'Straight to the point', apply: pref('communication_directness', 'direct') },
       { label: 'A bit of both', apply: pref('communication_directness', 'balanced') },
       { label: 'Gently, with context', apply: pref('communication_directness', 'gentle') },
+      { label: NOT_SURE },
+    ],
+  },
+  {
+    id: 'therapy_style',
+    professions: ['psychologist'],
+    target: { kind: 'preference', dimension: 'therapy_style' },
+    text: 'In sessions, what would help you most?',
+    options: [
+      { label: 'Practical strategies to try', apply: pref('therapy_style', 'practical') },
+      { label: 'Understanding why things happen', apply: pref('therapy_style', 'exploratory') },
+      { label: 'A mix of both', apply: pref('therapy_style', 'balanced') },
+      { label: NOT_SURE },
+    ],
+  },
+  {
+    id: 'affirming',
+    professions: ['psychologist'],
+    target: { kind: 'preference', dimension: 'neurodiversity_affirming' },
+    text: 'Would you like someone who treats ADHD as a difference rather than something to fix?',
+    options: [
+      { label: 'Yes, that matters to me', apply: pref('neurodiversity_affirming', 'high') },
+      { label: "I don't mind either way", apply: pref('neurodiversity_affirming', 'moderate') },
       { label: NOT_SURE },
     ],
   },

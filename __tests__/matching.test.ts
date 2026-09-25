@@ -1,168 +1,172 @@
-import { clinicians, getClinician } from '@/data/clinicians';
-import { decisionQuestion, DEMO_TEXT, rushedQuestion } from '@/features/match/fixtureAgent';
+import fs from 'fs';
+import path from 'path';
+
+import { professionals } from '@server/data/professionals';
+import { areaPhrase, copyProblems } from '@server/engine/explain';
+import { CONFIDENCE, DIMENSIONS, type Dimension } from '@server/engine/types';
+
+import { costLabel } from '@/components/ClinicianCards';
+import { getClinician } from '@/data/clinicians';
+import { signalsFor } from '@/features/match/agent';
+import { demos } from '@/features/match/demos';
+import { extractSignals } from '@/features/match/extract';
 import * as core from '@/features/match/sessionCore';
 import type { Match, MatchResult } from '@/features/match/types';
 
-const start = (text: string) => core.submitText(core.initialState(), text);
-const answerDecision = (t: core.Transition, a: string) => core.answer(t.state, decisionQuestion.id, a);
 const matchesOf = (r?: MatchResult): Match[] => (r?.status === 'matches' ? r.matches : []);
+const source: { id: string; description: string; chips: string[]; experience: string[]; about: string[]; details: [string, string][] }[] =
+  JSON.parse(fs.readFileSync(path.join(__dirname, '../server/data/adhdme/source.json'), 'utf8'));
+const corpus = (id: string) => {
+  const c = source.find((x) => x.id === id)!;
+  return [c.description, ...c.chips, ...c.experience, ...c.about, ...c.details.map(([, v]) => v)].join('\n');
+};
 
-describe('agent decision policy (fixture)', () => {
-  it('asks exactly one follow-up for the PRD demo, then stops', () => {
-    const t1 = start(DEMO_TEXT);
-    expect(t1.route).toBe(`/clarify?q=${decisionQuestion.id}`);
-    const t2 = answerDecision(t1, 'Explain them and decide together');
-    expect(t2.route).toBe('/matching');
-    expect(t2.state.asked).toHaveLength(1);
+describe('ADHDme profiles (server/data/professionals.json)', () => {
+  it('imports the GPs and psychologists, nothing else', () => {
+    expect(professionals.length).toBe(source.length);
+    expect(new Set(professionals.map((c) => c.profession))).toEqual(new Set(['gp', 'psychologist']));
+    expect(professionals.filter((c) => c.profession === 'gp').length).toBeGreaterThan(0);
+    expect(professionals.filter((c) => c.profession === 'psychologist').length).toBeGreaterThan(0);
   });
 
-  it('shows preference confirmation only when the answer leaves things uncertain', () => {
-    const t = answerDecision(start(DEMO_TEXT), 'Not sure');
-    expect(t.route).toBe('/confirm');
-    expect(t.state.priorities).toEqual([
-      'Longer appointments',
-      'Sleep and mental health together',
-      'Explains the reasons',
-      'ADHD experience',
-    ]);
-  });
-
-  it('removing a priority removes the matching reason', () => {
-    const confirm = answerDecision(start(DEMO_TEXT), 'Not sure');
-    const t = core.confirmPriorities(confirm.state, ['Longer appointments']);
-    expect(t.route).toBe('/matching');
-    const amy = matchesOf(core.match(t.state).state.result)[0];
-    expect(amy.reasons.map((r) => r.signal)).not.toContain("You said rushed appointments haven't worked for you.");
-  });
-
-  it('pauses for safety before asking anything, then carries on once acknowledged', () => {
-    const t = start('I have chest pain and need a GP who explains things.');
-    expect(t.route).toBe('/safety');
-    expect(core.acknowledgeSafety(t.state).route).toBe(`/clarify?q=${decisionQuestion.id}`);
-  });
-
-  it('never asks more than the one extra question', () => {
-    let t = core.match(answerDecision(start('I need a new GP.'), 'Not sure').state);
-    expect(t.state.result).toEqual({ status: 'none', actions: ['answer_more'] });
-    t = core.noMatchAction(t.state, 'answer_more');
-    expect(t.route).toBe(`/clarify?q=${rushedQuestion.id}`);
-    t = core.match(core.answer(t.state, rushedQuestion.id, 'No idea really').state);
-    expect(t.state.result).toEqual({ status: 'none', actions: [] });
-  });
-});
-
-describe('matching results (fixture)', () => {
-  const demo = () => core.match(answerDecision(start(DEMO_TEXT), 'Explain them and decide together').state).state;
-
-  it('returns Amy (strong fit) first, then two good fits, for the demo', () => {
-    const matches = matchesOf(demo().result);
-    expect(matches.map((m) => [m.clinicianId, m.fit])).toEqual([
-      ['amy-chen', 'Strong fit'],
-      ['priya-nair', 'Good fit'],
-      ['tom-walsh', 'Good fit'],
-    ]);
-  });
-
-  it("gives Amy the PRD demo's three reasons", () => {
-    const amy = matchesOf(demo().result)[0];
-    expect(amy.reasons.map((r) => r.evidenceId)).toEqual(['amy-pace', 'amy-integration', 'amy-sdm']);
-  });
-
-  it('matches the decision reason to the answer given', () => {
-    const t = core.match(answerDecision(start(DEMO_TEXT), 'Recommend the best one').state).state;
-    expect(matchesOf(t.result)[0].reasons[2].evidenceId).toBe('amy-direct');
-  });
-
-  it('shows only the clinicians who fit a hard constraint, without padding to 3', () => {
-    const t = core.match(answerDecision(start(`${DEMO_TEXT} I need a GP who bulk bills.`), 'Explain them and decide together').state);
-    expect(matchesOf(t.state.result).map((m) => m.clinicianId)).toEqual(['priya-nair', 'tom-walsh']);
-  });
-
-  it('offers telehealth when nobody fits in person on the weekend', () => {
-    const t = core.match(
-      answerDecision(start('I need longer appointments on the weekend, in person.'), 'Explain them and decide together').state,
-    );
-    expect(t.state.result).toEqual({ status: 'none', actions: ['include_telehealth'] });
-    const widened = core.noMatchAction(t.state, 'include_telehealth');
-    expect(matchesOf(widened.state.result).map((m) => [m.clinicianId, m.fit])).toEqual([
-      ['grace-okafor', 'Worth considering'],
-    ]);
-  });
-
-  it('keeps extra options hidden until asked for', () => {
-    const s = demo();
-    expect(s.result?.status === 'matches' && s.result.more.map((m) => m.clinicianId)).toEqual(['grace-okafor']);
-    const more = core.showMore(s);
-    expect(matchesOf(more.result)).toHaveLength(4);
-    expect(more.index).toBe(3);
-  });
-
-  it('steps through matches and stops at the end of the list', () => {
-    let s = demo();
-    for (let i = 0; i < 5; i++) s = core.nextMatch(s);
-    expect(s.index).toBe(3);
-    expect(core.currentMatch(s)).toBeUndefined();
-  });
-});
-
-// PRD §4.6, §4.8–4.9, §26–27, §32 — checked over every review state and the clinician data.
-describe('explanation rules', () => {
-  const BANNED = /\b(caring|compassionate|holistic|warm|patient-centred|patient-centered|thorough|understanding)\b/i;
-  const WINNER = /perfect match|best doctor|ideal clinician|number one/i;
-
-  const allMatches = core.scenarios.flatMap((s) => {
-    let state = s.build().state;
-    if (!state.result && state.input.answers[decisionQuestion.id]) state = core.match(state).state;
-    return matchesOf(state.result);
-  });
-
-  it('builds at least one match in the review states', () => {
-    expect(allMatches.length).toBeGreaterThan(0);
-  });
-
-  it.each(allMatches.map((m, i) => [`${m.clinicianId} #${i}`, m]))('%s: ≤3 reasons, each grounded in evidence', (_n, m) => {
-    const c = getClinician(m.clinicianId)!;
-    expect(m.reasons.length).toBeGreaterThan(0);
-    expect(m.reasons.length).toBeLessThanOrEqual(3);
-    for (const r of m.reasons) {
-      const ev = c.evidence.find((e) => e.id === r.evidenceId);
-      expect(ev).toBeDefined();
-      expect(r.evidence).toBe(ev!.patientFacing);
-      expect(r.signal).toMatch(/^You/);
+  it.each(professionals.map((c) => [c.id, c]))('%s: every trait is quoted from the published profile', (id, c) => {
+    const text = corpus(id as string);
+    for (const e of c.evidence) {
+      expect(text).toContain(e.excerpt);
+      expect(e.reviewerStatus).toBe('profile');
+      expect(CONFIDENCE[e.confidence]).toBeLessThanOrEqual(CONFIDENCE.medium);
+      expect(copyProblems(e.patientFacing)).toEqual([]);
+    }
+    for (const [d, t] of Object.entries(c.phenotype)) {
+      expect(DIMENSIONS[d as Dimension] as readonly string[]).toContain(t!.value);
     }
   });
 
-  it('never uses unsupported adjectives, winner language or percentages in patient-facing copy', () => {
-    const copy = [
-      ...allMatches.flatMap((m) => m.reasons.flatMap((r) => [r.signal, r.evidence])),
-      ...clinicians.flatMap((c) => [c.bio, ...c.practiceStyle, ...c.experiencedWith, ...c.evidence.map((e) => e.patientFacing)]),
-      decisionQuestion.ack,
-      decisionQuestion.text,
-      rushedQuestion.ack,
-      rushedQuestion.text,
-    ];
-    for (const line of copy) {
-      expect(line).not.toMatch(BANNED);
-      expect(line).not.toMatch(WINNER);
-      expect(line).not.toMatch(/\d\s*%/);
-    }
-  });
-
-  it('keeps agent lines to one sentence and options to 2–6 words (PRD §16)', () => {
-    for (const q of [decisionQuestion, rushedQuestion]) {
-      for (const line of [q.ack, q.text]) expect(line.match(/[.?!](\s|$)/g) ?? []).toHaveLength(1);
-      for (const o of q.options) {
-        const words = o.split(/\s+/).length;
-        expect(words).toBeGreaterThanOrEqual(2);
-        expect(words).toBeLessThanOrEqual(6);
+  it("never invents a fee or availability that a profile doesn't publish", () => {
+    for (const c of professionals) {
+      expect(c.practical.daysUntilAvailable).toBeNull();
+      expect(c.practical.weekends).toBeNull();
+      if (c.practice === 'GOALS Psychology' || c.practice === 'Atlantis Recovery Centre') {
+        expect(c.practical.fee).toBeNull();
+        expect(costLabel(getClinician(c.id)!)).toBe('Fee on request');
       }
     }
+    expect(costLabel(getClinician('paula-garrido')!)).toBe('$104 after rebate');
+    expect(costLabel(getClinician('anu-saxena')!)).toBe('$299, no rebate');
+    expect(costLabel(getClinician('jessica-katsamatsas')!)).toBe('$220 a session');
   });
 
-  it('shows at most 4 experience areas and 5 practice behaviours per clinician', () => {
-    for (const c of clinicians) {
-      expect(c.experiencedWith.length).toBeLessThanOrEqual(4);
-      expect(c.practiceStyle.length).toBeLessThanOrEqual(5);
+  it('has a portrait for every professional', () => {
+    for (const c of professionals) {
+      expect(fs.existsSync(path.join(__dirname, '../assets/clinicians', c.photo))).toBe(true);
+      expect(getClinician(c.id)!.photo).toBeTruthy();
     }
+  });
+});
+
+describe('keyword extractor (stand-in for the Claude extractor)', () => {
+  it('picks up needs, preferences and constraints from plain text', () => {
+    const s = extractSignals("I'm 24, I have ADHD and anxiety, appointments feel rushed and I want it bulk billed, online only.");
+    expect(s.clinicalNeeds.map((n) => n.area)).toEqual(expect.arrayContaining(['ADHD', 'Anxiety', 'Neurodivergent adults']));
+    expect(s.preferences.consultation_pace).toEqual({ value: 'unhurried', confidence: 'medium' });
+    expect(s.constraints).toMatchObject({ age: 24, maxGap: 0, mode: 'telehealth_only' });
+  });
+
+  it('only sets a clinician gender when explicitly asked for', () => {
+    expect(extractSignals('I would like a female GP').constraints.clinicianGender).toBe('female');
+    expect(extractSignals('I am a woman with ADHD').constraints.clinicianGender).toBeUndefined();
+  });
+
+  it('flags urgent wording for the safety pause', () => {
+    expect(extractSignals('I have chest pain').safetyFlag?.level).toBe('urgent');
+    expect(extractSignals('I have ADHD').safetyFlag).toBeUndefined();
+  });
+
+  it('keeps acronyms when writing an area into a sentence', () => {
+    expect(areaPhrase('Career and performance')).toBe('career and performance');
+    expect(areaPhrase('ADHD')).toBe('ADHD');
+    expect(areaPhrase("Women's health")).toBe("women's health");
+  });
+});
+
+describe('funnel and session', () => {
+  it('starts with the profession, then the description', () => {
+    const t = core.chooseProfession(core.initialState(), 'psychologist');
+    expect(t.route).toBe('/describe');
+    expect(t.state.profession).toBe('psychologist');
+    expect(t.state.input.profession).toBe('psychologist');
+    expect(core.chooseProfession(core.initialState(), 'either').state.input.profession).toBeUndefined();
+  });
+
+  it('only matches the chosen profession', () => {
+    for (const p of ['gp', 'psychologist'] as const) {
+      const state = core.demoResults(demos.find((d) => d.profession === p)!.id);
+      for (const m of matchesOf(state.result)) expect(getClinician(m.clinicianId)!.profession).toBe(p);
+    }
+  });
+
+  it('prefills a demo, and editing its words turns it into an ordinary search', () => {
+    const demo = demos.find((d) => d.id === 'psych-gold-coast')!;
+    const loaded = core.startDemo(core.initialState(), demo.id);
+    expect(loaded.state.draft).toBe(demo.text);
+    expect(core.submitText(loaded.state, demo.text).state.input.demoId).toBe(demo.id);
+    expect(core.submitText(loaded.state, `${demo.text} Also sleep.`).state.input.demoId).toBeUndefined();
+  });
+
+  it('treats an answer in the patient’s own words as extra description', () => {
+    const t = core.runDemo('psych-masking');
+    const q = t.state.asked.at(-1)!;
+    const next = core.answer(t.state, q.id, "I'd rather we talk things through together");
+    expect(next.state.input.answers[q.id]).toBe('Not sure');
+    expect(next.state.input.texts.at(-1)).toBe("I'd rather we talk things through together");
+    expect(signalsFor(next.state.input).preferences.shared_decision_making?.value).toBe('shared');
+  });
+});
+
+describe('demo run-throughs', () => {
+  it('has run-throughs for GPs, psychologists and unsure patients', () => {
+    expect(new Set(demos.map((d) => d.profession))).toEqual(new Set(['gp', 'psychologist', 'either']));
+    expect(new Set(demos.map((d) => d.id)).size).toBe(demos.length);
+  });
+
+  it.each(demos.map((d) => [d.id]))('%s reaches a result within the question ceiling', (id) => {
+    const t = core.runDemo(id);
+    expect(['/matching', '/confirm', '/safety'].includes(t.route) || t.route.startsWith('/clarify')).toBe(true);
+    const state = core.demoResults(id);
+    expect(state.asked.length).toBeLessThanOrEqual(4);
+    expect(state.result).toBeDefined();
+    for (const m of matchesOf(state.result)) {
+      expect(m.reasons.length).toBeGreaterThan(0);
+      expect(m.reasons.length).toBeLessThanOrEqual(3);
+      for (const r of m.reasons) expect(copyProblems(`${r.signal} ${r.evidence}`)).toEqual([]);
+    }
+  });
+
+  it('trauma, online only: telehealth psychologists with trauma experience, explained', () => {
+    const [first, second] = matchesOf(core.demoResults('psych-trauma-online').result);
+    expect([first.clinicianId, second.clinicianId]).toEqual(['alice-bui', 'paula-garrido']);
+    expect(first.fit).toBe('Strong fit');
+    expect(first.reasons[0].signal).toBe("You're looking for help with trauma.");
+    for (const m of matchesOf(core.demoResults('psych-trauma-online').result)) {
+      expect(getClinician(m.clinicianId)!.practical.modes).toContain('Telehealth');
+    }
+  });
+
+  it('female GP: narrows to the one GP who matches, without padding', () => {
+    expect(matchesOf(core.demoResults('gp-female').result).map((m) => m.clinicianId)).toEqual(['anu-saxena']);
+  });
+
+  it('Gold Coast, straight talk: Bart first, for being straight-talking', () => {
+    const [bart] = matchesOf(core.demoResults('psych-gold-coast').result);
+    expect(bart.clinicianId).toBe('bart-traynor');
+    expect(bart.reasons.map((r) => r.evidence)).toContain('Bart describes himself as straight-talking.');
+  });
+
+  it('bulk-billed psychologist: an honest no-match', () => {
+    expect(core.demoResults('psych-bulk-billed').result?.status).toBe('none');
+  });
+
+  it('urgent symptom: pauses for safety first', () => {
+    expect(core.runDemo('either-urgent').route).toBe('/safety');
   });
 });

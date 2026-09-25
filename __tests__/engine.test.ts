@@ -1,4 +1,4 @@
-import { seedClinicians as cs } from '../server/data/clinicians';
+import { fixtureClinicians as cs } from '../server/fixtures/clinicians';
 import { decide, preferencesToConfirm, recommend, type PatientSignals, type Scored } from '../server/engine';
 import { NEAR_TIE, selectTop } from '../server/engine/diversity';
 import { eligibleSet, failures } from '../server/engine/eligibility';
@@ -146,10 +146,24 @@ describe('question selection (PRD §11–15, §20)', () => {
     expect(best.gain).toBeGreaterThanOrEqual(STOP_THRESHOLD);
   });
 
-  it('stops at 3 questions when a credible match exists', () => {
+  it('stops at 3 questions when a credible match exists and only preferences are left to ask', () => {
     const asked = ['q1', 'q2', 'q3'];
-    expect(scoreQuestions(investigateSignals, cs, asked)[0].gain).toBeGreaterThanOrEqual(STOP_THRESHOLD);
-    expect(decide(investigateSignals, cs, { asked, preferencesConfirmed: true })).toEqual({ type: 'match' });
+    const s = withConstraints(investigateSignals, { maxGap: null, mode: 'any', needsWeekend: false });
+    const [best] = scoreQuestions(s, cs, asked);
+    expect(best.question.target.kind).toBe('preference');
+    expect(best.gain).toBeGreaterThanOrEqual(STOP_THRESHOLD);
+    expect(decide(s, cs, { asked, preferencesConfirmed: true })).toEqual({ type: 'match' });
+  });
+
+  it('allows a 4th question for an unresolved hard constraint (PRD §4.4)', () => {
+    const d = decide(investigateSignals, cs, { asked: ['q1', 'q2', 'q3'], preferencesConfirmed: true });
+    expect(d.type === 'ask' && d.question.target.kind).toBe('constraint');
+  });
+
+  it("doesn't ask a question whose likely answers would leave nobody to recommend", () => {
+    const onlyPricey = cs.filter((c) => (c.practical.gapAfterMedicare ?? Infinity) > 50);
+    const cost = scoreQuestions(demoAnswered, onlyPricey, []).find((q) => q.question.id === 'cost')!;
+    expect(cost.gain).toBe(0);
   });
 
   it('allows a 4th question only when nothing credible fits yet, and never a 5th', () => {
@@ -224,14 +238,15 @@ describe('recommend', () => {
   });
 
   it('shows only the clinicians who meet a hard constraint (partial results)', () => {
-    const r = recommend(withConstraints(demoAnswered, { mode: 'in_person_only', origin: NEW_FARM, maxKm: 3 }), cs);
+    const r = recommend(withConstraints(demoAnswered, { mode: 'in_person_only', origin: NEW_FARM, maxKm: 2 }), cs);
     expect(r.status === 'matches' && ids(r.matches)).toEqual(['amy-chen', 'sam-patel']);
   });
 
   it("says there's no strong match and suggests what would help", () => {
     const k = { mode: 'in_person_only' as const, needsWeekend: true, origin: NEW_FARM, maxKm: 5 };
     const r = recommend(withConstraints(demoAnswered, k), cs, ['decision_style']);
-    expect(r).toEqual({ status: 'none', actions: ['include_telehealth', 'expand_distance', 'answer_more'] });
+    // Another question can't help while the constraints exclude everyone, so it isn't offered.
+    expect(r).toEqual({ status: 'none', actions: ['include_telehealth', 'expand_distance'] });
   });
 
   it('asks for more rather than guessing when it knows too little', () => {

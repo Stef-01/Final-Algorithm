@@ -1,6 +1,6 @@
 import type { BankQuestion } from '../questions';
 import { selectTop } from './diversity';
-import { eligibleSet } from './eligibility';
+import { eligibleFor } from './eligibility';
 import { reasonsFor } from './explain';
 import { MAX_QUESTIONS, scoreQuestions, STOP_THRESHOLD, topK } from './infoGain';
 import { IMPORTANCE, rank, strongestLayer } from './score';
@@ -50,7 +50,7 @@ export function preferencesToConfirm(s: PatientSignals, cs: ClinicianRecord[]): 
 /** A credible match is one we could actually show: eligible, above the fit threshold, and explainable. */
 export function hasCredibleMatch(s: PatientSignals, cs: ClinicianRecord[]) {
   const byId = new Map(cs.map((c) => [c.id, c]));
-  return selectTop(rank(eligibleSet(cs, s.constraints), s)).some((x) => reasonsFor(byId.get(x.clinicianId)!, s).length > 0);
+  return selectTop(rank(eligibleFor(cs, s), s)).some((x) => reasonsFor(byId.get(x.clinicianId)!, s).length > 0);
 }
 
 export function decide(s: PatientSignals, cs: ClinicianRecord[], t: TurnState): Decision {
@@ -95,7 +95,7 @@ function noMatchActions(s: PatientSignals, cs: ClinicianRecord[], asked: string[
 
 export function recommend(s: PatientSignals, cs: ClinicianRecord[], asked: string[] = []): Recommendation {
   const byId = new Map(cs.map((c) => [c.id, c]));
-  const ranked = rank(eligibleSet(cs, s.constraints), s);
+  const ranked = rank(eligibleFor(cs, s), s);
 
   const matches: EngineMatch[] = [];
   const shown = new Set<string>();

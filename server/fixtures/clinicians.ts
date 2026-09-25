@@ -12,19 +12,18 @@ import raviSingh from './clinicians/ravi-singh.json';
 import samPatel from './clinicians/sam-patel.json';
 import tomWalsh from './clinicians/tom-walsh.json';
 
-// Fictional seed clinicians for prototype testing (docs/PLAN.md §8). Not real people.
-// Records are written by scripts/review-clinician.ts in Phase 5; until then they're hand-authored.
-export const seedClinicians = [
+// Fictional clinicians used only by the engine tests. Not real people, never shown in the app.
+export const fixtureClinicians = [
   amyChen,
-  priyaNair,
-  tomWalsh,
-  graceOkafor,
   danielReyes,
-  hannahLee,
-  samPatel,
-  michaelObrien,
-  lucyNguyen,
-  raviSingh,
   ellaBrooks,
+  graceOkafor,
+  hannahLee,
+  lucyNguyen,
+  michaelObrien,
   oliverSmith,
+  priyaNair,
+  raviSingh,
+  samPatel,
+  tomWalsh,
 ] as ClinicianRecord[];

@@ -2,6 +2,7 @@
   "id": "sam-patel",
   "name": "Dr Sam Patel",
   "firstName": "Sam",
+  "profession": "gp",
   "role": "GP",
   "location": {
     "suburb": "Kangaroo Point",

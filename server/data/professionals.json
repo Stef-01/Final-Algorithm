@@ -1,0 +1,2161 @@
+[
+  {
+    "id": "anubhav-saxena",
+    "name": "Dr Anubhav Saxena",
+    "firstName": "Anubhav",
+    "profession": "gp",
+    "role": "GP",
+    "practice": "Beecroft Family & Skin Cancer Clinic",
+    "location": {
+      "suburb": "Beecroft",
+      "city": "Sydney",
+      "lat": -33.749,
+      "lng": 151.064
+    },
+    "photo": "anubhav-saxena.jpg",
+    "bio": "Anubhav trained at the University of Sydney and works in Double Bay and Beecroft. He works from measurement rather than impression, and takes an integrative view: ADHD is looked at alongside sleep, cardiovascular and metabolic health rather than on its own, with a documented baseline before anything starts and review at set intervals rather than only when a problem gets loud enough to prompt a call. He also does aged-care and home visits, and gives a good deal of his spare time to the long-suffering cause of the Parramatta Eels.",
+    "credentials": [
+      "General practitioner, MBBS FRACGP MPhil BSc(Adv) DCH"
+    ],
+    "bookingUrl": "https://healthengine.com.au/doctor/nsw/beecroft/dr-anubhav-saxena/p123180",
+    "practical": {
+      "nextAvailable": "Long first appointment, scheduled reviews",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person",
+        "telehealth"
+      ],
+      "fee": 299,
+      "gapAfterMedicare": 299,
+      "billingNote": "$299 first appointment, $199 follow-up; no Medicare rebate. Set and charged by the practice.",
+      "newPatients": true,
+      "ageRange": [
+        0,
+        120
+      ],
+      "languages": [
+        "English",
+        "Hindi",
+        "Urdu"
+      ],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "gender": "male",
+      "initialConsultMins": null,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "ADHD",
+        "level": "particular",
+        "evidenceIds": [
+          "anubhav-saxena-exp-adhd"
+        ]
+      },
+      {
+        "area": "Heart and metabolic health",
+        "level": "particular",
+        "evidenceIds": [
+          "anubhav-saxena-exp-heart-and-metabolic-health"
+        ]
+      },
+      {
+        "area": "Preventive health",
+        "level": "particular",
+        "evidenceIds": [
+          "anubhav-saxena-exp-preventive-health"
+        ]
+      },
+      {
+        "area": "Chronic disease",
+        "level": "particular",
+        "evidenceIds": [
+          "anubhav-saxena-exp-chronic-disease"
+        ]
+      }
+    ],
+    "phenotype": {
+      "lifestyle_integration": {
+        "value": "high",
+        "confidence": "medium",
+        "evidenceIds": [
+          "anubhav-saxena-lifestyle_integration"
+        ]
+      },
+      "diagnostic_style": {
+        "value": "investigative",
+        "confidence": "medium",
+        "evidenceIds": [
+          "anubhav-saxena-diagnostic_style"
+        ]
+      },
+      "follow_up_intensity": {
+        "value": "scheduled",
+        "confidence": "medium",
+        "evidenceIds": [
+          "anubhav-saxena-follow_up_intensity"
+        ]
+      },
+      "consultation_pace": {
+        "value": "unhurried",
+        "confidence": "medium",
+        "evidenceIds": [
+          "anubhav-saxena-consultation_pace"
+        ]
+      }
+    },
+    "evidence": [
+      {
+        "id": "anubhav-saxena-exp-adhd",
+        "trait": "expertise",
+        "excerpt": "Structured adult ADHD assessment",
+        "patientFacing": "Anubhav offers a structured adult ADHD assessment.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "anubhav-saxena-exp-heart-and-metabolic-health",
+        "trait": "expertise",
+        "excerpt": "Baseline cardiovascular and metabolic screening",
+        "patientFacing": "Anubhav does baseline heart and metabolic screening before anything starts.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "anubhav-saxena-exp-preventive-health",
+        "trait": "expertise",
+        "excerpt": "Integrative and preventive care",
+        "patientFacing": "Anubhav lists integrative and preventive care among his experience.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "anubhav-saxena-exp-chronic-disease",
+        "trait": "expertise",
+        "excerpt": "Chronic disease management",
+        "patientFacing": "Anubhav manages chronic conditions.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "anubhav-saxena-lifestyle_integration",
+        "trait": "lifestyle_integration",
+        "excerpt": "ADHD is looked at alongside sleep, cardiovascular and metabolic health rather than on its own",
+        "patientFacing": "Anubhav looks at ADHD alongside sleep, heart and metabolic health rather than on its own.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "anubhav-saxena-diagnostic_style",
+        "trait": "diagnostic_style",
+        "excerpt": "He works from measurement rather than impression",
+        "patientFacing": "Anubhav says he works from measurement rather than impression, with a documented baseline before anything starts.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "anubhav-saxena-follow_up_intensity",
+        "trait": "follow_up_intensity",
+        "excerpt": "review at set intervals rather than only when a problem gets loud enough to prompt a call",
+        "patientFacing": "Anubhav reviews at set intervals, not only when a problem comes up.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "anubhav-saxena-consultation_pace",
+        "trait": "consultation_pace",
+        "excerpt": "Long first appointment, scheduled reviews",
+        "patientFacing": "Anubhav's practice books a long first appointment.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "anu-saxena",
+    "name": "Dr Anu Saxena",
+    "firstName": "Anu",
+    "profession": "gp",
+    "role": "GP",
+    "practice": "Bay Health Clinic",
+    "location": {
+      "suburb": "Double Bay",
+      "city": "Sydney",
+      "lat": -33.877,
+      "lng": 151.243
+    },
+    "photo": "anu-saxena.jpg",
+    "bio": "Anu is an experienced GP at Bay Health Clinic in Double Bay, and a Fellow of the Royal Australian College of General Practitioners. She came to medicine through psychology, a Bachelor of Psychology with First Class Honours at the University of Sydney, then her MD at the Australian National University, with a background in psychiatry and general medicine: hospital training across NSW, including Blacktown and Bathurst, rotations in cardiology, paediatrics and psychiatry, and the Sydney Child Health Program through the Sydney Children's Hospital Network; she holds a Diploma of Child Health. Her clinical interests are ADHD, mental health, women's health and functional medicine. She has completed an endorsed ADHD prescriber course, is training in Focused Psychological Strategies, and is completing further qualifications in functional medicine, nutrition, lifestyle medicine and health coaching. Of Indian origin and speaking Hindi and Urdu, she values culturally sensitive, holistic and patient-centred care. Outside medicine she enjoys travelling, learning about different cultures, charity and community work, and staying active through sport, cricket and tennis included.",
+    "credentials": [
+      "General practitioner, MD FRACGP BPsych(Hons) DCH"
+    ],
+    "bookingUrl": "https://healthengine.com.au/doctor/nsw/double-bay/dr-anusha-saxena/p160121",
+    "practical": {
+      "nextAvailable": "Appointment lengths set with the practice",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person",
+        "telehealth"
+      ],
+      "fee": 299,
+      "gapAfterMedicare": 299,
+      "billingNote": "$299 first appointment, $199 follow-up; no Medicare rebate. Set and charged by the practice.",
+      "newPatients": true,
+      "ageRange": [
+        0,
+        120
+      ],
+      "languages": [
+        "English",
+        "Hindi",
+        "Urdu"
+      ],
+      "accessibility": [],
+      "gender": "female",
+      "initialConsultMins": null,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "ADHD",
+        "level": "particular",
+        "evidenceIds": [
+          "anu-saxena-exp-adhd"
+        ]
+      },
+      {
+        "area": "Mental health",
+        "level": "particular",
+        "evidenceIds": [
+          "anu-saxena-exp-mental-health"
+        ]
+      },
+      {
+        "area": "Women's health",
+        "level": "particular",
+        "evidenceIds": [
+          "anu-saxena-exp-women-s-health"
+        ]
+      },
+      {
+        "area": "Children",
+        "level": "general",
+        "evidenceIds": [
+          "anu-saxena-exp-children"
+        ]
+      }
+    ],
+    "phenotype": {
+      "mental_health_integration": {
+        "value": "high",
+        "confidence": "medium",
+        "evidenceIds": [
+          "anu-saxena-mental_health_integration"
+        ]
+      },
+      "lifestyle_integration": {
+        "value": "high",
+        "confidence": "medium",
+        "evidenceIds": [
+          "anu-saxena-lifestyle_integration"
+        ]
+      }
+    },
+    "evidence": [
+      {
+        "id": "anu-saxena-exp-adhd",
+        "trait": "expertise",
+        "excerpt": "Her clinical interests are ADHD, mental health",
+        "patientFacing": "Anu lists ADHD among her clinical interests and has completed an endorsed ADHD prescriber course.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "anu-saxena-exp-mental-health",
+        "trait": "expertise",
+        "excerpt": "Brings a mental-health focus to general practice",
+        "patientFacing": "Anu brings a mental-health focus to general practice, with a psychology degree behind it.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "anu-saxena-exp-women-s-health",
+        "trait": "expertise",
+        "excerpt": "women's health and functional medicine",
+        "patientFacing": "Anu lists women's health among her clinical interests.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "anu-saxena-exp-children",
+        "trait": "expertise",
+        "excerpt": "Diploma of Child Health",
+        "patientFacing": "Anu holds a Diploma of Child Health.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "anu-saxena-mental_health_integration",
+        "trait": "mental_health_integration",
+        "excerpt": "Brings a mental-health focus to general practice",
+        "patientFacing": "Anu brings a mental-health focus to general practice, backed by a Bachelor of Psychology.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "anu-saxena-lifestyle_integration",
+        "trait": "lifestyle_integration",
+        "excerpt": "completing further qualifications in functional medicine, nutrition, lifestyle medicine and health coaching",
+        "patientFacing": "Anu is completing further training in nutrition, lifestyle medicine and health coaching.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "paula-garrido",
+    "name": "Paula Garrido",
+    "firstName": "Paula",
+    "profession": "psychologist",
+    "role": "Clinical Psychologist",
+    "practice": "Wellness Psychology Clinic",
+    "location": {
+      "suburb": "Telehealth",
+      "city": "Australia-wide",
+      "lat": null,
+      "lng": null
+    },
+    "photo": "paula-garrido.jpg",
+    "bio": "Paula Garrido is a Clinical Psychologist with extensive experience supporting individuals with ADHD and other neurodevelopmental differences. She has a special interest in providing compassionate, neuroaffirming, and trauma-informed psychological care, helping individuals better understand their unique strengths, challenges, and ways of experiencing the world. With additional training in ADHD, autism, complex trauma, and evidence-based psychological therapies, Paula supports individuals to navigate challenges with emotional regulation, executive functioning, anxiety, self-esteem, relationships, and everyday life. Her warm, collaborative, and non-judgmental approach creates a safe space for clients to explore their experiences, develop practical strategies, build self-understanding, and work towards meaningful and lasting change. Paula holds a Master of Clinical Psychology and is an ADHD-Certified Clinical Services Provider (ADHD-CCSP) and Certified Autism Spectrum Disorder Clinical Specialist (ASDCS).",
+    "credentials": [
+      "Clinical psychologist, MClinPsych ADHD-CCSP ASDCS"
+    ],
+    "bookingUrl": "https://wellnesspsychologyclinic.com.au/appointment-page/",
+    "practical": {
+      "nextAvailable": "60-minute sessions by secure video; times set with the clinic",
+      "daysUntilAvailable": null,
+      "modes": [
+        "telehealth"
+      ],
+      "fee": 253,
+      "gapAfterMedicare": 104,
+      "billingNote": "$253 a session, $149 Medicare rebate with a Mental Health Treatment Plan: about $104 out of pocket.",
+      "newPatients": true,
+      "ageRange": [
+        0,
+        120
+      ],
+      "languages": [],
+      "accessibility": [],
+      "gender": "female",
+      "initialConsultMins": 60,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "ADHD",
+        "level": "particular",
+        "evidenceIds": [
+          "paula-garrido-exp-adhd"
+        ]
+      },
+      {
+        "area": "Autism",
+        "level": "particular",
+        "evidenceIds": [
+          "paula-garrido-exp-autism"
+        ]
+      },
+      {
+        "area": "Trauma",
+        "level": "particular",
+        "evidenceIds": [
+          "paula-garrido-exp-trauma"
+        ]
+      },
+      {
+        "area": "Emotional regulation",
+        "level": "particular",
+        "evidenceIds": [
+          "paula-garrido-exp-emotional-regulation"
+        ]
+      },
+      {
+        "area": "Anxiety",
+        "level": "general",
+        "evidenceIds": [
+          "paula-garrido-exp-anxiety"
+        ]
+      }
+    ],
+    "phenotype": {
+      "neurodiversity_affirming": {
+        "value": "high",
+        "confidence": "medium",
+        "evidenceIds": [
+          "paula-garrido-neurodiversity_affirming"
+        ]
+      },
+      "shared_decision_making": {
+        "value": "shared",
+        "confidence": "medium",
+        "evidenceIds": [
+          "paula-garrido-shared_decision_making"
+        ]
+      },
+      "therapy_style": {
+        "value": "balanced",
+        "confidence": "medium",
+        "evidenceIds": [
+          "paula-garrido-therapy_style"
+        ]
+      }
+    },
+    "evidence": [
+      {
+        "id": "paula-garrido-exp-adhd",
+        "trait": "expertise",
+        "excerpt": "ADHD-Certified Clinical Services Provider (ADHD-CCSP)",
+        "patientFacing": "Paula is an ADHD-Certified Clinical Services Provider.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "paula-garrido-exp-autism",
+        "trait": "expertise",
+        "excerpt": "Certified Autism Spectrum Disorder Clinical Specialist (ASDCS)",
+        "patientFacing": "Paula is a certified autism clinical specialist.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "paula-garrido-exp-trauma",
+        "trait": "expertise",
+        "excerpt": "additional training in ADHD, autism, complex trauma",
+        "patientFacing": "Paula has additional training in complex trauma.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "paula-garrido-exp-emotional-regulation",
+        "trait": "expertise",
+        "excerpt": "navigate challenges with emotional regulation, executive functioning, anxiety",
+        "patientFacing": "Paula helps with emotional regulation, executive functioning and anxiety.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "paula-garrido-exp-anxiety",
+        "trait": "expertise",
+        "excerpt": "navigate challenges with emotional regulation, executive functioning, anxiety",
+        "patientFacing": "Paula works with anxiety.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "paula-garrido-neurodiversity_affirming",
+        "trait": "neurodiversity_affirming",
+        "excerpt": "neuroaffirming, and trauma-informed psychological care",
+        "patientFacing": "Paula describes her care as neuroaffirming and trauma-informed.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "paula-garrido-shared_decision_making",
+        "trait": "shared_decision_making",
+        "excerpt": "collaborative, and non-judgmental approach",
+        "patientFacing": "Paula describes her approach as collaborative and non-judgmental.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "paula-garrido-therapy_style",
+        "trait": "therapy_style",
+        "excerpt": "develop practical strategies, build self-understanding",
+        "patientFacing": "Paula works on practical strategies and on helping you make sense of yourself.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "kate-row",
+    "name": "Kate Row",
+    "firstName": "Kate",
+    "profession": "psychologist",
+    "role": "Psychologist and Clinic Director",
+    "practice": "GOALS Psychology",
+    "location": {
+      "suburb": "Fortitude Valley",
+      "city": "Brisbane",
+      "lat": -27.457,
+      "lng": 153.034
+    },
+    "photo": "kate-row.jpg",
+    "bio": "Kate works with toddlers, children, teenagers, and adults. The main therapeutic modalities she utilises include Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT), Motivational Interviewing (MI), solution-focused brief therapy, communication, and social skills building for growing client’s toolkits of practical coping strategies. Kate enjoys working with clients to identify their goals and work towards achieving them to improve overall well-being and live their most fulfilling lives possible. She has a life-long passion for working with clients with diffabilities/disabilities and supporting individuals and families through their NDIS journey to thrive. Kate is mum to three children.",
+    "credentials": [
+      "Psychologist, BSc(Psych) BA PostGradDip(Psych)"
+    ],
+    "bookingUrl": "https://www.halaxy.com/book/goals-psychology/location/726621",
+    "practical": {
+      "nextAvailable": "50-minute sessions; times set with the clinic",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person",
+        "telehealth"
+      ],
+      "fee": null,
+      "gapAfterMedicare": null,
+      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first.",
+      "newPatients": true,
+      "ageRange": [
+        0,
+        120
+      ],
+      "languages": [],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "gender": "female",
+      "initialConsultMins": 50,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "NDIS support",
+        "level": "particular",
+        "evidenceIds": [
+          "kate-row-exp-ndis-support"
+        ]
+      },
+      {
+        "area": "Disability",
+        "level": "particular",
+        "evidenceIds": [
+          "kate-row-exp-disability"
+        ]
+      },
+      {
+        "area": "Children",
+        "level": "particular",
+        "evidenceIds": [
+          "kate-row-exp-children"
+        ]
+      },
+      {
+        "area": "Career and performance",
+        "level": "general",
+        "evidenceIds": [
+          "kate-row-exp-career-and-performance"
+        ]
+      }
+    ],
+    "phenotype": {
+      "therapy_style": {
+        "value": "practical",
+        "confidence": "medium",
+        "evidenceIds": [
+          "kate-row-therapy_style"
+        ]
+      },
+      "shared_decision_making": {
+        "value": "shared",
+        "confidence": "medium",
+        "evidenceIds": [
+          "kate-row-shared_decision_making"
+        ]
+      }
+    },
+    "evidence": [
+      {
+        "id": "kate-row-exp-ndis-support",
+        "trait": "expertise",
+        "excerpt": "supporting individuals and families through their NDIS journey",
+        "patientFacing": "Kate supports individuals and families through the NDIS.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "kate-row-exp-disability",
+        "trait": "expertise",
+        "excerpt": "working with clients with diffabilities/disabilities",
+        "patientFacing": "Kate has a long-standing focus on working with people with disability.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "kate-row-exp-children",
+        "trait": "expertise",
+        "excerpt": "Kate works with toddlers, children, teenagers, and adults.",
+        "patientFacing": "Kate works with toddlers and children as well as teens and adults.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "kate-row-exp-career-and-performance",
+        "trait": "expertise",
+        "excerpt": "Career counselling and post-schooling decision making",
+        "patientFacing": "Kate offers career counselling.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "kate-row-therapy_style",
+        "trait": "therapy_style",
+        "excerpt": "toolkits of practical coping strategies",
+        "patientFacing": "Kate focuses on building a toolkit of practical coping strategies.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "kate-row-shared_decision_making",
+        "trait": "shared_decision_making",
+        "excerpt": "working with clients to identify their goals and work towards achieving them",
+        "patientFacing": "Kate works with you to set your goals and work towards them.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "ellie-putland",
+    "name": "Ellie Putland",
+    "firstName": "Ellie",
+    "profession": "psychologist",
+    "role": "Psychologist",
+    "practice": "GOALS Psychology",
+    "location": {
+      "suburb": "Fortitude Valley",
+      "city": "Brisbane",
+      "lat": -27.457,
+      "lng": 153.034
+    },
+    "photo": "ellie-putland.jpg",
+    "bio": "Ellie works with children, teenagers and adults. She works with clients from a trauma-informed care framework and works collaboratively with families on psychoeducation towards their goals. Ellie utilises Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT), Dialectical Behaviour Therapy (DBT) and Motivational Interviewing. Ellie is experienced in administering an array of assessments, incorporating relevant resources into sessions and liaising with clients’ wider support teams wherever helpful towards client goals. By supporting clients to develop and refine their psychological and coping skills, Ellie has a particular passion for supporting young people who would like to reduce their stressors. With a Bachelor of Psychological Science from Griffith University with 1st class Honours, Ellie is also an Associate Member of the Australian Psychological Society.",
+    "credentials": [
+      "Psychologist, BPsychSc(Hons I)"
+    ],
+    "bookingUrl": "https://www.halaxy.com/book/goals-psychology/location/726621",
+    "practical": {
+      "nextAvailable": "50-minute sessions; times set with the clinic",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person",
+        "telehealth"
+      ],
+      "fee": null,
+      "gapAfterMedicare": null,
+      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first.",
+      "newPatients": true,
+      "ageRange": [
+        0,
+        120
+      ],
+      "languages": [],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "gender": "female",
+      "initialConsultMins": 50,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "Young people",
+        "level": "particular",
+        "evidenceIds": [
+          "ellie-putland-exp-young-people"
+        ]
+      },
+      {
+        "area": "Stress",
+        "level": "general",
+        "evidenceIds": [
+          "ellie-putland-exp-stress"
+        ]
+      },
+      {
+        "area": "Trauma",
+        "level": "general",
+        "evidenceIds": [
+          "ellie-putland-exp-trauma"
+        ]
+      }
+    ],
+    "phenotype": {
+      "care_coordination": {
+        "value": "high",
+        "confidence": "medium",
+        "evidenceIds": [
+          "ellie-putland-care_coordination"
+        ]
+      },
+      "shared_decision_making": {
+        "value": "shared",
+        "confidence": "medium",
+        "evidenceIds": [
+          "ellie-putland-shared_decision_making"
+        ]
+      },
+      "therapy_style": {
+        "value": "practical",
+        "confidence": "medium",
+        "evidenceIds": [
+          "ellie-putland-therapy_style"
+        ]
+      }
+    },
+    "evidence": [
+      {
+        "id": "ellie-putland-exp-young-people",
+        "trait": "expertise",
+        "excerpt": "particular passion for supporting young people who would like to reduce their stressors",
+        "patientFacing": "Ellie particularly enjoys helping young people bring their stress down.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "ellie-putland-exp-stress",
+        "trait": "expertise",
+        "excerpt": "young people who would like to reduce their stressors",
+        "patientFacing": "Ellie helps people reduce their stressors.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "ellie-putland-exp-trauma",
+        "trait": "expertise",
+        "excerpt": "trauma-informed care framework",
+        "patientFacing": "Ellie works from a trauma-informed care framework.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "ellie-putland-care_coordination",
+        "trait": "care_coordination",
+        "excerpt": "wider support teams wherever helpful",
+        "patientFacing": "Ellie liaises with your wider support team where it helps.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "ellie-putland-shared_decision_making",
+        "trait": "shared_decision_making",
+        "excerpt": "works collaboratively with families on psychoeducation towards their goals",
+        "patientFacing": "Ellie works collaboratively with families towards your goals.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "ellie-putland-therapy_style",
+        "trait": "therapy_style",
+        "excerpt": "develop and refine their psychological and coping skills",
+        "patientFacing": "Ellie focuses on building psychological and coping skills.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "lachlan-avent",
+    "name": "Lachlan Avent",
+    "firstName": "Lachlan",
+    "profession": "psychologist",
+    "role": "Psychologist",
+    "practice": "GOALS Psychology",
+    "location": {
+      "suburb": "Fortitude Valley",
+      "city": "Brisbane",
+      "lat": -27.457,
+      "lng": 153.034
+    },
+    "photo": "lachlan-avent.jpg",
+    "bio": "Lachlan works with children, teenagers and adults and is passionate about providing a safe space for clients to express themselves, achieve their potential and meet the challenges that life presents. He is experienced working with clients who have autism, ADHD, OCD, specific learning disorders, depression, intellectual disability, are experiencing anxiety, phobias, depression, issues with self-esteem / confidence, stress / burn out, anger, bullying, interpersonal difficulties, and provides parenting support. Lachlan utilises Cognitive Behavioural Therapy (CBT), Dialectical Behavioural Therapy (DBT), Acceptance and Commitment Therapy (ACT), Motivational Interviewing (MI) and Emotion Focussed Therapy (EFT) to support clients to create meaningful change and build skills to live a life that fulfils them. Lachlan is experienced in administering assessments including the WISC, WIAT, WAIS, ADOS, MIGDAS and offers appointments for autism assessment and ADHD assessment. Lachlan is also a certified Triple P Stepping Stones Parenting Program Practitioner. Lachlan holds a Bachelor of Psychological Science with Honours from the University of Queensland.",
+    "credentials": [
+      "Psychologist, BPsychSc(Hons)"
+    ],
+    "bookingUrl": "https://www.halaxy.com/book/goals-psychology/location/726621",
+    "practical": {
+      "nextAvailable": "50-minute sessions; times set with the clinic",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person",
+        "telehealth"
+      ],
+      "fee": null,
+      "gapAfterMedicare": null,
+      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first.",
+      "newPatients": true,
+      "ageRange": [
+        0,
+        120
+      ],
+      "languages": [],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "gender": "male",
+      "initialConsultMins": 50,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "ADHD assessment",
+        "level": "particular",
+        "evidenceIds": [
+          "lachlan-avent-exp-adhd-assessment"
+        ]
+      },
+      {
+        "area": "Autism assessment",
+        "level": "particular",
+        "evidenceIds": [
+          "lachlan-avent-exp-autism-assessment"
+        ]
+      },
+      {
+        "area": "Parenting support",
+        "level": "particular",
+        "evidenceIds": [
+          "lachlan-avent-exp-parenting-support"
+        ]
+      },
+      {
+        "area": "ADHD",
+        "level": "general",
+        "evidenceIds": [
+          "lachlan-avent-exp-adhd"
+        ]
+      },
+      {
+        "area": "Autism",
+        "level": "general",
+        "evidenceIds": [
+          "lachlan-avent-exp-autism"
+        ]
+      },
+      {
+        "area": "Anxiety",
+        "level": "general",
+        "evidenceIds": [
+          "lachlan-avent-exp-anxiety"
+        ]
+      },
+      {
+        "area": "Burnout",
+        "level": "general",
+        "evidenceIds": [
+          "lachlan-avent-exp-burnout"
+        ]
+      }
+    ],
+    "phenotype": {
+      "therapy_style": {
+        "value": "practical",
+        "confidence": "medium",
+        "evidenceIds": [
+          "lachlan-avent-therapy_style"
+        ]
+      }
+    },
+    "evidence": [
+      {
+        "id": "lachlan-avent-exp-adhd-assessment",
+        "trait": "expertise",
+        "excerpt": "offers appointments for autism assessment and ADHD assessment",
+        "patientFacing": "Lachlan offers ADHD and autism assessments.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lachlan-avent-exp-autism-assessment",
+        "trait": "expertise",
+        "excerpt": "offers appointments for autism assessment and ADHD assessment",
+        "patientFacing": "Lachlan offers ADHD and autism assessments.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lachlan-avent-exp-parenting-support",
+        "trait": "expertise",
+        "excerpt": "certified Triple P Stepping Stones Parenting Program Practitioner",
+        "patientFacing": "Lachlan is a certified Triple P Stepping Stones parenting practitioner.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lachlan-avent-exp-adhd",
+        "trait": "expertise",
+        "excerpt": "experienced working with clients who have autism, ADHD",
+        "patientFacing": "Lachlan works with clients with ADHD and autism.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lachlan-avent-exp-autism",
+        "trait": "expertise",
+        "excerpt": "experienced working with clients who have autism, ADHD",
+        "patientFacing": "Lachlan works with clients with ADHD and autism.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lachlan-avent-exp-anxiety",
+        "trait": "expertise",
+        "excerpt": "are experiencing anxiety",
+        "patientFacing": "Lachlan works with anxiety.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lachlan-avent-exp-burnout",
+        "trait": "expertise",
+        "excerpt": "stress / burn out",
+        "patientFacing": "Lachlan works with stress and burnout.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lachlan-avent-therapy_style",
+        "trait": "therapy_style",
+        "excerpt": "build skills to live a life that fulfils them",
+        "patientFacing": "Lachlan helps clients build skills to live the life they want.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "samantha-courtney",
+    "name": "Samantha Courtney",
+    "firstName": "Samantha",
+    "profession": "psychologist",
+    "role": "Psychologist",
+    "practice": "GOALS Psychology",
+    "location": {
+      "suburb": "Fortitude Valley",
+      "city": "Brisbane",
+      "lat": -27.457,
+      "lng": 153.034
+    },
+    "photo": "samantha-courtney.jpg",
+    "bio": "Samantha works with teenagers and adults. She has experience working with clients who are experiencing difficulties with eating disorders, perinatal mental health, fertility, functional neurological disorder (FND), anxiety, depression, postnatal anxiety and depression, trauma and PTSD, and life stressors, including major life transitions such as parenthood, injuries, retiring and personal losses. Samantha is a Credentialed Eating Disorder Clinician (CEDC-MH) and her experience includes supporting clients who are mums, new parents, athletes, and clients from diverse life experiences with co-occurring health conditions to navigate eating disorder treatment. She is able to liaise with clients’ wider support teams such as dieticians, GPs and psychiatrists wherever helpful towards client goals. Samantha works from a trauma-informed care framework and a strengths-based lens to provide a calm, inclusive, and supportive environment for her clients to engage in individualised interventions. She utilises therapy modalities including Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT) and Dialectical Behaviour Therapy (DBT). Sam holds a Bachelor of Psychological Science from the University of New England, and a Bachelor of Social Science in Psychology (1st Class Honours) from the University of the Sunshine Coast.",
+    "credentials": [
+      "Psychologist, BPsychSc BSocSc(Psych)(Hons I) CEDC-MH"
+    ],
+    "bookingUrl": "https://www.halaxy.com/book/goals-psychology/location/726621",
+    "practical": {
+      "nextAvailable": "50-minute sessions; times set with the clinic",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person",
+        "telehealth"
+      ],
+      "fee": null,
+      "gapAfterMedicare": null,
+      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first.",
+      "newPatients": true,
+      "ageRange": [
+        13,
+        120
+      ],
+      "languages": [],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "gender": "female",
+      "initialConsultMins": 50,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "Eating disorders",
+        "level": "particular",
+        "evidenceIds": [
+          "samantha-courtney-exp-eating-disorders"
+        ]
+      },
+      {
+        "area": "Perinatal mental health",
+        "level": "particular",
+        "evidenceIds": [
+          "samantha-courtney-exp-perinatal-mental-health"
+        ]
+      },
+      {
+        "area": "Trauma",
+        "level": "particular",
+        "evidenceIds": [
+          "samantha-courtney-exp-trauma"
+        ]
+      },
+      {
+        "area": "Life transitions",
+        "level": "particular",
+        "evidenceIds": [
+          "samantha-courtney-exp-life-transitions"
+        ]
+      },
+      {
+        "area": "Anxiety",
+        "level": "general",
+        "evidenceIds": [
+          "samantha-courtney-exp-anxiety"
+        ]
+      },
+      {
+        "area": "Depression",
+        "level": "general",
+        "evidenceIds": [
+          "samantha-courtney-exp-depression"
+        ]
+      }
+    ],
+    "phenotype": {
+      "care_coordination": {
+        "value": "high",
+        "confidence": "medium",
+        "evidenceIds": [
+          "samantha-courtney-care_coordination"
+        ]
+      }
+    },
+    "evidence": [
+      {
+        "id": "samantha-courtney-exp-eating-disorders",
+        "trait": "expertise",
+        "excerpt": "Credentialed Eating Disorder Clinician (CEDC-MH)",
+        "patientFacing": "Samantha is a credentialed eating disorder clinician.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "samantha-courtney-exp-perinatal-mental-health",
+        "trait": "expertise",
+        "excerpt": "Perinatal mental health, fertility",
+        "patientFacing": "Samantha works with perinatal mental health and fertility.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "samantha-courtney-exp-trauma",
+        "trait": "expertise",
+        "excerpt": "trauma and PTSD",
+        "patientFacing": "Samantha works with trauma and PTSD.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "samantha-courtney-exp-life-transitions",
+        "trait": "expertise",
+        "excerpt": "major life transitions such as parenthood",
+        "patientFacing": "Samantha supports people through major life transitions such as parenthood or retiring.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "samantha-courtney-exp-anxiety",
+        "trait": "expertise",
+        "excerpt": "anxiety, depression, postnatal anxiety",
+        "patientFacing": "Samantha works with anxiety and depression.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "samantha-courtney-exp-depression",
+        "trait": "expertise",
+        "excerpt": "anxiety, depression, postnatal anxiety",
+        "patientFacing": "Samantha works with anxiety and depression.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "samantha-courtney-care_coordination",
+        "trait": "care_coordination",
+        "excerpt": "wider support teams such as dieticians, GPs and psychiatrists",
+        "patientFacing": "Samantha can liaise with your dietitian, GP and psychiatrist.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "lauren-poulos",
+    "name": "Lauren Poulos",
+    "firstName": "Lauren",
+    "profession": "psychologist",
+    "role": "Psychologist",
+    "practice": "GOALS Psychology",
+    "location": {
+      "suburb": "Fortitude Valley",
+      "city": "Brisbane",
+      "lat": -27.457,
+      "lng": 153.034
+    },
+    "photo": "lauren-poulos.jpg",
+    "bio": "Lauren works with toddlers, children, teens and adults. She is experienced working with clients who are experiencing anxiety, depression, emotional regulation, neurodivergence, autism, ADHD, intellectual disability, self esteem/ confidence, trauma, friendships & socialising, and offers parenting support among other presenting concerns. Lauren thoroughly enjoys facilitating a safe and collaborative space where clients can explore their goals and work toward meaningful change. She is experienced with Cognitive Behavioural Therapy (CBT), Motivational Interviewing (MI), skills building and coping strategies, Parent-Child Interaction Therapy (PCIT) and facilitating programs relating to managing disruptive behaviours in children to strengthen family dynamics. Lauren also has experience working with children in an early intervention context both in-clinic and at-home settings. Lauren holds a Bachelor of Psychological Sciences with Honours from the University of Queensland and a Master of Professional Psychology from Bond University.",
+    "credentials": [
+      "Psychologist, BPsychSc(Hons) MProfPsych"
+    ],
+    "bookingUrl": "https://www.halaxy.com/book/goals-psychology/location/726621",
+    "practical": {
+      "nextAvailable": "50-minute sessions; times set with the clinic",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person",
+        "telehealth"
+      ],
+      "fee": null,
+      "gapAfterMedicare": null,
+      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first.",
+      "newPatients": true,
+      "ageRange": [
+        0,
+        120
+      ],
+      "languages": [],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "gender": "female",
+      "initialConsultMins": 50,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "Children",
+        "level": "particular",
+        "evidenceIds": [
+          "lauren-poulos-exp-children"
+        ]
+      },
+      {
+        "area": "Parenting support",
+        "level": "particular",
+        "evidenceIds": [
+          "lauren-poulos-exp-parenting-support"
+        ]
+      },
+      {
+        "area": "ADHD",
+        "level": "general",
+        "evidenceIds": [
+          "lauren-poulos-exp-adhd"
+        ]
+      },
+      {
+        "area": "Autism",
+        "level": "general",
+        "evidenceIds": [
+          "lauren-poulos-exp-autism"
+        ]
+      },
+      {
+        "area": "Emotional regulation",
+        "level": "general",
+        "evidenceIds": [
+          "lauren-poulos-exp-emotional-regulation"
+        ]
+      },
+      {
+        "area": "Anxiety",
+        "level": "general",
+        "evidenceIds": [
+          "lauren-poulos-exp-anxiety"
+        ]
+      }
+    ],
+    "phenotype": {
+      "therapy_style": {
+        "value": "practical",
+        "confidence": "medium",
+        "evidenceIds": [
+          "lauren-poulos-therapy_style"
+        ]
+      },
+      "shared_decision_making": {
+        "value": "shared",
+        "confidence": "medium",
+        "evidenceIds": [
+          "lauren-poulos-shared_decision_making"
+        ]
+      }
+    },
+    "evidence": [
+      {
+        "id": "lauren-poulos-exp-children",
+        "trait": "expertise",
+        "excerpt": "Early intervention with children, in clinic and at home",
+        "patientFacing": "Lauren does early intervention with children, in the clinic and at home.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lauren-poulos-exp-parenting-support",
+        "trait": "expertise",
+        "excerpt": "Parent-Child Interaction Therapy (PCIT)",
+        "patientFacing": "Lauren offers Parent-Child Interaction Therapy.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lauren-poulos-exp-adhd",
+        "trait": "expertise",
+        "excerpt": "neurodivergence, autism, ADHD",
+        "patientFacing": "Lauren works with ADHD and autism.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lauren-poulos-exp-autism",
+        "trait": "expertise",
+        "excerpt": "neurodivergence, autism, ADHD",
+        "patientFacing": "Lauren works with ADHD and autism.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lauren-poulos-exp-emotional-regulation",
+        "trait": "expertise",
+        "excerpt": "emotional regulation",
+        "patientFacing": "Lauren works with emotional regulation.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lauren-poulos-exp-anxiety",
+        "trait": "expertise",
+        "excerpt": "experiencing anxiety, depression",
+        "patientFacing": "Lauren works with anxiety and depression.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lauren-poulos-therapy_style",
+        "trait": "therapy_style",
+        "excerpt": "skills building and coping strategies",
+        "patientFacing": "Lauren works on skills building and coping strategies.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "lauren-poulos-shared_decision_making",
+        "trait": "shared_decision_making",
+        "excerpt": "a safe and collaborative space where clients can explore their goals",
+        "patientFacing": "Lauren describes a collaborative space where you explore your goals.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "alice-bui",
+    "name": "Alice Bui",
+    "firstName": "Alice",
+    "profession": "psychologist",
+    "role": "Provisional Psychologist",
+    "practice": "GOALS Psychology",
+    "location": {
+      "suburb": "Fortitude Valley",
+      "city": "Brisbane",
+      "lat": -27.457,
+      "lng": 153.034
+    },
+    "photo": "alice-bui.jpg",
+    "bio": "Alice works with children, teens and adults. She is experienced working with clients regarding trauma, PTSD, anxiety, depression, adjustment difficulties, autism, ADHD, intellectual disability, neurodivergence, emotional dysregulation, behavioural challenges, among other presenting concerns. Her therapy style is trauma-informed and emphasises a safe collaborative space. Alice has special clinical interests in evidence-based practice for clients who have experienced trauma. She is particularly passionate about working with clients who are refugees and newly arrived backgrounds and thoroughly enjoys supporting clients from culturally and linguistically diverse (CALD) backgrounds who have experienced displacement, cultural transition and complex trauma with cultural sensitivity to tailor interventions to their unique lived experiences. Alice is experienced with Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT), Dialectical Behaviour Therapy (DBT) and Narrative Therapy. Alice holds a Bachelor of Psychology from Macquarie University, Bachelor of Psychological Science (Honours) and is currently completing a Master of Clinical Psychology.",
+    "credentials": [
+      "Provisional psychologist, BPsych BPsychSc(Hons), Master of Clinical Psychology in progress"
+    ],
+    "bookingUrl": "https://www.halaxy.com/book/goals-psychology/location/726621",
+    "practical": {
+      "nextAvailable": "50-minute sessions; times set with the clinic",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person",
+        "telehealth"
+      ],
+      "fee": null,
+      "gapAfterMedicare": null,
+      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first. Provisional psychologist sessions do not attract a Medicare rebate.",
+      "newPatients": true,
+      "ageRange": [
+        0,
+        120
+      ],
+      "languages": [],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "gender": "female",
+      "initialConsultMins": 50,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "Trauma",
+        "level": "particular",
+        "evidenceIds": [
+          "alice-bui-exp-trauma"
+        ]
+      },
+      {
+        "area": "Refugee and CALD clients",
+        "level": "particular",
+        "evidenceIds": [
+          "alice-bui-exp-refugee-and-cald-clients"
+        ]
+      },
+      {
+        "area": "ADHD",
+        "level": "general",
+        "evidenceIds": [
+          "alice-bui-exp-adhd"
+        ]
+      },
+      {
+        "area": "Autism",
+        "level": "general",
+        "evidenceIds": [
+          "alice-bui-exp-autism"
+        ]
+      },
+      {
+        "area": "Anxiety",
+        "level": "general",
+        "evidenceIds": [
+          "alice-bui-exp-anxiety"
+        ]
+      },
+      {
+        "area": "Depression",
+        "level": "general",
+        "evidenceIds": [
+          "alice-bui-exp-depression"
+        ]
+      }
+    ],
+    "phenotype": {
+      "shared_decision_making": {
+        "value": "shared",
+        "confidence": "medium",
+        "evidenceIds": [
+          "alice-bui-shared_decision_making"
+        ]
+      }
+    },
+    "evidence": [
+      {
+        "id": "alice-bui-exp-trauma",
+        "trait": "expertise",
+        "excerpt": "special clinical interests in evidence-based practice for clients who have experienced trauma",
+        "patientFacing": "Alice has a special interest in evidence-based care for people who have experienced trauma.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "alice-bui-exp-refugee-and-cald-clients",
+        "trait": "expertise",
+        "excerpt": "particularly passionate about working with clients who are refugees",
+        "patientFacing": "Alice particularly works with refugee, newly arrived and culturally diverse clients.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "alice-bui-exp-adhd",
+        "trait": "expertise",
+        "excerpt": "autism, ADHD, intellectual disability",
+        "patientFacing": "Alice works with ADHD and autism.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "alice-bui-exp-autism",
+        "trait": "expertise",
+        "excerpt": "autism, ADHD, intellectual disability",
+        "patientFacing": "Alice works with ADHD and autism.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "alice-bui-exp-anxiety",
+        "trait": "expertise",
+        "excerpt": "trauma, PTSD, anxiety, depression",
+        "patientFacing": "Alice works with anxiety and depression.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "alice-bui-exp-depression",
+        "trait": "expertise",
+        "excerpt": "trauma, PTSD, anxiety, depression",
+        "patientFacing": "Alice works with anxiety and depression.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "alice-bui-shared_decision_making",
+        "trait": "shared_decision_making",
+        "excerpt": "emphasises a safe collaborative space",
+        "patientFacing": "Alice describes her therapy style as trauma-informed and collaborative.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "meera-lakhani",
+    "name": "Meera Lakhani",
+    "firstName": "Meera",
+    "profession": "psychologist",
+    "role": "Educational and Developmental Psychologist",
+    "practice": "GOALS Psychology",
+    "location": {
+      "suburb": "Fortitude Valley",
+      "city": "Brisbane",
+      "lat": -27.457,
+      "lng": 153.034
+    },
+    "photo": "meera-lakhani.jpg",
+    "bio": "Meera works with children, teenagers and adults. She enjoys working with clients to understand their goals then create a plan to achieve their goals. Meera is passionate about helping clients to identify their unique areas of strengths and difficulties and collaborate with relevant stakeholders to maximise positive outcomes in their lives. Meera’s current focus is on neurodivergence assessments — autism assessment, ADHD assessment and cognitive assessment. She utilises assessment tools including WISC, WAIS, WIAT, MIGDAS and others as required to support clients with discovering an enhanced understanding of their unique neurotype. Meera is especially passionate about working with young adults and their families, in a way that aligns with their values and beliefs, to be the best version of themselves. She thrives on supporting clients to lean into vulnerability, learn new skills and navigate life’s challenges. Meera holds a Bachelor of Psychological Science from The University of Queensland and a Master of Psychology - Educational & Developmental from Queensland University of Technology. She has previously worked as a Psychologist in a school and at the Queensland Children’s Hospital Child Development Service.",
+    "credentials": [
+      "Educational and developmental psychologist, BPsychSc MPsych(Ed&Dev)"
+    ],
+    "bookingUrl": "https://www.goalspsychology.com/contact",
+    "practical": {
+      "nextAvailable": "Arranged with the clinic rather than booked online",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person",
+        "telehealth"
+      ],
+      "fee": null,
+      "gapAfterMedicare": null,
+      "billingNote": "Not published; quoted when you book. A free 15-minute call is available to ask first.",
+      "newPatients": true,
+      "ageRange": [
+        0,
+        120
+      ],
+      "languages": [],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "gender": "female",
+      "initialConsultMins": 50,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "ADHD assessment",
+        "level": "particular",
+        "evidenceIds": [
+          "meera-lakhani-exp-adhd-assessment"
+        ]
+      },
+      {
+        "area": "Autism assessment",
+        "level": "particular",
+        "evidenceIds": [
+          "meera-lakhani-exp-autism-assessment"
+        ]
+      },
+      {
+        "area": "Cognitive assessment",
+        "level": "particular",
+        "evidenceIds": [
+          "meera-lakhani-exp-cognitive-assessment"
+        ]
+      },
+      {
+        "area": "Young adults",
+        "level": "particular",
+        "evidenceIds": [
+          "meera-lakhani-exp-young-adults"
+        ]
+      }
+    ],
+    "phenotype": {
+      "shared_decision_making": {
+        "value": "shared",
+        "confidence": "medium",
+        "evidenceIds": [
+          "meera-lakhani-shared_decision_making"
+        ]
+      },
+      "care_coordination": {
+        "value": "high",
+        "confidence": "medium",
+        "evidenceIds": [
+          "meera-lakhani-care_coordination"
+        ]
+      }
+    },
+    "evidence": [
+      {
+        "id": "meera-lakhani-exp-adhd-assessment",
+        "trait": "expertise",
+        "excerpt": "autism assessment, ADHD assessment and cognitive assessment",
+        "patientFacing": "Meera focuses on ADHD, autism and cognitive assessments.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "meera-lakhani-exp-autism-assessment",
+        "trait": "expertise",
+        "excerpt": "autism assessment, ADHD assessment and cognitive assessment",
+        "patientFacing": "Meera focuses on ADHD, autism and cognitive assessments.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "meera-lakhani-exp-cognitive-assessment",
+        "trait": "expertise",
+        "excerpt": "autism assessment, ADHD assessment and cognitive assessment",
+        "patientFacing": "Meera focuses on ADHD, autism and cognitive assessments.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "meera-lakhani-exp-young-adults",
+        "trait": "expertise",
+        "excerpt": "especially passionate about working with young adults and their families",
+        "patientFacing": "Meera especially enjoys working with young adults and their families.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "meera-lakhani-shared_decision_making",
+        "trait": "shared_decision_making",
+        "excerpt": "working with clients to understand their goals then create a plan to achieve their goals",
+        "patientFacing": "Meera works with you to understand your goals, then plans how to reach them.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "meera-lakhani-care_coordination",
+        "trait": "care_coordination",
+        "excerpt": "collaborate with relevant stakeholders to maximise positive outcomes",
+        "patientFacing": "Meera works with the other people involved in your care.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "jessica-katsamatsas",
+    "name": "Jessica Katsamatsas",
+    "firstName": "Jess",
+    "profession": "psychologist",
+    "role": "Psychologist and Director",
+    "practice": "Neutral Minds Psychology",
+    "location": {
+      "suburb": "Ashgrove",
+      "city": "Brisbane",
+      "lat": -27.444,
+      "lng": 152.986
+    },
+    "photo": "jessica-katsamatsas.jpg",
+    "bio": "Hi, I’m Jess, a psychologist who believes therapy should feel like a space where you can take a breath, put the mask down, and be a little more human. I work primarily with young neurodivergent adults who may be navigating anxiety, burnout, low self-esteem, relationship difficulties, attachment wounds, or the lingering impact of past experiences. Many of the people I work with have spent a long time trying to understand why everyday life can feel harder than it seems to for everyone else. They may be used to overthinking, people-pleasing, masking, holding everything together, or feeling like they’re constantly trying to keep up. As someone passionate about neurodiversity-affirming care, I also understand that healing and growth don’t have to mean becoming “less neurodivergent” or learning to fit yourself into someone else’s idea of what life should look like. Sometimes, therapy is about understanding yourself more deeply, letting go of strategies that no longer serve you, and creating a life that actually works for you. My work draws on evidence-based approaches including CBT, ACT and mindfulness, alongside attachment-focused, trauma-informed and somatic-informed perspectives. I have a particular interest in the ways our early relationships and experiences can shape how we see ourselves, connect with others and cope with the world around us. My approach to therapy is warm, collaborative and down-to-earth. I’m not here to tell you how you should feel or hand you a list of strategies and send you on your way. Instead, we’ll work together to better understand your experiences, patterns, relationships and nervous system, while finding practical ways to make life feel more manageable. You don’t need to have the right words. You don’t need to know exactly what you want to work on. You just need a place to start. We can figure out the rest together.",
+    "credentials": [
+      "Registered psychologist"
+    ],
+    "bookingUrl": "https://clientportal.zandahealth.com/clientportal/neutralmindspsychology/appointment-booking",
+    "practical": {
+      "nextAvailable": "50-minute sessions for adults 18 and over; booked online through the practice’s portal",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person",
+        "telehealth"
+      ],
+      "fee": 220,
+      "gapAfterMedicare": null,
+      "billingNote": "$220 a session; Medicare rebate with a GP referral and Mental Health Treatment Plan.",
+      "newPatients": true,
+      "ageRange": [
+        18,
+        120
+      ],
+      "languages": [],
+      "accessibility": [],
+      "gender": "undeclared",
+      "initialConsultMins": 50,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "Neurodivergent adults",
+        "level": "particular",
+        "evidenceIds": [
+          "jessica-katsamatsas-exp-neurodivergent-adults"
+        ]
+      },
+      {
+        "area": "Anxiety",
+        "level": "particular",
+        "evidenceIds": [
+          "jessica-katsamatsas-exp-anxiety"
+        ]
+      },
+      {
+        "area": "Burnout",
+        "level": "particular",
+        "evidenceIds": [
+          "jessica-katsamatsas-exp-burnout"
+        ]
+      },
+      {
+        "area": "Relationships",
+        "level": "particular",
+        "evidenceIds": [
+          "jessica-katsamatsas-exp-relationships"
+        ]
+      },
+      {
+        "area": "Self-esteem",
+        "level": "particular",
+        "evidenceIds": [
+          "jessica-katsamatsas-exp-self-esteem"
+        ]
+      }
+    ],
+    "phenotype": {
+      "neurodiversity_affirming": {
+        "value": "high",
+        "confidence": "medium",
+        "evidenceIds": [
+          "jessica-katsamatsas-neurodiversity_affirming"
+        ]
+      },
+      "therapy_style": {
+        "value": "exploratory",
+        "confidence": "medium",
+        "evidenceIds": [
+          "jessica-katsamatsas-therapy_style"
+        ]
+      },
+      "shared_decision_making": {
+        "value": "shared",
+        "confidence": "medium",
+        "evidenceIds": [
+          "jessica-katsamatsas-shared_decision_making"
+        ]
+      }
+    },
+    "evidence": [
+      {
+        "id": "jessica-katsamatsas-exp-neurodivergent-adults",
+        "trait": "expertise",
+        "excerpt": "I work primarily with young neurodivergent adults",
+        "patientFacing": "Jess works mainly with young neurodivergent adults.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "jessica-katsamatsas-exp-anxiety",
+        "trait": "expertise",
+        "excerpt": "navigating anxiety, burnout, low self-esteem, relationship difficulties",
+        "patientFacing": "Jess works with anxiety, burnout, self-esteem and relationship difficulties.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "jessica-katsamatsas-exp-burnout",
+        "trait": "expertise",
+        "excerpt": "navigating anxiety, burnout, low self-esteem, relationship difficulties",
+        "patientFacing": "Jess works with anxiety, burnout, self-esteem and relationship difficulties.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "jessica-katsamatsas-exp-relationships",
+        "trait": "expertise",
+        "excerpt": "navigating anxiety, burnout, low self-esteem, relationship difficulties",
+        "patientFacing": "Jess works with anxiety, burnout, self-esteem and relationship difficulties.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "jessica-katsamatsas-exp-self-esteem",
+        "trait": "expertise",
+        "excerpt": "navigating anxiety, burnout, low self-esteem, relationship difficulties",
+        "patientFacing": "Jess works with anxiety, burnout, self-esteem and relationship difficulties.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "jessica-katsamatsas-neurodiversity_affirming",
+        "trait": "neurodiversity_affirming",
+        "excerpt": "passionate about neurodiversity-affirming care",
+        "patientFacing": "Jess practises neurodiversity-affirming care: growth doesn't have to mean becoming less neurodivergent.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "jessica-katsamatsas-therapy_style",
+        "trait": "therapy_style",
+        "excerpt": "hand you a list of strategies and send you on your way",
+        "patientFacing": "Jess says she won't just hand you a list of strategies; you work together to understand your patterns.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "jessica-katsamatsas-shared_decision_making",
+        "trait": "shared_decision_making",
+        "excerpt": "We can figure out the rest together.",
+        "patientFacing": "Jess says you don't need the right words to start; you'll work out the rest together.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "bart-traynor",
+    "name": "Bart Traynor",
+    "firstName": "Bart",
+    "profession": "psychologist",
+    "role": "Clinical Psychologist and Director",
+    "practice": "Atlantis Recovery Centre",
+    "location": {
+      "suburb": "Bundall",
+      "city": "Gold Coast",
+      "lat": -28.009,
+      "lng": 153.405
+    },
+    "photo": "bart-traynor.jpg",
+    "bio": "Bart is a passionate, straight-talking Clinical Psychologist who believes mental health support should help people function better in everyday life—not just feel better in the therapy room. He works with clients facing complex challenges, career and performance pressures, and major life transitions, while also supporting clinicians through supervision and professional development. As Director of Atlantis Recovery Centre, Bart leads an integrated approach that brings together psychology, movement, physical rehabilitation, and performance. His warm, practical style helps people build resilience, improve both mental and physical fitness, and create meaningful, lasting change.",
+    "credentials": [
+      "Clinical psychologist"
+    ],
+    "bookingUrl": "https://www.hotdoc.com.au/medical-centres/bundall-QLD-4217/atlantis-recovery-centre/doctors/bart-traynor-1",
+    "practical": {
+      "nextAvailable": "Times set with the practice; booked online through HotDoc",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person"
+      ],
+      "fee": null,
+      "gapAfterMedicare": null,
+      "billingNote": "Not published; quoted by the practice. DVA, NDIS, private health, WorkCover and Medicare plans accepted.",
+      "newPatients": true,
+      "ageRange": [
+        0,
+        120
+      ],
+      "languages": [],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "gender": "undeclared",
+      "initialConsultMins": null,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "Career and performance",
+        "level": "particular",
+        "evidenceIds": [
+          "bart-traynor-exp-career-and-performance"
+        ]
+      },
+      {
+        "area": "Life transitions",
+        "level": "particular",
+        "evidenceIds": [
+          "bart-traynor-exp-life-transitions"
+        ]
+      }
+    ],
+    "phenotype": {
+      "communication_directness": {
+        "value": "direct",
+        "confidence": "medium",
+        "evidenceIds": [
+          "bart-traynor-communication_directness"
+        ]
+      },
+      "therapy_style": {
+        "value": "practical",
+        "confidence": "medium",
+        "evidenceIds": [
+          "bart-traynor-therapy_style"
+        ]
+      },
+      "lifestyle_integration": {
+        "value": "high",
+        "confidence": "medium",
+        "evidenceIds": [
+          "bart-traynor-lifestyle_integration"
+        ]
+      }
+    },
+    "evidence": [
+      {
+        "id": "bart-traynor-exp-career-and-performance",
+        "trait": "expertise",
+        "excerpt": "career and performance pressures",
+        "patientFacing": "Bart works with career and performance pressures.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "bart-traynor-exp-life-transitions",
+        "trait": "expertise",
+        "excerpt": "major life transitions",
+        "patientFacing": "Bart supports people through major life transitions.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "bart-traynor-communication_directness",
+        "trait": "communication_directness",
+        "excerpt": "straight-talking Clinical Psychologist",
+        "patientFacing": "Bart describes himself as straight-talking.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "bart-traynor-therapy_style",
+        "trait": "therapy_style",
+        "excerpt": "function better in everyday life",
+        "patientFacing": "Bart focuses on helping you function better in everyday life, not just feel better in the session.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "bart-traynor-lifestyle_integration",
+        "trait": "lifestyle_integration",
+        "excerpt": "brings together psychology, movement, physical rehabilitation, and performance",
+        "patientFacing": "Bart's practice brings psychology together with movement and physical rehabilitation.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "jeff-leech",
+    "name": "Jeff Leech",
+    "firstName": "Jeff",
+    "profession": "psychologist",
+    "role": "Clinical Psychologist",
+    "practice": "Atlantis Recovery Centre",
+    "location": {
+      "suburb": "Bundall",
+      "city": "Gold Coast",
+      "lat": -28.009,
+      "lng": 153.405
+    },
+    "photo": "jeff-leech.jpg",
+    "bio": "Jeff is passionate about helping people overcome life’s most complex challenges. Whether you’re recovering from trauma, managing anxiety or depression, or striving to perform at your best, Jeff provides personalised, evidence-based care using Schema Therapy, ACT, and Activity-Based Psychotherapy. He is also completing advanced training in Psychedelic-Assisted Therapy, combining proven approaches with emerging treatments to help clients achieve lasting change.",
+    "credentials": [
+      "Clinical psychologist, MClinPsych BPsychSc(Hons)"
+    ],
+    "bookingUrl": "https://www.hotdoc.com.au/medical-centres/bundall-QLD-4217/atlantis-recovery-centre/doctors",
+    "practical": {
+      "nextAvailable": "Times set with the practice; booked online through HotDoc",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person"
+      ],
+      "fee": null,
+      "gapAfterMedicare": null,
+      "billingNote": "Not published; quoted by the practice. DVA, NDIS, private health, WorkCover and Medicare plans accepted.",
+      "newPatients": true,
+      "ageRange": [
+        0,
+        120
+      ],
+      "languages": [],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "gender": "undeclared",
+      "initialConsultMins": null,
+      "weekends": null
+    },
+    "expertise": [
+      {
+        "area": "Trauma",
+        "level": "particular",
+        "evidenceIds": [
+          "jeff-leech-exp-trauma"
+        ]
+      },
+      {
+        "area": "Anxiety",
+        "level": "particular",
+        "evidenceIds": [
+          "jeff-leech-exp-anxiety"
+        ]
+      },
+      {
+        "area": "Depression",
+        "level": "particular",
+        "evidenceIds": [
+          "jeff-leech-exp-depression"
+        ]
+      },
+      {
+        "area": "Career and performance",
+        "level": "general",
+        "evidenceIds": [
+          "jeff-leech-exp-career-and-performance"
+        ]
+      }
+    ],
+    "phenotype": {},
+    "evidence": [
+      {
+        "id": "jeff-leech-exp-trauma",
+        "trait": "expertise",
+        "excerpt": "recovering from trauma",
+        "patientFacing": "Jeff works with people recovering from trauma.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "jeff-leech-exp-anxiety",
+        "trait": "expertise",
+        "excerpt": "managing anxiety or depression",
+        "patientFacing": "Jeff helps with anxiety and depression.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "jeff-leech-exp-depression",
+        "trait": "expertise",
+        "excerpt": "managing anxiety or depression",
+        "patientFacing": "Jeff helps with anxiety and depression.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      },
+      {
+        "id": "jeff-leech-exp-career-and-performance",
+        "trait": "expertise",
+        "excerpt": "striving to perform at your best",
+        "patientFacing": "Jeff works with people striving to perform at their best.",
+        "scenario": "Published ADHDme profile",
+        "timestamp": "2026-09-25T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "profile"
+      }
+    ]
+  },
+  {
+    "id": "michael-rehardt",
+    "name": "Michael Rehardt",
+    "firstName": "Michael",
+    "profession": "psychologist",
+    "role": "Provisional Psychologist",
+    "practice": "Atlantis Recovery Centre",
+    "location": {
+      "suburb": "Bundall",
+      "city": "Gold Coast",
+      "lat": -28.009,
+      "lng": 153.405
+    },
+    "photo": "michael-rehardt.jpg",
+    "bio": "Michael is completing his final externship placement at Atlantis Recovery Centre as part of his Master of Clinical Psychology at Griffith University. He brings a thoughtful, creative and practical approach to his work and is continuing to build his clinical experience across a range of presentations. Outside psychology, Michael is also an Aboriginal artist and former competitive sprinter, bringing creativity, discipline and a unique perspective to the Atlantis team.",
+    "credentials": [
+      "Provisional psychologist"
+    ],
+    "bookingUrl": "https://www.hotdoc.com.au/medical-centres/bundall-QLD-4217/atlantis-recovery-centre/doctors",
+    "practical": {
+      "nextAvailable": "Times set with the practice; booked online through HotDoc",
+      "daysUntilAvailable": null,
+      "modes": [
+        "in_person"
+      ],
+      "fee": null,
+      "gapAfterMedicare": null,
+      "billingNote": "Not published; quoted by the practice. DVA, NDIS, private health, WorkCover and Medicare plans accepted. Provisional psychologist sessions do not attract a Medicare rebate.",
+      "newPatients": true,
+      "ageRange": [
+        0,
+        120
+      ],
+      "languages": [],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "gender": "undeclared",
+      "initialConsultMins": null,
+      "weekends": null
+    },
+    "expertise": [],
+    "phenotype": {},
+    "evidence": []
+  }
+]

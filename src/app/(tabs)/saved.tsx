@@ -21,7 +21,7 @@ export default function Saved() {
           <EmptyStateCard
             title="Nothing saved yet."
             body="Tap ♥ on a clinician you'd like to come back to and they'll appear here."
-            action={{ label: 'Find a GP', onPress: () => router.navigate('/') }}
+            action={{ label: 'Start a search', onPress: () => router.navigate('/') }}
           />
         ) : (
           <>

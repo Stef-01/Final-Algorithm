@@ -1,4 +1,4 @@
-import { expertiseLevel, IMPORTANCE, similarity, usableTrait } from './score';
+import { expertiseLevel, IMPORTANCE, isUsableStatus, similarity, usableTrait } from './score';
 import { CONFIDENCE, type ClinicianRecord, type Dimension, type PatientSignals, type Reason } from './types';
 
 // Match explanations (PRD §4.8–4.9, §26–27, §32). Each reason pairs something the patient
@@ -59,7 +59,20 @@ const SIGNAL: Partial<Record<Dimension, Record<string, string>>> = {
     scheduled: "You'd like regular check-ins.",
     as_needed: "You'd like follow-up only when you ask for it.",
   },
+  therapy_style: {
+    practical: 'You want practical strategies you can use day to day.',
+    exploratory: 'You want to understand why things happen, not just get a list of strategies.',
+    balanced: 'You want a mix of insight and practical strategies.',
+  },
+  neurodiversity_affirming: {
+    high: "You'd like someone who treats ADHD as a difference, not a deficit.",
+  },
 };
+
+/** "Career and performance" → "career and performance"; acronyms like ADHD and NDIS stay as they are. */
+export function areaPhrase(area: string) {
+  return area.replace(/^([A-Z])([a-z])/, (_m, a: string, b: string) => a.toLowerCase() + b);
+}
 
 function signalFor(d: Dimension, value: string, quote?: string) {
   if (quote) return `You said ${quote.replace(/[.!?]+$/, '')}.`;
@@ -68,7 +81,7 @@ function signalFor(d: Dimension, value: string, quote?: string) {
 
 function approvedEvidence(c: ClinicianRecord, ids: string[]) {
   return c.evidence.find(
-    (e) => ids.includes(e.id) && e.reviewerStatus === 'approved' && CONFIDENCE[e.confidence] >= CONFIDENCE.medium,
+    (e) => ids.includes(e.id) && isUsableStatus(e.reviewerStatus) && CONFIDENCE[e.confidence] >= CONFIDENCE.medium,
   );
 }
 
@@ -92,7 +105,7 @@ export function reasonsFor(c: ClinicianRecord, s: PatientSignals, max = MAX_REAS
     const e = c.expertise.find((x) => x.area.toLowerCase() === need.area.toLowerCase())!;
     const ev = approvedEvidence(c, e.evidenceIds);
     if (!ev) continue;
-    const signal = need.quote ? `You said ${need.quote.replace(/[.!?]+$/, '')}.` : `You're looking for help with ${need.area}.`;
+    const signal = need.quote ? `You said ${need.quote.replace(/[.!?]+$/, '')}.` : `You're looking for help with ${areaPhrase(need.area)}.`;
     candidates.push({ signal, evidenceId: ev.id, evidence: ev.patientFacing, dimension: 'expertise', weight: 0.8 * CONFIDENCE[need.confidence] });
   }
 
@@ -127,6 +140,8 @@ const STYLE_LABEL: Partial<Record<Dimension, Record<string, string>>> = {
   lifestyle_integration: { high: 'Lifestyle-focused' },
   medication_philosophy: { conservative: 'Cautious with medication' },
   continuity: { high: 'Continuity of care' },
+  therapy_style: { practical: 'Practical strategies', exploratory: 'Explores the why', balanced: 'Strategies and insight' },
+  neurodiversity_affirming: { high: 'Neurodiversity-affirming' },
 };
 
 /** "How they practise": up to 5 behaviours, most confident first. */

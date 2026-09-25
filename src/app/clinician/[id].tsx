@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ChipsCard, PhotoCard, PromptCard, TextCard } from '@/components/cards';
-import { placeLine, practicalChips } from '@/components/ClinicianCards';
+import { costLabel, placeLine, practicalChips } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { FitLabel } from '@/components/FitLabel';
 import { ScreenHeader } from '@/components/ScreenHeader';
@@ -69,15 +69,10 @@ export default function ClinicianDetail() {
           chips={[]}
           rowsTitle="Practical details"
           rows={[
-            { icon: 'icCalendar', label: `Next available: ${p.nextAvailable}` },
+            ...(c.practice ? [{ icon: 'icHometown' as const, label: c.practice }] : []),
+            { icon: 'icCalendar', label: p.nextAvailable },
             { icon: 'icVideo', label: p.modes.join(' · ') },
-            {
-              icon: 'icCost',
-              label:
-                p.gapAfterMedicare === 0
-                  ? 'Bulk billed, no out-of-pocket cost'
-                  : `$${p.fee} · approx. $${p.gapAfterMedicare} after Medicare`,
-            },
+            { icon: 'icCost', label: p.billingNote ?? costLabel(c) },
             { icon: 'icLocation', label: `${c.suburb}, ${c.city}` },
           ]}
         />

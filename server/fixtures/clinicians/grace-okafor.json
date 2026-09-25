@@ -2,6 +2,7 @@
   "id": "grace-okafor",
   "name": "Dr Grace Okafor",
   "firstName": "Grace",
+  "profession": "gp",
   "role": "GP",
   "location": {
     "suburb": "Toowong",

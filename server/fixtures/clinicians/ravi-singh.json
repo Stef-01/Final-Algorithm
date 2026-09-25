@@ -2,6 +2,7 @@
   "id": "ravi-singh",
   "name": "Dr Ravi Singh",
   "firstName": "Ravi",
+  "profession": "gp",
   "role": "GP",
   "location": {
     "suburb": "Carindale",

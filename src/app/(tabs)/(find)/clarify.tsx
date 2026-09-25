@@ -10,9 +10,9 @@ import { colors, fonts } from '@/lib/theme';
 // Screen 02 — adaptive clarification. A tapped answer moves on immediately; no next button.
 export default function Clarify() {
   const session = useSession();
-  const { q } = useLocalSearchParams<{ q?: string }>();
+  const { q, own } = useLocalSearchParams<{ q?: string; own?: string }>();
   const question = questionById(session.state, q);
-  const [ownWords, setOwnWords] = useState(false);
+  const [ownWords, setOwnWords] = useState(own === '1');
   const [text, setText] = useState('');
 
   if (!session.loaded) return null;

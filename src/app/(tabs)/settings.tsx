@@ -26,11 +26,20 @@ export default function Settings() {
           />
         </ListGroup>
 
+        <SectionTitle>Demo</SectionTitle>
+        <ListGroup>
+          <ListRow label="Try a demo patient" value="Step through a scripted search" onPress={() => router.push('/demos')} />
+        </ListGroup>
+
         <SectionTitle>About</SectionTitle>
         <ListGroup>
           <ListRow
             label="How matching works"
             value="WATL asks only what could change your matches, shows at most three, and explains each one."
+          />
+          <ListRow
+            label="Where profiles come from"
+            value="GPs and psychologists in the ADHDme network. Reasons are drawn from each clinician's published profile."
           />
           <ListRow
             label="Privacy"

@@ -2,6 +2,7 @@
   "id": "michael-obrien",
   "name": "Dr Michael O'Brien",
   "firstName": "Michael",
+  "profession": "gp",
   "role": "GP",
   "location": {
     "suburb": "Indooroopilly",
