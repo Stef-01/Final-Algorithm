@@ -4,6 +4,8 @@ WATL is a dating app that emphasizes long-term connections. Users can filter mat
 
 This is a React Native (Expo) app. It was ported from an Android/Java dating-app clone ([diya31656/Hinge](https://github.com/diya31656/Hinge)); that original Java code is kept under [`legacy-android/`](legacy-android) for reference.
 
+> **Testing phase: sign-in is off.** The app opens straight into Discover as a test user ("Tester"). To bring back the welcome screen and sign-up flow, set `EXPO_PUBLIC_SKIP_SIGN_IN=false` (locally in `.env`, or in Vercel's environment variables), or change the default in [`src/lib/config.ts`](src/lib/config.ts).
+
 ## Getting started
 
 ```bash

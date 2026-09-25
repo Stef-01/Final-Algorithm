@@ -15,6 +15,13 @@ import Phone from '@/app/onboarding/phone';
 import Verified from '@/app/onboarding/verified';
 import { ProfileProvider } from '@/lib/profile';
 
+// Lets each test flip the sign-in switch in src/lib/config.ts.
+const mockConfig = { skipSignIn: false };
+jest.mock('@/lib/config', () => ({
+  ...jest.requireActual('@/lib/config'),
+  isSignInSkipped: () => mockConfig.skipSignIn,
+}));
+
 // Minimal route tree: the real screens, wrapped in the profile provider like the root layout does.
 const Root = () => {
   const { Stack } = jest.requireActual('expo-router');
@@ -45,7 +52,10 @@ const routes = {
 
 const saved = async () => JSON.parse((await AsyncStorage.getItem('user_data')) ?? '{}');
 
-beforeEach(() => AsyncStorage.clear());
+beforeEach(async () => {
+  mockConfig.skipSignIn = false;
+  await AsyncStorage.clear();
+});
 
 describe('welcome', () => {
   it('shows the WATL branding and sign-up options', async () => {
@@ -160,5 +170,22 @@ describe('discover', () => {
     await waitFor(() => expect(screen).toHavePathname('/settings'));
     expect(await screen.findByText('Ada')).toBeOnTheScreen();
     expect(screen.getByText('WATL Member')).toBeOnTheScreen();
+  });
+});
+
+describe('sign-in skipped (testing phase)', () => {
+  beforeEach(() => {
+    mockConfig.skipSignIn = true;
+  });
+
+  it('opens straight into Discover', async () => {
+    renderRouter(routes, { initialUrl: '/' });
+    await waitFor(() => expect(screen).toHavePathname('/discover'));
+    expect(await screen.findByText('Lisa')).toBeOnTheScreen();
+  });
+
+  it('shows the test profile in Settings', async () => {
+    renderRouter(routes, { initialUrl: '/settings' });
+    expect(await screen.findByText('Tester')).toBeOnTheScreen();
   });
 });

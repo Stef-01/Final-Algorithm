@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
+import { isSignInSkipped, TEST_PROFILE } from './config';
+
 // Same keys the Android app kept in SharedPreferences ("user_data").
 export type Profile = Partial<{
   phoneNumber: string;
@@ -19,6 +21,9 @@ export type Profile = Partial<{
 
 const STORAGE_KEY = 'user_data';
 
+// With sign-in skipped (testing phase), an empty store starts as the test profile.
+const emptyProfile = (): Profile => (isSignInSkipped() ? { ...TEST_PROFILE } : {});
+
 type ProfileContextValue = {
   profile: Profile;
   loaded: boolean;
@@ -29,9 +34,9 @@ type ProfileContextValue = {
 const ProfileContext = createContext<ProfileContextValue | null>(null);
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
-  const [profile, setProfile] = useState<Profile>({});
+  const [profile, setProfile] = useState<Profile>(emptyProfile);
   const [loaded, setLoaded] = useState(false);
-  const current = useRef<Profile>({});
+  const current = useRef<Profile>(profile);
 
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
@@ -50,8 +55,8 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const clear = useCallback(async () => {
-    current.current = {};
-    setProfile({});
+    current.current = emptyProfile();
+    setProfile(current.current);
     await AsyncStorage.removeItem(STORAGE_KEY);
   }, []);
 
