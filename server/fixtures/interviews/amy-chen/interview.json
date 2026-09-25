@@ -302,7 +302,7 @@
       "domain": "Practice logistics",
       "dimension": "practical",
       "prompt": "Fees and rebates, typical wait for a new patient, weekend or after-hours times, telehealth, new patients.",
-      "answer": "",
+      "answer": "A standard consult is $120, and after the Medicare rebate most people pay about $42 out of pocket. I can usually see someone new within 1 day. I don't work weekends. Yes, I'm taking new patients. Consults are 30 minutes.",
       "excerpt": "",
       "proposed": {
         "value": null,
@@ -342,5 +342,13 @@
         "patientFacing": ""
       }
     }
-  ]
+  ],
+  "practicalSaid": {
+    "fee": "A standard consult is $120",
+    "gapAfterMedicare": "after the Medicare rebate most people pay about $42 out of pocket",
+    "daysUntilAvailable": "I can usually see someone new within 1 day",
+    "weekends": "I don't work weekends",
+    "newPatients": "Yes, I'm taking new patients",
+    "initialConsultMins": "Consults are 30 minutes"
+  }
 }

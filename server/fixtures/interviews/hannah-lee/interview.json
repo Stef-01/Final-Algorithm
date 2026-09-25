@@ -302,7 +302,7 @@
       "domain": "Practice logistics",
       "dimension": "practical",
       "prompt": "Fees and rebates, typical wait for a new patient, weekend or after-hours times, telehealth, new patients.",
-      "answer": "",
+      "answer": "My fee is $140; with the rebate the gap is around $55. The wait for a new patient is about 7 days. No weekend sessions, sorry. I am taking new patients. First sessions run 40 minutes.",
       "excerpt": "",
       "proposed": {
         "value": null,
@@ -342,5 +342,13 @@
         "patientFacing": ""
       }
     }
-  ]
+  ],
+  "practicalSaid": {
+    "fee": "My fee is $140",
+    "gapAfterMedicare": "with the rebate the gap is around $55",
+    "daysUntilAvailable": "The wait for a new patient is about 7 days",
+    "weekends": "No weekend sessions, sorry",
+    "newPatients": "I am taking new patients",
+    "initialConsultMins": "First sessions run 40 minutes"
+  }
 }

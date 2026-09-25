@@ -184,3 +184,35 @@ class ClaudeProposals(unittest.TestCase):
         drafts, _, problems = self.iv.validate(self.doc)
         self.assertEqual(problems, [])
         self.assertTrue(all(d['proposedBy'] == 'claude' for d in drafts if d['scenario'] in {a['scenario'] for a in self.answered}))
+
+
+class PracticalFactsNeedTheirSource(unittest.TestCase):
+    """Practice facts overwrite 'not published' on a real profile, so each must trace to what was said."""
+
+    def setUp(self):
+        sys.path.insert(0, str(ROOT / 'scripts'))
+        import interview
+        self.iv = interview
+        self.doc = json.loads((FIXTURES / 'amy-chen' / 'interview.json').read_text())
+
+    def problems(self):
+        return [p for p in self.iv.validate(self.doc)[2] if p.startswith('practical')]
+
+    def test_the_mock_interview_traces_every_fact(self):
+        self.assertEqual(self.problems(), [])
+
+    def test_a_fact_without_its_source_is_refused(self):
+        self.doc['practicalSaid']['fee'] = ''
+        self.assertTrue(any('say where it came from' in p for p in self.problems()))
+
+    def test_a_source_that_was_not_said_is_refused(self):
+        self.doc['practicalSaid']['weekends'] = 'I work every Saturday'
+        self.assertTrue(any('not word for word' in p for p in self.problems()))
+
+    def test_a_number_must_be_in_what_was_said(self):
+        self.doc['practical']['fee'] = 150
+        self.assertTrue(any('150 does not appear' in p for p in self.problems()))
+
+    def test_the_gap_cannot_be_more_than_the_fee(self):
+        self.doc['practical']['gapAfterMedicare'] = 130
+        self.assertIn('practical: the out-of-pocket gap is more than the fee', self.problems())

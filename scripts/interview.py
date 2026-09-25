@@ -92,6 +92,8 @@ def cmd_new(args):
         interviewer='',
         consent=False,
         practical={k: None for k in PRACTICAL_FIELDS},
+        # For each practical fact you fill in: the clinician's words from the logistics answer.
+        practicalSaid={k: '' for k in PRACTICAL_FIELDS},
         answers=[
             dict(scenario=sid, domain=domain, dimension=dim, prompt=prompt, answer='', excerpt='',
                  proposed=dict(value=None, area=None, level=None, confidence='medium', patientFacing=''))
@@ -141,6 +143,10 @@ def validate(doc):
         drafts.append(dict(scenario=sid, dimension=dim, value=p.get('value'), area=p.get('area'), level=p.get('level'),
                            confidence=p.get('confidence'), excerpt=excerpt, patientFacing=line, prompt=a['prompt'],
                            **({'proposedBy': p['proposedBy']} if p.get('proposedBy') else {})))
+    # Practice facts overwrite "not published" on a real profile, so each needs the clinician's own
+    # words from the logistics answer, and any number must appear in those words.
+    logistics = next((a.get('answer', '') for a in doc.get('answers', []) if a.get('scenario') == 'logistics'), '')
+    said = doc.get('practicalSaid') or {}
     practical = {}
     for k, v in (doc.get('practical') or {}).items():
         if k not in PRACTICAL_FIELDS:
@@ -148,7 +154,17 @@ def validate(doc):
         elif not isinstance(v, PRACTICAL_FIELDS[k]):
             problems.append(f'practical.{k}: wrong type')
         elif v is not None:
+            quote = (said.get(k) or '').strip()
+            if not quote:
+                problems.append(f'practical.{k}: say where it came from (practicalSaid.{k}, from the logistics answer)')
+            elif quote not in logistics:
+                problems.append(f'practical.{k}: practicalSaid is not word for word in the logistics answer: {quote!r}')
+            elif isinstance(v, (int, float)) and not isinstance(v, bool) and k != 'gapAfterMedicare' and not re.search(rf'(?<!\d){v:g}(?!\d)', quote):
+                problems.append(f'practical.{k}: {v} does not appear in what they said: {quote!r}')
             practical[k] = v
+    fee, gap = practical.get('fee'), practical.get('gapAfterMedicare')
+    if fee is not None and gap is not None and gap > fee:
+        problems.append('practical: the out-of-pocket gap is more than the fee')
     return drafts, practical, problems
 
 

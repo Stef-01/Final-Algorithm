@@ -302,7 +302,7 @@
       "domain": "Practice logistics",
       "dimension": "practical",
       "prompt": "Fees and rebates, typical wait for a new patient, weekend or after-hours times, telehealth, new patients.",
-      "answer": "",
+      "answer": "I bulk bill everyone, so it's $0 out of pocket. A new patient usually waits 4 days. I do Saturday mornings. We're taking new patients. Standard appointments are 30 minutes.",
       "excerpt": "",
       "proposed": {
         "value": null,
@@ -342,5 +342,13 @@
         "patientFacing": ""
       }
     }
-  ]
+  ],
+  "practicalSaid": {
+    "fee": "so it's $0 out of pocket",
+    "gapAfterMedicare": "I bulk bill everyone",
+    "daysUntilAvailable": "A new patient usually waits 4 days",
+    "weekends": "I do Saturday mornings",
+    "newPatients": "We're taking new patients",
+    "initialConsultMins": "Standard appointments are 30 minutes"
+  }
 }

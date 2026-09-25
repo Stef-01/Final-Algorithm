@@ -6,6 +6,7 @@
 ## Ground rules
 
 - **Ask about behaviour, never self-ratings.** Don't ask "How collaborative are you, 1–10?" Ask "A patient strongly prefers a treatment you don't initially recommend. Walk me through the consultation."
+- **Practice facts need their source too.** Fees, the out-of-pocket gap, wait for a new patient, weekends, new patients and consult length replace "not published" on the clinician's live profile. Record the logistics answer word for word, and for each fact you fill in under `practical`, put the clinician's words for it under `practicalSaid`. `ingest` refuses a fact without its words, words that aren't in the answer, a number that isn't in those words, or a gap larger than the fee.
 - **Record answers word for word.** Every trait WATL shows patients must quote a sentence the clinician actually said. `scripts/interview.py ingest` rejects any excerpt that isn't in the recorded answer.
 - **Propose, don't decide.** For each scenario, the interviewer proposes where the answer sits on the dimension's scale and drafts a one-line, patient-facing summary. A second person approves each trait in `scripts/interview.py review`.
 - **No unsupported adjectives** in patient-facing lines (caring, compassionate, holistic, warm, patient-centred, thorough, understanding). Describe what the clinician does.
