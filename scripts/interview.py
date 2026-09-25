@@ -2,6 +2,7 @@
 """Clinician onboarding interview pipeline (docs/clinician-interview.md, PRD §22–26).
 
     python3 scripts/interview.py new <id>                      # template -> <dir>/<id>/interview.json
+    python3 scripts/interview.py pull [--clear]                # Join WATL submissions -> <dir>/<id>/interview.json (needs KV_REST_API_URL/TOKEN)
     python3 scripts/interview.py propose <id>                  # Claude drafts proposals for unfilled answers (needs `pip install anthropic`)
     python3 scripts/interview.py ingest <id>                   # validate  -> <dir>/<id>/draft.json
     python3 scripts/interview.py review <id>                   # approve   -> <dir>/<id>/approved.json (interactive)
@@ -268,6 +269,49 @@ def propose_answers(doc, client, name=None):
     return filled, skipped
 
 
+def write_pulled(base, drafts):
+    """Write each Join WATL draft as <base>/<id>/interview.json, never over an existing file."""
+    written, skipped = [], []
+    for d in drafts:
+        cid = re.sub(r'[^a-z0-9-]', '', str(d.get('clinicianId', '')))
+        if not cid:
+            continue
+        f = pathlib.Path(base) / cid / 'interview.json'
+        if f.exists():
+            skipped.append(cid)
+            continue
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text(json.dumps(d, indent=2, ensure_ascii=False) + '\n')
+        written.append(cid)
+    return written, skipped
+
+
+def upstash(command):
+    import os
+    import urllib.request
+    url = os.environ.get('KV_REST_API_URL') or os.environ.get('UPSTASH_REDIS_REST_URL')
+    token = os.environ.get('KV_REST_API_TOKEN') or os.environ.get('UPSTASH_REDIS_REST_TOKEN')
+    if not url or not token:
+        fail('set KV_REST_API_URL and KV_REST_API_TOKEN (from Vercel → Storage → Upstash)')
+    req = urllib.request.Request(url, data=json.dumps(command).encode(), method='POST',
+                                 headers={'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'})
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return json.loads(r.read())['result']
+
+
+def cmd_pull(args):
+    raw = upstash(['LRANGE', 'watl:portal', '0', '-1'])
+    drafts = [json.loads(x) for x in raw]
+    written, skipped = write_pulled(args.dir, drafts)
+    print(f'{len(written)} new drafts: {", ".join(written) or "none"}')
+    for cid in skipped:
+        print(f'  already here, not overwritten: {cid}')
+    if args.clear and drafts:
+        upstash(['LTRIM', 'watl:portal', str(len(drafts)), '-1'])
+        print(f'cleared {len(drafts)} from the queue')
+    print('next: review each (practicalSaid, consent), then propose / ingest / review')
+
+
 def cmd_propose(args):
     d = paths(args)
     f = d / 'interview.json'
@@ -353,6 +397,8 @@ def main(argv=None):
     n = sub.add_parser('new')
     n.add_argument('id')
     n.add_argument('--force', action='store_true')
+    pl = sub.add_parser('pull')
+    pl.add_argument('--clear', action='store_true', help='remove the pulled submissions from the queue')
     pr = sub.add_parser('propose')
     pr.add_argument('id')
     pr.add_argument('--name', help="clinician's first name for patient-facing lines (default: from the id)")
@@ -363,7 +409,7 @@ def main(argv=None):
     c = sub.add_parser('collect')
     c.add_argument('--out', default=str(COLLECTED))
     args = ap.parse_args(argv)
-    {'new': cmd_new, 'propose': cmd_propose, 'ingest': cmd_ingest, 'review': cmd_review, 'collect': cmd_collect}[args.cmd](args)
+    {'new': cmd_new, 'pull': cmd_pull, 'propose': cmd_propose, 'ingest': cmd_ingest, 'review': cmd_review, 'collect': cmd_collect}[args.cmd](args)
 
 
 if __name__ == '__main__':

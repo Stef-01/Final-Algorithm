@@ -15,6 +15,7 @@
 ## Workflow
 
 ```bash
+python3 scripts/interview.py pull --clear                # or: fetch Join WATL submissions as drafts (they fill in their own facts)
 python3 scripts/interview.py new <clinician-id>          # writes server/data/interviews/<id>/interview.json
 # ...conduct the interview and fill in each answer word for word...
 python3 scripts/interview.py propose <clinician-id>      # optional: Claude drafts excerpts, values and lines for unfilled answers

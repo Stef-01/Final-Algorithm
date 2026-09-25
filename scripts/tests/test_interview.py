@@ -216,3 +216,25 @@ class PracticalFactsNeedTheirSource(unittest.TestCase):
     def test_the_gap_cannot_be_more_than_the_fee(self):
         self.doc['practical']['gapAfterMedicare'] = 130
         self.assertIn('practical: the out-of-pocket gap is more than the fee', self.problems())
+
+
+class PullFromJoinWatl(unittest.TestCase):
+    def setUp(self):
+        sys.path.insert(0, str(ROOT / 'scripts'))
+        import interview
+        self.iv = interview
+        self.dir = pathlib.Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.dir)
+
+    def test_writes_new_drafts_and_never_overwrites(self):
+        (self.dir / 'sam-lee').mkdir()
+        (self.dir / 'sam-lee' / 'interview.json').write_text('{"kept": true}')
+        written, skipped = self.iv.write_pulled(self.dir, [
+            {'clinicianId': 'sam-lee', 'consent': True},
+            {'clinicianId': 'alex-ng', 'consent': True},
+            {'clinicianId': '../../etc', 'consent': True},
+        ])
+        self.assertEqual(written, ['alex-ng', 'etc'])
+        self.assertEqual(skipped, ['sam-lee'])
+        self.assertEqual(json.loads((self.dir / 'sam-lee' / 'interview.json').read_text()), {'kept': True})
+        self.assertFalse((self.dir.parent / 'etc').exists() and (self.dir.parent / 'etc' / 'interview.json').exists())
