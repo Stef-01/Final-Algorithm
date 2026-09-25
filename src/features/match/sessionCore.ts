@@ -260,12 +260,24 @@ export function refine(state: SessionState, message: string, extracted?: Extract
   const profession = switched ? switchTo : state.profession;
   const n = result.matches.length + result.more.length;
   const { one, many } = copyFor(profession);
+  const first = firstName(result.matches[0].clinicianId);
+  const noun = n === 1 ? one : many;
   const reply: ChatTurn = {
     from: 'agent',
-    text: `${advice ? "I can't give medical advice — a clinician can help with that part. " : ''}Done — now ${what}. ${n} ${n === 1 ? one : many} fit, and ${firstName(result.matches[0].clinicianId)} is first.`,
+    text: `${advice ? "I can't give medical advice — a clinician can help with that part. " : ''}Done — now ${what}. ${n} ${noun} fit, and ${first} is first.`,
     action: 'see_matches',
+    facts: advice ? undefined : { said: text, changes, switched: switched ? `${copyFor(switchTo).many} instead` : undefined, count: n, noun, first },
   };
   return { state: say({ ...state, profession, input, result, index: 0 }, you, reply), route: '/refine' };
+}
+
+/** Swap the wording of the latest reply (Claude's version of the same facts). */
+export function rewordLast(state: SessionState, text: string): SessionState {
+  const chat = [...(state.chat ?? [])];
+  const last = chat.at(-1);
+  if (!last || last.from !== 'agent' || !last.facts) return state;
+  chat[chat.length - 1] = { ...last, text, facts: undefined };
+  return { ...state, chat, updatedAt: Date.now() };
 }
 
 export const isKnownQuestion = (id?: string) => !!bankQuestion(id);

@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 
+import type { ReplyFacts } from '@server/claude/reply';
 import type { Extraction } from '@server/claude/types';
 import type { Profession } from '@server/engine/types';
 
@@ -53,4 +54,39 @@ export async function extractRemote(text: string, profession?: Profession, timeo
 /** For tests: forget the cached "enabled" answer. */
 export function resetClaudeCache() {
   enabledCache = null;
+}
+
+// ---- Claude-worded assistant replies (api/reply.ts), off unless WATL_CLAUDE_REPLIES=on ----
+
+let replyCache: Promise<boolean> | null = null;
+
+function replyEnabled(): Promise<boolean> {
+  if (BASE === null || typeof fetch !== 'function') return Promise.resolve(false);
+  replyCache ??= fetch(`${BASE}/api/reply`)
+    .then((r) => (r.ok ? r.json() : { enabled: false }))
+    .then((b: { enabled?: boolean }) => b.enabled === true)
+    .catch(() => false);
+  return replyCache;
+}
+
+/** Claude's wording of a reply's facts, or null to keep the template. */
+export async function rewordRemote(facts: ReplyFacts, timeoutMs = 4000): Promise<string | null> {
+  if (!(await replyEnabled())) return null;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const r = await fetch(`${BASE}/api/reply`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ facts }),
+      signal: ctrl.signal,
+    });
+    if (!r.ok) return null;
+    const body = (await r.json()) as { reply?: unknown };
+    return typeof body.reply === 'string' && body.reply.length <= 280 ? body.reply : null;
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
 }

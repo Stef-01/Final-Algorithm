@@ -345,7 +345,12 @@ Each phase ends deployed on Vercel with CI green.
 - **Evals:** `evals/extraction.json` (33 cases) is scored by `evals/score.ts`. The keyword extractor must pass all of them in CI. Claude is held to ≥ 90% by an opt-in live run: `WATL_LIVE_EVAL=1 ANTHROPIC_API_KEY=… npx jest claude.live` (about 35 short requests).
 - **Interview proposals:** `scripts/interview.py propose <id>` has Claude draft excerpts, values and patient-facing lines for unfilled answers. Drafts pass the same checks as `ingest`, are marked `proposedBy: claude`, and still need a reviewer (tests use a stand-in client).
 - **Medical questions:** the assistant declines them with a fixed reply (50-prompt red-team set, `evals/redteam.json`).
-- **Still to do:** Claude writing the assistant's replies (today they're built from the signal diff; rerun the red-team set if that changes), and connecting a feedback store (D4; the endpoint is built).
+- **Claude-worded replies (off by default):** with `WATL_CLAUDE_REPLIES=on`, `api/reply.ts` has Claude word a "Done" reply from facts the engine worked out: what changed, the count, and who's first.
+  - A reply is used only if it keeps the count and name, and has no advice, medication, praise, exclamation marks or links (`checkReply`). Otherwise the template shows.
+  - Medical questions never carry facts, so they never reach it.
+  - The typing dots cover the wait, so nothing visibly swaps.
+  - The live eval checks the wording too.
+- **Still to do:** connecting a feedback store (D4; the endpoint is built).
 
 ### Phase 2 notes (engine as built)
 

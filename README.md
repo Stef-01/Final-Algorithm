@@ -67,7 +67,7 @@ The web build is deployed on Vercel from `main` (see [`vercel.json`](vercel.json
 
 [Vercel Web Analytics](https://vercel.com/docs/analytics) records a page view for every screen change on the web build ([`src/components/VercelAnalytics.web.tsx`](src/components/VercelAnalytics.web.tsx)), plus the PRD's behavioural events through [`src/lib/analytics.ts`](src/lib/analytics.ts). Events carry only short identifiers and counts, never what anyone typed or said. Analytics needs to be enabled once in the Vercel dashboard (project → Analytics → Enable), and custom events may need a paid plan. How to use the numbers in testing: [`docs/user-testing.md`](docs/user-testing.md).
 
-**Claude (optional).** With `ANTHROPIC_API_KEY` set in the Vercel project, [`api/extract.ts`](api/extract.ts) uses Claude to read what patients write. Without it, or whenever a request fails, the app uses its on-device keyword extractor, so nothing breaks. Set `WATL_CLAUDE=off` to switch Claude off without removing the key. Details: [`docs/PLAN.md`](docs/PLAN.md) → Phase 8 notes.
+**Claude (optional).** With `ANTHROPIC_API_KEY` set in the Vercel project, [`api/extract.ts`](api/extract.ts) uses Claude to read what patients write. Without it, or whenever a request fails, the app uses its on-device keyword extractor, so nothing breaks. Set `WATL_CLAUDE=off` to switch Claude off without removing the key, and `WATL_CLAUDE_REPLIES=on` to let Claude word the assistant's replies (checked against the facts, else the template is used). Details: [`docs/PLAN.md`](docs/PLAN.md) → Phase 8 notes.
 
 To try the production web build locally:
 

@@ -4,6 +4,7 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 import { track, wordCount } from '@/lib/analytics';
 
 import * as core from './sessionCore';
+import type { ReplyFacts } from '@server/claude/reply';
 import type { Extraction } from '@server/claude/types';
 
 import { SUGGESTION_TEXT } from './refine';
@@ -28,7 +29,7 @@ type Session = {
   rateMatches: (rating: number) => void;
   thumb: (clinicianId: string, dir: 'up' | 'down') => void;
   /** A message to the floating assistant; returns the route to show (usually '/refine'). */
-  refine: (message: string, extracted?: Extraction | null) => string;
+  refine: (message: string, extracted?: Extraction | null, reword?: (facts: ReplyFacts) => Promise<string | null>) => Promise<string>;
   reset: () => void;
   load: (state: core.SessionState) => void;
 };
@@ -114,9 +115,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         track(dir === 'up' ? 'match_feedback_positive' : 'match_feedback_negative', { clinician: id });
         commit(core.thumb(current.current, id, dir));
       },
-      refine: (message, extracted) => {
+      refine: async (message, extracted, reword) => {
         const before = current.current.result;
-        const t = core.refine(current.current, message, extracted);
+        let t = core.refine(current.current, message, extracted);
+        const facts = t.state.chat?.at(-1)?.facts;
+        const worded = facts && reword ? await reword(facts) : null;
+        if (worded) t = { ...t, state: core.rewordLast(t.state, worded) };
         track('assistant_message', { chip: message in SUGGESTION_TEXT, changed: t.state.result !== before, claude: !!extracted });
         return route(t);
       },

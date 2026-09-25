@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon } from '@/components/Icon';
 import { Appear, PressScale, useReducedMotion } from '@/components/motion';
 import { refineSuggestions, SUGGESTION_TEXT, type ChatTurn } from '@/features/match/refine';
-import { extractRemote } from '@/features/match/remoteExtract';
+import { extractRemote, rewordRemote } from '@/features/match/remoteExtract';
 import { useSession } from '@/features/match/session';
 import { useSpeechToText } from '@/features/voice/useSpeechToText';
 import { track, wordCount } from '@/lib/analytics';
@@ -49,8 +49,8 @@ export default function Refine() {
     // at least a beat so it reads as a conversation, never longer than the reading takes.
     const reading = text in SUGGESTION_TEXT ? Promise.resolve(null) : extractRemote(text, profession);
     const beat = new Promise((r) => setTimeout(r, reduced ? 0 : THINK_MS));
-    void Promise.all([reading, beat]).then(([extracted]) => {
-      const route = session.refine(text, extracted);
+    void Promise.all([reading, beat]).then(async ([extracted]) => {
+      const route = await session.refine(text, extracted, rewordRemote);
       setPending(null);
       if (route !== '/refine') {
         router.back();

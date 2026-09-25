@@ -1,6 +1,7 @@
 import { areaPhrase } from '@server/engine/explain';
 import type { Dimension, PatientSignals, Profession } from '@server/engine/types';
 
+import type { ReplyFacts } from '@server/claude/reply';
 import type { Extraction } from '@server/claude/types';
 
 import { extractSignals, withKeywordExtras } from './extract';
@@ -10,7 +11,8 @@ import { extractSignals, withKeywordExtras } from './extract';
 // Refinements are later turns, so they override what was said earlier. Stand-in for the Claude
 // agent (docs/PLAN.md Phase 8), which will take over the wording but keep these rules.
 
-export type ChatTurn = { from: 'agent' | 'you'; text: string; action?: 'see_matches' };
+/** `facts`: what a 'Done' reply says, so Claude can word it (never set on medical questions). */
+export type ChatTurn = { from: 'agent' | 'you'; text: string; action?: 'see_matches'; facts?: ReplyFacts };
 
 /** Loosening a requirement, which the keyword extractor alone can't express. */
 function relaxations(t: string): Partial<PatientSignals['constraints']> & { dropGender?: boolean; dropDistance?: boolean } {

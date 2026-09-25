@@ -9,6 +9,10 @@ import Anthropic from '@anthropic-ai/sdk';
 import cases from '../evals/extraction.json';
 import { misses, type Case } from '../evals/score';
 import { extractWithClaude } from '../server/claude/extract';
+import { writeReply } from '../server/claude/reply';
+
+import * as core from '@/features/match/sessionCore';
+import { refineSuggestions } from '@/features/match/refine';
 
 import { extractSignals, withKeywordExtras } from '@/features/match/extract';
 
@@ -33,6 +37,21 @@ live('extraction eval: Claude', () => {
       for (const f of failed) console.log(`${f.id}: ${f.problems.join('; ')}`);
       console.log(`Claude extraction: ${results.length - failed.length}/${results.length} passed`);
       expect((results.length - failed.length) / results.length).toBeGreaterThanOrEqual(PASS_RATE);
+    },
+    120_000,
+  );
+
+  it(
+    'words assistant replies within the rules at least 80% of the time (else the template shows)',
+    async () => {
+      const client = new Anthropic();
+      const start = core.demoResults('psych-masking');
+      const facts = refineSuggestions('psychologist')
+        .map((chip) => core.refine(start, chip).state.chat!.at(-1)!.facts)
+        .filter((f) => f !== undefined);
+      const replies = await Promise.all(facts.map((f) => writeReply(client, f)));
+      replies.forEach((r, i) => console.log(`${facts[i].changes.join(', ') || facts[i].switched}: ${r ?? '(template kept)'}`));
+      expect(replies.filter(Boolean).length / replies.length).toBeGreaterThanOrEqual(0.8);
     },
     120_000,
   );
