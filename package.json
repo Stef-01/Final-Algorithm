@@ -57,5 +57,8 @@
       "/node_modules/",
       "/legacy-android/"
     ]
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
