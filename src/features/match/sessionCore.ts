@@ -5,7 +5,7 @@ import type { Extraction } from '@server/claude/types';
 import { copyFor } from '@/lib/professions';
 
 import { isUrgent } from './extract';
-import { ADVICE_REPLY, describeChange, isAdviceRequest, withoutAdvice, listPhrase, professionSwitch, SUGGESTION_TEXT, understood, type ChatTurn } from './refine';
+import { ADVICE_REPLY, CLOSER, describeChange, isAdviceRequest, withoutAdvice, listPhrase, professionSwitch, SUGGESTION_TEXT, understood, type ChatTurn } from './refine';
 import { demoById, demos } from './demos';
 import type { AgentStep, Match, MatchResult, NoMatchAction, Priority, Profession, Question } from './types';
 
@@ -245,6 +245,10 @@ export function refine(state: SessionState, message: string, extracted?: Extract
   const switched = switchTo && switchTo !== state.input.profession;
   if (advice && changes.length === 0 && !switched) {
     return { state: say(state, you, { from: 'agent', text: ADVICE_REPLY }), route: '/refine' };
+  }
+  if (changes.length === 0 && !switched && CLOSER.test(words.toLowerCase()) && !after.constraints.origin) {
+    const reply: ChatTurn = { from: 'agent', text: 'Closer to where? Tell me a suburb or area, like “near Southport” or “Brisbane CBD”.' };
+    return { state: say(state, you, reply), route: '/refine' };
   }
   const claudeRead =
     !advice &&

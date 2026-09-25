@@ -4,7 +4,7 @@ import type { Dimension, PatientSignals, Profession } from '@server/engine/types
 import type { ReplyFacts } from '@server/claude/reply';
 import type { Extraction } from '@server/claude/types';
 
-import { extractSignals, withKeywordExtras } from './extract';
+import { extractSignals, placeIn, withKeywordExtras } from './extract';
 
 // The refine assistant (the floating button): after results are showing, the patient can say what
 // to change ("online only", "someone more direct", "cost doesn't matter") and the list re-ranks.
@@ -59,6 +59,9 @@ export const withoutAdvice = (text: string) =>
 export const ADVICE_REPLY =
   "I can't give medical advice, but a clinician can talk that through with you properly. I can help you find one who fits — tell me what matters to you, or pick a suggestion below.";
 
+/** Asking for someone nearer, with or without saying where. */
+export const CLOSER = /\b(closer|nearer|near me|close by|nearby|not so far|less travel)\b/;
+
 /** "Actually, a GP instead" and similar. */
 export function professionSwitch(text: string): Profession | undefined {
   const t = text.toLowerCase();
@@ -84,6 +87,15 @@ export function applyRefinement(s: PatientSignals, text: string, claude?: Extrac
   const dropGender = kwGender || claude?.relax.dropGender;
   const dropDistance = kwDistance || claude?.relax.dropDistance;
   const constraints = { ...s.constraints, ...x.constraints, ...relax };
+  // In a refinement any place counts ("somewhere in Southport"), not only "near …".
+  const place = placeIn(t);
+  if (place && !x.constraints.origin) {
+    constraints.origin = place.origin;
+    constraints.originLabel = place.label;
+    constraints.maxKm = /walking|very close/.test(t) ? 5 : 15;
+  }
+  // "Closer" with a place already known: halve the distance (never under 3 km).
+  if (!place && CLOSER.test(t) && constraints.origin) constraints.maxKm = Math.max(3, Math.round((constraints.maxKm ?? 20) / 2));
   if (dropGender) delete constraints.clinicianGender;
   if (dropDistance) delete constraints.maxKm;
   // Asked for directly, so the patient means it: count these as confirmed.
@@ -108,7 +120,9 @@ export function describeChange(before: PatientSignals, after: PatientSignals, la
   if (a.maxGap !== b.maxGap) out.push(a.maxGap === 0 ? 'bulk-billed only' : a.maxGap === null || a.maxGap === undefined ? 'any cost' : `up to $${a.maxGap} out of pocket`);
   if (!!a.needsWeekend !== !!b.needsWeekend) out.push(a.needsWeekend ? 'weekend appointments' : 'no weekend requirement');
   if (a.clinicianGender !== b.clinicianGender) out.push(a.clinicianGender ? `a ${a.clinicianGender} clinician` : 'any gender');
-  if (a.maxKm !== b.maxKm) out.push(a.maxKm === undefined ? 'any distance' : `within ${a.maxKm} km`);
+  const moved = a.origin && (a.origin.lat !== b.origin?.lat || a.origin.lng !== b.origin?.lng);
+  if (moved) out.push(`within ${a.maxKm ?? 15} km of ${a.originLabel ?? 'where you said'}`);
+  else if (a.maxKm !== b.maxKm) out.push(a.maxKm === undefined ? 'any distance' : `within ${a.maxKm} km${a.originLabel ? ` of ${a.originLabel}` : ''}`);
   for (const [d, p] of Object.entries(after.preferences)) {
     if (before.preferences[d as Dimension]?.value === p!.value) continue;
     const l = label(d as Dimension, p!.value);
@@ -137,7 +151,7 @@ export const listPhrase = (xs: string[]) => (xs.length <= 1 ? (xs[0] ?? '') : `$
 
 /** Suggestions shown as chips, worded as the patient would say them. */
 export function refineSuggestions(profession?: Profession): string[] {
-  const common = ['Online only', 'In person', 'Bulk billed only', 'Cost doesn’t matter', 'Someone more direct', 'Someone gentler', 'Longer appointments'];
+  const common = ['Online only', 'In person', 'Closer to me', 'Bulk billed only', 'Cost doesn’t matter', 'Someone more direct', 'Someone gentler', 'Longer appointments'];
   if (profession === 'psychologist') return [...common, 'Practical strategies', 'Neurodiversity-affirming', 'Show GPs instead'];
   if (profession === 'gp') return [...common, 'Mental health too', 'Weekend appointments', 'Show psychologists instead'];
   return [...common, 'Weekend appointments'];
@@ -147,6 +161,7 @@ export function refineSuggestions(profession?: Profession): string[] {
 export const SUGGESTION_TEXT: Record<string, string> = {
   'Online only': 'online only',
   'In person': 'face to face',
+  'Closer to me': 'closer',
   'Bulk billed only': 'bulk billed',
   'Cost doesn’t matter': "cost doesn't matter",
   'Someone more direct': 'more direct',

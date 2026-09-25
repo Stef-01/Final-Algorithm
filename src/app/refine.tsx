@@ -132,7 +132,7 @@ export default function Refine() {
             onChangeText={setDraft}
             onSubmitEditing={() => send(draft)}
             placeholder={
-              speech.listening ? 'Listening…' : hasResults ? 'e.g. someone gentler, or online only' : "What's going on, and what are you hoping for?"
+              speech.listening ? 'Listening…' : hasResults ? 'e.g. someone gentler, or near Southport' : "What's going on, and what are you hoping for?"
             }
             editable={!speech.listening}
             placeholderTextColor={colors.muted}

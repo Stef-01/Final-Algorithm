@@ -2,6 +2,7 @@ import { professionals } from '@server/data/professionals';
 import { copyProblems } from '@server/engine/explain';
 
 import { signalsFor } from '@/features/match/agent';
+import { extractSignals } from '@/features/match/extract';
 import { applyRefinement, professionSwitch, refineSuggestions, SUGGESTION_TEXT } from '@/features/match/refine';
 import * as core from '@/features/match/sessionCore';
 
@@ -90,5 +91,34 @@ describe('refine assistant', () => {
         expect(copyProblems(reply)).toEqual([]);
       }
     }
+  });
+});
+
+describe('refine assistant: where', () => {
+  it('any place named in a refinement sets where to look from', () => {
+    const t = core.refine(core.demoResults('psych-masking'), 'somewhere in Southport');
+    const k = signalsFor(t.state.input).constraints;
+    expect(k.originLabel).toBe('Southport');
+    expect(k.maxKm).toBe(15);
+    expect(last(t.state).text).toMatch(/^Done — now within 15 km of Southport\./);
+  });
+
+  it('"closer" halves the distance when a place is known', () => {
+    const s0 = core.refine(core.demoResults('psych-masking'), 'near Brisbane CBD').state;
+    const t = core.refine(s0, 'closer please');
+    expect(signalsFor(t.state.input).constraints.maxKm).toBe(8);
+    expect(last(t.state).text).toContain('within 8 km of Brisbane CBD');
+  });
+
+  it('"closer" with no place asks where instead of pretending', () => {
+    const s0 = core.demoResults('psych-masking');
+    const t = core.refine(s0, 'Closer to me');
+    expect(last(t.state).text).toMatch(/^Closer to where\?/);
+    expect(t.state.result).toBe(s0.result);
+  });
+
+  it('the describe screen still needs "near" to count a place (so "grew up in Sydney" doesn\'t)', () => {
+    expect(extractSignals('I grew up in Sydney').constraints.origin).toBeUndefined();
+    expect(extractSignals('I live near Southport').constraints.originLabel).toBe('Southport');
   });
 });

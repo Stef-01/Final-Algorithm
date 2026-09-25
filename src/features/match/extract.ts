@@ -68,6 +68,18 @@ const PLACES: [RegExp, { lat: number; lng: number }][] = [
   [/sydney/, { lat: -33.87, lng: 151.2 }],
 ];
 
+const titleCase = (s: string) => s.replace(/\b[a-z]/g, (c) => c.toUpperCase()).replace(/\bCbd\b/, 'CBD');
+
+/** The first known place named in the text, with the patient's own name for it. */
+export function placeIn(text: string): { origin: { lat: number; lng: number }; label: string } | undefined {
+  const t = text.toLowerCase();
+  for (const [re, origin] of PLACES) {
+    const m = t.match(re);
+    if (m) return { origin, label: titleCase(m[0].replace(/^the /, '')) };
+  }
+  return undefined;
+}
+
 // Deliberately broad: pausing someone who didn't need it costs a tap; missing someone who did is not
 // acceptable. No negation handling here on purpose. Reviewed list needed from a clinical advisor.
 const URGENT = [
@@ -124,9 +136,10 @@ export function extractSignals(raw: string, profession?: Profession): PatientSig
   if (/(male|man) (gp|doctor|psychologist)/.test(t) && !/female|woman/.test(t)) constraints.clinicianGender = 'male';
   const age = t.match(/\bi'?m (\d{2})\b|\b(\d{2}) ?(years old|yo)\b/);
   if (age) constraints.age = Number(age[1] ?? age[2]);
-  const place = PLACES.find(([re]) => re.test(t));
+  const place = placeIn(t);
   if (place && /near|close to|around|\blive|based|located|i'?m in|work in/.test(t)) {
-    constraints.origin = place[1];
+    constraints.origin = place.origin;
+    constraints.originLabel = place.label;
     constraints.maxKm = /walking|very close/.test(t) ? 5 : 15;
   }
   const languages = ['hindi', 'urdu', 'vietnamese', 'mandarin', 'arabic'].filter((l) => t.includes(l));
@@ -147,6 +160,7 @@ export function withKeywordExtras(claude: PatientSignals, keyword: PatientSignal
   const c = { ...claude.constraints };
   if (!c.origin && keyword.constraints.origin) {
     c.origin = keyword.constraints.origin;
+    c.originLabel = keyword.constraints.originLabel;
     c.maxKm = keyword.constraints.maxKm;
   }
   if (!c.languages && keyword.constraints.languages) c.languages = keyword.constraints.languages;

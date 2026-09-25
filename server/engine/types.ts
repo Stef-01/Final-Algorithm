@@ -42,6 +42,8 @@ export type HardConstraints = {
   origin?: { lat: number; lng: number };
   /** Max travel for in-person care (km). */
   maxKm?: number;
+  /** The place the patient named for `origin` ("Southport"), for plain-language replies. */
+  originLabel?: string;
   /** 'any' = in person or telehealth. */
   mode?: 'any' | 'in_person_only' | 'telehealth_only';
   /** Max out-of-pocket gap after Medicare, in dollars. `null` = patient said cost isn't a concern. */
