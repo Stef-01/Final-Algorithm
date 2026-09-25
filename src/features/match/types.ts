@@ -1,6 +1,6 @@
 import type { ImageSourcePropType } from 'react-native';
 
-import type { Caveat, FitLabel, NoMatchAction, Profession } from '@server/engine/types';
+import type { Caveat, FitLabel, NoMatchAction, Profession, Qualification } from '@server/engine/types';
 
 export type { Caveat, FitLabel, NoMatchAction, Profession };
 
@@ -20,6 +20,7 @@ export type Clinician = {
   photo: ImageSourcePropType;
   bio: string;
   credentials: string[];
+  qualifications: Qualification[];
   bookingUrl: string | null;
   practical: {
     nextAvailableShort: string;

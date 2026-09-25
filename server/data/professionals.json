@@ -17,6 +17,33 @@
     "credentials": [
       "General practitioner, MBBS FRACGP MPhil BSc(Adv) DCH"
     ],
+    "qualifications": [
+      {
+        "title": "Bachelor of Medicine, Bachelor of Surgery",
+        "detail": "MBBS",
+        "kind": "degree"
+      },
+      {
+        "title": "Fellow of the Royal Australian College of General Practitioners",
+        "detail": "FRACGP",
+        "kind": "membership"
+      },
+      {
+        "title": "Master of Philosophy",
+        "detail": "MPhil",
+        "kind": "degree"
+      },
+      {
+        "title": "Bachelor of Science (Advanced)",
+        "detail": "BSc(Adv)",
+        "kind": "degree"
+      },
+      {
+        "title": "Diploma of Child Health",
+        "detail": "DCH",
+        "kind": "degree"
+      }
+    ],
     "bookingUrl": "https://healthengine.com.au/doctor/nsw/beecroft/dr-anubhav-saxena/p123180",
     "practical": {
       "nextAvailable": "Long first appointment, scheduled reviews",
@@ -206,6 +233,26 @@
     "credentials": [
       "General practitioner, MD FRACGP BPsych(Hons) DCH"
     ],
+    "qualifications": [
+      {
+        "title": "Fellow of the Royal Australian College of General Practitioners",
+        "kind": "membership"
+      },
+      {
+        "title": "Bachelor of Psychology (First Class Honours)",
+        "detail": "University of Sydney",
+        "kind": "degree"
+      },
+      {
+        "title": "Diploma of Child Health",
+        "kind": "degree"
+      },
+      {
+        "title": "Endorsed ADHD prescriber course",
+        "badge": "Completed",
+        "kind": "certification"
+      }
+    ],
     "bookingUrl": "https://healthengine.com.au/doctor/nsw/double-bay/dr-anusha-saxena/p160121",
     "practical": {
       "nextAvailable": "Appointment lengths set with the practice",
@@ -358,6 +405,20 @@
     "bio": "Paula Garrido is a Clinical Psychologist with extensive experience supporting individuals with ADHD and other neurodevelopmental differences. She has a special interest in providing compassionate, neuroaffirming, and trauma-informed psychological care, helping individuals better understand their unique strengths, challenges, and ways of experiencing the world. With additional training in ADHD, autism, complex trauma, and evidence-based psychological therapies, Paula supports individuals to navigate challenges with emotional regulation, executive functioning, anxiety, self-esteem, relationships, and everyday life. Her warm, collaborative, and non-judgmental approach creates a safe space for clients to explore their experiences, develop practical strategies, build self-understanding, and work towards meaningful and lasting change. Paula holds a Master of Clinical Psychology and is an ADHD-Certified Clinical Services Provider (ADHD-CCSP) and Certified Autism Spectrum Disorder Clinical Specialist (ASDCS).",
     "credentials": [
       "Clinical psychologist, MClinPsych ADHD-CCSP ASDCS"
+    ],
+    "qualifications": [
+      {
+        "title": "Master of Clinical Psychology",
+        "kind": "degree"
+      },
+      {
+        "title": "ADHD-Certified Clinical Services Provider (ADHD-CCSP)",
+        "kind": "certification"
+      },
+      {
+        "title": "Certified Autism Spectrum Disorder Clinical Specialist (ASDCS)",
+        "kind": "certification"
+      }
     ],
     "bookingUrl": "https://wellnesspsychologyclinic.com.au/appointment-page/",
     "practical": {
@@ -541,6 +602,16 @@
     "credentials": [
       "Psychologist, BSc(Psych) BA PostGradDip(Psych)"
     ],
+    "qualifications": [
+      {
+        "title": "Bachelor of Science (Psychology) and Bachelor of Arts",
+        "kind": "degree"
+      },
+      {
+        "title": "Postgraduate Diploma in Psychology",
+        "kind": "degree"
+      }
+    ],
     "bookingUrl": "https://www.halaxy.com/book/goals-psychology/location/726621",
     "practical": {
       "nextAvailable": "50-minute sessions; times set with the clinic",
@@ -692,6 +763,17 @@
     "credentials": [
       "Psychologist, BPsychSc(Hons I)"
     ],
+    "qualifications": [
+      {
+        "title": "Bachelor of Psychological Science with First Class Honours",
+        "detail": "Griffith University",
+        "kind": "degree"
+      },
+      {
+        "title": "Associate Member of the Australian Psychological Society",
+        "kind": "membership"
+      }
+    ],
     "bookingUrl": "https://www.halaxy.com/book/goals-psychology/location/726621",
     "practical": {
       "nextAvailable": "50-minute sessions; times set with the clinic",
@@ -842,6 +924,17 @@
     "bio": "Lachlan works with children, teenagers and adults and is passionate about providing a safe space for clients to express themselves, achieve their potential and meet the challenges that life presents. He is experienced working with clients who have autism, ADHD, OCD, specific learning disorders, depression, intellectual disability, are experiencing anxiety, phobias, depression, issues with self-esteem / confidence, stress / burn out, anger, bullying, interpersonal difficulties, and provides parenting support. Lachlan utilises Cognitive Behavioural Therapy (CBT), Dialectical Behavioural Therapy (DBT), Acceptance and Commitment Therapy (ACT), Motivational Interviewing (MI) and Emotion Focussed Therapy (EFT) to support clients to create meaningful change and build skills to live a life that fulfils them. Lachlan is experienced in administering assessments including the WISC, WIAT, WAIS, ADOS, MIGDAS and offers appointments for autism assessment and ADHD assessment. Lachlan is also a certified Triple P Stepping Stones Parenting Program Practitioner. Lachlan holds a Bachelor of Psychological Science with Honours from the University of Queensland.",
     "credentials": [
       "Psychologist, BPsychSc(Hons)"
+    ],
+    "qualifications": [
+      {
+        "title": "Certified Triple P Stepping Stones Parenting Program Practitioner",
+        "kind": "certification"
+      },
+      {
+        "title": "Bachelor of Psychological Science with Honours",
+        "detail": "University of Queensland",
+        "kind": "degree"
+      }
     ],
     "bookingUrl": "https://www.halaxy.com/book/goals-psychology/location/726621",
     "practical": {
@@ -1028,6 +1121,22 @@
     "credentials": [
       "Psychologist, BPsychSc BSocSc(Psych)(Hons I) CEDC-MH"
     ],
+    "qualifications": [
+      {
+        "title": "Credentialed Eating Disorder Clinician (CEDC-MH)",
+        "kind": "certification"
+      },
+      {
+        "title": "Bachelor of Psychological Science",
+        "detail": "University of New England",
+        "kind": "degree"
+      },
+      {
+        "title": "Bachelor of Social Science in Psychology (First Class Honours)",
+        "detail": "University of the Sunshine Coast",
+        "kind": "degree"
+      }
+    ],
     "bookingUrl": "https://www.halaxy.com/book/goals-psychology/location/726621",
     "practical": {
       "nextAvailable": "50-minute sessions; times set with the clinic",
@@ -1195,6 +1304,18 @@
     "bio": "Lauren works with toddlers, children, teens and adults. She is experienced working with clients who are experiencing anxiety, depression, emotional regulation, neurodivergence, autism, ADHD, intellectual disability, self esteem/ confidence, trauma, friendships & socialising, and offers parenting support among other presenting concerns. Lauren thoroughly enjoys facilitating a safe and collaborative space where clients can explore their goals and work toward meaningful change. She is experienced with Cognitive Behavioural Therapy (CBT), Motivational Interviewing (MI), skills building and coping strategies, Parent-Child Interaction Therapy (PCIT) and facilitating programs relating to managing disruptive behaviours in children to strengthen family dynamics. Lauren also has experience working with children in an early intervention context both in-clinic and at-home settings. Lauren holds a Bachelor of Psychological Sciences with Honours from the University of Queensland and a Master of Professional Psychology from Bond University.",
     "credentials": [
       "Psychologist, BPsychSc(Hons) MProfPsych"
+    ],
+    "qualifications": [
+      {
+        "title": "Bachelor of Psychological Sciences with Honours",
+        "detail": "University of Queensland",
+        "kind": "degree"
+      },
+      {
+        "title": "Master of Professional Psychology",
+        "detail": "Bond University",
+        "kind": "degree"
+      }
     ],
     "bookingUrl": "https://www.halaxy.com/book/goals-psychology/location/726621",
     "practical": {
@@ -1381,6 +1502,22 @@
     "credentials": [
       "Provisional psychologist, BPsych BPsychSc(Hons), Master of Clinical Psychology in progress"
     ],
+    "qualifications": [
+      {
+        "title": "Bachelor of Psychology",
+        "detail": "Macquarie University",
+        "kind": "degree"
+      },
+      {
+        "title": "Bachelor of Psychological Science (Honours)",
+        "kind": "degree"
+      },
+      {
+        "title": "Master of Clinical Psychology",
+        "badge": "In progress",
+        "kind": "degree"
+      }
+    ],
     "bookingUrl": "https://www.halaxy.com/book/goals-psychology/location/726621",
     "practical": {
       "nextAvailable": "50-minute sessions; times set with the clinic",
@@ -1549,6 +1686,18 @@
     "credentials": [
       "Educational and developmental psychologist, BPsychSc MPsych(Ed&Dev)"
     ],
+    "qualifications": [
+      {
+        "title": "Bachelor of Psychological Science",
+        "detail": "University of Queensland",
+        "kind": "degree"
+      },
+      {
+        "title": "Master of Psychology (Educational & Developmental)",
+        "detail": "Queensland University of Technology",
+        "kind": "degree"
+      }
+    ],
     "bookingUrl": "https://www.goalspsychology.com/contact",
     "practical": {
       "nextAvailable": "Arranged with the clinic rather than booked online",
@@ -1700,6 +1849,7 @@
     "credentials": [
       "Registered psychologist"
     ],
+    "qualifications": [],
     "bookingUrl": "https://clientportal.zandahealth.com/clientportal/neutralmindspsychology/appointment-booking",
     "practical": {
       "nextAvailable": "50-minute sessions for adults 18 and over; booked online through the practice’s portal",
@@ -1883,6 +2033,18 @@
     "credentials": [
       "Clinical psychologist"
     ],
+    "qualifications": [
+      {
+        "title": "Australian Association of Psychologists",
+        "badge": "Member",
+        "kind": "membership"
+      },
+      {
+        "title": "Association of Applied Sports Psychology",
+        "badge": "Member",
+        "kind": "membership"
+      }
+    ],
     "bookingUrl": "https://www.hotdoc.com.au/medical-centres/bundall-QLD-4217/atlantis-recovery-centre/doctors/bart-traynor-1",
     "practical": {
       "nextAvailable": "Times set with the practice; booked online through HotDoc",
@@ -2016,6 +2178,18 @@
     "credentials": [
       "Clinical psychologist, MClinPsych BPsychSc(Hons)"
     ],
+    "qualifications": [
+      {
+        "title": "Master of Clinical Psychology",
+        "detail": "University of Queensland",
+        "kind": "degree"
+      },
+      {
+        "title": "Bachelor of Psychological Science (Honours)",
+        "detail": "Southern Cross University",
+        "kind": "degree"
+      }
+    ],
     "bookingUrl": "https://www.hotdoc.com.au/medical-centres/bundall-QLD-4217/atlantis-recovery-centre/doctors",
     "practical": {
       "nextAvailable": "Times set with the practice; booked online through HotDoc",
@@ -2130,6 +2304,14 @@
     "bio": "Michael is completing his final externship placement at Atlantis Recovery Centre as part of his Master of Clinical Psychology at Griffith University. He brings a thoughtful, creative and practical approach to his work and is continuing to build his clinical experience across a range of presentations. Outside psychology, Michael is also an Aboriginal artist and former competitive sprinter, bringing creativity, discipline and a unique perspective to the Atlantis team.",
     "credentials": [
       "Provisional psychologist"
+    ],
+    "qualifications": [
+      {
+        "title": "Master of Clinical Psychology",
+        "detail": "Griffith University",
+        "badge": "In progress",
+        "kind": "degree"
+      }
     ],
     "bookingUrl": "https://www.hotdoc.com.au/medical-centres/bundall-QLD-4217/atlantis-recovery-centre/doctors",
     "practical": {

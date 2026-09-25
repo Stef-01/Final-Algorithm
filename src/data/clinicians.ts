@@ -50,6 +50,7 @@ export function toView(r: ClinicianRecord): Clinician {
     photo: photos[r.id],
     bio: r.bio,
     credentials: r.credentials,
+    qualifications: r.qualifications ?? [],
     bookingUrl: r.bookingUrl,
     practical: {
       nextAvailableShort: availabilityShort(p.daysUntilAvailable),

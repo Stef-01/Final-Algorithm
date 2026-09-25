@@ -309,6 +309,61 @@ def session_minutes(text):
     return int(m.group(1)) if m else None
 
 
+# Plain names for post-nominals, used only when a profile doesn't spell its qualifications out.
+# Only abbreviations whose meaning is certain; anything else is shown as written, never guessed.
+POSTNOMINALS = {
+    'MBBS': 'Bachelor of Medicine, Bachelor of Surgery',
+    'MD': 'Doctor of Medicine',
+    'FRACGP': 'Fellow of the Royal Australian College of General Practitioners',
+    'MPhil': 'Master of Philosophy',
+    'BSc(Adv)': 'Bachelor of Science (Advanced)',
+    'BSc': 'Bachelor of Science',
+    'DCH': 'Diploma of Child Health',
+    'BA': 'Bachelor of Arts',
+    'BEd': 'Bachelor of Education',
+    'BExSc': 'Bachelor of Exercise Science',
+    'GradDipExSc': 'Graduate Diploma of Exercise Science',
+    'GradDipEd': 'Graduate Diploma of Education',
+    'GradDipPsych': 'Graduate Diploma of Psychology',
+    'MBusMgt': 'Master of Business Management',
+    'MTeach': 'Master of Teaching',
+    'PGDipPhysio': 'Postgraduate Diploma of Physiotherapy',
+    'ACC': 'Associate Certified Coach (ICF)',
+    'PhD': 'Doctor of Philosophy',
+}
+DEGREE = re.compile(r'^(Bachelor|Master|Doctor|PhD|Diploma|Postgraduate|Graduate)')
+MEMBER = re.compile(r'^(Associate Member|Member|Fellow)\b')
+INSTITUTION = re.compile(r'University|College|Society|Association|Institute|School')
+
+
+def qualifications(c):
+    """Qualifications as separate items, in the profile's own words where it spells them out."""
+    out = []
+    for line in c['experience']:
+        if not (DEGREE.match(line) or MEMBER.match(line) or re.match(r'(Certified|Credentialed|Endorsed|ADHD-Certified)\b', line)):
+            continue
+        badge = 'In progress' if re.search(r'in progress|currently completing', line) else 'Completed' if line.endswith(', completed') else None
+        parts = [p.strip() for p in re.sub(r',?\s*(in progress|currently completing|completed)$', '', line).split(', ')]
+        if MEMBER.match(line) and len(parts) > 1 and parts[0] in ('Member', 'Associate Member', 'Fellow'):
+            out.append(dict(title=', '.join(parts[1:]), badge=parts[0], kind='membership'))
+            continue
+        title, detail = parts[0], ', '.join(parts[1:]) or None
+        if detail and not INSTITUTION.search(detail):
+            title, detail = line, None
+        kind = 'degree' if DEGREE.match(line) else 'membership' if MEMBER.match(line) else 'certification'
+        out.append({k: v for k, v in dict(title=title, detail=detail, badge=badge, kind=kind).items() if v})
+    if out:
+        return out
+    # Fall back to decoding post-nominals ("General practitioner, MBBS FRACGP DCH").
+    q = c.get('qualifications') or ''
+    rest = q.split(',', 1)[1] if ',' in q else ''
+    for code in re.findall(r'[A-Za-z][A-Za-z&-]*(?:\([^)]*\))*', rest):
+        name = POSTNOMINALS.get(code)
+        kind = 'membership' if code.startswith('F') and name and name.startswith('Fellow') else 'degree' if name else 'certification'
+        out.append(dict(title=name, detail=code, kind=kind) if name else dict(title=code, kind=kind))
+    return out
+
+
 def convert(c):
     cid = c['id']
     text = corpus(c)
@@ -356,6 +411,7 @@ def convert(c):
         photo=f'{cid}.jpg',
         bio=' '.join(c['about']),
         credentials=[c['qualifications']] if c['qualifications'] else [],
+        qualifications=qualifications(c),
         bookingUrl=c['book_href'],
         practical=dict(
             nextAvailable=detail(c, 'Appointments') or 'Times set with the practice',

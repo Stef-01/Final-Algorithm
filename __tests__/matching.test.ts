@@ -74,6 +74,21 @@ describe('ADHDme profiles (server/data/professionals.json)', () => {
     }
   });
 
+  it('lists qualifications as separate items, each traceable to the profile', () => {
+    const quals = source as unknown as { id: string; qualifications?: string }[];
+    for (const c of professionals) {
+      const text = corpus(c.id);
+      const postnominals = quals.find((x) => x.id === c.id)?.qualifications ?? '';
+      for (const q of c.qualifications ?? []) {
+        // Either in the profile word for word, or a decoded post-nominal that the profile shows.
+        const decoded = !!q.detail && postnominals.includes(q.detail) && !text.includes(q.title);
+        expect({ id: c.id, q: q.title, ok: text.includes(q.title) || decoded }).toEqual({ id: c.id, q: q.title, ok: true });
+        expect(q.title).not.toMatch(/,\s*(in progress|completed)$/i);
+      }
+    }
+    expect(professionals.find((c) => c.id === 'alice-bui')!.qualifications).toContainEqual({ title: 'Master of Clinical Psychology', badge: 'In progress', kind: 'degree' });
+  });
+
   it('has a portrait for every professional', () => {
     for (const c of professionals) {
       expect(fs.existsSync(path.join(__dirname, '../assets/clinicians', c.photo))).toBe(true);

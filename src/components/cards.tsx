@@ -2,6 +2,8 @@ import { Image } from 'expo-image';
 import { ReactNode } from 'react';
 import { ImageSourcePropType, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import type { Qualification } from '@server/engine/types';
+
 import { colors, fonts } from '@/lib/theme';
 import { Icon } from './Icon';
 import { LikeButton } from './LikeButton';
@@ -77,6 +79,32 @@ export function TagsCard({ title, tags, kicker, ...like }: { title: string; tags
         ))}
       </View>
     </Card>
+  );
+}
+
+const QUAL_ICON: Record<Qualification['kind'], IconName> = { degree: 'icMortarboard', membership: 'icSecurity', certification: 'icCheck' };
+
+/** Qualifications as a clean list: what it is, where from, and a small badge (In progress, Member). */
+export function QualificationsCard({ items }: { items: Qualification[] }) {
+  if (items.length === 0) return null;
+  return (
+    <View style={styles.card}>
+      <Kicker label="Qualifications" style={styles.kickerChips} />
+      {items.map((q, i) => (
+        <View key={`${q.title}-${i}`} style={[styles.qual, i === 0 && styles.qualFirst]}>
+          <Icon name={QUAL_ICON[q.kind]} size={18} color={colors.black} />
+          <View style={styles.qualText}>
+            <Text style={styles.qualTitle}>{q.title}</Text>
+            {q.detail ? <Text style={styles.qualDetail}>{q.detail}</Text> : null}
+          </View>
+          {q.badge ? (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{q.badge}</Text>
+            </View>
+          ) : null}
+        </View>
+      ))}
+    </View>
   );
 }
 
@@ -206,6 +234,21 @@ const styles = StyleSheet.create({
   },
   noteTitle: { fontFamily: fonts.bold, fontSize: 13, letterSpacing: 0.3, color: colors.black, marginBottom: 6 },
   noteBody: { fontFamily: fonts.regular, fontSize: 15, lineHeight: 22, color: colors.black },
+  qual: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    paddingHorizontal: 29,
+    paddingVertical: 14,
+    borderTopWidth: 1,
+    borderTopColor: colors.background,
+  },
+  qualFirst: { borderTopWidth: 0, paddingTop: 12 },
+  qualText: { flex: 1, gap: 2 },
+  qualTitle: { fontFamily: fonts.medium, fontSize: 15, lineHeight: 20, color: colors.black },
+  qualDetail: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted },
+  badge: { borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 8, paddingVertical: 2, marginTop: 1 },
+  badgeText: { fontFamily: fonts.bold, fontSize: 11, color: colors.black },
   tags: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginHorizontal: 15 },
   tag: { maxWidth: '100%', borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 14, paddingVertical: 8 },
   tagText: { fontFamily: fonts.medium, fontSize: 15, color: colors.black },

@@ -85,6 +85,15 @@ export type Evidence = {
   reviewerStatus: 'draft' | 'approved' | 'profile' | 'rejected';
 };
 
+export type Qualification = {
+  title: string;
+  /** Where from (a university) or the post-nominal it decodes. */
+  detail?: string;
+  /** "In progress", "Completed", "Member". */
+  badge?: string;
+  kind: 'degree' | 'membership' | 'certification';
+};
+
 export type ClinicianRecord = {
   id: string;
   name: string;
@@ -98,6 +107,8 @@ export type ClinicianRecord = {
   photo: string;
   bio: string;
   credentials: string[];
+  /** Qualifications as separate items, in the profile's own words (scripts/import-adhdme.py). */
+  qualifications?: Qualification[];
   bookingUrl: string | null;
   practical: {
     nextAvailable: string;

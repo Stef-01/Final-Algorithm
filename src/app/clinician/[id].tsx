@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AssistantMark } from '@/components/AssistantButton';
-import { ChipsCard, NoteCard, PhotoCard, PromptCard, TagsCard, TextCard } from '@/components/cards';
+import { ChipsCard, NoteCard, PhotoCard, PromptCard, QualificationsCard, TagsCard, TextCard } from '@/components/cards';
 import { caveatLines, costLabel, noReasonLine, placeLine, practicalChips, reasonKicker } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { FitLabel } from '@/components/FitLabel';
@@ -96,11 +96,7 @@ export default function ClinicianDetail() {
           ]}
         />
         <TextCard kicker="In their words" title={`About ${c.firstName}`} body={c.bio} />
-        <ChipsCard
-          chips={[]}
-          rowsTitle="Qualifications"
-          rows={c.credentials.map((q) => ({ icon: 'icEducation', label: q }))}
-        />
+        <QualificationsCard items={c.qualifications} />
       </ScrollView>
 
       <View style={[styles.footer, { paddingBottom: 12 + insets.bottom }]}>
