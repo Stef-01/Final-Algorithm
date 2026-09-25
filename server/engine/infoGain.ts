@@ -14,15 +14,16 @@ export const STOP_THRESHOLD = 0.1;
 /** Default follow-up ceiling (PRD §4.4). */
 export const MAX_QUESTIONS = 3;
 
+// Lower than most preferences: constraints are asked only when they'd clearly change the list (PRD §20),
+// and patients with a hard limit usually say so upfront.
 const CONSTRAINT_IMPORTANCE: Partial<Record<keyof HardConstraints, number>> = {
-  maxGap: 1,
-  mode: 0.9,
-  needsWeekend: 0.8,
+  maxGap: 0.6,
+  mode: 0.6,
+  needsWeekend: 0.5,
 };
 
 export function topK(cs: ClinicianRecord[], s: PatientSignals, k = TOP_K) {
   return rank(eligibleFor(cs, s), s)
-    .filter((x) => x.fit !== null)
     .slice(0, k)
     .map((x) => x.clinicianId);
 }

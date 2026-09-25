@@ -8,6 +8,17 @@ import { setAnalyticsSender, track } from '@/lib/analytics';
 
 jest.mock('expo-font', () => ({ ...jest.requireActual('expo-font'), useFonts: () => [true, null] }));
 
+/** Answer follow-ups ("Not sure" where offered) and confirm priorities until the matches appear. */
+async function answerUntilMatches() {
+  for (let i = 0; i < 6; i++) {
+    await waitFor(() => undefined);
+    if (screen.queryByText('Find my matches')) fireEvent.press(screen.getByText('Find my matches'));
+    else if (screen.queryByText('Explain in your own words'))
+      fireEvent.press(screen.queryByText('Not sure') ?? screen.getAllByRole('button').filter((b) => b.props.accessibilityLabel === undefined)[0]);
+    else break;
+  }
+}
+
 type Sent = { name: string; props: Record<string, string | number | boolean> };
 let sent: Sent[] = [];
 beforeEach(async () => {
@@ -64,8 +75,8 @@ describe('events through a run-through (PRD §48)', () => {
     fireEvent.press(await screen.findByText('Try a demo patient'));
     fireEvent.press(await screen.findByText('Burnt out from masking'));
     fireEvent.press(await screen.findByLabelText('Next'));
-    fireEvent.press(await screen.findByText('Explain them and decide together'));
-    fireEvent.press(await screen.findByText('Find my matches'));
+    await screen.findByText('Explain in your own words');
+    await answerUntilMatches();
     await screen.findByText('Jessica Katsamatsas');
 
     fireEvent.press(screen.getByText('Yes'));
@@ -88,7 +99,8 @@ describe('events through a run-through (PRD §48)', () => {
       expect(names).toContain(n);
     }
     const done = sent.find((e) => e.name === 'matching_completed')!.props;
-    expect(done).toMatchObject({ followups: 1, profession: 'psychologist' });
+    expect(done).toMatchObject({ profession: 'psychologist' });
+    expect(done.followups).toBeGreaterThanOrEqual(1);
     expect(typeof done.seconds).toBe('number');
     expect(sent.find((e) => e.name === 'matching_started')!.props).toEqual({ profession: 'psychologist', demo: true });
 
@@ -106,6 +118,7 @@ describe('events through a run-through (PRD §48)', () => {
     fireEvent.press(await screen.findByText('Try a demo patient'));
     fireEvent.press(await screen.findByText('Trauma, online sessions only'));
     fireEvent.press(await screen.findByLabelText('Next'));
+    await answerUntilMatches();
     await screen.findByText('Alice Bui');
     for (let i = 0; i < 3; i++) fireEvent.press(screen.getByLabelText('Next match'));
     fireEvent.press(await screen.findByLabelText('4 out of 5, Well'));

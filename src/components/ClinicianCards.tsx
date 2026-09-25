@@ -1,5 +1,5 @@
-import type { Clinician, Match } from '@/features/match/types';
-import { ChipItem, ChipsCard, PhotoCard, PromptCard } from './cards';
+import type { Caveat, Clinician, Match } from '@/features/match/types';
+import { ChipItem, ChipsCard, PhotoCard, PromptCard, TextCard } from './cards';
 
 type Props = {
   clinician: Clinician;
@@ -30,6 +30,17 @@ export function practicalChips(c: Clinician): ChipItem[] {
 
 export const placeLine = (c: Clinician) => `${c.role} · ${c.suburb}, ${c.city}`;
 
+const CAVEAT_TEXT: Record<Caveat, string> = {
+  fee_unpublished: "The out-of-pocket cost isn't published, so it can't be checked against your budget. Ask the practice.",
+  weekend_hours_unpublished: "Weekend hours aren't published. Ask the practice.",
+};
+
+export const caveatLines = (m: Match) => (m.caveats ?? []).map((c) => CAVEAT_TEXT[c]);
+
+/** Shown instead of reasons when nothing the patient said matches a specific part of the profile. */
+export const noReasonLine = (c: Clinician) =>
+  `Nothing you've mentioned matches a specific part of ${c.firstName}'s profile yet, but ${c.firstName} meets your requirements.`;
+
 // A match in the Discover card layout, content in PRD §34 priority order:
 // who → why they fit (max 3) → practical details + experience → how they practise.
 export function ClinicianCards({ clinician: c, match, onOpen, onSave, saved }: Props) {
@@ -47,8 +58,13 @@ export function ClinicianCards({ clinician: c, match, onOpen, onSave, saved }: P
         accessibilityLabel={`View ${c.firstName}`}
         {...like}
       />
-      {match.reasons.slice(0, 3).map((r) => (
-        <PromptCard key={r.evidenceId} title={r.signal} answer={r.evidence} {...like} />
+      {match.reasons.length > 0 ? (
+        match.reasons.slice(0, 3).map((r) => <PromptCard key={r.evidenceId} title={r.signal} answer={r.evidence} {...like} />)
+      ) : (
+        <TextCard title="Why they're here" body={noReasonLine(c)} />
+      )}
+      {caveatLines(match).map((line) => (
+        <TextCard key={line} title="Worth checking" body={line} />
       ))}
       <ChipsCard
         chips={practicalChips(c)}

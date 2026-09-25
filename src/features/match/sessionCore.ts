@@ -129,13 +129,6 @@ export function nextMatch(state: SessionState): SessionState {
   return { ...state, index: Math.min(state.index + 1, total), updatedAt: Date.now() };
 }
 
-/** "See more options" — only on explicit request (PRD §4.7). */
-export function showMore(state: SessionState): SessionState {
-  if (state.result?.status !== 'matches' || state.result.more.length === 0) return state;
-  const { matches, more } = state.result;
-  return { ...state, result: { status: 'matches', matches: [...matches, ...more], more: [] }, index: matches.length, updatedAt: Date.now() };
-}
-
 export function noMatchAction(state: SessionState, action: NoMatchAction): Transition {
   if (action === 'answer_more') {
     const s = withInput(state, { wantsMoreQuestions: true });
@@ -181,13 +174,13 @@ export function runDemo(demoId: string, answers: string[] = []): Transition {
   return t;
 }
 
-/** Run a demo all the way to results, answering any question with its first option. */
-export function demoResults(demoId: string): SessionState {
+/** Run a demo all the way to results, answering "Not sure" (or the given option) to any question. */
+export function demoResults(demoId: string, pick: (q: Question) => string = (q) => q.options.find((o) => o === 'Not sure') ?? q.options[0]): SessionState {
   let t = runDemo(demoId);
   for (let i = 0; i < 5 && t.route !== '/matching'; i++) {
     if (t.route.startsWith('/clarify')) {
       const q = t.state.asked[t.state.asked.length - 1];
-      t = answer(t.state, q.id, q.options[0]);
+      t = answer(t.state, q.id, pick(q));
     } else if (t.route === '/confirm') {
       t = confirmPriorities(t.state, []);
     } else if (t.route === '/safety') {
@@ -290,4 +283,5 @@ export const scenarios: Scenario[] = [
   { id: 'partial', frame: '—', label: 'Only 1 fits', build: () => ({ state: demoResults('gp-female'), route: '/matches' }) },
   { id: 'safety', frame: '—', label: 'Safety pause', build: () => runDemo('either-urgent') },
   { id: 'demos', frame: '—', label: 'Demo patients', build: () => ({ state: initialState(), route: '/demos' }) },
+  { id: 'all', frame: '—', label: 'Everyone who fits (ranked)', build: () => ({ state: demoResults(withMatches()), route: '/all' }) },
 ];

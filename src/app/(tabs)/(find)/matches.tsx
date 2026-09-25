@@ -80,10 +80,10 @@ export default function Matches() {
           title="That's everyone I'd start with."
           body={
             more.length > 0
-              ? "Save anyone you'd like to come back to, or see a few more options."
+              ? `${more.length} more ${more.length === 1 ? copyFor(state.profession).one : copyFor(state.profession).many} also meet what you asked for, ranked behind these.`
               : "Save anyone you'd like to come back to. They'll be in the Saved tab."
           }
-          action={more.length > 0 ? { label: 'See more options', onPress: session.showMore } : undefined}
+          action={more.length > 0 ? { label: `See all ${matches.length + more.length}`, onPress: () => router.push('/all') } : undefined}
           secondary={{ label: 'Start over', onPress: startOver }}
         />
         <RatingCard value={state.feedback.rating} onRate={session.rateMatches} />
@@ -102,6 +102,11 @@ export default function Matches() {
           <View style={styles.intro}>
             <Text style={styles.introTitle}>{matchesHeadline(matches.length, state.profession)}</Text>
             {matches.length > 1 ? <Text style={styles.introBody}>Each fits for slightly different reasons.</Text> : null}
+            {more.length > 0 ? (
+              <Text style={styles.seeAll} onPress={() => router.push('/all')} accessibilityRole="link">
+                See all {matches.length + more.length} who fit
+              </Text>
+            ) : null}
           </View>
         ) : (
           <Text style={styles.position}>
@@ -147,6 +152,7 @@ const styles = StyleSheet.create({
   intro: { marginHorizontal: 12, marginTop: 20, paddingHorizontal: 15 },
   introTitle: { fontFamily: fonts.serifSemiBold, fontSize: 24, lineHeight: 30, color: colors.black },
   introBody: { fontFamily: fonts.regular, fontSize: 15, color: colors.black, marginTop: 6 },
+  seeAll: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, marginTop: 10, paddingVertical: 6 },
   position: { fontFamily: fonts.medium, fontSize: 14, color: colors.line, marginTop: 16, marginHorizontal: 27 },
   view: { marginHorizontal: 12, marginTop: 24 },
   next: {

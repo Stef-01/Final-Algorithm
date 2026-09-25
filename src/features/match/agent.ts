@@ -113,6 +113,7 @@ export function runMatching(input: SessionInput): MatchResult {
     clinicianId: m.clinicianId,
     fit: m.fit,
     reasons: m.reasons.map(({ signal, evidenceId, evidence }) => ({ signal, evidenceId, evidence })),
+    caveats: m.caveats,
   });
   return { status: 'matches', matches: r.matches.map(strip), more: r.more.map(strip) };
 }

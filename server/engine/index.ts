@@ -47,10 +47,12 @@ export function preferencesToConfirm(s: PatientSignals, cs: ClinicianRecord[]): 
   return dims.sort((a, b) => IMPORTANCE[b] - IMPORTANCE[a]).slice(0, 5);
 }
 
-/** A credible match is one we could actually show: eligible, above the fit threshold, and explainable. */
+/** A credible match: eligible, above "Possible fit", and explained by at least one evidence-backed reason. */
 export function hasCredibleMatch(s: PatientSignals, cs: ClinicianRecord[]) {
   const byId = new Map(cs.map((c) => [c.id, c]));
-  return selectTop(rank(eligibleFor(cs, s), s)).some((x) => reasonsFor(byId.get(x.clinicianId)!, s).length > 0);
+  return selectTop(rank(eligibleFor(cs, s), s)).some(
+    (x) => x.fit !== 'Possible fit' && reasonsFor(byId.get(x.clinicianId)!, s).length > 0,
+  );
 }
 
 export function decide(s: PatientSignals, cs: ClinicianRecord[], t: TurnState): Decision {
@@ -72,11 +74,11 @@ export function decide(s: PatientSignals, cs: ClinicianRecord[], t: TurnState): 
   return { type: 'match' };
 }
 
-function toMatch(c: ClinicianRecord, x: Scored, s: PatientSignals): EngineMatch | null {
+function toMatch(c: ClinicianRecord, x: Scored, s: PatientSignals): EngineMatch {
   const reasons = reasonsFor(c, s);
-  // Never show a clinician we can't explain (PRD §4.8).
-  if (reasons.length === 0 || !x.fit) return null;
-  return { clinicianId: c.id, fit: x.fit, reasons, strongestLayer: strongestLayer(x) };
+  // No evidence-backed reason → never labelled better than "Possible fit" (PRD §4.8, §42).
+  const fit = reasons.length === 0 ? 'Possible fit' : x.fit;
+  return { clinicianId: c.id, fit, reasons, strongestLayer: strongestLayer(x), caveats: x.caveats };
 }
 
 /** What would help when nothing fits (PRD §42): relax one constraint at a time and see if matches appear. */
@@ -93,24 +95,24 @@ function noMatchActions(s: PatientSignals, cs: ClinicianRecord[], asked: string[
   return actions;
 }
 
+/**
+ * Everyone who meets the patient's requirements, in priority order: up to three featured matches
+ * (with near-tie diversity), then everyone else ranked. Only an empty eligible set is "no match".
+ */
 export function recommend(s: PatientSignals, cs: ClinicianRecord[], asked: string[] = []): Recommendation {
   const byId = new Map(cs.map((c) => [c.id, c]));
-  const ranked = rank(eligibleFor(cs, s), s);
+  const scored = rank(eligibleFor(cs, s), s);
+  if (scored.length === 0) return { status: 'none', actions: noMatchActions(s, cs, asked) };
 
-  const matches: EngineMatch[] = [];
-  const shown = new Set<string>();
-  for (const x of selectTop(ranked)) {
-    const m = toMatch(byId.get(x.clinicianId)!, x, s);
-    if (m) matches.push(m);
-    shown.add(x.clinicianId);
-  }
-  if (matches.length === 0) return { status: 'none', actions: noMatchActions(s, cs, asked) };
+  // Clinicians we can explain come before those we can't; within each group, the engine's order.
+  const explained = new Set(scored.filter((x) => reasonsFor(byId.get(x.clinicianId)!, s).length > 0).map((x) => x.clinicianId));
+  const ranked = [...scored.filter((x) => explained.has(x.clinicianId)), ...scored.filter((x) => !explained.has(x.clinicianId))];
 
-  const more = ranked
-    .filter((x) => !shown.has(x.clinicianId))
-    .map((x) => toMatch(byId.get(x.clinicianId)!, x, s))
-    .filter((m): m is EngineMatch => m !== null)
-    .slice(0, 3);
-
-  return { status: 'matches', matches, more };
+  const featured = selectTop(ranked);
+  const shown = new Set(featured.map((x) => x.clinicianId));
+  return {
+    status: 'matches',
+    matches: featured.map((x) => toMatch(byId.get(x.clinicianId)!, x, s)),
+    more: ranked.filter((x) => !shown.has(x.clinicianId)).map((x) => toMatch(byId.get(x.clinicianId)!, x, s)),
+  };
 }

@@ -46,7 +46,8 @@ Three tabs: **Find**, **Saved** and **Settings**.
 | Follow-up question | `/clarify?q=…` | Only questions whose answer could change the matches; tap an answer, or use your own words |
 | Preference confirmation | `/confirm` | Only when an uncertain guess would change the matches; tap a priority to remove it |
 | Matching | `/matching` | Moves on as soon as results are ready |
-| Top matches | `/matches` | Up to 3, one at a time, in the Discover card layout: fit label, why they fit, practical details, how they practise. ✕ = next match, ♥ = save |
+| Top matches | `/matches` | The three I'd start with, one at a time, in the Discover card layout: fit label, why they fit, practical details, how they practise. ✕ = next match, ♥ = save |
+| Everyone who fits | `/all` | Everyone who meets your requirements, ranked. Unexplained ones are labelled "Possible fit"; unpublished costs are flagged |
 | Clinician detail | `/clinician/[id]` | Why I matched you, practice, experience, practical details (as published), bio, qualifications; Book / See next match |
 | Booking handoff | `/book/[id]` | Opens the practice's own booking page |
 | Safety pause | `/safety` | Shown on urgent wording; wording pending clinical review |

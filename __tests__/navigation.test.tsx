@@ -9,6 +9,7 @@ import FindLayout from '@/app/(tabs)/(find)/_layout';
 import Funnel from '@/app/(tabs)/(find)/index';
 import Describe from '@/app/(tabs)/(find)/describe';
 import Demos from '@/app/(tabs)/(find)/demos';
+import AllMatches from '@/app/(tabs)/(find)/all';
 import Clarify from '@/app/(tabs)/(find)/clarify';
 import Confirm from '@/app/(tabs)/(find)/confirm';
 import Matching from '@/app/(tabs)/(find)/matching';
@@ -29,6 +30,7 @@ const routes = {
   '(tabs)/(find)/index': Funnel,
   '(tabs)/(find)/describe': Describe,
   '(tabs)/(find)/demos': Demos,
+  '(tabs)/(find)/all': AllMatches,
   '(tabs)/(find)/clarify': Clarify,
   '(tabs)/(find)/confirm': Confirm,
   '(tabs)/(find)/matching': Matching,
@@ -43,13 +45,14 @@ const routes = {
 
 beforeEach(() => AsyncStorage.clear());
 
-/** Answer any follow-up questions with their first option until the matches appear. */
+/** Answer follow-ups ("Not sure" where offered) and confirm priorities until the matches appear. */
 async function answerUntilMatches() {
-  for (let i = 0; i < 4; i++) {
-    if (screen.queryByText('Explain in your own words') === null) break;
-    const options = screen.getAllByRole('button').filter((b) => b.props.accessibilityLabel === undefined);
-    fireEvent.press(options[0]);
+  for (let i = 0; i < 6; i++) {
     await waitFor(() => undefined);
+    if (screen.queryByText('Find my matches')) fireEvent.press(screen.getByText('Find my matches'));
+    else if (screen.queryByText('Explain in your own words'))
+      fireEvent.press(screen.queryByText('Not sure') ?? screen.getAllByRole('button').filter((b) => b.props.accessibilityLabel === undefined)[0]);
+    else break;
   }
 }
 
@@ -86,9 +89,11 @@ describe('app shell', () => {
 });
 
 describe('demo run-throughs', () => {
-  it('trauma, online only: goes straight to explained matches', async () => {
+  it('trauma, online only: explained matches, with everyone else ranked behind', async () => {
     await startDemo('Trauma, online sessions only');
+    await answerUntilMatches();
     expect(await screen.findByText('Alice Bui')).toBeOnTheScreen();
+    expect(screen.getByText(/^See all \d+ who fit$/)).toBeOnTheScreen();
     expect(screen.getByText("I found 3 psychologists I'd start with.")).toBeOnTheScreen();
     expect(screen.getByLabelText('Strong fit')).toBeOnTheScreen();
     expect(screen.getByText("You're looking for help with trauma.")).toBeOnTheScreen();
@@ -104,6 +109,8 @@ describe('demo run-throughs', () => {
 
   it('opens a real profile and hands off to the practice’s booking page', async () => {
     await startDemo('Trauma, online sessions only');
+    await answerUntilMatches();
+    await screen.findByText('Alice Bui');
     fireEvent.press(screen.getByLabelText('Next match'));
     fireEvent.press(await screen.findByText('View Paula'));
     await waitFor(() => expect(screen).toHavePathname('/clinician/paula-garrido'));
@@ -124,20 +131,29 @@ describe('demo run-throughs', () => {
     expect(screen.getByText('$299, no rebate')).toBeOnTheScreen();
   });
 
-  it('asks a follow-up, confirms an uncertain priority, then shows results', async () => {
+  it('asks a follow-up when it would change the list, then shows results', async () => {
     await startDemo('Burnt out from masking');
-    expect(await screen.findByText('When there are several reasonable options, what do you prefer?')).toBeOnTheScreen();
-    fireEvent.press(screen.getByText('Explain them and decide together'));
-    expect(await screen.findByText("Here's what seems to matter most.")).toBeOnTheScreen();
-    expect(screen.getByText('Neurodiversity-affirming')).toBeOnTheScreen();
-    fireEvent.press(screen.getByText('Find my matches'));
+    expect(await screen.findByText('Explain in your own words')).toBeOnTheScreen();
+    await answerUntilMatches();
     expect(await screen.findByText('Jessica Katsamatsas')).toBeOnTheScreen();
     expect(screen.getByText(/hand you a list of strategies/)).toBeOnTheScreen();
   });
 
-  it('bulk-billed psychologist: says honestly there is no strong match', async () => {
+  it('bulk-billed psychologist: lists psychologists and flags the unconfirmed cost', async () => {
     await startDemo('A bulk-billed psychologist');
-    expect(await screen.findByText("I don't have a strong enough match yet.")).toBeOnTheScreen();
+    await answerUntilMatches();
+    await waitFor(() => expect(screen).toHavePathname('/matches'));
+    expect(screen.getAllByText(/out-of-pocket cost isn't published/).length).toBeGreaterThan(0);
+  });
+
+  it('shows everyone who fits, ranked, on the "See all" list', async () => {
+    await startDemo('Trauma, online sessions only');
+    await answerUntilMatches();
+    fireEvent.press(await screen.findByText(/^See all \d+ who fit$/));
+    expect(await screen.findByText("I'd start with")).toBeOnTheScreen();
+    expect(screen.getByText('Also a fit')).toBeOnTheScreen();
+    fireEvent.press(screen.getByLabelText(/^1\. Alice Bui/));
+    await waitFor(() => expect(screen).toHavePathname('/clinician/alice-bui'));
   });
 
   it('urgent symptom: pauses for safety, then carries on', async () => {

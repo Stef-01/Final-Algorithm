@@ -136,7 +136,7 @@ describe('demo run-throughs', () => {
     expect(state.asked.length).toBeLessThanOrEqual(4);
     expect(state.result).toBeDefined();
     for (const m of matchesOf(state.result)) {
-      expect(m.reasons.length).toBeGreaterThan(0);
+      if (m.fit !== 'Possible fit') expect(m.reasons.length).toBeGreaterThan(0);
       expect(m.reasons.length).toBeLessThanOrEqual(3);
       for (const r of m.reasons) expect(copyProblems(`${r.signal} ${r.evidence}`)).toEqual([]);
     }
@@ -162,8 +162,23 @@ describe('demo run-throughs', () => {
     expect(bart.reasons.map((r) => r.evidence)).toContain('Bart describes himself as straight-talking.');
   });
 
-  it('bulk-billed psychologist: an honest no-match', () => {
-    expect(core.demoResults('psych-bulk-billed').result?.status).toBe('none');
+  it('bulk-billed psychologist: still lists psychologists, flagging that the cost can’t be confirmed', () => {
+    const r = core.demoResults('psych-bulk-billed').result;
+    if (r?.status !== 'matches') throw new Error('expected matches');
+    const all = [...r.matches, ...r.more];
+    expect(all.length).toBeGreaterThan(3);
+    for (const m of all) expect(m.caveats).toContain('fee_unpublished');
+    // Nobody with a known fee above the limit appears.
+    expect(all.some((m) => m.clinicianId === 'paula-garrido')).toBe(false);
+  });
+
+  it('lists everyone who fits, ranked, not just three', () => {
+    const r = core.demoResults('psych-trauma-online').result;
+    if (r?.status !== 'matches') throw new Error('expected matches');
+    expect(r.matches).toHaveLength(3);
+    expect(r.more.length).toBeGreaterThan(0);
+    const telehealth = professionals.filter((c) => c.profession === 'psychologist' && c.practical.modes.includes('telehealth'));
+    expect(r.matches.length + r.more.length).toBe(telehealth.length);
   });
 
   it('urgent symptom: pauses for safety first', () => {

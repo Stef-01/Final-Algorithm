@@ -1,8 +1,8 @@
 import type { ImageSourcePropType } from 'react-native';
 
-import type { FitLabel, NoMatchAction, Profession } from '@server/engine/types';
+import type { Caveat, FitLabel, NoMatchAction, Profession } from '@server/engine/types';
 
-export type { FitLabel, NoMatchAction, Profession };
+export type { Caveat, FitLabel, NoMatchAction, Profession };
 
 // Shapes the screens use. The engine's own types live in server/engine/types.ts.
 
@@ -40,7 +40,7 @@ export type Clinician = {
 /** One reason = what the patient said + what the clinician does (PRD §27). */
 export type Reason = { signal: string; evidenceId: string; evidence: string };
 
-export type Match = { clinicianId: string; fit: FitLabel; reasons: Reason[] };
+export type Match = { clinicianId: string; fit: FitLabel; reasons: Reason[]; caveats?: Caveat[] };
 
 export type Question = {
   id: string;

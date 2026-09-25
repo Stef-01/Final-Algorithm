@@ -156,8 +156,16 @@ describe('question selection (PRD §11–15, §20)', () => {
   });
 
   it('allows a 4th question for an unresolved hard constraint (PRD §4.4)', () => {
-    const d = decide(investigateSignals, cs, { asked: ['q1', 'q2', 'q3'], preferencesConfirmed: true });
-    expect(d.type === 'ask' && d.question.target.kind).toBe('constraint');
+    // Every preference known; only the cost limit is still open, and it would change the list.
+    const everything = Object.fromEntries(
+      Object.keys(DIMENSIONS).map((d) => [d, { value: (DIMENSIONS[d as Dimension] as readonly string[])[2], confidence: 'high' as const }]),
+    );
+    const s: PatientSignals = { ...demoSignals, preferences: everything, constraints: { ...demoSignals.constraints, mode: 'any', needsWeekend: false } };
+    const [best] = scoreQuestions(s, cs, ['q1', 'q2', 'q3']);
+    expect(best.question.id).toBe('cost');
+    const d = decide(s, cs, { asked: ['q1', 'q2', 'q3'], preferencesConfirmed: true });
+    if (best.gain >= STOP_THRESHOLD) expect(d.type === 'ask' && d.question.id).toBe('cost');
+    else expect(d.type).toBe('match');
   });
 
   it("doesn't ask a question whose likely answers would leave nobody to recommend", () => {
@@ -198,6 +206,7 @@ describe('top-3 selection (PRD §31, §43)', () => {
     total,
     layers: { clinical, practice, practical: 0.5 },
     fit,
+    caveats: [],
   });
 
   it('always puts the best overall fit first', () => {
@@ -216,8 +225,9 @@ describe('top-3 selection (PRD §31, §43)', () => {
     expect(ids(selectTop(differentLabel))).toEqual(['a', 'b', 'c']);
   });
 
-  it('returns fewer than 3 rather than padding, and skips anyone below the fit threshold', () => {
-    expect(ids(selectTop([s('a', 0.8, 0.5, 0.9), s('b', 0.4, 0.5, 0.9, null)]))).toEqual(['a']);
+  it('features up to three, in priority order, and fewer when fewer are eligible', () => {
+    expect(ids(selectTop([s('a', 0.8, 0.5, 0.9), s('b', 0.4, 0.5, 0.9, 'Possible fit')]))).toEqual(['a', 'b']);
+    expect(selectTop([s('a', 0.9, 0.5, 0.9), s('b', 0.8, 0.5, 0.9), s('c', 0.7, 0.5, 0.9), s('d', 0.6, 0.5, 0.9)])).toHaveLength(3);
     expect(selectTop([])).toEqual([]);
   });
 });
@@ -237,31 +247,60 @@ describe('recommend', () => {
     expect(r.matches[0].reasons[0].signal).toBe('You said rushed appointments have not worked for you.');
   });
 
-  it('shows only the clinicians who meet a hard constraint (partial results)', () => {
+  it('shows only the clinicians who meet a known requirement (partial results)', () => {
     const r = recommend(withConstraints(demoAnswered, { mode: 'in_person_only', origin: NEW_FARM, maxKm: 2 }), cs);
-    expect(r.status === 'matches' && ids(r.matches)).toEqual(['amy-chen', 'sam-patel']);
+    if (r.status !== 'matches') throw new Error('expected matches');
+    expect(ids(r.matches)).toEqual(['amy-chen', 'sam-patel']);
+    expect(r.more).toEqual([]);
   });
 
-  it("says there's no strong match and suggests what would help", () => {
-    const k = { mode: 'in_person_only' as const, needsWeekend: true, origin: NEW_FARM, maxKm: 5 };
+  it('lists everyone eligible, prioritised: featured three, then the rest in order', () => {
+    const r = recommend(demoAnswered, cs, ['decision_style']);
+    if (r.status !== 'matches') throw new Error('expected matches');
+    const all = [...r.matches, ...r.more].map((m) => m.clinicianId);
+    const eligible = cs.filter((c) => c.practical.newPatients && c.practical.ageRange[0] <= 27 && c.practical.ageRange[1] >= 27);
+    expect(new Set(all)).toEqual(new Set(eligible.map((c) => c.id)));
+    expect(r.matches).toHaveLength(3);
+    // Explained clinicians before unexplained ones; unexplained ones are only ever "Possible fit".
+    const firstUnexplained = r.more.findIndex((m) => m.reasons.length === 0);
+    if (firstUnexplained >= 0) expect(r.more.slice(firstUnexplained).every((m) => m.reasons.length === 0)).toBe(true);
+    for (const m of [...r.matches, ...r.more]) if (m.reasons.length === 0) expect(m.fit).toBe('Possible fit');
+  });
+
+  it('flags, rather than drops, clinicians whose fee is unpublished when there is a cost limit', () => {
+    const unpublished = cs.map((c) => (c.id === 'priya-nair' ? { ...c, practical: { ...c.practical, gapAfterMedicare: null, fee: null } } : c));
+    const r = recommend(withConstraints(demoAnswered, { maxGap: 0 }), unpublished, ['decision_style', 'cost']);
+    if (r.status !== 'matches') throw new Error('expected matches');
+    const priya = [...r.matches, ...r.more].find((m) => m.clinicianId === 'priya-nair')!;
+    expect(priya.caveats).toEqual(['fee_unpublished']);
+    // A known fee above the limit still rules a clinician out.
+    expect([...r.matches, ...r.more].some((m) => m.clinicianId === 'amy-chen')).toBe(false);
+  });
+
+  it("says there's no match only when nobody meets the requirements, and suggests what would help", () => {
+    const k = { mode: 'in_person_only' as const, needsWeekend: true, origin: NEW_FARM, maxKm: 1 };
     const r = recommend(withConstraints(demoAnswered, k), cs, ['decision_style']);
     // Another question can't help while the constraints exclude everyone, so it isn't offered.
     expect(r).toEqual({ status: 'none', actions: ['include_telehealth', 'expand_distance'] });
   });
 
-  it('asks for more rather than guessing when it knows too little', () => {
-    expect(recommend(vagueSignals, cs)).toEqual({ status: 'none', actions: ['answer_more'] });
+  it('with almost nothing to go on, still lists everyone — honestly, as possible fits', () => {
+    const r = recommend(vagueSignals, cs);
+    if (r.status !== 'matches') throw new Error('expected matches');
+    for (const m of [...r.matches, ...r.more]) {
+      expect(m.fit).toBe('Possible fit');
+      expect(m.reasons).toEqual([]);
+    }
+    // ...and the agent asks questions before showing them.
+    expect(decide(vagueSignals, cs, fresh).type).toBe('ask');
   });
 
-  it('keeps extra options separate, explained, and excluding the ones already shown', () => {
+  it('keeps the rest separate from the featured three, without repeats', () => {
     const r = recommend(withConstraints(demoAnswered, { mode: 'telehealth_only' }), cs);
     if (r.status !== 'matches') throw new Error('expected matches');
     expect(r.more.length).toBeGreaterThan(0);
-    expect(r.more.length).toBeLessThanOrEqual(3);
-    for (const m of r.more) {
-      expect(ids(r.matches)).not.toContain(m.clinicianId);
-      expect(m.reasons.length).toBeGreaterThan(0);
-    }
+    const all = [...r.matches, ...r.more].map((m) => m.clinicianId);
+    expect(new Set(all).size).toBe(all.length);
   });
 
   it('never sends scores or interview excerpts to the patient', () => {
@@ -286,7 +325,7 @@ describe('explanations (PRD §4.8–4.9, §26–27, §32)', () => {
     const shown = r.status === 'matches' ? [...r.matches, ...r.more] : [];
     for (const m of shown) {
       const c = byId(m.clinicianId);
-      expect(m.reasons.length).toBeGreaterThan(0);
+      if (m.fit !== 'Possible fit') expect(m.reasons.length).toBeGreaterThan(0);
       expect(m.reasons.length).toBeLessThanOrEqual(3);
       expect(new Set(m.reasons.map((x) => x.evidenceId)).size).toBe(m.reasons.length);
       for (const reason of m.reasons) {

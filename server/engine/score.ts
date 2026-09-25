@@ -1,4 +1,4 @@
-import { distanceKm } from './eligibility';
+import { distanceKm, softMisses } from './eligibility';
 import {
   CONFIDENCE,
   DIMENSIONS,
@@ -41,7 +41,10 @@ export const FIT_THRESHOLDS: [FitLabel, number][] = [
   ['Worth considering', 0.52],
 ];
 
-export const fitFor = (total: number): FitLabel | null => FIT_THRESHOLDS.find(([, t]) => total >= t)?.[0] ?? null;
+export const fitFor = (total: number): FitLabel => FIT_THRESHOLDS.find(([, t]) => total >= t)?.[0] ?? 'Possible fit';
+
+/** Ranking penalty for each requirement a clinician's profile can't confirm (unpublished fee or hours). */
+export const SOFT_MISS_PENALTY = 0.06;
 
 /** Evidence that may reach patients: interview-reviewed, or taken from the clinician's own published profile. */
 export const isUsableStatus = (s: Evidence['reviewerStatus']) => s === 'approved' || s === 'profile';
@@ -134,8 +137,10 @@ export function practicalScore(c: ClinicianRecord, s: PatientSignals) {
 
 export function score(c: ClinicianRecord, s: PatientSignals): Scored {
   const layers = { clinical: clinicalScore(c, s), practice: practiceScore(c, s), practical: practicalScore(c, s) };
-  const total = (Object.keys(layers) as Layer[]).reduce((sum, l) => sum + LAYER_WEIGHT[l] * layers[l], 0);
-  return { clinicianId: c.id, total, layers, fit: fitFor(total) };
+  const caveats = softMisses(c, s.constraints);
+  const total =
+    (Object.keys(layers) as Layer[]).reduce((sum, l) => sum + LAYER_WEIGHT[l] * layers[l], 0) - SOFT_MISS_PENALTY * caveats.length;
+  return { clinicianId: c.id, total, layers, fit: fitFor(total), caveats };
 }
 
 /** Provisional ranking, best first. Ties broken by id so results are stable. */

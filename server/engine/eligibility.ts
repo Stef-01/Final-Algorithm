@@ -1,4 +1,4 @@
-import type { ClinicianRecord, HardConstraints, PatientSignals, Profession } from './types';
+import type { Caveat, ClinicianRecord, HardConstraints, PatientSignals, Profession } from './types';
 
 // Layer 1 (PRD §19–21): remove clinicians who can't meet a *known* hard constraint.
 // Unknown constraints are never assumed.
@@ -46,12 +46,21 @@ export function failures(c: ClinicianRecord, k: HardConstraints, profession?: Pr
   if (mode === 'in_person_only' && !inPerson) out.push(p.modes.includes('in_person') ? 'distance' : 'mode');
   if (mode === 'any' && !inPerson && !telehealth) out.push('distance');
 
-  // An unpublished fee can't be shown to meet a stated limit, so it doesn't.
-  if (typeof k.maxGap === 'number' && (p.gapAfterMedicare === null || p.gapAfterMedicare > k.maxGap)) out.push('cost');
+  // A known fee above the limit, or known weekday-only hours, rule a clinician out. Unpublished ones
+  // don't: they're ranked lower and flagged instead (see softMisses).
+  if (typeof k.maxGap === 'number' && p.gapAfterMedicare !== null && p.gapAfterMedicare > k.maxGap) out.push('cost');
   if (k.clinicianGender && p.gender !== k.clinicianGender) out.push('gender');
-  if (k.needsWeekend && p.weekends !== true) out.push('weekend');
+  if (k.needsWeekend && p.weekends === false) out.push('weekend');
   if (k.accessibility?.some((a) => !p.accessibility.includes(a))) out.push('accessibility');
   if (k.languages?.length && !k.languages.some((l) => p.languages.includes(l))) out.push('language');
+  return out;
+}
+
+/** Requirements the clinician might meet but hasn't published, so they can't be confirmed. */
+export function softMisses(c: ClinicianRecord, k: HardConstraints): Caveat[] {
+  const out: Caveat[] = [];
+  if (typeof k.maxGap === 'number' && c.practical.gapAfterMedicare === null) out.push('fee_unpublished');
+  if (k.needsWeekend && c.practical.weekends === null) out.push('weekend_hours_unpublished');
   return out;
 }
 

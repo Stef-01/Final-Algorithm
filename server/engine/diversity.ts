@@ -1,15 +1,15 @@
 import { strongestLayer } from './score';
 import type { Scored } from './types';
 
-// Top-3 selection (PRD §31, §43). Slot 1 is always the best overall fit. Later slots may prefer
+// Featured top 3 (PRD §31, §43). Slot 1 is always the best overall fit. Later slots may prefer
 // a clinician who fits for a different reason, but only among near-ties with the same fit label,
-// so variety never costs quality. Fewer than 3 valid clinicians → return fewer; never pad.
+// so variety never costs quality. Everyone else stays in the ranked list behind these three.
 
 /** Two clinicians this close on total score (and with the same fit label) count as a near-tie. */
 export const NEAR_TIE = 0.04;
 
 export function selectTop(ranked: Scored[], k = 3): Scored[] {
-  const pool = ranked.filter((x) => x.fit !== null);
+  const pool = [...ranked];
   const picked: Scored[] = [];
   while (picked.length < k && pool.length > 0) {
     const next = pool[0];

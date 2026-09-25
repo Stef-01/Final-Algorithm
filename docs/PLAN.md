@@ -433,6 +433,10 @@ Each phase ends deployed on Vercel with CI green.
 - **D3:** Analytics provider for custom events if Vercel's plan doesn't include them. [Vercel if available, else PostHog]
 - **D4:** Feedback storage. [Vercel KV]
 - **D5:** Keep the native iOS/Android builds working, or go web-only for the prototype? [keep them building, test on web]
+- **D8 (decided): show everyone who fits, prioritised.** Every clinician who meets the patient's requirements is a match. The top three are featured one at a time (Discover layout); the rest are on a ranked "See all" list (`/all`).
+  - Labels stay honest. A clinician with no evidence-backed reason is "Possible fit", never higher.
+  - Unpublished fees or weekend hours no longer exclude anyone. They're ranked lower (−0.06 per unconfirmed requirement) and flagged "Worth checking".
+  - This relaxes PRD §4.7 (max 3), at your request.
 - **D7:** Voice transcription: browser speech service (fast, free, but audio goes to the browser vendor in Chrome) or a server-side service WATL controls? [browser for the prototype, with a clear notice]
 - **D6:** What does WATL stand for, and is there a tagline for the open screen? [use the PRD's "Find a GP who fits you." with the WATL logo]
 

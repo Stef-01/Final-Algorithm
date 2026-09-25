@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ChipsCard, PhotoCard, PromptCard, TextCard } from '@/components/cards';
-import { costLabel, placeLine, practicalChips } from '@/components/ClinicianCards';
+import { caveatLines, costLabel, noReasonLine, placeLine, practicalChips } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { FitLabel } from '@/components/FitLabel';
 import { ScreenHeader } from '@/components/ScreenHeader';
@@ -24,7 +24,11 @@ export default function ClinicianDetail() {
   const { saved, isSaved, toggle } = useSaved();
   const insets = useSafeAreaInsets();
   const c = getClinician(id);
-  const match = findMatch(session.state, id) ?? saved.find((m) => m.clinicianId === id);
+  const r0 = session.state.result;
+  const match =
+    findMatch(session.state, id) ??
+    (r0?.status === 'matches' ? r0.more.find((m) => m.clinicianId === id) : undefined) ??
+    saved.find((m) => m.clinicianId === id);
   const fit = match?.fit ?? 'none';
 
   useEffect(() => {
@@ -60,8 +64,13 @@ export default function ClinicianDetail() {
         {match ? (
           <>
             <Text style={styles.section}>Why I matched you</Text>
-            {match.reasons.slice(0, 3).map((r) => (
-              <PromptCard key={r.evidenceId} title={r.signal} answer={r.evidence} {...like} />
+            {match.reasons.length > 0 ? (
+              match.reasons.slice(0, 3).map((r) => <PromptCard key={r.evidenceId} title={r.signal} answer={r.evidence} {...like} />)
+            ) : (
+              <TextCard title="Why they're here" body={noReasonLine(c)} />
+            )}
+            {caveatLines(match).map((line) => (
+              <TextCard key={line} title="Worth checking" body={line} />
             ))}
           </>
         ) : null}

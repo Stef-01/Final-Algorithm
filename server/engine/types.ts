@@ -124,7 +124,11 @@ export type ClinicianRecord = {
 
 // ---- Outputs ---------------------------------------------------------------
 
-export type FitLabel = 'Strong fit' | 'Good fit' | 'Worth considering';
+/** 'Possible fit' = meets the patient's requirements, but nothing they said matches a specific trait yet. */
+export type FitLabel = 'Strong fit' | 'Good fit' | 'Worth considering' | 'Possible fit';
+
+/** Things the patient asked for that this clinician's profile doesn't publish, so can't be confirmed. */
+export type Caveat = 'fee_unpublished' | 'weekend_hours_unpublished';
 
 export type Layer = 'clinical' | 'practice' | 'practical';
 
@@ -132,12 +136,13 @@ export type Scored = {
   clinicianId: string;
   total: number;
   layers: Record<Layer, number>;
-  fit: FitLabel | null;
+  fit: FitLabel;
+  caveats: Caveat[];
 };
 
 export type Reason = { signal: string; evidenceId: string; evidence: string; dimension: Dimension | 'expertise' };
 
-export type EngineMatch = { clinicianId: string; fit: FitLabel; reasons: Reason[]; strongestLayer: Layer };
+export type EngineMatch = { clinicianId: string; fit: FitLabel; reasons: Reason[]; strongestLayer: Layer; caveats: Caveat[] };
 
 export type NoMatchAction = 'include_telehealth' | 'expand_distance' | 'answer_more';
 

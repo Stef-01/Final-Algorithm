@@ -20,7 +20,6 @@ type Session = {
   acknowledgeSafety: () => string;
   match: () => string;
   nextMatch: () => void;
-  showMore: () => void;
   noMatchAction: (action: NoMatchAction) => string;
   rateMatches: (rating: number) => void;
   thumb: (clinicianId: string, dir: 'up' | 'down') => void;
@@ -97,7 +96,6 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         track('next_match_viewed', { position: next.index + 1 });
         commit(next);
       },
-      showMore: () => commit(core.showMore(current.current)),
       noMatchAction: (a) => route(core.noMatchAction(current.current, a)),
       rateMatches: (rating) => {
         const next = core.rateMatches(current.current, rating);
