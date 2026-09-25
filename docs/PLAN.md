@@ -35,7 +35,7 @@ Where a PRD rule is about *behaviour* but touches presentation (for example "max
 | 06 Matching | `/matching` | `OnboardingStep`-style centred state | "Finding your best fits…" with checkmarks tied to real pipeline steps. Skipped if results come back in under ~300 ms. |
 | 07–09 Top matches | `/matches` | **Discover screen as it is today** | Header: clinician name + fit label. Body: `ProfileCards`-style column (§3). ✕ = **Next match**, ♥ = interested/save. Sub-header line: "I found 3 clinicians I'd start with. Each fits for slightly different reasons." After the last match: "See more options" (explicit request only). |
 | 10 Clinician detail | `/clinician/[id]` | Profile "View" screen style + `Sheet`-style sticky CTA | Same card language, with deeper layers (bio, credentials, full practical details). Sticky **Book with Amy** (purple pill), **See next match** as text. |
-| 11 No strong match | `/matches` (state) | Standouts empty-state card ("Fresh out of Standouts!") | "I don't have a strong enough match yet." One action: **Answer one more question** / **Expand distance** / **Include telehealth**. |
+| 11 No strong match | `/matches` (state) | Standouts empty-state card ("Fresh out of Standouts!") | "Nobody fits all of that yet." plus what's ruling everyone out. One action, offered only if it alone would help: **Show them at any cost** / **Include any gender** / **Include telehealth** / **Look further away** / **Include GPs and psychologists** / **Answer one more question**. "Change something else" opens the assistant. |
 | Safety pause (§44) | `/safety` | `Sheet` | Pauses matching and shows the safety message plus urgent-help options before the user can continue. |
 
 **Navigation (decided):** we keep the shell's dark bottom tab bar with three tabs:
@@ -422,7 +422,7 @@ Each phase ends deployed on Vercel with CI green.
   - Practice fit is now an evidence-weighted average with a pull towards neutral (unknown traits no longer dilute known ones).
   - Answers that would leave nobody to recommend add no information gain, so cost doesn't get asked first just to empty the list.
 - **Demo run-throughs:** `src/features/match/demos.ts` has 10 scripted patients (GP, psychologist, not sure) with hand-written signals. They double as expected outputs for the Claude extraction evals in Phase 8.
-- **Typed searches:** `src/features/match/extract.ts` is a keyword extractor standing in for Claude. It picks up preferences at medium confidence, so the engine confirms or asks when a guess matters.
+- **Typed searches:** `src/features/match/extract.ts` is the keyword extractor. It was the stand-in for Claude, and is now the fallback whenever Claude is off or unavailable (Phase 8). It picks up preferences at medium confidence, so the engine confirms or asks when a guess matters.
 - **Fictional clinicians:** the 12 fictional clinicians moved to `server/fixtures/` and are used only by the engine tests.
 
 ## 13. Testing strategy

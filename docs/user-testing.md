@@ -45,7 +45,7 @@ Ask in this order, word for word:
 
 Events are Vercel Web Analytics custom events. Enable Web Analytics on the project first; custom events may need a Pro plan. They carry only short identifiers and counts, never what anyone typed or said.
 
-- `matching_started` → `matching_completed`: journeys started and finished. `seconds` is time to shortlist, `followups` the number of questions, `matches` how many were shown (0 = no strong match).
+- `matching_started` → `matching_completed`: journeys started and finished. `seconds` is time to shortlist, `followups` the number of questions, `matches` how many were featured (0 = nobody fits).
 - `followup_asked` / `followup_answered`: which questions come up, and how often people answer in their own words (`ownWords`).
 - `voice_started` / `voice_completed`: voice take-up.
 - `clinician_viewed`, `next_match_viewed`, `booking_clicked`: how people move through the matches.
