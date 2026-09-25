@@ -61,6 +61,7 @@ export const icons = {
   icClock: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.8\"/><path d=\"M12 7v5.5l3.5 2\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.8\"/></svg>",
   icSparkle: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 2.5c.5 4.9 2.6 7 7.5 7.5-4.9.5-7 2.6-7.5 7.5-.5-4.9-2.6-7-7.5-7.5 4.9-.5 7-2.6 7.5-7.5z\" fill=\"#000000\"/><path d=\"M19 15.5c.25 2.1 1.1 2.95 3.2 3.2-2.1.25-2.95 1.1-3.2 3.2-.25-2.1-1.1-2.95-3.2-3.2 2.1-.25 2.95-1.1 3.2-3.2z\" fill=\"#000000\"/></svg>",
   icSend: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 19V5M5.5 11.5 12 5l6.5 6.5\" fill=\"none\" stroke=\"#000000\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+  icHeartFilled: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 21.2l-1.3-1.2C5.6 15.4 2.3 12.4 2.3 8.6 2.3 5.6 4.7 3.2 7.7 3.2c1.7 0 3.3.8 4.3 2.1 1-1.3 2.6-2.1 4.3-2.1 3 0 5.4 2.4 5.4 5.4 0 3.8-3.3 6.8-8.4 11.4L12 21.2z\" fill=\"#000000\"/></svg>",
   icMic: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.8\"/><path d=\"M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7\" fill=\"none\" stroke=\"#000000\" stroke-width=\"1.8\"/></svg>",
 } as const;
 

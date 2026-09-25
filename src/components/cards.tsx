@@ -4,6 +4,7 @@ import { ImageSourcePropType, Pressable, ScrollView, StyleSheet, Text, View } fr
 
 import { colors, fonts } from '@/lib/theme';
 import { Icon } from './Icon';
+import { LikeButton } from './LikeButton';
 import { IconName } from './icons';
 
 // The profile card language from the Discover screen: white cards on the grey
@@ -139,15 +140,9 @@ function Card({
       <Text style={[styles.cardTitle, padded && styles.cardTitlePadded]}>{title}</Text>
       {children}
       {onLike ? (
-        <Pressable
-          onPress={onLike}
-          accessibilityRole="button"
-          accessibilityLabel={likeLabel}
-          accessibilityState={{ selected: !!liked }}
-          style={styles.like}
-        >
-          <Icon name={liked ? 'heartPink' : 'icLike'} size={23} />
-        </Pressable>
+        <View style={styles.like}>
+          <LikeButton liked={!!liked} onPress={onLike} label={likeLabel} />
+        </View>
       ) : null}
     </View>
   );
@@ -172,22 +167,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     marginHorizontal: 15,
   },
-  like: {
-    position: 'absolute',
-    right: 15,
-    bottom: 15,
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 4,
-  },
+  like: { position: 'absolute', right: 15, bottom: 15 },
   chips: { paddingHorizontal: 15, paddingVertical: 18 },
   chip: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14 },
   chipDivider: { borderLeftWidth: 1, borderLeftColor: colors.chip },

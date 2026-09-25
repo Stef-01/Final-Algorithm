@@ -10,26 +10,31 @@ type Props = {
   title: string;
   /** Shows a back arrow. Pass a function to run before going back (e.g. to save). */
   back?: boolean | (() => void);
+  /** Replaces going back with something else (e.g. back to the search), with its own label. */
+  onBack?: () => void;
+  backLabel?: string;
   right?: ReactNode;
   children?: ReactNode;
 };
 
-export function ScreenHeader({ title, back, right, children }: Props) {
+export function ScreenHeader({ title, back, onBack: custom, backLabel = 'Back', right, children }: Props) {
   const insets = useSafeAreaInsets();
   const onBack = () => {
+    if (custom) return custom();
     if (typeof back === 'function') back();
     router.back();
   };
+  const showBack = !!back || !!custom;
 
   return (
     <View style={[styles.card, { paddingTop: insets.top }]}>
       <View style={styles.row}>
-        {back ? (
-          <Pressable onPress={onBack} hitSlop={12} accessibilityRole="button" accessibilityLabel="Back" style={styles.back}>
+        {showBack ? (
+          <Pressable onPress={onBack} hitSlop={12} accessibilityRole="button" accessibilityLabel={backLabel} style={styles.back}>
             <Icon name="icLeftArrow" size={20} />
           </Pressable>
         ) : null}
-        <Text style={[styles.title, !back && styles.titleNoBack]} numberOfLines={1} accessibilityRole="header">
+        <Text style={[styles.title, !showBack && styles.titleNoBack]} numberOfLines={1} accessibilityRole="header">
           {title}
         </Text>
         <View style={styles.right}>{right}</View>

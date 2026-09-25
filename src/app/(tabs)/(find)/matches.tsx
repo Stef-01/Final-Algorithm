@@ -118,7 +118,13 @@ export default function Matches() {
 
   return (
     <View style={styles.root}>
-      <ScreenHeader title={clinician.name} right={<FitLabel fit={m.fit} />} />
+      <ScreenHeader
+        title={clinician.name}
+        right={<FitLabel fit={m.fit} />}
+        // Always a way back: the previous match, or from the first one, back to the search to redo it.
+        onBack={state.index > 0 ? session.prevMatch : () => router.navigate('/describe')}
+        backLabel={state.index > 0 ? 'Previous match' : 'Back to your search'}
+      />
       <ScrollView key={state.index} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {state.index === 0 ? (
           <View style={styles.intro}>
@@ -166,9 +172,10 @@ export default function Matches() {
 }
 
 function Shell({ title, children }: { title: string; children: React.ReactNode }) {
+  const toSearch = () => router.navigate('/describe');
   return (
     <View style={styles.root}>
-      <ScreenHeader title={title} />
+      <ScreenHeader title={title} onBack={toSearch} backLabel="Back to your search" />
       <ScrollView contentContainerStyle={styles.content}>{children}</ScrollView>
     </View>
   );

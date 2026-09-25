@@ -165,6 +165,10 @@ export function nextMatch(state: SessionState): SessionState {
   return { ...state, index: Math.min(state.index + 1, total), updatedAt: Date.now() };
 }
 
+export function prevMatch(state: SessionState): SessionState {
+  return { ...state, index: Math.max(0, state.index - 1), updatedAt: Date.now() };
+}
+
 export function noMatchAction(state: SessionState, action: NoMatchAction): Transition {
   if (action === 'answer_more') {
     const s = withInput(state, { wantsMoreQuestions: true });
