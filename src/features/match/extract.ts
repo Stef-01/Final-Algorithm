@@ -68,7 +68,22 @@ const PLACES: [RegExp, { lat: number; lng: number }][] = [
   [/sydney/, { lat: -33.87, lng: 151.2 }],
 ];
 
-const URGENT = [/chest pain/, /suicid/, /kill myself/, /self[- ]harm/, /overdos/, /can'?t breathe|cannot breathe/, /emergency/];
+// Deliberately broad: pausing someone who didn't need it costs a tap; missing someone who did is not
+// acceptable. No negation handling here on purpose. Reviewed list needed from a clinical advisor.
+const URGENT = [
+  /chest pain/,
+  /suicid/,
+  /kill myself/,
+  /self[- ]harm/,
+  /hurt(ing)? myself/,
+  /want(ed)? to die|wish i (was|were) dead|better off dead/,
+  /end(ing)? (it all|my life|things)/,
+  /no (reason|point) (to|in) (live|living|going on)/,
+  /(don'?t|do not) want to (live|be alive|be here)/,
+  /overdos/,
+  /can'?t breathe|cannot breathe/,
+  /emergency/,
+];
 
 /** Matches `re` somewhere it isn't negated ("it's not anxiety", "I'm not depressed"). */
 function mentioned(t: string, re: RegExp): boolean {
