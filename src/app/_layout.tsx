@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { VercelAnalytics } from '@/components/VercelAnalytics';
 import { ProfileProvider } from '@/lib/profile';
 import { fontAssets } from '@/lib/theme';
 
@@ -14,6 +15,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ProfileProvider>
         <StatusBar style="dark" />
+        <VercelAnalytics />
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#fff' } }}>
           <Stack.Screen name="(tabs)" options={{ animation: 'none' }} />
           {['delete-account', 'learn-more', 'roses', 'profile/why-last-name', 'profile/gender-feedback'].map(

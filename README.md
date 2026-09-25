@@ -27,6 +27,19 @@ The tests in `__tests__/` cover:
 - **Profile store:** loading, saving and clearing data on the device.
 - **Screens:** welcome branding and redirect, each sign-up step's validation and saved values, Discover cycling between profiles, and tab navigation.
 
+## Web deployment (Vercel)
+
+The web build is deployed on Vercel from `main` (see [`vercel.json`](vercel.json)): Vercel runs `npx expo export --platform web` and serves `dist/` as a single-page app, so deep links like `/discover` work.
+
+[Vercel Web Analytics](https://vercel.com/docs/analytics) records a page view for every screen change on the web build ([`src/components/VercelAnalytics.web.tsx`](src/components/VercelAnalytics.web.tsx)). It does nothing in the iOS and Android apps. Analytics must be enabled once in the Vercel dashboard (project → Analytics → Enable) before data shows up.
+
+To try the production web build locally:
+
+```bash
+npx expo export --platform web
+npx serve -s dist
+```
+
 ## What's in the app
 
 | Area | Route | Notes |
