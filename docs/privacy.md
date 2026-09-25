@@ -6,7 +6,7 @@ What WATL does with what a patient tells it, as the code stands. Written for a r
 
 | Data | Where it goes | How long | Code |
 |---|---|---|---|
-| What the patient types or says, answers, refinements | The device only (`AsyncStorage`, key `watl_session`) | Discarded on load after 24 hours; **Start over** in Settings clears it at once | `src/features/match/session.tsx` |
+| What the patient types or says, answers, refinements | The device only (`AsyncStorage`, key `watl_session`) | Discarded and deleted 24 hours after it was last used (tested); **Start over** in Settings clears it at once | `src/features/match/session.tsx` |
 | Saved clinicians: id, fit label, date saved (no reasons, since those repeat what the patient said) | The device only (`watl_saved`) | Until removed | `src/features/match/saved.tsx` |
 | Typed text, when Claude is on | Sent to `/api/extract`, then to Anthropic's API, to be read into signals | Not stored or logged by WATL. Anthropic's retention applies (see Open 1) | `api/extract.ts`, `server/claude/extract.ts` |
 | Voice | The browser's speech service transcribes it (in Chrome, audio goes to Google). WATL receives only the text | Not stored by WATL | `src/features/voice/` (decision D7) |
@@ -22,7 +22,7 @@ What WATL does with what a patient tells it, as the code stands. Written for a r
 ## Claude (Phase 8)
 
 - **Off unless configured.** `GET /api/extract` reports whether it's on. Settings shows which reader is in use, and the Privacy line says words are sent to Anthropic's API when it is.
-- **Minimal payload.** Only the message text (capped at 2,000 characters) and the chosen profession are sent. No identifiers, no session history, no location.
+- **Minimal payload.** Reading a message (`/api/extract`) sends only its text (capped at 2,000 characters) and the chosen profession. If Claude-worded replies are on (`/api/reply`), it also sends the refinement's text, what changed, the match count and the first clinician's first name. Neither sends identifiers, session history or location.
 - **No logging.** The function logs only a failure reason (e.g. `api 429`), never the text.
 - **Fails closed to the device.** Any error returns 503, and the app falls back to on-device keyword matching.
 
