@@ -65,7 +65,7 @@ export const demos: Demo[] = [
     id: 'psych-masking',
     profession: 'psychologist',
     title: 'Burnt out from masking',
-    shows: 'One follow-up question, then matches that put neurodiversity-affirming care first.',
+    shows: 'One follow-up question, then matches explained by what you said about anxiety and masking.',
     text: "I'm 26 and I think I've been masking my ADHD for years. I'm burnt out and anxious. I don't want someone who just hands me a list of strategies. I want to understand why things feel so hard.",
     signals: {
       profession: 'psychologist',
