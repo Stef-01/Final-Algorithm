@@ -4,7 +4,7 @@ WATL helps you find a GP who fits you. Describe what you need in your own words,
 
 This is a React Native (Expo Router) app, mobile-first on the web and deployed on Vercel. The build plan is in [`docs/PLAN.md`](docs/PLAN.md).
 
-> **Status: Phase 1 of the plan.** Every screen works end to end on fixture data: a scripted stand-in for the matching engine, and four fictional clinicians with illustrated portraits. The real engine (Phase 2), the Claude agent (Phase 3) and voice (Phase 4) come next.
+> **Status: Phase 2 of the plan.** Every screen works end to end on fixture data (Phase 1), and the real matching engine is built and tested in `server/` (Phase 2). Phase 3 connects the two through a Vercel API with the Claude agent; voice is Phase 4.
 >
 > **Testing tools are on:** a "Use the demo example" link on the first screen, and Settings → Review screen states (`/dev/states`), which opens any screen state directly. Set `EXPO_PUBLIC_DEV_TOOLS=false` to hide them.
 
@@ -30,6 +30,7 @@ The tests in `__tests__/` cover:
 - **Assets:** every image and font the app `require`s exists and is a real file of its type, and every file in `assets/images` and `assets/clinicians` is used.
 - **Matching (fixture):** one follow-up for the PRD demo, preference confirmation only when uncertain, safety pause, hard-constraint filtering without padding, no-strong-match actions, "see more" only on request.
 - **Explanation rules:** every reason is backed by a clinician evidence line, at most 3 reasons, no unsupported adjectives, winner language or percentages, one-sentence agent lines, 2–6-word options.
+- **Engine (`server/`):** seed-data integrity; eligibility for each hard constraint; draft and low-confidence traits ignored; the PRD demo asks one question then returns Amy first with the three demo reasons; the question ceiling and its exceptions; preference confirmation only when it matters; diversity never costing quality; partial and no-match results with the right suggestions; no scores or interview excerpts in the output; copy rules on every reason; question-bank wording rules.
 - **Screens:** the PRD demo script end to end, stepping through matches, detail and booking handoff, saving to the Saved tab, partial and no-match results, safety, start over, and the review page.
 
 ## What's in the app
@@ -74,6 +75,10 @@ src/components/   Shared UI: conversation scaffold, Discover-style cards, clinic
 src/features/match/  Session state, fixture agent, saved clinicians
 src/data/         Fictional clinicians
 src/lib/          Theme (colours, fonts), testing-tools switch
+server/engine/    Matching engine: eligibility, scoring, question selection, top-3 selection, explanations
+server/questions.ts  Behavioural follow-up question bank
+server/data/      Fictional seed clinicians (JSON, with evidence and review status)
+server/fixtures/  Hand-written patient signals for tests and evals
 assets/           Images, clinician portraits (illustrations) and fonts
 docs/PLAN.md      Build plan
 ```

@@ -1,0 +1,185 @@
+{
+  "id": "hannah-lee",
+  "name": "Dr Hannah Lee",
+  "firstName": "Hannah",
+  "role": "GP",
+  "location": {
+    "suburb": "Woolloongabba",
+    "city": "Brisbane",
+    "lat": -27.489,
+    "lng": 153.036
+  },
+  "photo": "hannah-lee.png",
+  "bio": "Hannah focuses on women's health and long-standing problems that haven't been resolved elsewhere.",
+  "credentials": [
+    "MBBS, University of Melbourne",
+    "FRACGP",
+    "Diploma of Women's Health"
+  ],
+  "bookingUrl": null,
+  "practical": {
+    "nextAvailable": "Next Wednesday, 11:00 am",
+    "daysUntilAvailable": 7,
+    "modes": [
+      "in_person"
+    ],
+    "fee": 140,
+    "gapAfterMedicare": 55,
+    "newPatients": true,
+    "ageRange": [
+      16,
+      99
+    ],
+    "languages": [
+      "English"
+    ],
+    "accessibility": [
+      "wheelchair"
+    ],
+    "gender": "female",
+    "initialConsultMins": 40,
+    "weekends": false
+  },
+  "expertise": [
+    {
+      "area": "Women's health",
+      "level": "particular",
+      "evidenceIds": [
+        "hannah-lee-exp-womens-health"
+      ]
+    },
+    {
+      "area": "Chronic pain",
+      "level": "particular",
+      "evidenceIds": [
+        "hannah-lee-exp-chronic-pain"
+      ]
+    }
+  ],
+  "phenotype": {
+    "diagnostic_style": {
+      "value": "investigative",
+      "confidence": "high",
+      "evidenceIds": [
+        "hannah-lee-diagnostic_style"
+      ]
+    },
+    "uncertainty_tolerance": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "hannah-lee-uncertainty_tolerance"
+      ]
+    },
+    "consultation_pace": {
+      "value": "unhurried",
+      "confidence": "high",
+      "evidenceIds": [
+        "hannah-lee-consultation_pace"
+      ]
+    },
+    "follow_up_intensity": {
+      "value": "proactive",
+      "confidence": "high",
+      "evidenceIds": [
+        "hannah-lee-follow_up_intensity"
+      ]
+    },
+    "shared_decision_making": {
+      "value": "shared",
+      "confidence": "medium",
+      "evidenceIds": [
+        "hannah-lee-shared_decision_making"
+      ]
+    },
+    "medication_philosophy": {
+      "value": "conservative",
+      "confidence": "medium",
+      "evidenceIds": [
+        "hannah-lee-medication_philosophy"
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "hannah-lee-exp-womens-health",
+      "trait": "expertise",
+      "excerpt": "Women's health is most of my practice.",
+      "patientFacing": "Hannah has a diploma in women's health.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "hannah-lee-exp-chronic-pain",
+      "trait": "expertise",
+      "excerpt": "I see a lot of chronic pain that hasn't been sorted out.",
+      "patientFacing": "Hannah manages long-term pain conditions.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "hannah-lee-diagnostic_style",
+      "trait": "diagnostic_style",
+      "excerpt": "If it doesn't add up, I keep looking.",
+      "patientFacing": "Hannah keeps investigating when symptoms don't fit a clear answer.",
+      "scenario": "Symptoms don't fit a clear diagnosis after the first visit.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "hannah-lee-uncertainty_tolerance",
+      "trait": "uncertainty_tolerance",
+      "excerpt": "Some problems take a few visits and that's fine.",
+      "patientFacing": "Hannah is comfortable with problems that take several visits to understand.",
+      "scenario": "Symptoms don't fit a clear diagnosis after the first visit.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "hannah-lee-consultation_pace",
+      "trait": "consultation_pace",
+      "excerpt": "I book 40 minutes for new patients.",
+      "patientFacing": "Hannah books 40-minute first appointments.",
+      "scenario": "Walk me through a first appointment with a new patient.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "hannah-lee-follow_up_intensity",
+      "trait": "follow_up_intensity",
+      "excerpt": "I ring people with their results.",
+      "patientFacing": "Hannah calls you with results and next steps.",
+      "scenario": "What happens between appointments for your ongoing patients?",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "hannah-lee-shared_decision_making",
+      "trait": "shared_decision_making",
+      "excerpt": "We agree on next steps together.",
+      "patientFacing": "Hannah agrees on the next steps with you.",
+      "scenario": "A patient strongly prefers a treatment you do not initially recommend.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "hannah-lee-medication_philosophy",
+      "trait": "medication_philosophy",
+      "excerpt": "I try other things before adding medication.",
+      "patientFacing": "Hannah tries other approaches before adding medication.",
+      "scenario": "A patient asks whether they should start medication.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    }
+  ]
+}

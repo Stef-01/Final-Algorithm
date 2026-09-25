@@ -1,0 +1,202 @@
+{
+  "id": "tom-walsh",
+  "name": "Dr Tom Walsh",
+  "firstName": "Tom",
+  "role": "GP",
+  "location": {
+    "suburb": "West End",
+    "city": "Brisbane",
+    "lat": -27.482,
+    "lng": 153.009
+  },
+  "photo": "tom-walsh.png",
+  "bio": "Tom has worked in general practice for eight years, mostly with university students and young professionals.",
+  "credentials": [
+    "MBBS, James Cook University",
+    "FRACGP"
+  ],
+  "bookingUrl": null,
+  "practical": {
+    "nextAvailable": "Friday, 4:45 pm",
+    "daysUntilAvailable": 4,
+    "modes": [
+      "in_person",
+      "telehealth"
+    ],
+    "fee": 0,
+    "gapAfterMedicare": 0,
+    "newPatients": true,
+    "ageRange": [
+      16,
+      99
+    ],
+    "languages": [
+      "English"
+    ],
+    "accessibility": [
+      "wheelchair"
+    ],
+    "gender": "male",
+    "initialConsultMins": 30,
+    "weekends": false
+  },
+  "expertise": [
+    {
+      "area": "Adult ADHD",
+      "level": "particular",
+      "evidenceIds": [
+        "tom-walsh-exp-adult-adhd"
+      ]
+    },
+    {
+      "area": "Work stress",
+      "level": "particular",
+      "evidenceIds": [
+        "tom-walsh-exp-work-stress"
+      ]
+    },
+    {
+      "area": "Mental health",
+      "level": "general",
+      "evidenceIds": [
+        "tom-walsh-exp-mental-health"
+      ]
+    }
+  ],
+  "phenotype": {
+    "consultation_pace": {
+      "value": "unhurried",
+      "confidence": "high",
+      "evidenceIds": [
+        "tom-walsh-consultation_pace"
+      ]
+    },
+    "explanation_depth": {
+      "value": "detailed",
+      "confidence": "high",
+      "evidenceIds": [
+        "tom-walsh-explanation_depth"
+      ]
+    },
+    "shared_decision_making": {
+      "value": "shared",
+      "confidence": "high",
+      "evidenceIds": [
+        "tom-walsh-shared_decision_making"
+      ]
+    },
+    "communication_directness": {
+      "value": "direct",
+      "confidence": "high",
+      "evidenceIds": [
+        "tom-walsh-communication_directness"
+      ]
+    },
+    "continuity": {
+      "value": "high",
+      "confidence": "medium",
+      "evidenceIds": [
+        "tom-walsh-continuity"
+      ]
+    },
+    "mental_health_integration": {
+      "value": "moderate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "tom-walsh-mental_health_integration"
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "tom-walsh-exp-adult-adhd",
+      "trait": "expertise",
+      "excerpt": "A lot of my patients are uni students with ADHD.",
+      "patientFacing": "Tom sees many university students with ADHD.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "tom-walsh-exp-work-stress",
+      "trait": "expertise",
+      "excerpt": "Burnout and work stress are most of what I see.",
+      "patientFacing": "Tom helps with work and study stress, including burnout.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "tom-walsh-exp-mental-health",
+      "trait": "expertise",
+      "excerpt": "I do mental health care plans regularly.",
+      "patientFacing": "Tom provides mental health care plans.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "tom-walsh-consultation_pace",
+      "trait": "consultation_pace",
+      "excerpt": "I leave a buffer after first appointments so we're never cut off.",
+      "patientFacing": "Tom leaves a 15-minute buffer after first appointments so they don't get cut short.",
+      "scenario": "Walk me through a first appointment with a new patient.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "tom-walsh-explanation_depth",
+      "trait": "explanation_depth",
+      "excerpt": "I draw the options out on paper so people can see the reasoning.",
+      "patientFacing": "Tom sketches out the options during the visit so you can see the reasoning.",
+      "scenario": "A patient asks why you're recommending a particular plan.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "tom-walsh-shared_decision_making",
+      "trait": "shared_decision_making",
+      "excerpt": "We go through pros and cons and decide together.",
+      "patientFacing": "Tom talks through the pros and cons of each option and decides with you.",
+      "scenario": "A patient strongly prefers a treatment you do not initially recommend.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "tom-walsh-communication_directness",
+      "trait": "communication_directness",
+      "excerpt": "I say what I'd do and what would change my mind.",
+      "patientFacing": "Tom tells you plainly what he recommends and what would change his mind.",
+      "scenario": "You need to tell a patient a test result isn't what they hoped.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "tom-walsh-continuity",
+      "trait": "continuity",
+      "excerpt": "I like to keep my patients with me.",
+      "patientFacing": "Tom tries to see his ongoing patients himself rather than handing over.",
+      "scenario": "How do you handle patients seeing other GPs in your practice?",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "tom-walsh-mental_health_integration",
+      "trait": "mental_health_integration",
+      "excerpt": "If mental health comes up, we deal with it.",
+      "patientFacing": "Tom covers mental health when it comes up.",
+      "scenario": "A patient comes in about ADHD medication but mentions poor sleep and stress.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    }
+  ]
+}

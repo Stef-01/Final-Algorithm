@@ -1,0 +1,169 @@
+{
+  "id": "ravi-singh",
+  "name": "Dr Ravi Singh",
+  "firstName": "Ravi",
+  "role": "GP",
+  "location": {
+    "suburb": "Carindale",
+    "city": "Brisbane",
+    "lat": -27.503,
+    "lng": 153.102
+  },
+  "photo": "ravi-singh.png",
+  "bio": "Ravi focuses on long-term conditions such as diabetes and heart health, with close follow-up.",
+  "credentials": [
+    "MBBS, University of Adelaide",
+    "FRACGP"
+  ],
+  "bookingUrl": null,
+  "practical": {
+    "nextAvailable": "In 9 days",
+    "daysUntilAvailable": 9,
+    "modes": [
+      "in_person"
+    ],
+    "fee": 0,
+    "gapAfterMedicare": 0,
+    "newPatients": true,
+    "ageRange": [
+      16,
+      99
+    ],
+    "languages": [
+      "English",
+      "Hindi",
+      "Punjabi"
+    ],
+    "accessibility": [
+      "wheelchair"
+    ],
+    "gender": "male",
+    "initialConsultMins": 20,
+    "weekends": false
+  },
+  "expertise": [
+    {
+      "area": "Diabetes",
+      "level": "particular",
+      "evidenceIds": [
+        "ravi-singh-exp-diabetes"
+      ]
+    },
+    {
+      "area": "Heart health",
+      "level": "particular",
+      "evidenceIds": [
+        "ravi-singh-exp-heart-health"
+      ]
+    }
+  ],
+  "phenotype": {
+    "continuity": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "ravi-singh-continuity"
+      ]
+    },
+    "follow_up_intensity": {
+      "value": "proactive",
+      "confidence": "high",
+      "evidenceIds": [
+        "ravi-singh-follow_up_intensity"
+      ]
+    },
+    "care_coordination": {
+      "value": "high",
+      "confidence": "medium",
+      "evidenceIds": [
+        "ravi-singh-care_coordination"
+      ]
+    },
+    "consultation_pace": {
+      "value": "standard",
+      "confidence": "high",
+      "evidenceIds": [
+        "ravi-singh-consultation_pace"
+      ]
+    },
+    "communication_directness": {
+      "value": "balanced",
+      "confidence": "medium",
+      "evidenceIds": [
+        "ravi-singh-communication_directness"
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "ravi-singh-exp-diabetes",
+      "trait": "expertise",
+      "excerpt": "Diabetes is most of my work.",
+      "patientFacing": "Ravi manages type 1 and type 2 diabetes.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "ravi-singh-exp-heart-health",
+      "trait": "expertise",
+      "excerpt": "I do a lot of heart health checks.",
+      "patientFacing": "Ravi runs heart health checks and follow-up.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "ravi-singh-continuity",
+      "trait": "continuity",
+      "excerpt": "My patients see me every time.",
+      "patientFacing": "Ravi sees his ongoing patients himself at every visit.",
+      "scenario": "How do you handle patients seeing other GPs in your practice?",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "ravi-singh-follow_up_intensity",
+      "trait": "follow_up_intensity",
+      "excerpt": "We call people when they're due.",
+      "patientFacing": "Ravi's clinic contacts you when a review is due.",
+      "scenario": "What happens between appointments for your ongoing patients?",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "ravi-singh-care_coordination",
+      "trait": "care_coordination",
+      "excerpt": "I keep specialists in the loop.",
+      "patientFacing": "Ravi coordinates with your specialists and shares updates.",
+      "scenario": "A patient is also seeing a psychologist and a specialist.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "ravi-singh-consultation_pace",
+      "trait": "consultation_pace",
+      "excerpt": "Standard appointments.",
+      "patientFacing": "Ravi keeps to standard appointments.",
+      "scenario": "Walk me through a first appointment with a new patient.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "ravi-singh-communication_directness",
+      "trait": "communication_directness",
+      "excerpt": "Context first.",
+      "patientFacing": "Ravi explains results with context.",
+      "scenario": "You need to tell a patient a test result isn't what they hoped.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    }
+  ]
+}

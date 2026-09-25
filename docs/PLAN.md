@@ -322,7 +322,7 @@ Each phase ends deployed on Vercel with CI green.
 | --- | --- | --- |
 | **0. Clean slate** ✅ done | Remove the dating features and assets (§11); rebuild the tab bar as Find / Saved / Settings. Tag the legacy code. New route skeleton with placeholder screens in the existing style. | App opens on `/` (Find tab) with no sign-in; tabs are Find / Saved / Settings; bundle size and load time recorded; CI green. |
 | **1. UI with fixtures** ✅ done | All screens (§2) wired to a local fixture session: demo patient input (§52), one follow-up, 3 fixture clinicians rendered through `ClinicianCards` in the Discover layout, detail page, no-match, partial results, safety sheet. Text input only. | The PRD demo script runs end to end on Vercel with fixtures; every state reachable; a `/dev/states` page lists every state for review, standing in for the Figma frames in §51. During testing it's on in every build, including Vercel; `EXPO_PUBLIC_DEV_TOOLS=false` hides it. |
-| **2. Matching engine** | `server/engine/*` + question bank + seed clinician JSON (10–15 fictional). Pure functions with unit tests. | Given hand-written `PatientSignals`, the engine returns the expected top 3, the question to ask, and when to stop; the explanation lints pass; the diversity, partial and empty rules pass. |
+| **2. Matching engine** ✅ done | `server/engine/*` + question bank + seed clinician JSON (10–15 fictional). Pure functions with unit tests. | Given hand-written `PatientSignals`, the engine returns the expected top 3, the question to ask, and when to stop; the explanation lints pass; the diversity, partial and empty rules pass. |
 | **3. Agent + API** | Vercel Functions `/api/turn`, `/api/matches`, `/api/feedback`; Claude extraction with a JSON schema; safety classifier; SPA rewrite excluding `/api`. Client switches from fixtures to the API. | Real free text produces sensible follow-ups and matches; p75 latency under 3 s; the extraction eval set (§13) meets its threshold; no medical advice in 50 red-team prompts. |
 | **4. Voice** | `useSpeechToText` (web), listening state, editable transcript, fallback to text, transcription notice. | Works on iOS Safari and Android Chrome; hidden gracefully elsewhere; text flow unaffected. |
 | **5. Clinician pipeline** | Interview guide, `ingest-interview` and `review-clinician` scripts; at least 3 records produced through the pipeline (mock interviews are fine). | A transcript becomes an approved clinician record whose explanations cite real evidence. |
@@ -330,6 +330,18 @@ Each phase ends deployed on Vercel with CI green.
 | **7. Hardening** | Accessibility pass, performance budget, privacy review, safety copy reviewed by a clinical advisor. | WCAG AA checks pass; load under 2 s; the checklist in §9 is signed off. Ready for moderated user testing. |
 
 ---
+
+### Phase 2 notes (engine as built)
+
+- **Where:** `server/engine/` (types, eligibility, score, infoGain, diversity, explain, index), `server/questions.ts` (12 behavioural questions), `server/data/clinicians/*.json` (12 fictional seed clinicians), `server/fixtures/signals.ts` (hand-written patient signals, reused as expected outputs for the Phase 3 extraction evals).
+- **Tuned values** (all on the seed data; revisit with real clinicians):
+  - Layer weights: clinical 0.35, practice 0.5, practical 0.15.
+  - Fit thresholds: Strong ≥ 0.74, Good ≥ 0.62, Worth considering ≥ 0.52.
+  - Stop threshold τ = 0.10, set so the PRD §52 demo asks one question and stops.
+  - Near-tie window for diversity: 0.04, with the same fit label.
+- **Constraint answer priors:** bulk-billed-only 20%, in-person-only 20%, weekend-only 10%. This keeps rare hard limits from crowding out preference questions (PRD §20), while still asking when a constraint would change the top 3.
+- **"Credible match"** means eligible, above the fit threshold *and* explainable with at least one evidence-backed reason. With too little information, neutral scores can clear the threshold, but nothing gets shown without a reason.
+- **Not wired to the app yet.** The app still uses the Phase 1 fixture agent. Phase 3 serves this engine through `/api/turn` and `/api/matches` and switches the client over, including portraits for the eight new seed clinicians.
 
 ## 13. Testing strategy
 

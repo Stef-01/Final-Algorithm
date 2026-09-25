@@ -1,0 +1,253 @@
+{
+  "id": "amy-chen",
+  "name": "Dr Amy Chen",
+  "firstName": "Amy",
+  "role": "GP",
+  "location": {
+    "suburb": "New Farm",
+    "city": "Brisbane",
+    "lat": -27.4678,
+    "lng": 153.051
+  },
+  "photo": "amy-chen.png",
+  "bio": "Amy has worked in general practice for 12 years and sees many young adults with ADHD. She splits her week between the New Farm clinic and telehealth.",
+  "credentials": [
+    "MBBS, University of Queensland",
+    "FRACGP"
+  ],
+  "bookingUrl": null,
+  "practical": {
+    "nextAvailable": "Tomorrow, 3:30 pm",
+    "daysUntilAvailable": 1,
+    "modes": [
+      "in_person",
+      "telehealth"
+    ],
+    "fee": 120,
+    "gapAfterMedicare": 42,
+    "newPatients": true,
+    "ageRange": [
+      16,
+      99
+    ],
+    "languages": [
+      "English"
+    ],
+    "accessibility": [
+      "wheelchair"
+    ],
+    "gender": "female",
+    "initialConsultMins": 30,
+    "weekends": false
+  },
+  "expertise": [
+    {
+      "area": "Adult ADHD",
+      "level": "particular",
+      "evidenceIds": [
+        "amy-chen-exp-adult-adhd"
+      ]
+    },
+    {
+      "area": "Sleep",
+      "level": "particular",
+      "evidenceIds": [
+        "amy-chen-exp-sleep"
+      ]
+    },
+    {
+      "area": "Mental health",
+      "level": "particular",
+      "evidenceIds": [
+        "amy-chen-exp-mental-health"
+      ]
+    },
+    {
+      "area": "Women's health",
+      "level": "particular",
+      "evidenceIds": [
+        "amy-chen-exp-womens-health"
+      ]
+    }
+  ],
+  "phenotype": {
+    "consultation_pace": {
+      "value": "unhurried",
+      "confidence": "high",
+      "evidenceIds": [
+        "amy-chen-consultation_pace"
+      ]
+    },
+    "shared_decision_making": {
+      "value": "shared",
+      "confidence": "high",
+      "evidenceIds": [
+        "amy-chen-shared_decision_making"
+      ]
+    },
+    "explanation_depth": {
+      "value": "detailed",
+      "confidence": "high",
+      "evidenceIds": [
+        "amy-chen-explanation_depth"
+      ]
+    },
+    "mental_health_integration": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "amy-chen-mental_health_integration"
+      ]
+    },
+    "uncertainty_tolerance": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "amy-chen-uncertainty_tolerance"
+      ]
+    },
+    "communication_directness": {
+      "value": "direct",
+      "confidence": "medium",
+      "evidenceIds": [
+        "amy-chen-communication_directness"
+      ]
+    },
+    "follow_up_intensity": {
+      "value": "proactive",
+      "confidence": "medium",
+      "evidenceIds": [
+        "amy-chen-follow_up_intensity"
+      ]
+    },
+    "lifestyle_integration": {
+      "value": "high",
+      "confidence": "medium",
+      "evidenceIds": [
+        "amy-chen-lifestyle_integration"
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "amy-chen-exp-adult-adhd",
+      "trait": "expertise",
+      "excerpt": "About a third of my patients are young adults with ADHD.",
+      "patientFacing": "Amy has a particular interest in adult ADHD and sees many patients aged 18 to 35.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-exp-sleep",
+      "trait": "expertise",
+      "excerpt": "Sleep comes up with nearly every ADHD patient, so I always ask about it.",
+      "patientFacing": "Amy regularly treats sleep problems alongside ADHD.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-exp-mental-health",
+      "trait": "expertise",
+      "excerpt": "I do a lot of mental health care plans and follow-up.",
+      "patientFacing": "Amy manages anxiety and low mood as part of ongoing care.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-exp-womens-health",
+      "trait": "expertise",
+      "excerpt": "I also do a lot of women's health.",
+      "patientFacing": "Amy provides women's health care including contraception and hormonal health.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-consultation_pace",
+      "trait": "consultation_pace",
+      "excerpt": "I book 30 minutes for new patients and keep the last five for what happens next.",
+      "patientFacing": "Amy books 30-minute first appointments and keeps the end of each visit to agree on next steps.",
+      "scenario": "Walk me through a first appointment with a new patient.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-shared_decision_making",
+      "trait": "shared_decision_making",
+      "excerpt": "I usually lay out two or three reasonable options and ask what matters to them.",
+      "patientFacing": "Amy explains the trade-offs of two or three options before agreeing on a plan with you.",
+      "scenario": "A patient strongly prefers a treatment you do not initially recommend.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-explanation_depth",
+      "trait": "explanation_depth",
+      "excerpt": "I want people to leave knowing why we chose the plan.",
+      "patientFacing": "Amy explains the reasoning behind each recommendation before you leave.",
+      "scenario": "A patient asks why you're recommending a particular plan.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-mental_health_integration",
+      "trait": "mental_health_integration",
+      "excerpt": "I don't treat ADHD in isolation; sleep and mood are part of the same plan.",
+      "patientFacing": "Amy works through ADHD, sleep and mental health in one plan rather than as separate problems.",
+      "scenario": "A patient comes in about ADHD medication but mentions poor sleep and stress.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-uncertainty_tolerance",
+      "trait": "uncertainty_tolerance",
+      "excerpt": "If it doesn't fit neatly, we work through it over a few visits.",
+      "patientFacing": "Amy is comfortable working through several overlapping issues over a few visits.",
+      "scenario": "Symptoms don't fit a clear diagnosis after the first visit.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-communication_directness",
+      "trait": "communication_directness",
+      "excerpt": "I'd rather be clear than vague.",
+      "patientFacing": "Amy tells you plainly what she thinks is going on.",
+      "scenario": "You need to tell a patient a test result isn't what they hoped.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-follow_up_intensity",
+      "trait": "follow_up_intensity",
+      "excerpt": "If we change something, I book a review before they go.",
+      "patientFacing": "Amy books a follow-up before you leave when a plan changes.",
+      "scenario": "What happens between appointments for your ongoing patients?",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-lifestyle_integration",
+      "trait": "lifestyle_integration",
+      "excerpt": "We talk about routine and sleep as much as medication.",
+      "patientFacing": "Amy builds sleep and routine changes into the plan.",
+      "scenario": "A patient's main issue seems linked to sleep, exercise and routine.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    }
+  ]
+}

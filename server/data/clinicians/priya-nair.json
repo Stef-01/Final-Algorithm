@@ -1,0 +1,237 @@
+{
+  "id": "priya-nair",
+  "name": "Dr Priya Nair",
+  "firstName": "Priya",
+  "role": "GP",
+  "location": {
+    "suburb": "Paddington",
+    "city": "Brisbane",
+    "lat": -27.46,
+    "lng": 152.999
+  },
+  "photo": "priya-nair.png",
+  "bio": "Priya has a particular interest in adult ADHD, anxiety and mood. She runs a bulk-billed clinic two days a week.",
+  "credentials": [
+    "MBBS, Monash University",
+    "FRACGP",
+    "Graduate Certificate in Mental Health"
+  ],
+  "bookingUrl": null,
+  "practical": {
+    "nextAvailable": "Thursday, 10:15 am",
+    "daysUntilAvailable": 3,
+    "modes": [
+      "in_person",
+      "telehealth"
+    ],
+    "fee": 0,
+    "gapAfterMedicare": 0,
+    "newPatients": true,
+    "ageRange": [
+      16,
+      99
+    ],
+    "languages": [
+      "English"
+    ],
+    "accessibility": [
+      "wheelchair"
+    ],
+    "gender": "female",
+    "initialConsultMins": 20,
+    "weekends": false
+  },
+  "expertise": [
+    {
+      "area": "Adult ADHD",
+      "level": "particular",
+      "evidenceIds": [
+        "priya-nair-exp-adult-adhd"
+      ]
+    },
+    {
+      "area": "Anxiety",
+      "level": "particular",
+      "evidenceIds": [
+        "priya-nair-exp-anxiety"
+      ]
+    },
+    {
+      "area": "Mood",
+      "level": "particular",
+      "evidenceIds": [
+        "priya-nair-exp-mood"
+      ]
+    },
+    {
+      "area": "Sleep",
+      "level": "general",
+      "evidenceIds": [
+        "priya-nair-exp-sleep"
+      ]
+    }
+  ],
+  "phenotype": {
+    "consultation_pace": {
+      "value": "standard",
+      "confidence": "high",
+      "evidenceIds": [
+        "priya-nair-consultation_pace"
+      ]
+    },
+    "explanation_depth": {
+      "value": "detailed",
+      "confidence": "high",
+      "evidenceIds": [
+        "priya-nair-explanation_depth"
+      ]
+    },
+    "mental_health_integration": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "priya-nair-mental_health_integration"
+      ]
+    },
+    "follow_up_intensity": {
+      "value": "scheduled",
+      "confidence": "high",
+      "evidenceIds": [
+        "priya-nair-follow_up_intensity"
+      ]
+    },
+    "shared_decision_making": {
+      "value": "shared",
+      "confidence": "medium",
+      "evidenceIds": [
+        "priya-nair-shared_decision_making"
+      ]
+    },
+    "communication_directness": {
+      "value": "balanced",
+      "confidence": "medium",
+      "evidenceIds": [
+        "priya-nair-communication_directness"
+      ]
+    },
+    "medication_philosophy": {
+      "value": "moderate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "priya-nair-medication_philosophy"
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "priya-nair-exp-adult-adhd",
+      "trait": "expertise",
+      "excerpt": "Every ADHD review covers sleep and work, not just the script.",
+      "patientFacing": "Priya reviews sleep and work stress at every ADHD appointment, not just medication.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "priya-nair-exp-anxiety",
+      "trait": "expertise",
+      "excerpt": "I did extra training in anxiety and use it daily.",
+      "patientFacing": "Priya has additional training in anxiety management.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "priya-nair-exp-mood",
+      "trait": "expertise",
+      "excerpt": "Mood disorders are a big part of my practice.",
+      "patientFacing": "Priya manages depression and low mood with regular reviews.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "priya-nair-exp-sleep",
+      "trait": "expertise",
+      "excerpt": "I ask about sleep at every review.",
+      "patientFacing": "Priya covers sleep as part of ADHD reviews.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "priya-nair-consultation_pace",
+      "trait": "consultation_pace",
+      "excerpt": "If we run out of time, I book another rather than rushing.",
+      "patientFacing": "Priya keeps to standard appointments and books a second one when there's more to cover.",
+      "scenario": "Walk me through a first appointment with a new patient.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "priya-nair-explanation_depth",
+      "trait": "explanation_depth",
+      "excerpt": "I send a written summary with the reasons after each visit.",
+      "patientFacing": "Priya sends a written summary of the plan and the reasons for it after each visit.",
+      "scenario": "A patient asks why you're recommending a particular plan.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "priya-nair-mental_health_integration",
+      "trait": "mental_health_integration",
+      "excerpt": "Mood and anxiety are always on the agenda with ADHD.",
+      "patientFacing": "Priya looks at mood, anxiety and ADHD together at every review.",
+      "scenario": "A patient comes in about ADHD medication but mentions poor sleep and stress.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "priya-nair-follow_up_intensity",
+      "trait": "follow_up_intensity",
+      "excerpt": "I see people every four to six weeks while we're adjusting.",
+      "patientFacing": "Priya books regular reviews every few weeks while things are changing.",
+      "scenario": "What happens between appointments for your ongoing patients?",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "priya-nair-shared_decision_making",
+      "trait": "shared_decision_making",
+      "excerpt": "I go through the options and we agree together.",
+      "patientFacing": "Priya goes through the options with you and agrees on a plan together.",
+      "scenario": "A patient strongly prefers a treatment you do not initially recommend.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "priya-nair-communication_directness",
+      "trait": "communication_directness",
+      "excerpt": "I give the context first, then the recommendation.",
+      "patientFacing": "Priya explains results with context before recommendations.",
+      "scenario": "You need to tell a patient a test result isn't what they hoped.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "priya-nair-medication_philosophy",
+      "trait": "medication_philosophy",
+      "excerpt": "Medication is one tool among several.",
+      "patientFacing": "Priya considers medication alongside other options.",
+      "scenario": "A patient asks whether they should start medication.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    }
+  ]
+}

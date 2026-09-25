@@ -1,0 +1,203 @@
+{
+  "id": "lucy-nguyen",
+  "name": "Dr Lucy Nguyen",
+  "firstName": "Lucy",
+  "role": "GP",
+  "location": {
+    "suburb": "Chermside",
+    "city": "Brisbane",
+    "lat": -27.385,
+    "lng": 153.031
+  },
+  "photo": "lucy-nguyen.png",
+  "bio": "Lucy works with adults with ADHD and autism in Brisbane's northside, with weekend clinics.",
+  "credentials": [
+    "MBBS, University of Queensland",
+    "FRACGP"
+  ],
+  "bookingUrl": null,
+  "practical": {
+    "nextAvailable": "Saturday, 9:30 am",
+    "daysUntilAvailable": 2,
+    "modes": [
+      "in_person",
+      "telehealth"
+    ],
+    "fee": 95,
+    "gapAfterMedicare": 30,
+    "newPatients": true,
+    "ageRange": [
+      16,
+      99
+    ],
+    "languages": [
+      "English",
+      "Vietnamese"
+    ],
+    "accessibility": [
+      "wheelchair"
+    ],
+    "gender": "female",
+    "initialConsultMins": 30,
+    "weekends": true
+  },
+  "expertise": [
+    {
+      "area": "Adult ADHD",
+      "level": "particular",
+      "evidenceIds": [
+        "lucy-nguyen-exp-adult-adhd"
+      ]
+    },
+    {
+      "area": "Autism",
+      "level": "particular",
+      "evidenceIds": [
+        "lucy-nguyen-exp-autism"
+      ]
+    },
+    {
+      "area": "Anxiety",
+      "level": "general",
+      "evidenceIds": [
+        "lucy-nguyen-exp-anxiety"
+      ]
+    }
+  ],
+  "phenotype": {
+    "shared_decision_making": {
+      "value": "shared",
+      "confidence": "high",
+      "evidenceIds": [
+        "lucy-nguyen-shared_decision_making"
+      ]
+    },
+    "explanation_depth": {
+      "value": "detailed",
+      "confidence": "medium",
+      "evidenceIds": [
+        "lucy-nguyen-explanation_depth"
+      ]
+    },
+    "consultation_pace": {
+      "value": "unhurried",
+      "confidence": "medium",
+      "evidenceIds": [
+        "lucy-nguyen-consultation_pace"
+      ]
+    },
+    "follow_up_intensity": {
+      "value": "scheduled",
+      "confidence": "medium",
+      "evidenceIds": [
+        "lucy-nguyen-follow_up_intensity"
+      ]
+    },
+    "mental_health_integration": {
+      "value": "moderate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "lucy-nguyen-mental_health_integration"
+      ]
+    },
+    "continuity": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "lucy-nguyen-continuity"
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "lucy-nguyen-exp-adult-adhd",
+      "trait": "expertise",
+      "excerpt": "ADHD is most of my practice.",
+      "patientFacing": "Lucy has a particular interest in adult ADHD.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "lucy-nguyen-exp-autism",
+      "trait": "expertise",
+      "excerpt": "I see many autistic adults.",
+      "patientFacing": "Lucy works with autistic adults.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "lucy-nguyen-exp-anxiety",
+      "trait": "expertise",
+      "excerpt": "Anxiety comes up often.",
+      "patientFacing": "Lucy manages anxiety as part of general care.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "lucy-nguyen-shared_decision_making",
+      "trait": "shared_decision_making",
+      "excerpt": "We go through options and agree together.",
+      "patientFacing": "Lucy agrees on each plan with you after going through the options.",
+      "scenario": "A patient strongly prefers a treatment you do not initially recommend.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "lucy-nguyen-explanation_depth",
+      "trait": "explanation_depth",
+      "excerpt": "I explain why at each step.",
+      "patientFacing": "Lucy explains why she's suggesting each step.",
+      "scenario": "A patient asks why you're recommending a particular plan.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "lucy-nguyen-consultation_pace",
+      "trait": "consultation_pace",
+      "excerpt": "First appointments are 30 minutes.",
+      "patientFacing": "Lucy books 30-minute first appointments.",
+      "scenario": "Walk me through a first appointment with a new patient.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "lucy-nguyen-follow_up_intensity",
+      "trait": "follow_up_intensity",
+      "excerpt": "I book regular reviews.",
+      "patientFacing": "Lucy books regular reviews.",
+      "scenario": "What happens between appointments for your ongoing patients?",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "lucy-nguyen-mental_health_integration",
+      "trait": "mental_health_integration",
+      "excerpt": "Mental health comes in when relevant.",
+      "patientFacing": "Lucy covers mental health when it's relevant.",
+      "scenario": "A patient comes in about ADHD medication but mentions poor sleep and stress.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "lucy-nguyen-continuity",
+      "trait": "continuity",
+      "excerpt": "I keep my patients.",
+      "patientFacing": "Lucy keeps her patients with her rather than handing over.",
+      "scenario": "How do you handle patients seeing other GPs in your practice?",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "draft"
+    }
+  ]
+}

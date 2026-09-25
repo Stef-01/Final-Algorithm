@@ -1,0 +1,168 @@
+{
+  "id": "daniel-reyes",
+  "name": "Dr Daniel Reyes",
+  "firstName": "Daniel",
+  "role": "GP",
+  "location": {
+    "suburb": "Fortitude Valley",
+    "city": "Brisbane",
+    "lat": -27.457,
+    "lng": 153.034
+  },
+  "photo": "daniel-reyes.png",
+  "bio": "Daniel runs a busy inner-city practice with extended hours and weekend appointments.",
+  "credentials": [
+    "MBBS, University of Queensland",
+    "FRACGP"
+  ],
+  "bookingUrl": null,
+  "practical": {
+    "nextAvailable": "Tomorrow, 8:00 am",
+    "daysUntilAvailable": 1,
+    "modes": [
+      "in_person",
+      "telehealth"
+    ],
+    "fee": 90,
+    "gapAfterMedicare": 35,
+    "newPatients": true,
+    "ageRange": [
+      16,
+      99
+    ],
+    "languages": [
+      "English"
+    ],
+    "accessibility": [
+      "wheelchair"
+    ],
+    "gender": "male",
+    "initialConsultMins": 15,
+    "weekends": true
+  },
+  "expertise": [
+    {
+      "area": "Men's health",
+      "level": "particular",
+      "evidenceIds": [
+        "daniel-reyes-exp-mens-health"
+      ]
+    },
+    {
+      "area": "Sexual health",
+      "level": "particular",
+      "evidenceIds": [
+        "daniel-reyes-exp-sexual-health"
+      ]
+    }
+  ],
+  "phenotype": {
+    "consultation_pace": {
+      "value": "brisk",
+      "confidence": "high",
+      "evidenceIds": [
+        "daniel-reyes-consultation_pace"
+      ]
+    },
+    "shared_decision_making": {
+      "value": "clinician_led",
+      "confidence": "high",
+      "evidenceIds": [
+        "daniel-reyes-shared_decision_making"
+      ]
+    },
+    "communication_directness": {
+      "value": "direct",
+      "confidence": "high",
+      "evidenceIds": [
+        "daniel-reyes-communication_directness"
+      ]
+    },
+    "explanation_depth": {
+      "value": "brief",
+      "confidence": "medium",
+      "evidenceIds": [
+        "daniel-reyes-explanation_depth"
+      ]
+    },
+    "diagnostic_style": {
+      "value": "pragmatic",
+      "confidence": "high",
+      "evidenceIds": [
+        "daniel-reyes-diagnostic_style"
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "daniel-reyes-exp-mens-health",
+      "trait": "expertise",
+      "excerpt": "Men's health is my main interest.",
+      "patientFacing": "Daniel has a particular interest in men's health checks.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "daniel-reyes-exp-sexual-health",
+      "trait": "expertise",
+      "excerpt": "I do a lot of sexual health.",
+      "patientFacing": "Daniel provides sexual health screening and care.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "daniel-reyes-consultation_pace",
+      "trait": "consultation_pace",
+      "excerpt": "My appointments run on time; I keep them focused.",
+      "patientFacing": "Daniel keeps appointments short and on time.",
+      "scenario": "Walk me through a first appointment with a new patient.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "daniel-reyes-shared_decision_making",
+      "trait": "shared_decision_making",
+      "excerpt": "I tell them what I'd recommend and why, briefly.",
+      "patientFacing": "Daniel gives a clear recommendation and a plan to follow.",
+      "scenario": "A patient strongly prefers a treatment you do not initially recommend.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "daniel-reyes-communication_directness",
+      "trait": "communication_directness",
+      "excerpt": "I'm straight to the point.",
+      "patientFacing": "Daniel gets straight to the point.",
+      "scenario": "You need to tell a patient a test result isn't what they hoped.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "daniel-reyes-explanation_depth",
+      "trait": "explanation_depth",
+      "excerpt": "I stick to the key points.",
+      "patientFacing": "Daniel covers the key points without a long explanation.",
+      "scenario": "A patient asks why you're recommending a particular plan.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "daniel-reyes-diagnostic_style",
+      "trait": "diagnostic_style",
+      "excerpt": "Start with the most likely cause and act on it.",
+      "patientFacing": "Daniel starts with the most likely explanation and a clear plan.",
+      "scenario": "Symptoms don't fit a clear diagnosis after the first visit.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    }
+  ]
+}

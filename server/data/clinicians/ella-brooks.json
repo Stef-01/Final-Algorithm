@@ -1,0 +1,151 @@
+{
+  "id": "ella-brooks",
+  "name": "Dr Ella Brooks",
+  "firstName": "Ella",
+  "role": "GP",
+  "location": {
+    "suburb": "Ashgrove",
+    "city": "Brisbane",
+    "lat": -27.444,
+    "lng": 152.986
+  },
+  "photo": "ella-brooks.png",
+  "bio": "Ella has a long-standing ADHD and mental health practice. She isn't taking new patients at the moment.",
+  "credentials": [
+    "MBBS, University of Queensland",
+    "FRACGP"
+  ],
+  "bookingUrl": null,
+  "practical": {
+    "nextAvailable": "Not taking new patients",
+    "daysUntilAvailable": 14,
+    "modes": [
+      "in_person",
+      "telehealth"
+    ],
+    "fee": 150,
+    "gapAfterMedicare": 70,
+    "newPatients": false,
+    "ageRange": [
+      16,
+      99
+    ],
+    "languages": [
+      "English"
+    ],
+    "accessibility": [
+      "wheelchair"
+    ],
+    "gender": "female",
+    "initialConsultMins": 40,
+    "weekends": false
+  },
+  "expertise": [
+    {
+      "area": "Adult ADHD",
+      "level": "particular",
+      "evidenceIds": [
+        "ella-brooks-exp-adult-adhd"
+      ]
+    },
+    {
+      "area": "Mental health",
+      "level": "particular",
+      "evidenceIds": [
+        "ella-brooks-exp-mental-health"
+      ]
+    }
+  ],
+  "phenotype": {
+    "consultation_pace": {
+      "value": "unhurried",
+      "confidence": "high",
+      "evidenceIds": [
+        "ella-brooks-consultation_pace"
+      ]
+    },
+    "shared_decision_making": {
+      "value": "shared",
+      "confidence": "high",
+      "evidenceIds": [
+        "ella-brooks-shared_decision_making"
+      ]
+    },
+    "explanation_depth": {
+      "value": "detailed",
+      "confidence": "high",
+      "evidenceIds": [
+        "ella-brooks-explanation_depth"
+      ]
+    },
+    "mental_health_integration": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "ella-brooks-mental_health_integration"
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "ella-brooks-exp-adult-adhd",
+      "trait": "expertise",
+      "excerpt": "ADHD is my main interest.",
+      "patientFacing": "Ella has a particular interest in adult ADHD.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "ella-brooks-exp-mental-health",
+      "trait": "expertise",
+      "excerpt": "I do a lot of mental health.",
+      "patientFacing": "Ella manages mental health as part of ongoing care.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "ella-brooks-consultation_pace",
+      "trait": "consultation_pace",
+      "excerpt": "40 minutes for new patients.",
+      "patientFacing": "Ella books 40-minute first appointments.",
+      "scenario": "Walk me through a first appointment with a new patient.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "ella-brooks-shared_decision_making",
+      "trait": "shared_decision_making",
+      "excerpt": "We decide together.",
+      "patientFacing": "Ella decides on each plan with you.",
+      "scenario": "A patient strongly prefers a treatment you do not initially recommend.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "ella-brooks-explanation_depth",
+      "trait": "explanation_depth",
+      "excerpt": "I explain the why.",
+      "patientFacing": "Ella explains the reasoning behind each recommendation.",
+      "scenario": "A patient asks why you're recommending a particular plan.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "ella-brooks-mental_health_integration",
+      "trait": "mental_health_integration",
+      "excerpt": "ADHD, sleep and mood together.",
+      "patientFacing": "Ella covers ADHD, sleep and mood together.",
+      "scenario": "A patient comes in about ADHD medication but mentions poor sleep and stress.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    }
+  ]
+}

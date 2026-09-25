@@ -1,0 +1,169 @@
+{
+  "id": "michael-obrien",
+  "name": "Dr Michael O'Brien",
+  "firstName": "Michael",
+  "role": "GP",
+  "location": {
+    "suburb": "Indooroopilly",
+    "city": "Brisbane",
+    "lat": -27.499,
+    "lng": 152.973
+  },
+  "photo": "michael-obrien.png",
+  "bio": "Michael combines general practice with sports medicine and focuses on exercise, sleep and routine.",
+  "credentials": [
+    "MBBS, University of Queensland",
+    "FRACGP",
+    "Postgraduate Diploma in Sports Medicine"
+  ],
+  "bookingUrl": null,
+  "practical": {
+    "nextAvailable": "Tomorrow, 12:30 pm",
+    "daysUntilAvailable": 1,
+    "modes": [
+      "in_person",
+      "telehealth"
+    ],
+    "fee": 110,
+    "gapAfterMedicare": 45,
+    "newPatients": true,
+    "ageRange": [
+      16,
+      99
+    ],
+    "languages": [
+      "English"
+    ],
+    "accessibility": [
+      "wheelchair"
+    ],
+    "gender": "male",
+    "initialConsultMins": 20,
+    "weekends": true
+  },
+  "expertise": [
+    {
+      "area": "Sports medicine",
+      "level": "particular",
+      "evidenceIds": [
+        "michael-obrien-exp-sports-medicine"
+      ]
+    },
+    {
+      "area": "Sleep",
+      "level": "general",
+      "evidenceIds": [
+        "michael-obrien-exp-sleep"
+      ]
+    }
+  ],
+  "phenotype": {
+    "lifestyle_integration": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "michael-obrien-lifestyle_integration"
+      ]
+    },
+    "medication_philosophy": {
+      "value": "conservative",
+      "confidence": "high",
+      "evidenceIds": [
+        "michael-obrien-medication_philosophy"
+      ]
+    },
+    "consultation_pace": {
+      "value": "standard",
+      "confidence": "medium",
+      "evidenceIds": [
+        "michael-obrien-consultation_pace"
+      ]
+    },
+    "communication_directness": {
+      "value": "direct",
+      "confidence": "medium",
+      "evidenceIds": [
+        "michael-obrien-communication_directness"
+      ]
+    },
+    "shared_decision_making": {
+      "value": "clinician_led",
+      "confidence": "medium",
+      "evidenceIds": [
+        "michael-obrien-shared_decision_making"
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "michael-obrien-exp-sports-medicine",
+      "trait": "expertise",
+      "excerpt": "I trained in sports medicine.",
+      "patientFacing": "Michael has postgraduate training in sports medicine.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "michael-obrien-exp-sleep",
+      "trait": "expertise",
+      "excerpt": "Sleep comes into most of my plans.",
+      "patientFacing": "Michael looks at sleep as part of lifestyle care.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "michael-obrien-lifestyle_integration",
+      "trait": "lifestyle_integration",
+      "excerpt": "Exercise, sleep and routine are the base of every plan.",
+      "patientFacing": "Michael builds exercise, sleep and routine into every plan.",
+      "scenario": "A patient's main issue seems linked to sleep, exercise and routine.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "michael-obrien-medication_philosophy",
+      "trait": "medication_philosophy",
+      "excerpt": "I'd rather try lifestyle changes first.",
+      "patientFacing": "Michael tries lifestyle changes before starting medication.",
+      "scenario": "A patient asks whether they should start medication.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "michael-obrien-consultation_pace",
+      "trait": "consultation_pace",
+      "excerpt": "Standard appointments usually work.",
+      "patientFacing": "Michael keeps to standard-length appointments.",
+      "scenario": "Walk me through a first appointment with a new patient.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "michael-obrien-communication_directness",
+      "trait": "communication_directness",
+      "excerpt": "I tell people what I'd do.",
+      "patientFacing": "Michael tells you plainly what he'd do.",
+      "scenario": "You need to tell a patient a test result isn't what they hoped.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "michael-obrien-shared_decision_making",
+      "trait": "shared_decision_making",
+      "excerpt": "I give a clear recommendation.",
+      "patientFacing": "Michael gives a clear recommendation.",
+      "scenario": "A patient strongly prefers a treatment you do not initially recommend.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    }
+  ]
+}

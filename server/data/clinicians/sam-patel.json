@@ -1,0 +1,185 @@
+{
+  "id": "sam-patel",
+  "name": "Dr Sam Patel",
+  "firstName": "Sam",
+  "role": "GP",
+  "location": {
+    "suburb": "Kangaroo Point",
+    "city": "Brisbane",
+    "lat": -27.476,
+    "lng": 153.036
+  },
+  "photo": "sam-patel.png",
+  "bio": "Sam provides inclusive primary care with a focus on LGBTQIA+ health and mental health.",
+  "credentials": [
+    "MBBS, Griffith University",
+    "FRACGP"
+  ],
+  "bookingUrl": null,
+  "practical": {
+    "nextAvailable": "Wednesday, 2:00 pm",
+    "daysUntilAvailable": 5,
+    "modes": [
+      "in_person",
+      "telehealth"
+    ],
+    "fee": 0,
+    "gapAfterMedicare": 0,
+    "newPatients": true,
+    "ageRange": [
+      16,
+      99
+    ],
+    "languages": [
+      "English"
+    ],
+    "accessibility": [
+      "wheelchair"
+    ],
+    "gender": "nonbinary",
+    "initialConsultMins": 30,
+    "weekends": false
+  },
+  "expertise": [
+    {
+      "area": "LGBTQIA+ health",
+      "level": "particular",
+      "evidenceIds": [
+        "sam-patel-exp-lgbtqiaplus-health"
+      ]
+    },
+    {
+      "area": "Mental health",
+      "level": "particular",
+      "evidenceIds": [
+        "sam-patel-exp-mental-health"
+      ]
+    },
+    {
+      "area": "Adult ADHD",
+      "level": "general",
+      "evidenceIds": [
+        "sam-patel-exp-adult-adhd"
+      ]
+    }
+  ],
+  "phenotype": {
+    "shared_decision_making": {
+      "value": "patient_led",
+      "confidence": "high",
+      "evidenceIds": [
+        "sam-patel-shared_decision_making"
+      ]
+    },
+    "patient_autonomy": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "sam-patel-patient_autonomy"
+      ]
+    },
+    "communication_directness": {
+      "value": "gentle",
+      "confidence": "medium",
+      "evidenceIds": [
+        "sam-patel-communication_directness"
+      ]
+    },
+    "mental_health_integration": {
+      "value": "high",
+      "confidence": "medium",
+      "evidenceIds": [
+        "sam-patel-mental_health_integration"
+      ]
+    },
+    "explanation_depth": {
+      "value": "moderate",
+      "confidence": "medium",
+      "evidenceIds": [
+        "sam-patel-explanation_depth"
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "sam-patel-exp-lgbtqiaplus-health",
+      "trait": "expertise",
+      "excerpt": "Most of my patients are from the LGBTQIA+ community.",
+      "patientFacing": "Sam has a particular focus on LGBTQIA+ health, including gender-affirming care.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "sam-patel-exp-mental-health",
+      "trait": "expertise",
+      "excerpt": "Mental health is a big part of what I do.",
+      "patientFacing": "Sam manages anxiety and depression as part of ongoing care.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "sam-patel-exp-adult-adhd",
+      "trait": "expertise",
+      "excerpt": "I see some adults with ADHD.",
+      "patientFacing": "Sam sees adults with ADHD as part of general care.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "sam-patel-shared_decision_making",
+      "trait": "shared_decision_making",
+      "excerpt": "It's their body; I set out the options and they choose.",
+      "patientFacing": "Sam sets out the options clearly and leaves the decision with you.",
+      "scenario": "A patient wants to make a decision you have reservations about.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "sam-patel-patient_autonomy",
+      "trait": "patient_autonomy",
+      "excerpt": "If they choose differently, I support that and we plan around it.",
+      "patientFacing": "Sam supports your choice even when it differs from their first suggestion.",
+      "scenario": "A patient wants to make a decision you have reservations about.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "sam-patel-communication_directness",
+      "trait": "communication_directness",
+      "excerpt": "I take time with difficult news.",
+      "patientFacing": "Sam gives difficult news gently and with context.",
+      "scenario": "You need to tell a patient a test result isn't what they hoped.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "sam-patel-mental_health_integration",
+      "trait": "mental_health_integration",
+      "excerpt": "I always ask how they're going mentally.",
+      "patientFacing": "Sam checks in on mental health at each visit.",
+      "scenario": "A patient comes in about ADHD medication but mentions poor sleep and stress.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "sam-patel-explanation_depth",
+      "trait": "explanation_depth",
+      "excerpt": "I explain the main reasons.",
+      "patientFacing": "Sam explains the main reasons behind each option.",
+      "scenario": "A patient asks why you're recommending a particular plan.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    }
+  ]
+}

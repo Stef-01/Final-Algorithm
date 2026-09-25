@@ -1,0 +1,150 @@
+{
+  "id": "grace-okafor",
+  "name": "Dr Grace Okafor",
+  "firstName": "Grace",
+  "role": "GP",
+  "location": {
+    "suburb": "Toowong",
+    "city": "Brisbane",
+    "lat": -27.485,
+    "lng": 152.992
+  },
+  "photo": "grace-okafor.png",
+  "bio": "Grace works in a practice that shares care with an on-site psychologist, and offers evening telehealth.",
+  "credentials": [
+    "MBBS, University of Sydney",
+    "FRACGP"
+  ],
+  "bookingUrl": null,
+  "practical": {
+    "nextAvailable": "Monday, 6:30 pm",
+    "daysUntilAvailable": 6,
+    "modes": [
+      "telehealth"
+    ],
+    "fee": 130,
+    "gapAfterMedicare": 60,
+    "newPatients": true,
+    "ageRange": [
+      16,
+      99
+    ],
+    "languages": [
+      "English"
+    ],
+    "accessibility": [
+      "wheelchair"
+    ],
+    "gender": "female",
+    "initialConsultMins": 40,
+    "weekends": true
+  },
+  "expertise": [
+    {
+      "area": "Mental health",
+      "level": "particular",
+      "evidenceIds": [
+        "grace-okafor-exp-mental-health"
+      ]
+    },
+    {
+      "area": "Adult ADHD",
+      "level": "general",
+      "evidenceIds": [
+        "grace-okafor-exp-adult-adhd"
+      ]
+    }
+  ],
+  "phenotype": {
+    "care_coordination": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "grace-okafor-care_coordination"
+      ]
+    },
+    "consultation_pace": {
+      "value": "unhurried",
+      "confidence": "medium",
+      "evidenceIds": [
+        "grace-okafor-consultation_pace"
+      ]
+    },
+    "mental_health_integration": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "grace-okafor-mental_health_integration"
+      ]
+    },
+    "shared_decision_making": {
+      "value": "patient_led",
+      "confidence": "medium",
+      "evidenceIds": [
+        "grace-okafor-shared_decision_making"
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "grace-okafor-exp-mental-health",
+      "trait": "expertise",
+      "excerpt": "I share care with our psychologist most days.",
+      "patientFacing": "Grace works alongside a psychologist in the same practice.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "grace-okafor-exp-adult-adhd",
+      "trait": "expertise",
+      "excerpt": "I see some adults with ADHD.",
+      "patientFacing": "Grace manages adults with ADHD as part of general care.",
+      "scenario": "Clinical interests",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "grace-okafor-care_coordination",
+      "trait": "care_coordination",
+      "excerpt": "The psychologist and I keep one shared plan.",
+      "patientFacing": "Grace works alongside a psychologist in the same practice and shares a plan with them.",
+      "scenario": "A patient is also seeing a psychologist and a specialist.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "grace-okafor-consultation_pace",
+      "trait": "consultation_pace",
+      "excerpt": "My telehealth slots are 40 minutes.",
+      "patientFacing": "Grace offers 40-minute telehealth appointments in the evenings.",
+      "scenario": "Walk me through a first appointment with a new patient.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "grace-okafor-mental_health_integration",
+      "trait": "mental_health_integration",
+      "excerpt": "Mental health is part of every visit.",
+      "patientFacing": "Grace treats mental health as part of every appointment.",
+      "scenario": "A patient comes in about ADHD medication but mentions poor sleep and stress.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "grace-okafor-shared_decision_making",
+      "trait": "shared_decision_making",
+      "excerpt": "I explain and then it's their call.",
+      "patientFacing": "Grace explains the options and leaves the choice with you.",
+      "scenario": "A patient strongly prefers a treatment you do not initially recommend.",
+      "timestamp": "2026-09-01T10:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    }
+  ]
+}
