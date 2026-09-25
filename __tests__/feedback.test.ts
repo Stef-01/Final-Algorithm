@@ -29,6 +29,18 @@ describe('feedback storage (PRD §49)', () => {
     expect(toRecord(parseFeedback(good)!, new Date('2026-09-25T13:45:00Z')).day).toBe('2026-09-25');
   });
 
+  it('after a 5 or a 1–2, keeps known reasons and a short note; ignores them for a 3–4', () => {
+    const why = { reasons: ['clear_why', 'too_far', 'clear_why', 'x'], note: '  Loved   the   fee line  ' };
+    expect(parseFeedback({ ...good, rating: 5, why })!.why).toEqual({ reasons: ['clear_why'], note: 'Loved the fee line' });
+    expect(parseFeedback({ ...good, rating: 1, why })!.why).toEqual({ reasons: ['too_far'], note: 'Loved the fee line' });
+    expect(parseFeedback({ ...good, rating: 4, why })!.why).toBeUndefined();
+    expect(parseFeedback({ ...good, rating: 2, why: { note: 'x'.repeat(900) } })!.why!.note).toHaveLength(300);
+    expect(parseFeedback({ ...good, rating: 5, why: { reasons: [] } })!.why).toBeUndefined();
+    const s = core.rateMatches(core.demoResults('psych-masking'), 5, { reasons: ['got_it'], note: 'Quick' });
+    expect(parseFeedback(feedbackBody(s))!.why).toEqual({ reasons: ['got_it'], note: 'Quick' });
+    expect(core.rateMatches(s, 3).feedback.why).toBeUndefined();
+  });
+
   it('what the app sends contains nothing the patient wrote', () => {
     let s = core.demoResults('psych-masking');
     s = core.thumb(core.rateMatches(s, 5), 'jessica-katsamatsas', 'up');

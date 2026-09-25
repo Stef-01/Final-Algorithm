@@ -14,6 +14,8 @@ import { FitLabel } from '@/components/FitLabel';
 import { Icon } from '@/components/Icon';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { PillButton } from '@/components/Sheet';
+import { whyKind } from '@server/feedback';
+
 import { getClinician } from '@/data/clinicians';
 import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
@@ -116,7 +118,7 @@ export default function Matches() {
           secondary={{ label: 'Start over', onPress: startOver }}
         />
         <AlsoCouldHelp />
-        <RatingCard value={state.feedback.rating} onRate={session.rateMatches} />
+        <RatingCard value={state.feedback.rating} onRate={(n) => (whyKind(n) ? router.push(`/rate?n=${n}`) : session.rateMatches(n))} />
       </Shell>
     );
   }

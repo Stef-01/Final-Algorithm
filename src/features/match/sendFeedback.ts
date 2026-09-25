@@ -2,7 +2,8 @@ import { API_BASE } from './remoteExtract';
 import { secondsToShortlist, type SessionState } from './sessionCore';
 
 // Sends the 1–5 rating and thumbs to /api/feedback (PRD §49). Fire and forget: feedback must
-// never slow the patient down or show an error. Numbers and clinician ids only.
+// never slow the patient down or show an error. Numbers and clinician ids, plus the reasons and
+// short note from the "What was good / off?" screen when there is one.
 
 export function feedbackBody(state: SessionState) {
   const r = state.result;
@@ -14,6 +15,7 @@ export function feedbackBody(state: SessionState) {
     profession: state.profession ?? 'either',
     claude: !!state.input.extracted,
     thumbs: state.feedback.thumbs,
+    ...(state.feedback.why ? { why: state.feedback.why } : {}),
   };
 }
 

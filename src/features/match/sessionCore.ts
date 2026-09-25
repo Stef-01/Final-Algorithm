@@ -31,7 +31,7 @@ export type SessionState = {
   /** When the patient submitted their description (time-to-shortlist, PRD §49). */
   startedAt?: number;
   /** In-app validation (PRD §49): a 1–5 credibility rating and per-match thumbs. */
-  feedback: { rating?: number; thumbs: Record<string, 'up' | 'down'> };
+  feedback: { rating?: number; thumbs: Record<string, 'up' | 'down'>; why?: { reasons: string[]; note?: string } };
   /** The refine assistant's conversation (floating button). */
   chat?: ChatTurn[];
   updatedAt: number;
@@ -235,9 +235,12 @@ export function noMatchAction(state: SessionState, action: NoMatchAction): Trans
 export const secondsToShortlist = (state: SessionState, now = Date.now()) =>
   state.startedAt ? Math.round((now - state.startedAt) / 1000) : 0;
 
-export function rateMatches(state: SessionState, rating: number): SessionState {
+export function rateMatches(state: SessionState, rating: number, why?: { reasons: string[]; note?: string }): SessionState {
   const r = Math.max(1, Math.min(5, Math.round(rating)));
-  return { ...state, feedback: { ...state.feedback, rating: r }, updatedAt: Date.now() };
+  const feedback = { ...state.feedback, rating: r };
+  if (why && (why.reasons.length || why.note)) feedback.why = why;
+  else delete feedback.why;
+  return { ...state, feedback, updatedAt: Date.now() };
 }
 
 export function thumb(state: SessionState, clinicianId: string, dir: 'up' | 'down'): SessionState {

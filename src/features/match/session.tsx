@@ -30,7 +30,7 @@ type Session = {
   setFilters: (f: Filters) => string;
   switchProfession: (p: Profession) => string;
   noMatchAction: (action: NoMatchAction) => string;
-  rateMatches: (rating: number) => void;
+  rateMatches: (rating: number, why?: { reasons: string[]; note?: string }) => void;
   thumb: (clinicianId: string, dir: 'up' | 'down') => void;
   /** A message to the floating assistant; returns the route to show (usually '/refine'). */
   refine: (message: string, extracted?: Extraction | null, reword?: (facts: ReplyFacts) => Promise<string | null>) => Promise<string>;
@@ -124,8 +124,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         return route(core.switchProfession(current.current, p));
       },
       noMatchAction: (a) => route(core.noMatchAction(current.current, a)),
-      rateMatches: (rating) => {
-        const next = core.rateMatches(current.current, rating);
+      rateMatches: (rating, why) => {
+        const next = core.rateMatches(current.current, rating, why);
         const r = next.result;
         track('match_rating', { rating: next.feedback.rating!, matches: r?.status === 'matches' ? r.matches.length : 0 });
         sendFeedback(next);

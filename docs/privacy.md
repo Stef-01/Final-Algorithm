@@ -12,7 +12,7 @@ What WATL does with what a patient tells it, as the code stands. Written for a r
 | Voice | The browser's speech service transcribes it (in Chrome, audio goes to Google). WATL receives only the text | Not stored by WATL | `src/features/voice/` (decision D7) |
 | Analytics events | Vercel Web Analytics | Vercel's retention | `src/lib/analytics.ts` |
 | Join WATL submissions (a professional's name, email, practice, fees and answers) | `/api/portal` → Upstash list `watl:portal`, once connected, as a draft interview for review | The newest 1,000 are kept; delete each once reviewed | `api/portal.ts`, `server/portal.ts` |
-| Match rating and thumbs (numbers, clinician ids, the day) | `/api/feedback` → Upstash Redis, once connected | The newest 5,000 are kept; no time limit yet (see Open 5) | `api/feedback.ts`, `server/feedback.ts` |
+| Match rating and thumbs (numbers, clinician ids, the day); after a 5 or a 1–2, the reasons tapped and an optional note of up to 300 characters | `/api/feedback` → Upstash Redis, once connected | The newest 5,000 are kept; no time limit yet (see Open 5) | `api/feedback.ts`, `server/feedback.ts` |
 
 ## What never leaves the device
 
@@ -33,4 +33,4 @@ What WATL does with what a patient tells it, as the code stands. Written for a r
 2. **Consent wording.** When Claude is on, the describe screen and Settings both say that what patients write is read by Claude (Anthropic) and not stored by WATL. Whether that notice is enough, or explicit consent is needed, depends on legal advice.
 3. **Voice.** Browser transcription sends audio to the browser vendor. Decision D7 accepted this for the prototype, with a notice on screen. A WATL-controlled service is needed before launch.
 4. **Real clinicians.** Profiles come from the ADHDme network's published pages. Their consent to being matched and quoted in WATL still needs confirming.
-5. **Feedback retention.** `/api/feedback` stores ratings with no patient text and only the day, not the time. Still, decide how long to keep them (for example, until the testing round ends) before connecting the store.
+5. **Feedback retention.** `/api/feedback` stores ratings with only the day, not the time. The one piece of free text is the optional "Other" note after a 5 or a 1–2; the box asks for no health details, but someone may still type them, so it needs the same retention decision and a person should read notes before sharing them. Still, decide how long to keep them (for example, until the testing round ends) before connecting the store.
