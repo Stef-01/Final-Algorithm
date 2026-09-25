@@ -4,16 +4,9 @@ import { StyleSheet, Text } from 'react-native';
 
 import { DatePicker } from '@/components/DatePicker';
 import { OnboardingStep } from '@/components/OnboardingStep';
+import { ageOn } from '@/lib/age';
 import { useProfile } from '@/lib/profile';
 import { colors, fonts } from '@/lib/theme';
-
-function ageOn(birth: Date, today = new Date()) {
-  let age = today.getFullYear() - birth.getFullYear();
-  const beforeBirthday =
-    today.getMonth() < birth.getMonth() ||
-    (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate());
-  return beforeBirthday ? age - 1 : age;
-}
 
 export default function DateOfBirth() {
   const { update } = useProfile();

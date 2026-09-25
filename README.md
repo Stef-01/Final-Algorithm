@@ -13,12 +13,19 @@ npm start          # then press i (iOS simulator), a (Android emulator) or w (we
 
 Every native module used here ships with Expo Go, so you can also scan the QR code with Expo Go on a phone.
 
-Checks:
+Checks (also run by GitHub Actions on every push and pull request):
 
 ```bash
 npm run typecheck
 npx expo lint
+npm test
 ```
+
+The tests in `__tests__/` cover:
+
+- **Assets:** every image, font and video the app `require`s exists and is a real file of its type, every file in `assets/images` is used, and each seeded profile has 6 captioned photos and 3 prompts.
+- **Profile store:** loading, saving and clearing data on the device.
+- **Screens:** welcome branding and redirect, each sign-up step's validation and saved values, Discover cycling between profiles, and tab navigation.
 
 ## What's in the app
 
