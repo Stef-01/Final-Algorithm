@@ -15,7 +15,7 @@ import { PressScale, Pulse, useReducedMotion } from './motion';
 const SIZE = 56;
 const TAB_BAR = 58;
 /** Screens where it would cover something, or where a conversation makes no sense. */
-const HIDDEN = [/^\/refine/, /^\/matching/, /^\/safety/, /^\/book\//, /^\/dev\//, /^\/clinician\//, /^\/discover/, /^\/join/];
+const HIDDEN = [/^\/refine/, /^\/matching/, /^\/safety/, /^\/book\//, /^\/dev\//, /^\/clinician\//, /^\/discover/, /^\/join/, /^\/filters/];
 /** Screens with the round Next button bottom-right (ConversationStep). */
 const HAS_NEXT = ['/', '/describe', '/clarify', '/confirm'];
 

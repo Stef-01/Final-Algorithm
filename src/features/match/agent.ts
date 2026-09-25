@@ -10,6 +10,7 @@ import { copyFor } from '@/lib/professions';
 
 import { demoById } from './demos';
 import { extractSignals, mergeSignals, withKeywordExtras } from './extract';
+import { applyFilters, type Filters } from './filters';
 import { applyRefinement } from './refine';
 import type { AgentStep, MatchResult, Priority, Question } from './types';
 
@@ -37,6 +38,8 @@ export type SessionInput = {
   refinements?: string[];
   /** Claude's reading of the opening description (Phase 8); absent = keyword extractor. */
   extracted?: Extraction;
+  /** Filters set on the Filters screen: the last word on requirements. */
+  filters?: Filters;
   /** Goals from Profile at the time of the search (ids). They add low-confidence needs. */
   goals?: string[];
   /** Claude's reading of each refinement, parallel to `refinements` (null = keyword extractor). */
@@ -74,6 +77,7 @@ export function signalsFor(input: SessionInput): PatientSignals {
   // Loosened on the no-match screen: applied last, so they win over anything said before.
   if (input.anyCost) s.constraints = { ...s.constraints, maxGap: null };
   if (input.anyGender) s.constraints = { ...s.constraints, clinicianGender: undefined };
+  s = applyFilters(s, input.filters);
   s.profession = input.profession;
   if (input.safetyAcknowledged) delete s.safetyFlag;
   return s;

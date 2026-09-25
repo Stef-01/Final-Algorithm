@@ -42,6 +42,6 @@ describe('discovery queue', () => {
     renderRouter(routes, { initialUrl: '/discover' });
     for (let i = 0; i < PROFESSION_INFO.findIndex((p) => p.id === 'dietitian'); i++) fireEvent.press(screen.getAllByLabelText('Next')[0]);
     expect(await screen.findByText('Not in the network yet')).toBeOnTheScreen();
-    expect(screen.queryByLabelText('Find dietitians')).toBeNull();
+    expect(screen.queryByLabelText('Find dietitians and nutritionists')).toBeNull();
   });
 });

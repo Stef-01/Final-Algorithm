@@ -35,6 +35,7 @@ export default function RootLayout() {
               <Stack.Screen name="clinician/[id]" />
               <Stack.Screen name="dev/states" />
               <Stack.Screen name="join" />
+              <Stack.Screen name="filters" />
               {['safety', 'book/[id]', 'refine'].map((name) => (
                 <Stack.Screen key={name} name={name} options={{ presentation: 'transparentModal', animation: 'fade' }} />
               ))}

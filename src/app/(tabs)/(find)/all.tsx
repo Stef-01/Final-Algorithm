@@ -2,6 +2,7 @@ import { Redirect, router } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { AlsoCouldHelp } from '@/components/AlsoCouldHelp';
+import { FiltersButton } from '@/components/FiltersButton';
 import { MatchRow } from '@/components/MatchRow';
 import { Appear } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
@@ -24,10 +25,10 @@ export default function AllMatches() {
     <View style={styles.root}>
       <ScreenHeader title={`All ${all.length} ${many}`} back />
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.note}>
-          Everyone here meets what you asked for. They&apos;re in order of how well they fit what you told me, with the
-          reasons first.
-        </Text>
+        <Text style={styles.note}>Everyone who fits, best first.</Text>
+        <View style={styles.filters}>
+          <FiltersButton />
+        </View>
         {all.map((m, i) => {
           const startsExplained = r.matches.some((x) => x.reasons.length > 0);
           const c = getClinician(m.clinicianId);
@@ -49,6 +50,7 @@ export default function AllMatches() {
 }
 
 const styles = StyleSheet.create({
+  filters: { marginHorizontal: 12, marginTop: 4, marginBottom: 4 },
   root: { flex: 1, backgroundColor: colors.background },
   content: { paddingBottom: 100 }, // clear of the floating assistant button
   note: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 20, color: colors.black, margin: 20, marginBottom: 4 },

@@ -7,6 +7,7 @@ import * as core from './sessionCore';
 import type { ReplyFacts } from '@server/claude/reply';
 import type { Extraction } from '@server/claude/types';
 
+import type { Filters } from './filters';
 import { SUGGESTION_TEXT } from './refine';
 import { sendFeedback } from './sendFeedback';
 import type { NoMatchAction, Profession } from './types';
@@ -26,6 +27,7 @@ type Session = {
   match: () => string;
   nextMatch: () => void;
   prevMatch: () => void;
+  setFilters: (f: Filters) => string;
   switchProfession: (p: Profession) => string;
   noMatchAction: (action: NoMatchAction) => string;
   rateMatches: (rating: number) => void;
@@ -113,6 +115,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         commit(next);
       },
       prevMatch: () => commit(core.prevMatch(current.current)),
+      setFilters: (f) => {
+        track('filters_applied', { count: Object.values(f).filter((v) => v !== undefined && v !== 'any').length });
+        return route(core.setFilters(current.current, f));
+      },
       switchProfession: (p) => {
         track('also_could_help', { profession: p });
         return route(core.switchProfession(current.current, p));

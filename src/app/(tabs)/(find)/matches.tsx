@@ -4,6 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { ClinicianCards } from '@/components/ClinicianCards';
 import { AlsoCouldHelp } from '@/components/AlsoCouldHelp';
+import { FiltersButton } from '@/components/FiltersButton';
 import { ProgressDots } from '@/components/ProgressDots';
 import { Appear } from '@/components/motion';
 import { Swipeable, type SwipeableHandle } from '@/components/Swipeable';
@@ -164,6 +165,11 @@ export default function Matches() {
                 <ProgressDots count={matches.length} index={state.index} label={`Match ${state.index + 1} of ${matches.length}`} />
               </View>
             )}
+            {state.index === 0 ? (
+              <View style={styles.filters}>
+                <FiltersButton />
+              </View>
+            ) : null}
             {state.index === 0 ? <AlsoCouldHelp /> : null}
             <ClinicianCards
               key={clinician.id}
@@ -205,6 +211,7 @@ function Shell({ title, children }: { title: string; children: React.ReactNode }
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   fill: { flex: 1 },
+  filters: { marginHorizontal: 12, marginTop: 14 },
   content: { paddingBottom: 110 },
   intro: { marginHorizontal: 12, marginTop: 20, paddingHorizontal: 15 },
   introTitle: { fontFamily: fonts.serifSemiBold, fontSize: 24, lineHeight: 30, color: colors.black },

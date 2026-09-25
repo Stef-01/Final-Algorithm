@@ -34,6 +34,7 @@ export type Events = {
   calendar_added: { profession: string; how: string };
   also_could_help: { profession: string };
   portal_submitted: { profession: string };
+  filters_applied: { count: number };
 };
 
 export type EventName = keyof Events;

@@ -23,7 +23,7 @@ export const PROFESSION_INFO: ProfessionInfo[] = [
   { id: 'physiotherapist', one: 'physiotherapist', many: 'physiotherapists', for: 'Pain, injury', icon: 'icProPhysio', available: true },
   { id: 'exercise_physiologist', one: 'exercise physiologist', many: 'exercise physiologists', for: 'Exercise as medicine', icon: 'icProExercise', available: true },
   { id: 'neurotherapist', one: 'neurotherapy practitioner', many: 'neurotherapy practitioners', for: 'Brain mapping', icon: 'icProNeuro', available: true },
-  { id: 'dietitian', one: 'dietitian', many: 'dietitians', for: 'Food, nutrition', icon: 'icProDiet', available: false },
+  { id: 'dietitian', one: 'dietitian or nutritionist', many: 'dietitians and nutritionists', for: 'Food, nutrition', icon: 'icProDiet', available: false },
 ];
 
 /**

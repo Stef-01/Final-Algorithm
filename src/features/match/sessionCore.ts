@@ -2,6 +2,8 @@ import { pool as clinicianPool, nextStep, normaliseAnswer, priorityLabel, runMat
 import type { Extraction } from '@server/claude/types';
 import { PROFESSIONS } from '@server/engine/types';
 
+import type { Filters } from './filters';
+
 import { copyFor } from '@/lib/professions';
 
 import { isUrgent } from './extract';
@@ -188,6 +190,18 @@ export function alsoCouldHelp(state: SessionState): { profession: Profession; co
 export function switchProfession(state: SessionState, profession: Profession): Transition {
   const input = { ...state.input, profession };
   return { state: { ...state, profession, input, result: runMatching(input), index: 0, updatedAt: Date.now() }, route: '/matches' };
+}
+
+/** Set filters on the current search and re-rank (from the Filters screen). */
+export function setFilters(state: SessionState, filters: Filters): Transition {
+  const input = { ...state.input, filters };
+  return { state: { ...state, input, result: runMatching(input), index: 0, updatedAt: Date.now() }, route: '/matches' };
+}
+
+/** How many would fit with these filters, before applying them ("Show 7"). */
+export function countWithFilters(state: SessionState, filters: Filters): number {
+  const r = runMatching({ ...state.input, filters });
+  return r.status === 'matches' ? r.matches.length + r.more.length : 0;
 }
 
 export function prevMatch(state: SessionState): SessionState {

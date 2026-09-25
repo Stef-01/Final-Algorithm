@@ -70,7 +70,7 @@ describe('app shell', () => {
     expect(await screen.findByText('Who could help?')).toBeOnTheScreen();
     for (const o of ['GP', 'Psychologist', 'ADHD coach', 'Physiotherapist', 'Not sure yet']) expect(screen.getByText(o)).toBeOnTheScreen();
     // Kinds with nobody in the network yet are shown but can't be searched.
-    expect(screen.getByLabelText('Dietitian. Food, nutrition. Not in the network yet').props.accessibilityState).toMatchObject({ disabled: true });
+    expect(screen.getByLabelText('Dietitian or nutritionist. Food, nutrition. Not in the network yet').props.accessibilityState).toMatchObject({ disabled: true });
     expect(screen.queryByText(/sign in|sign up|hinge|adhdme/i)).toBeNull();
   });
 
