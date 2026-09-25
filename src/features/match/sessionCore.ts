@@ -112,8 +112,8 @@ function apply(state: SessionState, step: AgentStep): Transition {
 }
 
 /** The funnel: which kind of professional (PRD screen 01 is next). */
-export function chooseProfession(_state: SessionState, profession: ProfessionChoice): Transition {
-  return { state: initialState(profession), route: '/describe' };
+export function chooseProfession(_state: SessionState, profession: ProfessionChoice, draft?: string): Transition {
+  return { state: { ...initialState(profession), draft }, route: '/describe' };
 }
 
 /** Load a demo patient: their profession and words, ready to submit on the describe screen. */

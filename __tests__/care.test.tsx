@@ -137,3 +137,32 @@ describe('My care: removing someone', () => {
     expect(JSON.parse((await AsyncStorage.getItem('watl_saved'))!)).toEqual([]);
   });
 });
+
+describe('starting a search from your team', () => {
+  it('prefills the words from the goals that profession helps with', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { goalsDraft } = require('@/features/care/plan') as typeof import('@/features/care/plan');
+    expect(goalsDraft('gp', ['medication', 'sleep', 'move'])).toBe("I'd like help to: review medication, sleep better.");
+    expect(goalsDraft('adhd_coach', ['medication'])).toBeUndefined();
+  });
+
+  it('"Add a GP" opens the search with those words ready', async () => {
+    await AsyncStorage.clear();
+    await AsyncStorage.setItem('watl_goals', JSON.stringify(['medication']));
+    /* eslint-disable @typescript-eslint/no-require-imports */
+    renderRouter(
+      {
+        _layout: require('@/app/_layout'),
+        '(tabs)/_layout': require('@/app/(tabs)/_layout').default,
+        '(tabs)/(find)/_layout': require('@/app/(tabs)/(find)/_layout').default,
+        '(tabs)/(find)/index': () => null,
+        '(tabs)/(find)/describe': require('@/app/(tabs)/(find)/describe').default,
+        '(tabs)/saved': require('@/app/(tabs)/saved').default,
+        '(tabs)/settings': () => null,
+      },
+      { initialUrl: '/saved' },
+    );
+    fireEvent.press(await screen.findByLabelText('Add a GP'));
+    expect((await screen.findByLabelText("What you're looking for")).props.value).toBe("I'd like help to: review medication.");
+  });
+});

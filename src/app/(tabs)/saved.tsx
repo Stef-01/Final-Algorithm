@@ -11,7 +11,7 @@ import { Appear, PressScale } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { getClinician } from '@/data/clinicians';
 import { useGoals } from '@/features/care/goals';
-import { bookingPlan, careTeam, type Slot, type Step, type TeamMember } from '@/features/care/plan';
+import { bookingPlan, careTeam, goalsDraft, type Slot, type Step, type TeamMember } from '@/features/care/plan';
 import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
 import type { ProfessionChoice } from '@/features/match/sessionCore';
@@ -64,7 +64,7 @@ export default function MyCare() {
             <Appear key={slot.member?.clinicianId ?? slot.profession} index={i} distance={10}>
               <TeamCard
                 slot={slot}
-                onFind={(p) => router.push(session.chooseProfession(p))}
+                onFind={(p) => router.push(session.chooseProfession(p, goalsDraft(p, goals)))}
                 onRemove={(id) => {
                   const item = saved.find((x) => x.clinicianId === id);
                   if (item) toggle(item);

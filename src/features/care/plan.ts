@@ -30,6 +30,12 @@ export const GOALS: Goal[] = [
   { id: 'child', label: 'Support my child', icon: 'icKids', professions: ['occupational_therapist', 'psychologist'], areas: ['Children', 'Parenting support'] },
 ];
 
+/** Words to start a search with, from the goals this profession helps with ("I'd like help to: …"). */
+export function goalsDraft(profession: string, goalIds: string[]): string | undefined {
+  const labels = GOALS.filter((g) => goalIds.includes(g.id) && g.professions.includes(profession as Profession)).map((g) => g.label.charAt(0).toLowerCase() + g.label.slice(1));
+  return labels.length ? `I'd like help to: ${labels.join(', ')}.` : undefined;
+}
+
 /** Care usually starts with a GP (assessment, referrals), then therapy, coaching and allied health. */
 export const ORDER: (Profession | 'dietitian')[] = [
   'gp',
