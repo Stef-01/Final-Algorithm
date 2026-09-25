@@ -6,8 +6,8 @@ import { colors } from '@/lib/theme';
 import { Icon } from './Icon';
 import { useReducedMotion } from './motion';
 
-// A match you can swipe: left to pass, right to save. It follows the finger with a slight tilt,
-// shows which way it's going (✕ or ♥), and flies off past a threshold or on a quick flick; otherwise
+// A match you can swipe: left for no, right for yes. It follows the finger with a slight tilt,
+// shows which way it's going (✕ or ✓, growing as you drag), and flies off past a threshold or on a quick flick; otherwise
 // it springs back. Only a clearly sideways drag takes over, so scrolling still works.
 
 export type SwipeableHandle = { fling: (dir: -1 | 1) => void };
@@ -62,6 +62,8 @@ export const Swipeable = forwardRef<SwipeableHandle, Props>(function Swipeable({
   const rotate = x.interpolate({ inputRange: [-width, 0, width], outputRange: ['-7deg', '0deg', '7deg'] });
   const pass = x.interpolate({ inputRange: [-120, -30, 0], outputRange: [1, 0, 0], extrapolate: 'clamp' });
   const save = x.interpolate({ inputRange: [0, 30, 120], outputRange: [0, 0, 1], extrapolate: 'clamp' });
+  const passScale = x.interpolate({ inputRange: [-160, -30, 0], outputRange: [1.15, 0.6, 0.6], extrapolate: 'clamp' });
+  const saveScale = x.interpolate({ inputRange: [0, 30, 160], outputRange: [0.6, 0.6, 1.15], extrapolate: 'clamp' });
 
   return (
     <Animated.View
@@ -75,14 +77,14 @@ export const Swipeable = forwardRef<SwipeableHandle, Props>(function Swipeable({
       style={[styles.fill, style, { transform: [{ translateX: x }, { rotate }] }]}
     >
       {children}
-      <Animated.View pointerEvents="none" style={[styles.stamp, styles.left, { opacity: pass }]}>
+      <Animated.View pointerEvents="none" style={[styles.stamp, styles.left, { opacity: pass, transform: [{ scale: passScale }, { rotate: '-12deg' }] }]}>
         <View style={[styles.circle, styles.passCircle]}>
           <Icon name="icClose" size={22} color={colors.white} />
         </View>
       </Animated.View>
-      <Animated.View pointerEvents="none" style={[styles.stamp, styles.right, { opacity: save }]}>
+      <Animated.View pointerEvents="none" style={[styles.stamp, styles.right, { opacity: save, transform: [{ scale: saveScale }, { rotate: '12deg' }] }]}>
         <View style={[styles.circle, styles.saveCircle]}>
-          <Icon name="icHeartFilled" size={26} color={colors.white} />
+          <Icon name="icCheck" size={26} color={colors.white} />
         </View>
       </Animated.View>
     </Animated.View>
