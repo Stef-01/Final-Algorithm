@@ -21,6 +21,7 @@ Checks (also run by GitHub Actions on every push and pull request):
 npm run typecheck
 npx expo lint
 npm test
+npm run test:py      # interview pipeline
 ```
 
 After adding or removing packages, run `npm run lockfile` before committing. An incremental `npm install` on macOS can drop Linux-only packages from `package-lock.json`, which makes `npm ci` fail in CI.
@@ -52,6 +53,8 @@ Three tabs: **Find**, **Saved** and **Settings**.
 | Saved | `/saved` | Clinicians you hearted, kept on this device |
 | Settings | `/settings` | Start over, demo patients, about, privacy, help and safety, review screen states |
 
+**Onboarding interviews:** `docs/clinician-interview.md` and `scripts/interview.py` turn a recorded interview into approved traits that replace the profile-sourced ones (see the three mock examples in `server/fixtures/interviews/`).
+
 **Profiles:** the GPs and psychologists come from the ADHDme network ([revamped-adhd.me](https://github.com/Stef-01/revamped-adhd.me)). Refresh them with `python3 scripts/import-adhdme.py --source ../revamped-adhd.me`. The importer only uses what each profile publishes and stops if a quoted excerpt isn't in the profile.
 
 There's no account and no sign-in.
@@ -81,7 +84,7 @@ server/engine/    Matching engine: eligibility, scoring, question selection, top
 server/questions.ts  Behavioural follow-up question bank
 server/data/      ADHDme GPs and psychologists (professionals.json) and the source snapshot
 server/fixtures/  Fictional clinicians and hand-written patient signals, for engine tests only
-scripts/          import-adhdme.py (profile importer)
+scripts/          import-adhdme.py (profile importer), interview.py (onboarding interviews)
 assets/           Images, clinician portraits (illustrations) and fonts
 docs/PLAN.md      Build plan
 ```

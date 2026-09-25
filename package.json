@@ -41,7 +41,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "expo lint",
     "test": "jest",
-    "lockfile": "rm -rf node_modules package-lock.json && npm install"
+    "lockfile": "rm -rf node_modules package-lock.json && npm install",
+    "test:py": "python3 -m unittest discover scripts/tests"
   },
   "private": true,
   "jest": {

@@ -1,0 +1,103 @@
+{
+  "clinicianId": "amy-chen",
+  "interviewDate": "2026-09-10",
+  "practical": {
+    "fee": 120,
+    "gapAfterMedicare": 42,
+    "daysUntilAvailable": 1,
+    "weekends": false,
+    "newPatients": true,
+    "initialConsultMins": 30
+  },
+  "phenotype": {
+    "explanation_depth": {
+      "value": "detailed",
+      "confidence": "medium",
+      "evidenceIds": [
+        "amy-chen-interview-explanation"
+      ]
+    },
+    "shared_decision_making": {
+      "value": "shared",
+      "confidence": "high",
+      "evidenceIds": [
+        "amy-chen-interview-sdm"
+      ]
+    },
+    "mental_health_integration": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "amy-chen-interview-mental_health"
+      ]
+    },
+    "consultation_pace": {
+      "value": "unhurried",
+      "confidence": "high",
+      "evidenceIds": [
+        "amy-chen-interview-pace"
+      ]
+    }
+  },
+  "expertise": [
+    {
+      "area": "Adult ADHD",
+      "level": "particular",
+      "evidenceIds": [
+        "amy-chen-interview-expertise"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "amy-chen-interview-expertise",
+      "trait": "expertise",
+      "excerpt": "Young adults with ADHD, mostly",
+      "patientFacing": "Amy mostly sees young adults with ADHD.",
+      "scenario": "Which presentations do you most enjoy working with, and which do you refer on?",
+      "timestamp": "2026-09-10T00:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-interview-explanation",
+      "trait": "explanation_depth",
+      "excerpt": "I want them to leave able to explain the plan to their partner",
+      "patientFacing": "Amy explains the plan until you could explain it to someone at home.",
+      "scenario": "A patient asks why you're recommending a plan. How much do you explain, and how?",
+      "timestamp": "2026-09-10T00:00:00+10:00",
+      "confidence": "medium",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-interview-sdm",
+      "trait": "shared_decision_making",
+      "excerpt": "lay out the two or three reasonable options, say which I'd lean towards and why, then ask what matters most to them",
+      "patientFacing": "Amy sets out the options, says which she'd lean towards and why, then asks what matters most to you.",
+      "scenario": "A patient strongly prefers a treatment you don't initially recommend. Walk me through the consultation.",
+      "timestamp": "2026-09-10T00:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-interview-mental_health",
+      "trait": "mental_health_integration",
+      "excerpt": "Sleep and stress change how the medication works, so we look at all three together",
+      "patientFacing": "Amy looks at sleep, stress and ADHD medication together rather than separately.",
+      "scenario": "A patient comes in about ADHD medication but mentions poor sleep and stress.",
+      "timestamp": "2026-09-10T00:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "amy-chen-interview-pace",
+      "trait": "consultation_pace",
+      "excerpt": "I keep the last five minutes for agreeing what happens next",
+      "patientFacing": "Amy keeps the last five minutes of each visit to agree on next steps with you.",
+      "scenario": "Walk me through a first appointment with a new patient, minute by minute.",
+      "timestamp": "2026-09-10T00:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    }
+  ]
+}

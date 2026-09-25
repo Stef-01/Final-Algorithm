@@ -1,0 +1,68 @@
+{
+  "clinicianId": "tom-walsh",
+  "interviewDate": "2026-09-11",
+  "practical": {
+    "fee": 0,
+    "gapAfterMedicare": 0,
+    "daysUntilAvailable": 4,
+    "weekends": true,
+    "newPatients": true,
+    "initialConsultMins": 30
+  },
+  "phenotype": {
+    "communication_directness": {
+      "value": "direct",
+      "confidence": "high",
+      "evidenceIds": [
+        "tom-walsh-interview-directness"
+      ]
+    },
+    "shared_decision_making": {
+      "value": "shared",
+      "confidence": "high",
+      "evidenceIds": [
+        "tom-walsh-interview-sdm"
+      ]
+    },
+    "continuity": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "tom-walsh-interview-continuity"
+      ]
+    }
+  },
+  "expertise": [],
+  "evidence": [
+    {
+      "id": "tom-walsh-interview-directness",
+      "trait": "communication_directness",
+      "excerpt": "I say it plainly, then I stop talking and let them react",
+      "patientFacing": "Tom tells you plainly, then gives you room to react.",
+      "scenario": "You need to tell a patient a result isn't what they hoped. How do you say it?",
+      "timestamp": "2026-09-11T00:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "tom-walsh-interview-sdm",
+      "trait": "shared_decision_making",
+      "excerpt": "We go through the pros and cons on paper and decide together",
+      "patientFacing": "Tom goes through the pros and cons with you on paper and you decide together.",
+      "scenario": "A patient strongly prefers a treatment you don't initially recommend. Walk me through the consultation.",
+      "timestamp": "2026-09-11T00:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "tom-walsh-interview-continuity",
+      "trait": "continuity",
+      "excerpt": "I keep my own patients",
+      "patientFacing": "Tom keeps his own patients rather than handing them around.",
+      "scenario": "How do you handle patients seeing other clinicians in your practice?",
+      "timestamp": "2026-09-11T00:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "pace": "approve",
+  "sdm": "approve",
+  "mental_health": "approve",
+  "explanation": {
+    "patientFacing": "Amy explains the plan until you could explain it to someone at home."
+  },
+  "expertise": "approve"
+}

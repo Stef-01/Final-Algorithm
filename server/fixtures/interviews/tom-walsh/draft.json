@@ -1,0 +1,62 @@
+{
+  "clinicianId": "tom-walsh",
+  "interviewDate": "2026-09-11",
+  "practical": {
+    "fee": 0,
+    "gapAfterMedicare": 0,
+    "daysUntilAvailable": 4,
+    "weekends": true,
+    "newPatients": true,
+    "initialConsultMins": 30
+  },
+  "traits": [
+    {
+      "scenario": "directness",
+      "dimension": "communication_directness",
+      "value": "direct",
+      "area": null,
+      "level": null,
+      "confidence": "high",
+      "excerpt": "I say it plainly, then I stop talking and let them react",
+      "patientFacing": "Tom tells you plainly, then gives you room to react.",
+      "prompt": "You need to tell a patient a result isn't what they hoped. How do you say it?",
+      "reviewerStatus": "draft"
+    },
+    {
+      "scenario": "sdm",
+      "dimension": "shared_decision_making",
+      "value": "shared",
+      "area": null,
+      "level": null,
+      "confidence": "high",
+      "excerpt": "We go through the pros and cons on paper and decide together",
+      "patientFacing": "Tom goes through the pros and cons with you on paper and you decide together.",
+      "prompt": "A patient strongly prefers a treatment you don't initially recommend. Walk me through the consultation.",
+      "reviewerStatus": "draft"
+    },
+    {
+      "scenario": "medication",
+      "dimension": "medication_philosophy",
+      "value": "proactive",
+      "area": null,
+      "level": null,
+      "confidence": "medium",
+      "excerpt": "I start medication early if it's clearly ADHD",
+      "patientFacing": "Tom is comfortable starting medication early when ADHD is clear.",
+      "prompt": "A patient asks whether they should start medication. How do you approach it?",
+      "reviewerStatus": "draft"
+    },
+    {
+      "scenario": "continuity",
+      "dimension": "continuity",
+      "value": "high",
+      "area": null,
+      "level": null,
+      "confidence": "high",
+      "excerpt": "I keep my own patients",
+      "patientFacing": "Tom keeps his own patients rather than handing them around.",
+      "prompt": "How do you handle patients seeing other clinicians in your practice?",
+      "reviewerStatus": "draft"
+    }
+  ]
+}

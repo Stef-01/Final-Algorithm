@@ -1,0 +1,346 @@
+{
+  "clinicianId": "tom-walsh",
+  "interviewDate": "2026-09-11",
+  "interviewer": "WATL team (mock interview, fictional clinician)",
+  "consent": true,
+  "practical": {
+    "fee": 0,
+    "gapAfterMedicare": 0,
+    "daysUntilAvailable": 4,
+    "weekends": true,
+    "newPatients": true,
+    "initialConsultMins": 30
+  },
+  "answers": [
+    {
+      "scenario": "expertise",
+      "domain": "Clinical expertise",
+      "dimension": "expertise",
+      "prompt": "Which presentations do you most enjoy working with, and which do you refer on?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "complexity",
+      "domain": "Preferred complexity",
+      "dimension": "uncertainty_tolerance",
+      "prompt": "A patient arrives with four overlapping problems and 15 minutes booked. What do you do?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "diagnostic",
+      "domain": "Diagnostic curiosity",
+      "dimension": "diagnostic_style",
+      "prompt": "Symptoms don't fit a clear diagnosis after the first visit. What happens next?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "investigation",
+      "domain": "Investigation threshold",
+      "dimension": "diagnostic_style",
+      "prompt": "A patient asks for a test you don't think is needed. Walk me through the conversation.",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "directness",
+      "domain": "Communication directness",
+      "dimension": "communication_directness",
+      "prompt": "You need to tell a patient a result isn't what they hoped. How do you say it?",
+      "answer": "I say it plainly, then I stop talking and let them react. Then I say what would change my mind.",
+      "excerpt": "I say it plainly, then I stop talking and let them react",
+      "proposed": {
+        "value": "direct",
+        "area": null,
+        "level": null,
+        "confidence": "high",
+        "patientFacing": "Tom tells you plainly, then gives you room to react."
+      }
+    },
+    {
+      "scenario": "explanation",
+      "domain": "Explanation depth",
+      "dimension": "explanation_depth",
+      "prompt": "A patient asks why you're recommending a plan. How much do you explain, and how?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "sdm",
+      "domain": "Shared decision-making",
+      "dimension": "shared_decision_making",
+      "prompt": "A patient strongly prefers a treatment you don't initially recommend. Walk me through the consultation.",
+      "answer": "We go through the pros and cons on paper and decide together.",
+      "excerpt": "We go through the pros and cons on paper and decide together",
+      "proposed": {
+        "value": "shared",
+        "area": null,
+        "level": null,
+        "confidence": "high",
+        "patientFacing": "Tom goes through the pros and cons with you on paper and you decide together."
+      }
+    },
+    {
+      "scenario": "autonomy",
+      "domain": "Patient autonomy",
+      "dimension": "patient_autonomy",
+      "prompt": "A patient wants to make a decision you have reservations about. What do you do?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "medication",
+      "domain": "Medication philosophy",
+      "dimension": "medication_philosophy",
+      "prompt": "A patient asks whether they should start medication. How do you approach it?",
+      "answer": "Honestly, I start medication early if it's clearly ADHD. People have waited long enough.",
+      "excerpt": "I start medication early if it's clearly ADHD",
+      "proposed": {
+        "value": "proactive",
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": "Tom is comfortable starting medication early when ADHD is clear."
+      }
+    },
+    {
+      "scenario": "lifestyle",
+      "domain": "Lifestyle integration",
+      "dimension": "lifestyle_integration",
+      "prompt": "A patient's main issue seems linked to sleep, exercise and routine. What's in the plan?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "mental_health",
+      "domain": "Mental health integration",
+      "dimension": "mental_health_integration",
+      "prompt": "A patient comes in about ADHD medication but mentions poor sleep and stress.",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "pace",
+      "domain": "Consultation pace",
+      "dimension": "consultation_pace",
+      "prompt": "Walk me through a first appointment with a new patient, minute by minute.",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "continuity",
+      "domain": "Continuity",
+      "dimension": "continuity",
+      "prompt": "How do you handle patients seeing other clinicians in your practice?",
+      "answer": "I keep my own patients. If I'm away they see my colleague, but they come back to me.",
+      "excerpt": "I keep my own patients",
+      "proposed": {
+        "value": "high",
+        "area": null,
+        "level": null,
+        "confidence": "high",
+        "patientFacing": "Tom keeps his own patients rather than handing them around."
+      }
+    },
+    {
+      "scenario": "follow_up",
+      "domain": "Follow-up intensity",
+      "dimension": "follow_up_intensity",
+      "prompt": "What happens between appointments for your ongoing patients?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "coordination",
+      "domain": "Care coordination",
+      "dimension": "care_coordination",
+      "prompt": "A patient is also seeing a psychologist and a specialist. How do you work with them?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "uncertainty",
+      "domain": "Comfort with uncertainty",
+      "dimension": "uncertainty_tolerance",
+      "prompt": "Tell me about a case you still don't fully understand. How did you manage it?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "scope",
+      "domain": "Boundaries and scope",
+      "dimension": null,
+      "prompt": "What would you tell a patient you can't help them with, and where would you send them?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "structure",
+      "domain": "Consultation structure",
+      "dimension": "consultation_pace",
+      "prompt": "How do you end an appointment? What does the patient leave with?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "patient_behaviours",
+      "domain": "Preferred patient behaviours",
+      "dimension": null,
+      "prompt": "What helps a patient get the most out of working with you?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "logistics",
+      "domain": "Practice logistics",
+      "dimension": "practical",
+      "prompt": "Fees and rebates, typical wait for a new patient, weekend or after-hours times, telehealth, new patients.",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "therapy_style",
+      "domain": "Therapy style (psychologists)",
+      "dimension": "therapy_style",
+      "prompt": "A client asks for \"tools to fix this\". How do you respond, and what does a typical session look like?",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    },
+    {
+      "scenario": "affirming",
+      "domain": "Neurodiversity-affirming care (psychologists)",
+      "dimension": "neurodiversity_affirming",
+      "prompt": "A client says they want to stop being \"so ADHD\". Walk me through how you'd work with that.",
+      "answer": "",
+      "excerpt": "",
+      "proposed": {
+        "value": null,
+        "area": null,
+        "level": null,
+        "confidence": "medium",
+        "patientFacing": ""
+      }
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "clinicianId": "hannah-lee",
+  "interviewDate": "2026-09-12",
+  "practical": {
+    "fee": 140,
+    "gapAfterMedicare": 55,
+    "daysUntilAvailable": 7,
+    "weekends": false,
+    "newPatients": true,
+    "initialConsultMins": 40
+  },
+  "traits": [
+    {
+      "scenario": "expertise",
+      "dimension": "expertise",
+      "value": null,
+      "area": "Chronic pain",
+      "level": "particular",
+      "confidence": "high",
+      "excerpt": "Endometriosis and chronic pelvic pain are most of what I see",
+      "patientFacing": "Hannah mostly sees endometriosis and chronic pelvic pain.",
+      "prompt": "Which presentations do you most enjoy working with, and which do you refer on?",
+      "reviewerStatus": "draft"
+    },
+    {
+      "scenario": "diagnostic",
+      "dimension": "diagnostic_style",
+      "value": "investigative",
+      "area": null,
+      "level": null,
+      "confidence": "high",
+      "excerpt": "I'd rather order one more test than tell someone it's all in their head",
+      "patientFacing": "Hannah would rather run one more test than dismiss symptoms that don't add up.",
+      "prompt": "Symptoms don't fit a clear diagnosis after the first visit. What happens next?",
+      "reviewerStatus": "draft"
+    },
+    {
+      "scenario": "follow_up",
+      "dimension": "follow_up_intensity",
+      "value": "proactive",
+      "area": null,
+      "level": null,
+      "confidence": "high",
+      "excerpt": "I ring people with their results myself, even the normal ones",
+      "patientFacing": "Hannah rings you with your results herself, even when they are normal.",
+      "prompt": "What happens between appointments for your ongoing patients?",
+      "reviewerStatus": "draft"
+    },
+    {
+      "scenario": "uncertainty",
+      "dimension": "uncertainty_tolerance",
+      "value": "high",
+      "area": null,
+      "level": null,
+      "confidence": "high",
+      "excerpt": "I have patients I've seen for a year before we worked it out",
+      "patientFacing": "Hannah is prepared to work on a problem over many visits until it makes sense.",
+      "prompt": "Tell me about a case you still don't fully understand. How did you manage it?",
+      "reviewerStatus": "draft"
+    }
+  ]
+}

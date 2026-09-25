@@ -1,0 +1,86 @@
+{
+  "clinicianId": "hannah-lee",
+  "interviewDate": "2026-09-12",
+  "practical": {
+    "fee": 140,
+    "gapAfterMedicare": 55,
+    "daysUntilAvailable": 7,
+    "weekends": false,
+    "newPatients": true,
+    "initialConsultMins": 40
+  },
+  "phenotype": {
+    "diagnostic_style": {
+      "value": "investigative",
+      "confidence": "high",
+      "evidenceIds": [
+        "hannah-lee-interview-diagnostic"
+      ]
+    },
+    "follow_up_intensity": {
+      "value": "proactive",
+      "confidence": "high",
+      "evidenceIds": [
+        "hannah-lee-interview-follow_up"
+      ]
+    },
+    "uncertainty_tolerance": {
+      "value": "high",
+      "confidence": "high",
+      "evidenceIds": [
+        "hannah-lee-interview-uncertainty"
+      ]
+    }
+  },
+  "expertise": [
+    {
+      "area": "Chronic pain",
+      "level": "particular",
+      "evidenceIds": [
+        "hannah-lee-interview-expertise"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "hannah-lee-interview-expertise",
+      "trait": "expertise",
+      "excerpt": "Endometriosis and chronic pelvic pain are most of what I see",
+      "patientFacing": "Hannah mostly sees endometriosis and chronic pelvic pain.",
+      "scenario": "Which presentations do you most enjoy working with, and which do you refer on?",
+      "timestamp": "2026-09-12T00:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "hannah-lee-interview-diagnostic",
+      "trait": "diagnostic_style",
+      "excerpt": "I'd rather order one more test than tell someone it's all in their head",
+      "patientFacing": "Hannah would rather run one more test than dismiss symptoms that don't add up.",
+      "scenario": "Symptoms don't fit a clear diagnosis after the first visit. What happens next?",
+      "timestamp": "2026-09-12T00:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "hannah-lee-interview-follow_up",
+      "trait": "follow_up_intensity",
+      "excerpt": "I ring people with their results myself, even the normal ones",
+      "patientFacing": "Hannah rings you with your results herself, even when they are normal.",
+      "scenario": "What happens between appointments for your ongoing patients?",
+      "timestamp": "2026-09-12T00:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    },
+    {
+      "id": "hannah-lee-interview-uncertainty",
+      "trait": "uncertainty_tolerance",
+      "excerpt": "I have patients I've seen for a year before we worked it out",
+      "patientFacing": "Hannah is prepared to work on a problem over many visits until it makes sense.",
+      "scenario": "Tell me about a case you still don't fully understand. How did you manage it?",
+      "timestamp": "2026-09-12T00:00:00+10:00",
+      "confidence": "high",
+      "reviewerStatus": "approved"
+    }
+  ]
+}

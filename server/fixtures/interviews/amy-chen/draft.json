@@ -1,0 +1,74 @@
+{
+  "clinicianId": "amy-chen",
+  "interviewDate": "2026-09-10",
+  "practical": {
+    "fee": 120,
+    "gapAfterMedicare": 42,
+    "daysUntilAvailable": 1,
+    "weekends": false,
+    "newPatients": true,
+    "initialConsultMins": 30
+  },
+  "traits": [
+    {
+      "scenario": "expertise",
+      "dimension": "expertise",
+      "value": null,
+      "area": "Adult ADHD",
+      "level": "particular",
+      "confidence": "high",
+      "excerpt": "Young adults with ADHD, mostly",
+      "patientFacing": "Amy mostly sees young adults with ADHD.",
+      "prompt": "Which presentations do you most enjoy working with, and which do you refer on?",
+      "reviewerStatus": "draft"
+    },
+    {
+      "scenario": "explanation",
+      "dimension": "explanation_depth",
+      "value": "detailed",
+      "area": null,
+      "level": null,
+      "confidence": "medium",
+      "excerpt": "I want them to leave able to explain the plan to their partner",
+      "patientFacing": "Amy explains the plan until you could explain it to someone else.",
+      "prompt": "A patient asks why you're recommending a plan. How much do you explain, and how?",
+      "reviewerStatus": "draft"
+    },
+    {
+      "scenario": "sdm",
+      "dimension": "shared_decision_making",
+      "value": "shared",
+      "area": null,
+      "level": null,
+      "confidence": "high",
+      "excerpt": "lay out the two or three reasonable options, say which I'd lean towards and why, then ask what matters most to them",
+      "patientFacing": "Amy sets out the options, says which she'd lean towards and why, then asks what matters most to you.",
+      "prompt": "A patient strongly prefers a treatment you don't initially recommend. Walk me through the consultation.",
+      "reviewerStatus": "draft"
+    },
+    {
+      "scenario": "mental_health",
+      "dimension": "mental_health_integration",
+      "value": "high",
+      "area": null,
+      "level": null,
+      "confidence": "high",
+      "excerpt": "Sleep and stress change how the medication works, so we look at all three together",
+      "patientFacing": "Amy looks at sleep, stress and ADHD medication together rather than separately.",
+      "prompt": "A patient comes in about ADHD medication but mentions poor sleep and stress.",
+      "reviewerStatus": "draft"
+    },
+    {
+      "scenario": "pace",
+      "dimension": "consultation_pace",
+      "value": "unhurried",
+      "area": null,
+      "level": null,
+      "confidence": "high",
+      "excerpt": "I keep the last five minutes for agreeing what happens next",
+      "patientFacing": "Amy keeps the last five minutes of each visit to agree on next steps with you.",
+      "prompt": "Walk me through a first appointment with a new patient, minute by minute.",
+      "reviewerStatus": "draft"
+    }
+  ]
+}

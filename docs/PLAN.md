@@ -325,7 +325,7 @@ Each phase ends deployed on Vercel with CI green.
 | **2. Matching engine** ✅ done | `server/engine/*` + question bank + seed clinician JSON (10–15 fictional). Pure functions with unit tests. | Given hand-written `PatientSignals`, the engine returns the expected top 3, the question to ask, and when to stop; the explanation lints pass; the diversity, partial and empty rules pass. |
 | **3. Engine in the app, demo run-throughs, GPs + psychologists** ✅ done | The Phase 2 engine runs on the device against the real ADHDme GP and psychologist profiles (imported by `scripts/import-adhdme.py`). A funnel first screen (GP / psychologist / not sure), scripted demo patients for both professions, and a keyword extractor standing in for Claude. | Every demo runs end to end; typed searches use the real engine; only the chosen profession is matched; unpublished fees and availability stay unknown; CI green. |
 | **4. Voice** ✅ done | `useSpeechToText` (web), listening state, editable transcript, fallback to text, transcription notice. | Works on iOS Safari and Android Chrome; hidden gracefully elsewhere; text flow unaffected. |
-| **5. Clinician pipeline** | Interview guide, `ingest-interview` and `review-clinician` scripts; at least 3 records produced through the pipeline (mock interviews are fine). | A transcript becomes an approved clinician record whose explanations cite real evidence. |
+| **5. Clinician pipeline** ✅ done | Interview guide, `ingest-interview` and `review-clinician` scripts; at least 3 records produced through the pipeline (mock interviews are fine). | A transcript becomes an approved clinician record whose explanations cite real evidence. |
 | **6. Instrumentation + validation** | `track()` events, feedback sheet, feedback storage (Vercel KV or similar), user-testing script. | All 12 events visible in the dashboard (or PostHog); feedback stored; the testing script is ready. |
 | **7. Hardening** | Accessibility pass, performance budget, privacy review, safety copy reviewed by a clinical advisor. | WCAG AA checks pass; load under 2 s; the checklist in §9 is signed off. Ready for moderated user testing. |
 | **8. Claude agent + API (final stage)** | Vercel Functions `/api/turn`, `/api/matches`, `/api/feedback`; Claude extraction with a JSON schema; safety classifier; SPA rewrite excluding `/api`. Client switches from fixtures to the API. | Real free text produces sensible follow-ups and matches; p75 latency under 3 s; the extraction eval set (§13) meets its threshold; no medical advice in 50 red-team prompts. |
@@ -343,6 +343,19 @@ Each phase ends deployed on Vercel with CI green.
 - **Constraint answer priors:** bulk-billed-only 20%, in-person-only 20%, weekend-only 10%. This keeps rare hard limits from crowding out preference questions (PRD §20), while still asking when a constraint would change the top 3.
 - **"Credible match"** means eligible, above the fit threshold *and* explainable with at least one evidence-backed reason. With too little information, neutral scores can clear the threshold, but nothing gets shown without a reason.
 - **Not wired to the app yet.** The app still uses the Phase 1 fixture agent. Phase 3 serves this engine through `/api/turn` and `/api/matches` and switches the client over, including portraits for the eight new seed clinicians.
+
+### Phase 5 notes (clinician onboarding pipeline)
+
+- **Guide:** `docs/clinician-interview.md` has 22 behavioural scenarios: the 20 PRD §24 domains plus therapy style and neurodiversity-affirming care for psychologists. There are no self-ratings.
+- **Script:** `scripts/interview.py` has four subcommands:
+  - `new` writes a template.
+  - `ingest` validates it. Consent must be recorded, excerpts must be word for word from the answer, values must be on the dimension's scale (read from `server/engine/types.ts`), and patient-facing lines must follow the copy rules.
+  - `review` approves, edits or rejects each trait, interactively or from a decisions file. Undecided traits are not approved.
+  - `collect` writes `server/data/interviews.json`.
+- **Overlay:** `server/data/overlay.ts` applies approved interviews on top of the profile records. Interview traits (`approved`) replace profile-sourced ones for the same dimension or area. Confirmed practical facts (fees, availability, weekends, new patients) replace "not published".
+- **Mock interviews:** three were run through the pipeline for fictional test clinicians. None exist yet for the real network; interviews with the ADHDme clinicians are the next real-world step.
+- **Deferred:** Claude drafting proposals from a transcript moves to Phase 8. Until then an interviewer proposes values by hand.
+- **Tests:** Python unit tests run in CI (`npm run test:py`).
 
 ### Phase 4 notes (voice)
 

@@ -1,0 +1,259 @@
+{
+  "amy-chen": {
+    "clinicianId": "amy-chen",
+    "interviewDate": "2026-09-10",
+    "practical": {
+      "fee": 120,
+      "gapAfterMedicare": 42,
+      "daysUntilAvailable": 1,
+      "weekends": false,
+      "newPatients": true,
+      "initialConsultMins": 30
+    },
+    "phenotype": {
+      "explanation_depth": {
+        "value": "detailed",
+        "confidence": "medium",
+        "evidenceIds": [
+          "amy-chen-interview-explanation"
+        ]
+      },
+      "shared_decision_making": {
+        "value": "shared",
+        "confidence": "high",
+        "evidenceIds": [
+          "amy-chen-interview-sdm"
+        ]
+      },
+      "mental_health_integration": {
+        "value": "high",
+        "confidence": "high",
+        "evidenceIds": [
+          "amy-chen-interview-mental_health"
+        ]
+      },
+      "consultation_pace": {
+        "value": "unhurried",
+        "confidence": "high",
+        "evidenceIds": [
+          "amy-chen-interview-pace"
+        ]
+      }
+    },
+    "expertise": [
+      {
+        "area": "Adult ADHD",
+        "level": "particular",
+        "evidenceIds": [
+          "amy-chen-interview-expertise"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "id": "amy-chen-interview-expertise",
+        "trait": "expertise",
+        "excerpt": "Young adults with ADHD, mostly",
+        "patientFacing": "Amy mostly sees young adults with ADHD.",
+        "scenario": "Which presentations do you most enjoy working with, and which do you refer on?",
+        "timestamp": "2026-09-10T00:00:00+10:00",
+        "confidence": "high",
+        "reviewerStatus": "approved"
+      },
+      {
+        "id": "amy-chen-interview-explanation",
+        "trait": "explanation_depth",
+        "excerpt": "I want them to leave able to explain the plan to their partner",
+        "patientFacing": "Amy explains the plan until you could explain it to someone at home.",
+        "scenario": "A patient asks why you're recommending a plan. How much do you explain, and how?",
+        "timestamp": "2026-09-10T00:00:00+10:00",
+        "confidence": "medium",
+        "reviewerStatus": "approved"
+      },
+      {
+        "id": "amy-chen-interview-sdm",
+        "trait": "shared_decision_making",
+        "excerpt": "lay out the two or three reasonable options, say which I'd lean towards and why, then ask what matters most to them",
+        "patientFacing": "Amy sets out the options, says which she'd lean towards and why, then asks what matters most to you.",
+        "scenario": "A patient strongly prefers a treatment you don't initially recommend. Walk me through the consultation.",
+        "timestamp": "2026-09-10T00:00:00+10:00",
+        "confidence": "high",
+        "reviewerStatus": "approved"
+      },
+      {
+        "id": "amy-chen-interview-mental_health",
+        "trait": "mental_health_integration",
+        "excerpt": "Sleep and stress change how the medication works, so we look at all three together",
+        "patientFacing": "Amy looks at sleep, stress and ADHD medication together rather than separately.",
+        "scenario": "A patient comes in about ADHD medication but mentions poor sleep and stress.",
+        "timestamp": "2026-09-10T00:00:00+10:00",
+        "confidence": "high",
+        "reviewerStatus": "approved"
+      },
+      {
+        "id": "amy-chen-interview-pace",
+        "trait": "consultation_pace",
+        "excerpt": "I keep the last five minutes for agreeing what happens next",
+        "patientFacing": "Amy keeps the last five minutes of each visit to agree on next steps with you.",
+        "scenario": "Walk me through a first appointment with a new patient, minute by minute.",
+        "timestamp": "2026-09-10T00:00:00+10:00",
+        "confidence": "high",
+        "reviewerStatus": "approved"
+      }
+    ]
+  },
+  "hannah-lee": {
+    "clinicianId": "hannah-lee",
+    "interviewDate": "2026-09-12",
+    "practical": {
+      "fee": 140,
+      "gapAfterMedicare": 55,
+      "daysUntilAvailable": 7,
+      "weekends": false,
+      "newPatients": true,
+      "initialConsultMins": 40
+    },
+    "phenotype": {
+      "diagnostic_style": {
+        "value": "investigative",
+        "confidence": "high",
+        "evidenceIds": [
+          "hannah-lee-interview-diagnostic"
+        ]
+      },
+      "follow_up_intensity": {
+        "value": "proactive",
+        "confidence": "high",
+        "evidenceIds": [
+          "hannah-lee-interview-follow_up"
+        ]
+      },
+      "uncertainty_tolerance": {
+        "value": "high",
+        "confidence": "high",
+        "evidenceIds": [
+          "hannah-lee-interview-uncertainty"
+        ]
+      }
+    },
+    "expertise": [
+      {
+        "area": "Chronic pain",
+        "level": "particular",
+        "evidenceIds": [
+          "hannah-lee-interview-expertise"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "id": "hannah-lee-interview-expertise",
+        "trait": "expertise",
+        "excerpt": "Endometriosis and chronic pelvic pain are most of what I see",
+        "patientFacing": "Hannah mostly sees endometriosis and chronic pelvic pain.",
+        "scenario": "Which presentations do you most enjoy working with, and which do you refer on?",
+        "timestamp": "2026-09-12T00:00:00+10:00",
+        "confidence": "high",
+        "reviewerStatus": "approved"
+      },
+      {
+        "id": "hannah-lee-interview-diagnostic",
+        "trait": "diagnostic_style",
+        "excerpt": "I'd rather order one more test than tell someone it's all in their head",
+        "patientFacing": "Hannah would rather run one more test than dismiss symptoms that don't add up.",
+        "scenario": "Symptoms don't fit a clear diagnosis after the first visit. What happens next?",
+        "timestamp": "2026-09-12T00:00:00+10:00",
+        "confidence": "high",
+        "reviewerStatus": "approved"
+      },
+      {
+        "id": "hannah-lee-interview-follow_up",
+        "trait": "follow_up_intensity",
+        "excerpt": "I ring people with their results myself, even the normal ones",
+        "patientFacing": "Hannah rings you with your results herself, even when they are normal.",
+        "scenario": "What happens between appointments for your ongoing patients?",
+        "timestamp": "2026-09-12T00:00:00+10:00",
+        "confidence": "high",
+        "reviewerStatus": "approved"
+      },
+      {
+        "id": "hannah-lee-interview-uncertainty",
+        "trait": "uncertainty_tolerance",
+        "excerpt": "I have patients I've seen for a year before we worked it out",
+        "patientFacing": "Hannah is prepared to work on a problem over many visits until it makes sense.",
+        "scenario": "Tell me about a case you still don't fully understand. How did you manage it?",
+        "timestamp": "2026-09-12T00:00:00+10:00",
+        "confidence": "high",
+        "reviewerStatus": "approved"
+      }
+    ]
+  },
+  "tom-walsh": {
+    "clinicianId": "tom-walsh",
+    "interviewDate": "2026-09-11",
+    "practical": {
+      "fee": 0,
+      "gapAfterMedicare": 0,
+      "daysUntilAvailable": 4,
+      "weekends": true,
+      "newPatients": true,
+      "initialConsultMins": 30
+    },
+    "phenotype": {
+      "communication_directness": {
+        "value": "direct",
+        "confidence": "high",
+        "evidenceIds": [
+          "tom-walsh-interview-directness"
+        ]
+      },
+      "shared_decision_making": {
+        "value": "shared",
+        "confidence": "high",
+        "evidenceIds": [
+          "tom-walsh-interview-sdm"
+        ]
+      },
+      "continuity": {
+        "value": "high",
+        "confidence": "high",
+        "evidenceIds": [
+          "tom-walsh-interview-continuity"
+        ]
+      }
+    },
+    "expertise": [],
+    "evidence": [
+      {
+        "id": "tom-walsh-interview-directness",
+        "trait": "communication_directness",
+        "excerpt": "I say it plainly, then I stop talking and let them react",
+        "patientFacing": "Tom tells you plainly, then gives you room to react.",
+        "scenario": "You need to tell a patient a result isn't what they hoped. How do you say it?",
+        "timestamp": "2026-09-11T00:00:00+10:00",
+        "confidence": "high",
+        "reviewerStatus": "approved"
+      },
+      {
+        "id": "tom-walsh-interview-sdm",
+        "trait": "shared_decision_making",
+        "excerpt": "We go through the pros and cons on paper and decide together",
+        "patientFacing": "Tom goes through the pros and cons with you on paper and you decide together.",
+        "scenario": "A patient strongly prefers a treatment you don't initially recommend. Walk me through the consultation.",
+        "timestamp": "2026-09-11T00:00:00+10:00",
+        "confidence": "high",
+        "reviewerStatus": "approved"
+      },
+      {
+        "id": "tom-walsh-interview-continuity",
+        "trait": "continuity",
+        "excerpt": "I keep my own patients",
+        "patientFacing": "Tom keeps his own patients rather than handing them around.",
+        "scenario": "How do you handle patients seeing other clinicians in your practice?",
+        "timestamp": "2026-09-11T00:00:00+10:00",
+        "confidence": "high",
+        "reviewerStatus": "approved"
+      }
+    ]
+  }
+}
