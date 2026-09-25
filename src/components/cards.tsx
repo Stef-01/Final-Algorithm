@@ -10,7 +10,7 @@ import { LikeButton } from './LikeButton';
 import { IconName } from './icons';
 
 // The profile card language from the Discover screen: white cards on the grey
-// background, each with an optional like button in the bottom-right corner.
+// background, each with an optional like button in the bottom-right corner (top-right on photos).
 
 type LikeProps = { onLike?: () => void; likeLabel?: string; liked?: boolean };
 
@@ -24,15 +24,23 @@ export function PhotoCard({
   // Inside a labelled button the photo is decorative; on its own it needs its own description.
   const alt = onPress ? '' : (accessibilityLabel ?? caption);
   const image = <Image source={source} style={styles.photo} contentFit="cover" accessibilityLabel={alt} accessibilityIgnoresInvertColors />;
+  // The photo's heart sits top-right, clear of the ✓ and ✕ buttons along the bottom of the matches.
   return (
-    <Card title={caption} {...like}>
-      {onPress ? (
-        <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={accessibilityLabel}>
-          {image}
-        </Pressable>
-      ) : (
-        image
-      )}
+    <Card title={caption}>
+      <View>
+        {onPress ? (
+          <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={accessibilityLabel}>
+            {image}
+          </Pressable>
+        ) : (
+          image
+        )}
+        {like.onLike ? (
+          <View style={styles.likeTop}>
+            <LikeButton liked={!!like.liked} onPress={like.onLike} label={like.likeLabel ?? 'Like'} />
+          </View>
+        ) : null}
+      </View>
     </Card>
   );
 }
@@ -209,6 +217,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   like: { position: 'absolute', right: 15, bottom: 15 },
+  likeTop: { position: 'absolute', right: 15, top: 15 },
   chips: { paddingHorizontal: 15, paddingVertical: 18 },
   chip: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14 },
   chipDivider: { borderLeftWidth: 1, borderLeftColor: colors.chip },

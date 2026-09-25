@@ -165,13 +165,21 @@ describe('demo run-throughs', () => {
     await waitFor(() => expect(screen.getByText(/\?$/)).toBeOnTheScreen());
   });
 
-  it('saves a clinician into your care team', async () => {
+  it('liking puts someone in Liked; adding them from their profile puts them in your care team', async () => {
     await startDemo('Straight talk about work pressure, Gold Coast');
     expect(await screen.findByText('Bart Traynor')).toBeOnTheScreen();
     fireEvent.press(screen.getAllByLabelText('Save Bart')[0]);
     fireEvent.press(screen.getByLabelText('My care'));
-    expect(await screen.findByLabelText('Bart Traynor, Psychologist')).toBeOnTheScreen();
-    expect(screen.getByText('Book Bart')).toBeOnTheScreen();
+    expect(await screen.findByText('Liked')).toBeOnTheScreen();
+    expect(screen.queryByText('Book Bart')).toBeNull();
+    fireEvent.press(screen.getByLabelText('Bart Traynor, Psychologist'));
+    const toggle = await screen.findByLabelText('Bart in your care team');
+    expect(toggle.props.accessibilityState).toMatchObject({ checked: false });
+    fireEvent.press(toggle);
+    expect(await screen.findByText('In your care team')).toBeOnTheScreen();
+    fireEvent.press(screen.getByLabelText('Back'));
+    expect(await screen.findByText('Book Bart')).toBeOnTheScreen();
+    expect(screen.queryByText('Liked')).toBeNull();
   });
 });
 

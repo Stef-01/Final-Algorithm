@@ -60,4 +60,17 @@ describe('restoring Saved', () => {
       ]),
     ).toEqual([{ clinicianId: 'alice-bui', fit: 'Good fit', savedAt: '2026-09-20' }]);
   });
+
+  it('keeps who is in the care team, and only a real yes', () => {
+    const { restoreSaved } = require('@/features/match/saved') as typeof import('@/features/match/saved');
+    expect(
+      restoreSaved([
+        { clinicianId: 'alice-bui', fit: 'Good fit', savedAt: '2026-09-20', team: true },
+        { clinicianId: 'bart-traynor', fit: 'Good fit', savedAt: '2026-09-20', team: 'yes' },
+      ]),
+    ).toEqual([
+      { clinicianId: 'alice-bui', fit: 'Good fit', savedAt: '2026-09-20', team: true },
+      { clinicianId: 'bart-traynor', fit: 'Good fit', savedAt: '2026-09-20' },
+    ]);
+  });
 });

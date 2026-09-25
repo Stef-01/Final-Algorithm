@@ -8,6 +8,8 @@ import { ChipsCard, NoteCard, PhotoCard, PromptCard, QualificationsCard, TagsCar
 import { caveatLines, costLabel, noReasonLine, placeLine, placeName, practicalChips, reasonKicker } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { FitLabel } from '@/components/FitLabel';
+import { Icon } from '@/components/Icon';
+import { PressScale } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { PillButton } from '@/components/Sheet';
 import { getClinician } from '@/data/clinicians';
@@ -22,7 +24,7 @@ import { colors, fonts } from '@/lib/theme';
 export default function ClinicianDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const session = useSession();
-  const { saved, isSaved, toggle } = useSaved();
+  const { saved, isSaved, toggle, inTeam, setTeam } = useSaved();
   const insets = useSafeAreaInsets();
   const c = getClinician(id);
   // Why they fit comes only from the current search; Saved keeps the label, not the reasons.
@@ -60,6 +62,7 @@ export default function ClinicianDetail() {
       <ScreenHeader title={c.name} back right={fit !== 'none' ? <FitLabel fit={fit} /> : undefined} />
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: 140 + insets.bottom }]}>
         <PhotoCard caption={placeLine(c)} source={c.photo} {...like} />
+        {likeTarget ? <TeamToggle name={c.firstName} on={inTeam(c.id)} onPress={() => setTeam(likeTarget, !inTeam(c.id))} /> : null}
 
         {match ? (
           <>
@@ -122,8 +125,41 @@ export default function ClinicianDetail() {
   );
 }
 
+/** Liking someone keeps them in Liked; this puts them in your care team (and likes them too). */
+function TeamToggle({ name, on, onPress }: { name: string; on: boolean; onPress: () => void }) {
+  return (
+    <PressScale
+      onPress={onPress}
+      accessibilityRole="switch"
+      accessibilityState={{ checked: on }}
+      accessibilityLabel={`${name} in your care team`}
+      style={[styles.team, on && styles.teamOn]}
+      scaleTo={0.97}
+    >
+      <Icon name={on ? 'icCheck' : 'icUser1'} size={16} color={on ? colors.white : colors.black} />
+      <Text style={[styles.teamText, on && styles.teamTextOn]}>{on ? 'In your care team' : 'Add to care team'}</Text>
+    </PressScale>
+  );
+}
+
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
+  team: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    minHeight: 48,
+    marginHorizontal: 12,
+    marginTop: 12,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: colors.black,
+    backgroundColor: colors.white,
+  },
+  teamOn: { backgroundColor: colors.purple, borderColor: colors.purple },
+  teamText: { fontFamily: fonts.bold, fontSize: 15, color: colors.black },
+  teamTextOn: { color: colors.white },
   content: {},
   footerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   book: { flex: 1, marginTop: -8 },

@@ -117,9 +117,9 @@ describe('goals shape a search', () => {
 });
 
 describe('My care: removing someone', () => {
-  it('the heart on a team card takes them off the team', async () => {
+  it('the heart on a team card takes them off the team, back to Liked', async () => {
     await AsyncStorage.clear();
-    await AsyncStorage.setItem('watl_saved', JSON.stringify([{ clinicianId: 'alice-bui', fit: 'Good fit', savedAt: '2026-09-26' }]));
+    await AsyncStorage.setItem('watl_saved', JSON.stringify([{ clinicianId: 'alice-bui', fit: 'Good fit', savedAt: '2026-09-26', team: true }]));
     /* eslint-disable @typescript-eslint/no-require-imports */
     renderRouter(
       {
@@ -132,7 +132,11 @@ describe('My care: removing someone', () => {
       },
       { initialUrl: '/saved' },
     );
+    expect(await screen.findByText('Book Alice')).toBeOnTheScreen();
     fireEvent.press(await screen.findByLabelText('Remove Alice from your team'));
+    expect(await screen.findByLabelText('Unlike Alice')).toBeOnTheScreen();
+    expect(screen.queryByText('Book Alice')).toBeNull();
+    fireEvent.press(screen.getByLabelText('Unlike Alice'));
     expect(await screen.findByText('Build your care team.')).toBeOnTheScreen();
     expect(JSON.parse((await AsyncStorage.getItem('watl_saved'))!)).toEqual([]);
   });

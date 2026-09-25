@@ -20,32 +20,36 @@ import { addToCalendar } from '@/lib/calendar';
 import { article, capitalised, PROFESSION_INFO } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
 
-// My care: your team (saved clinicians, plus a slot for each profession your goals point to) and
-// the next steps, each a reminder you can put in your calendar. Stored on this device only.
+// My care: your care team at the top (people you added from their profile, plus a slot for each
+// profession your goals point to) with next steps to book; below it, everyone you liked but haven't
+// added. Stored on this device only.
 
 const infoFor = (p: string) => PROFESSION_INFO.find((x) => x.id === p)!;
 const DAY = new Intl.DateTimeFormat('en-AU', { weekday: 'short', day: 'numeric', month: 'short' });
 
 export default function MyCare() {
-  const { saved, toggle } = useSaved();
+  const { saved, toggle, setTeam } = useSaved();
   const { goals } = useGoals();
   const session = useSession();
 
-  const members: TeamMember[] = saved.flatMap((s) => {
-    const c = getClinician(s.clinicianId);
-    return c ? [{ clinicianId: c.id, profession: c.profession, name: c.name, firstName: c.firstName, bookingUrl: c.bookingUrl }] : [];
-  });
+  const members: TeamMember[] = saved
+    .filter((s) => s.team)
+    .flatMap((s) => {
+      const c = getClinician(s.clinicianId);
+      return c ? [{ clinicianId: c.id, profession: c.profession, name: c.name, firstName: c.firstName, bookingUrl: c.bookingUrl }] : [];
+    });
   const team = careTeam(members, goals);
   const steps = bookingPlan(team);
+  const liked = saved.filter((s) => !s.team && getClinician(s.clinicianId));
 
-  if (team.length === 0) {
+  if (team.length === 0 && liked.length === 0) {
     return (
       <View style={styles.root}>
         <ScreenHeader title="My care" />
         <ScrollView contentContainerStyle={styles.content}>
           <EmptyStateCard
             title="Build your care team."
-            body="Save people you like, or pick goals in Profile."
+            body="Like people as you swipe, or pick goals in Profile."
             action={{ label: 'Find someone', onPress: () => router.navigate('/') }}
             secondary={{ label: 'Set goals', onPress: () => router.navigate('/settings') }}
           />
@@ -58,8 +62,17 @@ export default function MyCare() {
     <View style={styles.root}>
       <ScreenHeader title="My care" />
       <ScrollView contentContainerStyle={styles.content}>
-        <SectionTitle>Your team</SectionTitle>
+        <SectionTitle>Care team</SectionTitle>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.team}>
+          {members.length === 0 ? (
+            <View style={[styles.card, styles.empty]} accessible accessibilityLabel="Open someone you liked to add them to your team">
+              <View style={styles.emptyIcon}>
+                <Icon name="icUser1" size={24} color={colors.black} />
+              </View>
+              <Text style={styles.cardName}>Open someone you liked</Text>
+              <Text style={styles.cardRole}>Then “Add to care team”</Text>
+            </View>
+          ) : null}
           {team.map((slot, i) => (
             <Appear key={slot.member?.clinicianId ?? slot.profession} index={i} distance={10}>
               <TeamCard
@@ -67,7 +80,7 @@ export default function MyCare() {
                 onFind={(p) => router.push(session.chooseProfession(p, goalsDraft(p, goals)))}
                 onRemove={(id) => {
                   const item = saved.find((x) => x.clinicianId === id);
-                  if (item) toggle(item);
+                  if (item) setTeam(item, false);
                 }}
               />
             </Appear>
@@ -85,6 +98,19 @@ export default function MyCare() {
               ))}
             </View>
             <Text style={styles.fine}>Reminders to book. WATL can’t see your calendar.</Text>
+          </>
+        ) : null}
+
+        {liked.length > 0 ? (
+          <>
+            <SectionTitle>Liked</SectionTitle>
+            <View style={styles.steps}>
+              {liked.map((item, i) => (
+                <Appear key={item.clinicianId} index={i}>
+                  <LikedRow id={item.clinicianId} onUnlike={() => toggle(item)} />
+                </Appear>
+              ))}
+            </View>
           </>
         ) : null}
       </ScrollView>
@@ -136,6 +162,33 @@ function TeamCard({ slot, onFind, onRemove }: { slot: Slot; onFind: (p: Professi
       </Text>
       <Text style={styles.cardRole}>{info.available ? info.for : 'Soon'}</Text>
     </PressScale>
+  );
+}
+
+/** Someone you liked: tap to open their profile (and add them to your team from there). */
+function LikedRow({ id, onUnlike }: { id: string; onUnlike: () => void }) {
+  const c = getClinician(id)!;
+  const info = infoFor(c.profession);
+  return (
+    <View style={styles.step}>
+      <PressScale
+        onPress={() => router.push(`/clinician/${id}`)}
+        accessibilityRole="button"
+        accessibilityLabel={`${c.name}, ${capitalised(info.one)}`}
+        style={styles.likedMain}
+        scaleTo={0.98}
+      >
+        <Image source={c.photo} style={styles.likedPhoto} contentFit="cover" accessibilityLabel="" />
+        <View style={styles.fill}>
+          <Text style={styles.stepTitle} numberOfLines={1}>
+            {c.name}
+          </Text>
+          <Text style={[styles.cardRole, styles.left]}>{capitalised(info.one)}</Text>
+        </View>
+        <Icon name="icRightArrow" size={14} color={colors.muted} />
+      </PressScale>
+      <LikeButton liked onPress={onUnlike} label={`Unlike ${c.firstName}`} size={34} />
+    </View>
   );
 }
 
@@ -202,5 +255,9 @@ const styles = StyleSheet.create({
   stepTitle: { fontFamily: fonts.bold, fontSize: 15, color: colors.black },
   cal: { width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: colors.black, alignItems: 'center', justifyContent: 'center' },
   ics: { fontFamily: fonts.bold, fontSize: 12, color: colors.black },
+  likedMain: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 12, minHeight: 52 },
+  likedPhoto: { width: 44, height: 44, borderRadius: 22 },
+  fill: { flex: 1 },
+  left: { textAlign: 'left' },
   fine: { fontFamily: fonts.regular, fontSize: 12, color: colors.muted, textAlign: 'center', marginTop: 12, paddingHorizontal: 24 },
 });

@@ -3,19 +3,22 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 
 import type { FitLabel, Match } from './types';
 
-// Clinicians the patient hearted. Kept on this device only; no account (PRD §4.12).
+// Clinicians the patient hearted (Liked), and those they chose for their care team: liking someone
+// doesn't put them in the team; you add them from their profile. Kept on this device only; no
+// account (PRD §4.12).
 // Only the id, the fit label and the date are kept: a match's reasons repeat what the patient
 // said about their health, and those stay with the search (24 h), not here (docs/privacy.md).
 
 const STORAGE_KEY = 'watl_saved';
 
-export type SavedItem = { clinicianId: string; fit: FitLabel; savedAt: string };
+export type SavedItem = { clinicianId: string; fit: FitLabel; savedAt: string; /** In the care team, not just liked. */ team?: true };
 
 /** Keep only what Saved needs (also strips reasons from anything saved by an older version). */
-export const toSavedItem = (m: Pick<Match, 'clinicianId' | 'fit'> & { savedAt?: string }, now = new Date()): SavedItem => ({
+export const toSavedItem = (m: Pick<Match, 'clinicianId' | 'fit'> & { savedAt?: string; team?: boolean }, now = new Date()): SavedItem => ({
   clinicianId: m.clinicianId,
   fit: m.fit,
   savedAt: m.savedAt ?? now.toISOString().slice(0, 10),
+  ...(m.team ? { team: true as const } : {}),
 });
 
 const FITS: FitLabel[] = ['Strong fit', 'Good fit', 'Worth considering', 'Possible fit'];
@@ -27,7 +30,7 @@ export function restoreSaved(raw: unknown): SavedItem[] {
   for (const m of raw as Partial<SavedItem>[]) {
     if (!m || typeof m.clinicianId !== 'string' || !m.fit || !FITS.includes(m.fit)) continue;
     if (out.some((x) => x.clinicianId === m.clinicianId)) continue;
-    out.push(toSavedItem({ clinicianId: m.clinicianId, fit: m.fit, savedAt: typeof m.savedAt === 'string' ? m.savedAt : undefined }));
+    out.push(toSavedItem({ clinicianId: m.clinicianId, fit: m.fit, savedAt: typeof m.savedAt === 'string' ? m.savedAt : undefined, team: m.team === true }));
   }
   return out;
 }
@@ -36,6 +39,9 @@ type Saved = {
   saved: SavedItem[];
   isSaved: (clinicianId: string) => boolean;
   toggle: (match: Pick<Match, 'clinicianId' | 'fit'>) => void;
+  inTeam: (clinicianId: string) => boolean;
+  /** Add to the care team (liking them too if they weren't already), or take them out of it (still liked). */
+  setTeam: (match: Pick<Match, 'clinicianId' | 'fit'>, on: boolean) => void;
 };
 
 const SavedContext = createContext<Saved | null>(null);
@@ -56,19 +62,38 @@ export function SavedProvider({ children }: { children: ReactNode }) {
       .catch(() => {});
   }, []);
 
-  const toggle = useCallback((match: Pick<Match, 'clinicianId' | 'fit'>) => {
-    const exists = current.current.some((m) => m.clinicianId === match.clinicianId);
-    const next = exists
-      ? current.current.filter((m) => m.clinicianId !== match.clinicianId)
-      : [...current.current, toSavedItem(match)];
+  const write = useCallback((next: SavedItem[]) => {
     current.current = next;
     setSaved(next);
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
   }, []);
 
+  const toggle = useCallback(
+    (match: Pick<Match, 'clinicianId' | 'fit'>) => {
+      const exists = current.current.some((m) => m.clinicianId === match.clinicianId);
+      write(exists ? current.current.filter((m) => m.clinicianId !== match.clinicianId) : [...current.current, toSavedItem(match)]);
+    },
+    [write],
+  );
+
+  const setTeam = useCallback(
+    (match: Pick<Match, 'clinicianId' | 'fit'>, on: boolean) => {
+      const had = current.current.find((m) => m.clinicianId === match.clinicianId);
+      const item = toSavedItem({ ...(had ?? match), team: on });
+      write(had ? current.current.map((m) => (m === had ? item : m)) : [...current.current, item]);
+    },
+    [write],
+  );
+
   const value = useMemo<Saved>(
-    () => ({ saved, toggle, isSaved: (id) => saved.some((m) => m.clinicianId === id) }),
-    [saved, toggle],
+    () => ({
+      saved,
+      toggle,
+      setTeam,
+      isSaved: (id) => saved.some((m) => m.clinicianId === id),
+      inTeam: (id) => saved.some((m) => m.clinicianId === id && m.team),
+    }),
+    [saved, toggle, setTeam],
   );
 
   return <SavedContext.Provider value={value}>{children}</SavedContext.Provider>;

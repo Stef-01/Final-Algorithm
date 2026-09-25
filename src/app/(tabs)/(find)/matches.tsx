@@ -205,7 +205,7 @@ export default function Matches() {
         onPress={() => deck.current?.fling(-1)}
         accessibilityRole="button"
         accessibilityLabel="Not for me"
-        style={styles.next}
+        style={[styles.next, styles.no]}
       >
         <Icon name="icDecline" size={24} />
       </Pressable>
@@ -243,11 +243,11 @@ const styles = StyleSheet.create({
   position: { marginTop: 16, marginHorizontal: 27 },
   count: { fontFamily: fonts.medium, fontSize: 14, color: colors.muted },
   also: { fontFamily: fonts.bold, fontSize: 13, color: colors.purpleText, marginTop: 6 },
-  yes: { left: undefined, right: 20, backgroundColor: colors.purple },
+  no: { left: 20 },
+  yes: { right: 20, backgroundColor: colors.purple },
   view: { marginHorizontal: 12, marginTop: 24 },
   next: {
     position: 'absolute',
-    left: 20,
     bottom: 20,
     width: 60,
     height: 60,
