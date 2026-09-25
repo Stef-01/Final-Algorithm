@@ -60,7 +60,16 @@ export const Swipeable = forwardRef<SwipeableHandle, Props>(function Swipeable({
   const save = x.interpolate({ inputRange: [0, 30, 120], outputRange: [0, 0, 1], extrapolate: 'clamp' });
 
   return (
-    <Animated.View {...api.pan.panHandlers} style={[styles.fill, style, { transform: [{ translateX: x }, { rotate }] }]}>
+    <Animated.View
+      {...api.pan.panHandlers}
+      // Screen readers can't swipe: the same two moves as named actions.
+      accessibilityActions={[
+        { name: 'pass', label: 'Pass' },
+        { name: 'save', label: 'Save' },
+      ]}
+      onAccessibilityAction={(e) => api.fling(e.nativeEvent.actionName === 'save' ? 1 : -1)}
+      style={[styles.fill, style, { transform: [{ translateX: x }, { rotate }] }]}
+    >
       {children}
       <Animated.View pointerEvents="none" style={[styles.stamp, styles.left, { opacity: pass }]}>
         <View style={[styles.circle, styles.passCircle]}>

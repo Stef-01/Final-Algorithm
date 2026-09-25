@@ -203,6 +203,6 @@ describe('review page', () => {
     }
     fireEvent.press(screen.getByText('Match 2'));
     await waitFor(() => expect(screen).toHavePathname('/matches'));
-    expect(screen.getByText('2 of 3')).toBeOnTheScreen();
+    expect(screen.getByLabelText('Match 2 of 3')).toBeOnTheScreen();
   });
 });

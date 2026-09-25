@@ -4,6 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { ClinicianCards } from '@/components/ClinicianCards';
 import { AlsoCouldHelp } from '@/components/AlsoCouldHelp';
+import { ProgressDots } from '@/components/ProgressDots';
 import { Appear } from '@/components/motion';
 import { Swipeable, type SwipeableHandle } from '@/components/Swipeable';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
@@ -159,9 +160,9 @@ export default function Matches() {
                 ) : null}
               </View>
             ) : (
-              <Text style={styles.position}>
-                {state.index + 1} of {matches.length}
-              </Text>
+              <View style={styles.position}>
+                <ProgressDots count={matches.length} index={state.index} label={`Match ${state.index + 1} of ${matches.length}`} />
+              </View>
             )}
             {state.index === 0 ? <AlsoCouldHelp /> : null}
             <ClinicianCards
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
   introTitle: { fontFamily: fonts.serifSemiBold, fontSize: 24, lineHeight: 30, color: colors.black },
   introBody: { fontFamily: fonts.regular, fontSize: 15, color: colors.black, marginTop: 6 },
   seeAll: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, marginTop: 2, paddingVertical: 14 },
-  position: { fontFamily: fonts.medium, fontSize: 14, color: colors.muted, marginTop: 16, marginHorizontal: 27 },
+  position: { marginTop: 16, marginHorizontal: 27 },
   view: { marginHorizontal: 12, marginTop: 24 },
   next: {
     position: 'absolute',

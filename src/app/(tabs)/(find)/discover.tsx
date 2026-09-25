@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon } from '@/components/Icon';
 import type { IconName } from '@/components/icons';
 import { Appear, PressScale } from '@/components/motion';
+import { ProgressDots } from '@/components/ProgressDots';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { Swipeable, type SwipeableHandle } from '@/components/Swipeable';
 import { useSession } from '@/features/match/session';
@@ -51,7 +52,7 @@ export default function Discover() {
 
   return (
     <View style={styles.root}>
-      <ScreenHeader title="Explore" back right={<Text style={styles.count}>{`${i + 1}/${PROFESSION_INFO.length}`}</Text>} />
+      <ScreenHeader title="Explore" back right={<ProgressDots count={PROFESSION_INFO.length} index={i} label={`Card ${i + 1} of ${PROFESSION_INFO.length}`} />} />
       <Swipeable key={card.id} ref={deck} onLeft={next} onRight={find}>
         <Appear from="right" distance={i > 0 ? 50 : 0} style={styles.stage}>
           <View style={styles.card}>
@@ -96,7 +97,6 @@ export default function Discover() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  count: { fontFamily: fonts.medium, fontSize: 14, color: colors.muted },
   stage: { flex: 1, justifyContent: 'center', paddingHorizontal: 20 },
   card: { backgroundColor: colors.white, borderRadius: 24, paddingVertical: 36, paddingHorizontal: 24, alignItems: 'center' },
   iconWrap: { width: 96, height: 96, borderRadius: 48, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' },
