@@ -1,7 +1,9 @@
+import { useRef } from 'react';
 import { router } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { ClinicianCards } from '@/components/ClinicianCards';
+import { Swipeable, type SwipeableHandle } from '@/components/Swipeable';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { MatchFeedback, RatingCard } from '@/components/Feedback';
 import { FitLabel } from '@/components/FitLabel';
@@ -48,6 +50,7 @@ function blocker(action: NoMatchAction | undefined, many: string) {
 // Screen 05 — top matches, one clinician at a time in the Discover layout.
 export default function Matches() {
   const session = useSession();
+  const deck = useRef<SwipeableHandle>(null);
   const { isSaved, toggle } = useSaved();
   const { state } = session;
 
@@ -125,42 +128,52 @@ export default function Matches() {
         onBack={state.index > 0 ? session.prevMatch : () => router.navigate('/describe')}
         backLabel={state.index > 0 ? 'Previous match' : 'Back to your search'}
       />
-      <ScrollView key={state.index} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {state.index === 0 ? (
-          <View style={styles.intro}>
-            <Text style={styles.introTitle}>{matchesHeadline(matches.length, state.profession, explained)}</Text>
-            {subline ? <Text style={styles.introBody}>{subline}</Text> : null}
-            {explained === 0 ? (
-              <Text style={styles.seeAll} onPress={() => router.push('/refine')} accessibilityRole="link">
-                Tell the assistant what matters
-              </Text>
-            ) : null}
-            {more.length > 0 ? (
-              <Text style={styles.seeAll} onPress={() => router.push('/all')} accessibilityRole="link">
-                See all {matches.length + more.length} who fit
-              </Text>
-            ) : null}
+      <Swipeable
+        key={state.index}
+        ref={deck}
+        onLeft={session.nextMatch}
+        onRight={() => {
+          if (!isSaved(m.clinicianId)) toggle(m);
+          session.nextMatch();
+        }}
+      >
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+          {state.index === 0 ? (
+            <View style={styles.intro}>
+              <Text style={styles.introTitle}>{matchesHeadline(matches.length, state.profession, explained)}</Text>
+              {subline ? <Text style={styles.introBody}>{subline}</Text> : null}
+              {explained === 0 ? (
+                <Text style={styles.seeAll} onPress={() => router.push('/refine')} accessibilityRole="link">
+                  Tell the assistant what matters
+                </Text>
+              ) : null}
+              {more.length > 0 ? (
+                <Text style={styles.seeAll} onPress={() => router.push('/all')} accessibilityRole="link">
+                  See all {matches.length + more.length} who fit
+                </Text>
+              ) : null}
+            </View>
+          ) : (
+            <Text style={styles.position}>
+              {state.index + 1} of {matches.length}
+            </Text>
+          )}
+          <ClinicianCards
+            key={clinician.id}
+            clinician={clinician}
+            match={m}
+            onOpen={open}
+            saved={isSaved(clinician.id)}
+            onSave={() => toggle(m)}
+          />
+          <View style={styles.view}>
+            <PillButton label={`View ${clinician.firstName}`} onPress={open} />
           </View>
-        ) : (
-          <Text style={styles.position}>
-            {state.index + 1} of {matches.length}
-          </Text>
-        )}
-        <ClinicianCards
-          key={clinician.id}
-          clinician={clinician}
-          match={m}
-          onOpen={open}
-          saved={isSaved(clinician.id)}
-          onSave={() => toggle(m)}
-        />
-        <View style={styles.view}>
-          <PillButton label={`View ${clinician.firstName}`} onPress={open} />
-        </View>
-        <MatchFeedback value={state.feedback.thumbs[clinician.id]} onChoose={(dir) => session.thumb(clinician.id, dir)} />
-      </ScrollView>
+          <MatchFeedback value={state.feedback.thumbs[clinician.id]} onChoose={(dir) => session.thumb(clinician.id, dir)} />
+        </ScrollView>
+      </Swipeable>
       <Pressable
-        onPress={session.nextMatch}
+        onPress={() => deck.current?.fling(-1)}
         accessibilityRole="button"
         accessibilityLabel="Next match"
         style={styles.next}

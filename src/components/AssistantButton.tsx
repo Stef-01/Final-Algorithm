@@ -58,12 +58,14 @@ export function AssistantButton() {
   if (hidden) return null;
 
   const bottom = insets.bottom + TAB_BAR + (HAS_NEXT.includes(path) ? 112 : 20);
+  // On a match, the cards' save hearts sit bottom-right, so the assistant sits beside the ✕ instead.
+  const side = path === '/matches' ? { left: 96 } : { right: 20 };
   const hasResults = state.result?.status === 'matches';
   // Draw the eye once results arrive and the patient hasn't used it yet.
   const invite = hasResults && !(state.chat?.length) && path === '/matches';
 
   return (
-    <View pointerEvents="box-none" style={[styles.wrap, { bottom }]}>
+    <View pointerEvents="box-none" style={[styles.wrap, side, { bottom: bottom + (path === '/matches' ? 2 : 0) }]}>
       <Animated.View style={{ transform: [{ scale: enter }], opacity: enter, alignItems: 'center', justifyContent: 'center' }}>
         <Pulse size={SIZE} active={invite} />
         <PressScale
@@ -84,7 +86,7 @@ export function AssistantButton() {
 }
 
 const styles = StyleSheet.create({
-  wrap: { position: 'absolute', right: 20 },
+  wrap: { position: 'absolute' },
   flat: { shadowOpacity: 0, elevation: 0 },
   button: {
     width: SIZE,
