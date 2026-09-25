@@ -1,6 +1,7 @@
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AssistantButton } from '@/components/AssistantButton';
@@ -11,7 +12,9 @@ import { fontAssets } from '@/lib/theme';
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts(fontAssets);
-  if (!fontsLoaded && !fontError) return null;
+  // Web paints straight away and swaps the fonts in when they arrive (first paint was waiting
+  // ~0.5 s on five font files). Native waits, where a swap is more jarring.
+  if (!fontsLoaded && !fontError && Platform.OS !== 'web') return null;
 
   return (
     <SafeAreaProvider>
