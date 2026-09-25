@@ -1,6 +1,7 @@
 import { forwardRef, ReactNode, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { Animated, PanResponder, StyleProp, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
 
+import { tap } from '@/lib/haptics';
 import { colors } from '@/lib/theme';
 import { Icon } from './Icon';
 import { useReducedMotion } from './motion';
@@ -28,7 +29,10 @@ export const Swipeable = forwardRef<SwipeableHandle, Props>(function Swipeable({
   }, [onLeft, onRight, width, reduced]);
 
   const api = useMemo(() => {
-    const done = (dir: -1 | 1) => (dir < 0 ? handlers.current.onLeft() : handlers.current.onRight());
+    const done = (dir: -1 | 1) => {
+      tap(dir > 0 ? 'save' : 'light');
+      return dir < 0 ? handlers.current.onLeft() : handlers.current.onRight();
+    };
     const fling = (dir: -1 | 1) => {
       if (handlers.current.reduced) return done(dir);
       Animated.timing(x, { toValue: dir * handlers.current.width * 1.2, duration: 220, useNativeDriver: false }).start(() => {

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Platform, StyleSheet } from 'react-native';
 
+import { tap } from '@/lib/haptics';
 import { colors } from '@/lib/theme';
 import { Icon } from './Icon';
 import { PressScale, useReducedMotion } from './motion';
@@ -42,7 +43,10 @@ export function LikeButton({
 
   return (
     <PressScale
-      onPress={onPress}
+      onPress={() => {
+        tap(liked ? 'light' : 'save');
+        onPress();
+      }}
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityState={{ selected: liked }}

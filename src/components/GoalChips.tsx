@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { GOALS } from '@/features/care/plan';
+import { tap } from '@/lib/haptics';
 import { colors, fonts } from '@/lib/theme';
 import { Icon } from './Icon';
 import { Appear, PressScale } from './motion';
@@ -14,7 +15,10 @@ export function GoalChips({ selected, onToggle }: { selected: string[]; onToggle
         return (
           <Appear key={g.id} index={i} distance={6}>
             <PressScale
-              onPress={() => onToggle(g.id)}
+              onPress={() => {
+                tap();
+                onToggle(g.id);
+              }}
               accessibilityRole="button"
               accessibilityLabel={g.label}
               accessibilityState={{ selected: on }}
