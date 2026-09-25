@@ -32,10 +32,17 @@ The biggest barrier after "who" is "how much, and when". Most profiles publish n
 
 ## 4. Your care team ✅ started
 
-- ✅ **My care.** Saved professionals become your team, ordered the way care usually starts. Goals add slots for who's missing.
+- ✅ **My care.** People you add from their profile become your team, ordered the way care usually starts; everyone else you liked waits below. Goals add slots for who's missing.
 - ✅ **Next steps.** A suggested booking order, each addable to your calendar as a reminder.
 - **Next: calendar connect.** With your permission (Google or Microsoft sign-in), read only free/busy times to suggest when to book. Later, match those against practices' live availability for a one-tap booking.
 - **Later: a shared plan.** With consent, share your goals and team with the people in it, so a GP, psychologist and coach see the same plan. Nothing is shared by default.
+
+## 4b. Your AI, as your concierge ✅ started
+
+- ✅ **WATL as an MCP server** (`/api/mcp`). Add it to Claude or ChatGPT as a custom connector and the assistant searches WATL with what it already knows about you: needs, limits, how you like to be treated. WATL's rules still do the ranking, with the same reasons and caveats.
+- ✅ **Connect your AI** in Profile: pick an assistant, copy the URL, choose what it may use, and watch an example chat run against the real tool.
+- **Next: sign-in for the connector** (OAuth), so the assistant can also read your WATL goals and team with your permission, and add people to your team for you.
+- **Later: booking through the assistant**, once practices share live availability.
 
 ## 5. The network (supply)
 

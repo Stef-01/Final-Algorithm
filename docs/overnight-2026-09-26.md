@@ -34,3 +34,21 @@ What changed for your list: discovery, care team, calendar, motion, and less tex
 6. Unpublished gender: exclude or flag?
 7. Vercel Web Analytics, and the font licence.
 8. **New:** a business model decision (VISION, "Needs a decision"). It shapes the clinician portal and patient-reported fit.
+
+# Third run, 26 September 2026
+
+| You asked for | What's there now |
+|---|---|
+| Swipe left for no, right for yes and booking | Right likes them, records a thumbs-up and opens booking; left records a no. ✕ and ✓ buttons do the same. |
+| Swipe the whole list, not just the top 3 | The deck runs through everyone who fits; after the top matches they're marked "Also a fit". |
+| Why a 5, why a 1–2 | "What was good?" / "What was off?" with tappable reasons and Other in your own words. Skip sends just the rating. |
+| Liked vs care team | My care: care team on top (with booking reminders), Liked below. Add someone to the team from their profile. |
+| Location preference after picking a profession | "Does location matter?" Anywhere (telehealth), or Near a place: a map of Australia with tappable cities. The telehealth line is counted from the network ("9 of 12 psychologists here offer telehealth"). |
+| MCP demo in Profile | Connect your AI: pick Claude or ChatGPT, copy the connector URL, choose what it can use, and see an example chat. The connector is real: `https://final-algorithm.vercel.app/api/mcp` answers `find_professionals` and `get_professional`. |
+| Duolingo-style motion, no mascot | Buttons push into a lip and spring back; chips pop when chosen; a progress bar grows across the search steps; bursts when you say yes, add to your team, connect, or send a rating; swipe stamps grow as you drag; a sliding tab indicator; a My care badge that hops; sheets spring up; screens slide in. All of it is skipped with Reduce Motion. |
+| Back button always | Every search step now has one. |
+
+## Honest limits
+
+- **MCP:** no sign-in yet, so the assistant can't read your WATL goals or team directly; it uses what you've told it. The in-app chat is an example that calls the real tool on your device.
+- **Map:** ten places (where the network's rooms are, plus the capitals); it's for choosing a city, not an address.
