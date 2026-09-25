@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     borderColor: colors.black,
     borderRadius: 30,
     paddingHorizontal: 14,
-    paddingVertical: 11,
+    paddingVertical: 13,
     backgroundColor: colors.white,
   },
   on: { backgroundColor: colors.purple, borderColor: colors.purple },
