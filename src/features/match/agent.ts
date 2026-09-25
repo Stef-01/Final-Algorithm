@@ -78,7 +78,9 @@ function toQuestion(q: BankQuestion, input: SessionInput): Question {
       : first
         ? 'That helps — one thing would narrow this down.'
         : 'Thanks — one more thing would help.';
-  return { id: q.id, ack, text: q.text, options: q.options.map((o) => o.label) };
+  // "{clinician}" follows the profession chosen in the funnel.
+  const who = input.profession === 'gp' ? 'your GP' : input.profession === 'psychologist' ? 'your psychologist' : 'a GP or psychologist';
+  return { id: q.id, ack, text: q.text.replace('{clinician}', who), options: q.options.map((o) => o.label) };
 }
 
 export const PRIORITY_LABEL: Partial<Record<Dimension, Record<string, string>>> = {

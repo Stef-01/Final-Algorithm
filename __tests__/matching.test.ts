@@ -9,6 +9,7 @@ import { costLabel } from '@/components/ClinicianCards';
 import { matchesHeadline, matchesSubline } from '@/lib/professions';
 import { getClinician } from '@/data/clinicians';
 import { signalsFor } from '@/features/match/agent';
+import { QUESTIONS } from '@server/questions';
 import { demos } from '@/features/match/demos';
 import { extractSignals } from '@/features/match/extract';
 import * as core from '@/features/match/sessionCore';
@@ -264,5 +265,19 @@ describe('one reason for several needs', () => {
     const paula = professionals.find((c) => c.id === 'paula-garrido')!;
     const r = reasonsFor(paula, { clinicalNeeds: [{ area: 'ADHD', confidence: 'high' }, { area: 'Trauma', confidence: 'medium' }], preferences: {}, constraints: {} });
     expect(r[0].signal).toBe("You're looking for help with ADHD.");
+  });
+});
+
+describe('question wording follows the profession', () => {
+  it('no question assumes a doctor, and continuity is only asked about GPs', () => {
+    for (const q of QUESTIONS) expect(q.text).not.toMatch(/\ba doctor\b/);
+    expect(QUESTIONS.find((q) => q.id === 'continuity')!.professions).toEqual(['gp']);
+  });
+
+  it('never asks a psychologist seeker about their GP', () => {
+    for (const d of demos.filter((x) => x.profession === 'psychologist')) {
+      const s = core.demoResults(d.id);
+      for (const q of s.asked) expect(q.text).not.toMatch(/\bGP\b|doctor/);
+    }
   });
 });

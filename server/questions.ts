@@ -61,7 +61,7 @@ export const QUESTIONS: BankQuestion[] = [
   {
     id: 'explanation',
     target: { kind: 'preference', dimension: 'explanation_depth' },
-    text: 'When a doctor recommends something, how much of the reasoning do you want?',
+    text: 'When {clinician} recommends something, how much of the reasoning do you want?',
     options: [
       { label: 'Just the key points', apply: pref('explanation_depth', 'brief') },
       { label: 'Some of the reasoning', apply: pref('explanation_depth', 'moderate') },
@@ -119,6 +119,8 @@ export const QUESTIONS: BankQuestion[] = [
   {
     id: 'continuity',
     target: { kind: 'preference', dimension: 'continuity' },
+    // Seeing one psychologist is the norm, so this only matters when looking for a GP.
+    professions: ['gp'],
     text: 'How important is seeing the same GP every time?',
     options: [
       { label: 'Very important', apply: pref('continuity', 'high') },
