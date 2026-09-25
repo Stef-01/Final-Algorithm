@@ -21,6 +21,8 @@ npx expo lint
 npm test
 ```
 
+After adding or removing packages, run `npm run lockfile` before committing. An incremental `npm install` on macOS can drop Linux-only packages from `package-lock.json`, which makes `npm ci` fail in CI.
+
 The tests in `__tests__/` cover:
 
 - **Assets:** every image, font and video the app `require`s exists and is a real file of its type, every file in `assets/images` is used, and each seeded profile has 6 captioned photos and 3 prompts.
