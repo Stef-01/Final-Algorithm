@@ -434,20 +434,27 @@ Each phase ends deployed on Vercel with CI green.
 - **Typed searches:** `src/features/match/extract.ts` is the keyword extractor. It was the stand-in for Claude, and is now the fallback whenever Claude is off or unavailable (Phase 8). It picks up preferences at medium confidence, so the engine confirms or asks when a guess matters.
 - **Fictional clinicians:** the 12 fictional clinicians moved to `server/fixtures/` and are used only by the engine tests.
 
-### Phase 9 notes (discovery and care team, started 26 Sep)
+### Phase 9 notes (discovery and care team, 26 Sep)
 
 The direction is set out in [`docs/VISION.md`](VISION.md): concierge care, for everyone.
 
-- **Built:**
-  - a discovery grid across 7 professions (26 real professionals);
-  - goals in Profile;
-  - My care, with a team, empty slots from goals, and booking reminders for Google Calendar or as .ics files;
-  - swipe to pass or save, the back button, a filled heart, and qualifications as a list.
-- **Next, in order:**
-  1. "Also could help" after results;
-  2. a discovery queue of one-card introductions;
-  3. a clinician portal for fees and availability;
-  4. calendar connect (free/busy only, with consent).
+- **Discovery:**
+  - a grid across 7 professions (26 real professionals);
+  - Explore, a swipeable card per profession;
+  - "Also could help" after results.
+- **Care:**
+  - goals in Profile, which also tilt searches at low confidence;
+  - My care: your team, empty slots from goals, and booking reminders. On phones these go to the device calendar; on web to Google Calendar or an .ics file;
+  - starting a search from your team or discovery pre-fills your goals.
+- **Supply:** Join WATL, a professional submits their facts in their own words, which are queued for review; then `interview.py pull`.
+- **Feel:**
+  - swipe to pass or save, a filled heart with a pop and ring, and progress dots;
+  - haptics on phones;
+  - the back button everywhere, and less text.
+- **Next:**
+  1. email a professional when they're live;
+  2. calendar connect (free/busy only, with consent);
+  3. patient-reported fit, after checking it against AHPRA's advertising rules (VISION §2).
 
 ## 13. Testing strategy
 
