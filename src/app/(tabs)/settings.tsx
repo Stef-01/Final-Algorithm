@@ -43,6 +43,11 @@ export default function Settings() {
           />
         </ListGroup>
 
+        <SectionTitle>For professionals</SectionTitle>
+        <ListGroup>
+          <ListRow label="Join WATL" value="Publish your fees and availability" onPress={() => router.push('/join')} />
+        </ListGroup>
+
         <SectionTitle>Demo</SectionTitle>
         <ListGroup>
           <ListRow label="Try a demo patient" value="Scripted searches to try" onPress={() => router.push('/demos')} />

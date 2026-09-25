@@ -33,6 +33,7 @@ export type Events = {
   goal_toggled: { goal: string; on: boolean };
   calendar_added: { profession: string; how: string };
   also_could_help: { profession: string };
+  portal_submitted: { profession: string };
 };
 
 export type EventName = keyof Events;
