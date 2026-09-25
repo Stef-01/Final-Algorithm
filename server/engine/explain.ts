@@ -65,7 +65,7 @@ const SIGNAL: Partial<Record<Dimension, Record<string, string>>> = {
     balanced: 'You want a mix of insight and practical strategies.',
   },
   neurodiversity_affirming: {
-    high: "You'd like someone who treats ADHD as a difference, not a deficit.",
+    high: "You'd like someone who treats neurodivergence as a difference, not a deficit.",
   },
 };
 
