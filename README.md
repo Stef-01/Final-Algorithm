@@ -63,7 +63,7 @@ There's no account and no sign-in.
 
 The web build is deployed on Vercel from `main` (see [`vercel.json`](vercel.json)). Vercel runs `npx expo export --platform web` and serves `dist/` as a single-page app, so deep links work.
 
-[Vercel Web Analytics](https://vercel.com/docs/analytics) records a page view for every screen change on the web build ([`src/components/VercelAnalytics.web.tsx`](src/components/VercelAnalytics.web.tsx)). It needs to be enabled once in the Vercel dashboard (project → Analytics → Enable) before data shows up.
+[Vercel Web Analytics](https://vercel.com/docs/analytics) records a page view for every screen change on the web build ([`src/components/VercelAnalytics.web.tsx`](src/components/VercelAnalytics.web.tsx)), plus the PRD's behavioural events through [`src/lib/analytics.ts`](src/lib/analytics.ts). Events carry only short identifiers and counts, never what anyone typed or said. Analytics needs to be enabled once in the Vercel dashboard (project → Analytics → Enable), and custom events may need a paid plan. How to use the numbers in testing: [`docs/user-testing.md`](docs/user-testing.md).
 
 To try the production web build locally:
 

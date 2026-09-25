@@ -1,4 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
+import { useEffect } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -12,6 +13,7 @@ import { getClinician } from '@/data/clinicians';
 import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
 import { findMatch } from '@/features/match/sessionCore';
+import { track } from '@/lib/analytics';
 import { colors, fonts } from '@/lib/theme';
 
 // Screen 06 — clinician detail, in the same card language as the matches.
@@ -23,6 +25,11 @@ export default function ClinicianDetail() {
   const insets = useSafeAreaInsets();
   const c = getClinician(id);
   const match = findMatch(session.state, id) ?? saved.find((m) => m.clinicianId === id);
+  const fit = match?.fit ?? 'none';
+
+  useEffect(() => {
+    if (c) track('clinician_viewed', { clinician: c.id, fit });
+  }, [c, fit]);
 
   if (!c) {
     return (

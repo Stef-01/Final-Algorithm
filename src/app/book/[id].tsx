@@ -4,6 +4,7 @@ import { Text } from 'react-native';
 
 import { PillButton, Sheet, sheetText } from '@/components/Sheet';
 import { getClinician } from '@/data/clinicians';
+import { track } from '@/lib/analytics';
 
 // Booking hands off to the practice's own booking page (PRD §7). WATL takes no part of the fee.
 export default function BookingHandoff() {
@@ -24,6 +25,7 @@ export default function BookingHandoff() {
         <PillButton
           label="Open booking page"
           onPress={() => {
+            track('booking_clicked', { clinician: c.id });
             Linking.openURL(c.bookingUrl!);
             router.back();
           }}

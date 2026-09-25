@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { ClinicianCards } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
+import { MatchFeedback, RatingCard } from '@/components/Feedback';
 import { FitLabel } from '@/components/FitLabel';
 import { Icon } from '@/components/Icon';
 import { ScreenHeader } from '@/components/ScreenHeader';
@@ -85,6 +86,7 @@ export default function Matches() {
           action={more.length > 0 ? { label: 'See more options', onPress: session.showMore } : undefined}
           secondary={{ label: 'Start over', onPress: startOver }}
         />
+        <RatingCard value={state.feedback.rating} onRate={session.rateMatches} />
       </Shell>
     );
   }
@@ -116,6 +118,7 @@ export default function Matches() {
         <View style={styles.view}>
           <PillButton label={`View ${clinician.firstName}`} onPress={open} />
         </View>
+        <MatchFeedback value={state.feedback.thumbs[clinician.id]} onChoose={(dir) => session.thumb(clinician.id, dir)} />
       </ScrollView>
       <Pressable
         onPress={session.nextMatch}

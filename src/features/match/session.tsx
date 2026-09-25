@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
+import { track, wordCount } from '@/lib/analytics';
+
 import * as core from './sessionCore';
 import type { NoMatchAction } from './types';
 
@@ -20,6 +22,8 @@ type Session = {
   nextMatch: () => void;
   showMore: () => void;
   noMatchAction: (action: NoMatchAction) => string;
+  rateMatches: (rating: number) => void;
+  thumb: (clinicianId: string, dir: 'up' | 'down') => void;
   reset: () => void;
   load: (state: core.SessionState) => void;
 };
@@ -35,7 +39,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     AsyncStorage.getItem(STORAGE_KEY)
       .then((raw) => {
         if (!raw) return;
-        const saved: core.SessionState = JSON.parse(raw);
+        const saved: core.SessionState = { feedback: { thumbs: {} }, ...JSON.parse(raw) };
         if (Date.now() - saved.updatedAt > MAX_AGE_MS) return AsyncStorage.removeItem(STORAGE_KEY);
         current.current = saved;
         setState(saved);
@@ -64,14 +68,47 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       loaded,
       chooseProfession: (p) => route(core.chooseProfession(current.current, p)),
       startDemo: (id) => route(core.startDemo(current.current, id)),
-      submitText: (text) => route(core.submitText(current.current, text)),
-      answer: (q, v) => route(core.answer(current.current, q, v)),
+      submitText: (text) => {
+        const t = core.submitText(current.current, text);
+        track('text_submitted', { words: wordCount(text) });
+        track('matching_started', { profession: t.state.profession ?? 'either', demo: !!t.state.input.demoId });
+        return route(t);
+      },
+      answer: (q, v) => {
+        const t = core.answer(current.current, q, v);
+        track('followup_answered', { question: q, ownWords: t.state.input.answers[q] !== v });
+        return route(t);
+      },
       confirmPriorities: (removed) => route(core.confirmPriorities(current.current, removed)),
       acknowledgeSafety: () => route(core.acknowledgeSafety(current.current)),
-      match: () => route(core.match(current.current)),
-      nextMatch: () => commit(core.nextMatch(current.current)),
+      match: () => {
+        const t = core.match(current.current);
+        const r = t.state.result;
+        track('matching_completed', {
+          matches: r?.status === 'matches' ? r.matches.length : 0,
+          followups: t.state.asked.length,
+          seconds: core.secondsToShortlist(t.state),
+          profession: t.state.profession ?? 'either',
+        });
+        return route(t);
+      },
+      nextMatch: () => {
+        const next = core.nextMatch(current.current);
+        track('next_match_viewed', { position: next.index + 1 });
+        commit(next);
+      },
       showMore: () => commit(core.showMore(current.current)),
       noMatchAction: (a) => route(core.noMatchAction(current.current, a)),
+      rateMatches: (rating) => {
+        const next = core.rateMatches(current.current, rating);
+        const r = next.result;
+        track('match_rating', { rating: next.feedback.rating!, matches: r?.status === 'matches' ? r.matches.length : 0 });
+        commit(next);
+      },
+      thumb: (id, dir) => {
+        track(dir === 'up' ? 'match_feedback_positive' : 'match_feedback_negative', { clinician: id });
+        commit(core.thumb(current.current, id, dir));
+      },
       reset: () => {
         commit(core.initialState());
         AsyncStorage.removeItem(STORAGE_KEY).catch(() => {});

@@ -162,7 +162,7 @@ describe('typed searches', () => {
     fireEvent.press(await screen.findByText('A psychologist'));
     fireEvent.changeText(await screen.findByLabelText("What you're looking for"), "I've been through trauma and want online sessions only.");
     fireEvent.press(screen.getByLabelText('Next'));
-    await screen.findByText(/\?$|I found|strong enough/);
+    await screen.findAllByText(/\?$|I found|strong enough/);
     await answerUntilMatches();
     await waitFor(() => expect(screen).toHavePathname('/matches'));
   });

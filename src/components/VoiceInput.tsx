@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AccessibilityInfo, Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useSpeechToText } from '@/features/voice/useSpeechToText';
+import { track, wordCount } from '@/lib/analytics';
 import { colors, fonts } from '@/lib/theme';
 import { Icon } from './Icon';
 
@@ -15,7 +16,10 @@ type Props = {
 // Voice-first, text-equal (PRD §4.10, §9): a prominent mic, a live transcript in plain text,
 // and only Done / Cancel while listening. Renders nothing where the browser can't transcribe.
 export function VoiceInput({ onTranscript, onStart, compact }: Props) {
-  const speech = useSpeechToText(onTranscript);
+  const speech = useSpeechToText((said) => {
+    track('voice_completed', { words: wordCount(said) });
+    onTranscript(said);
+  });
   const [pulse] = useState(() => new Animated.Value(0));
   const [reduceMotion, setReduceMotion] = useState(false);
 
@@ -79,6 +83,7 @@ export function VoiceInput({ onTranscript, onStart, compact }: Props) {
         <Pressable
           onPress={() => {
             onStart?.();
+            track('voice_started', {});
             speech.start();
           }}
           accessibilityRole="button"

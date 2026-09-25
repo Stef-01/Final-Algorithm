@@ -19,6 +19,10 @@ export type SessionState = {
   result?: MatchResult;
   /** Current match; equal to matches.length means "end of list". */
   index: number;
+  /** When the patient submitted their description (time-to-shortlist, PRD §49). */
+  startedAt?: number;
+  /** In-app validation (PRD §49): a 1–5 credibility rating and per-match thumbs. */
+  feedback: { rating?: number; thumbs: Record<string, 'up' | 'down'> };
   updatedAt: number;
 };
 
@@ -43,6 +47,7 @@ export const initialState = (profession?: ProfessionChoice): SessionState => ({
   asked: [],
   priorities: [],
   index: 0,
+  feedback: { thumbs: {} },
   updatedAt: Date.now(),
 });
 
@@ -87,7 +92,11 @@ export function submitText(state: SessionState, text: string): Transition {
   const t = text.trim();
   const demo = state.input.demoId ? demoById(state.input.demoId) : undefined;
   const demoId = demo && demo.text === t ? demo.id : undefined;
-  const s: SessionState = { ...initialState(state.profession), input: { ...emptyInput(state.profession, demoId), texts: [t] } };
+  const s: SessionState = {
+    ...initialState(state.profession),
+    input: { ...emptyInput(state.profession, demoId), texts: [t] },
+    startedAt: Date.now(),
+  };
   return apply(s, nextStep(s.input));
 }
 
@@ -134,6 +143,19 @@ export function noMatchAction(state: SessionState, action: NoMatchAction): Trans
   }
   const s = withInput(state, action === 'include_telehealth' ? { includeTelehealth: true } : { expandDistance: true });
   return match(s);
+}
+
+/** Seconds from submitting the description to the shortlist appearing. */
+export const secondsToShortlist = (state: SessionState, now = Date.now()) =>
+  state.startedAt ? Math.round((now - state.startedAt) / 1000) : 0;
+
+export function rateMatches(state: SessionState, rating: number): SessionState {
+  const r = Math.max(1, Math.min(5, Math.round(rating)));
+  return { ...state, feedback: { ...state.feedback, rating: r }, updatedAt: Date.now() };
+}
+
+export function thumb(state: SessionState, clinicianId: string, dir: 'up' | 'down'): SessionState {
+  return { ...state, feedback: { ...state.feedback, thumbs: { ...state.feedback.thumbs, [clinicianId]: dir } }, updatedAt: Date.now() };
 }
 
 export function currentMatch(state: SessionState): Match | undefined {

@@ -1,11 +1,12 @@
 import { Redirect, router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput } from 'react-native';
 
 import { ChoicePill, ConversationStep } from '@/components/ConversationStep';
 import { VoiceInput } from '@/components/VoiceInput';
 import { questionById } from '@/features/match/sessionCore';
 import { useSession } from '@/features/match/session';
+import { track } from '@/lib/analytics';
 import { colors, fonts } from '@/lib/theme';
 
 // Screen 02 — adaptive clarification. A tapped answer moves on immediately; no next button.
@@ -15,6 +16,11 @@ export default function Clarify() {
   const question = questionById(session.state, q);
   const [ownWords, setOwnWords] = useState(own === '1');
   const [text, setText] = useState('');
+  const number = session.state.asked.findIndex((x) => x.id === q) + 1;
+
+  useEffect(() => {
+    if (q && number > 0) track('followup_asked', { question: q, number });
+  }, [q, number]);
 
   if (!session.loaded) return null;
   if (!question) return <Redirect href="/" />;

@@ -326,7 +326,7 @@ Each phase ends deployed on Vercel with CI green.
 | **3. Engine in the app, demo run-throughs, GPs + psychologists** ✅ done | The Phase 2 engine runs on the device against the real ADHDme GP and psychologist profiles (imported by `scripts/import-adhdme.py`). A funnel first screen (GP / psychologist / not sure), scripted demo patients for both professions, and a keyword extractor standing in for Claude. | Every demo runs end to end; typed searches use the real engine; only the chosen profession is matched; unpublished fees and availability stay unknown; CI green. |
 | **4. Voice** ✅ done | `useSpeechToText` (web), listening state, editable transcript, fallback to text, transcription notice. | Works on iOS Safari and Android Chrome; hidden gracefully elsewhere; text flow unaffected. |
 | **5. Clinician pipeline** ✅ done | Interview guide, `ingest-interview` and `review-clinician` scripts; at least 3 records produced through the pipeline (mock interviews are fine). | A transcript becomes an approved clinician record whose explanations cite real evidence. |
-| **6. Instrumentation + validation** | `track()` events, feedback sheet, feedback storage (Vercel KV or similar), user-testing script. | All 12 events visible in the dashboard (or PostHog); feedback stored; the testing script is ready. |
+| **6. Instrumentation + validation** ✅ done | `track()` events, feedback sheet, feedback storage (Vercel KV or similar), user-testing script. | All 12 events visible in the dashboard (or PostHog); feedback stored; the testing script is ready. |
 | **7. Hardening** | Accessibility pass, performance budget, privacy review, safety copy reviewed by a clinical advisor. | WCAG AA checks pass; load under 2 s; the checklist in §9 is signed off. Ready for moderated user testing. |
 | **8. Claude agent + API (final stage)** | Vercel Functions `/api/turn`, `/api/matches`, `/api/feedback`; Claude extraction with a JSON schema; safety classifier; SPA rewrite excluding `/api`. Client switches from fixtures to the API. | Real free text produces sensible follow-ups and matches; p75 latency under 3 s; the extraction eval set (§13) meets its threshold; no medical advice in 50 red-team prompts. |
 
@@ -343,6 +343,20 @@ Each phase ends deployed on Vercel with CI green.
 - **Constraint answer priors:** bulk-billed-only 20%, in-person-only 20%, weekend-only 10%. This keeps rare hard limits from crowding out preference questions (PRD §20), while still asking when a constraint would change the top 3.
 - **"Credible match"** means eligible, above the fit threshold *and* explainable with at least one evidence-backed reason. With too little information, neutral scores can clear the threshold, but nothing gets shown without a reason.
 - **Not wired to the app yet.** The app still uses the Phase 1 fixture agent. Phase 3 serves this engine through `/api/turn` and `/api/matches` and switches the client over, including portraits for the eight new seed clinicians.
+
+### Phase 6 notes (instrumentation and validation)
+
+- **Wrapper:** `src/lib/analytics.ts` is a typed `track()` covering the 12 PRD §48 events plus `match_rating` (the §49 credibility question). Events go to Vercel Web Analytics on the web build; the native apps send nothing yet.
+  - Properties are limited to numbers, booleans and short identifiers (question ids, clinician ids, fit labels). Anything a patient typed or said is dropped by construction.
+  - A failing sender never breaks the flow.
+- **Where events fire:** session transitions fire from the session provider (`src/features/match/session.tsx`), so `sessionCore` stays pure. Screen events fire where they happen: follow-up shown, clinician viewed, booking, voice.
+- **Derived metrics:** time to shortlist is `matching_completed.seconds`, measured from submitting the description. Follow-up burden is `matching_completed.followups`.
+- **In-app validation:** "Does this match feel right for you?" (Yes / Not really) under each match, and the 1–5 credibility question on the end-of-list card. Both are stored in the session and sent as events.
+- **Deferred:** server-side feedback storage (Vercel KV) arrives with the Phase 8 API.
+- **Testing script:** `docs/user-testing.md`, with targets from PRD §49.
+- **Two checks for you:**
+  - Enable Web Analytics in the Vercel dashboard.
+  - Confirm whether the plan includes custom events. If not, the wrapper can point at another provider.
 
 ### Phase 5 notes (clinician onboarding pipeline)
 
