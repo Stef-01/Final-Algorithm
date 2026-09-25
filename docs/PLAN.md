@@ -342,6 +342,10 @@ Each phase ends deployed on Vercel with CI green.
   - The describe screen and typed messages to the assistant use it. Demo patients and assistant chips stay scripted.
   - Places, languages and urgent wording also come from the keyword rules. Either reading can trigger the safety pause.
 - **Switching it on (you):** add `ANTHROPIC_API_KEY` to the Vercel project's environment variables and redeploy. Set `WATL_CLAUDE=off` to switch it off again without removing the key.
+- **Dependency audit (25 Sep):** CI fails on any high or critical advisory in shipped dependencies. Two moderate advisories are accepted:
+  - `uuid` 7 comes via `xcode`, which is Expo's iOS build tooling and never runs in the app or on the server.
+  - `decode-uri-component` 0.2 comes via Expo Router's URL parsing. At worst a malformed link slows the patient's own tab, and no API function uses it.
+  - Forcing newer versions breaks those packages. Revisit when Expo updates them.
 - **Spend protection:** `server/guard.ts` guards `/api/extract`, `/api/reply` and `/api/feedback`.
   - Only WATL's own pages (and localhost) are accepted. Add other hosts with `WATL_ALLOWED_ORIGINS`.
   - Requests with no origin (native apps) are refused unless `WATL_ALLOW_NO_ORIGIN=1`.
