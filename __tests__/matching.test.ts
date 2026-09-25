@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { professionals } from '@server/data/professionals';
-import { areaPhrase, copyProblems } from '@server/engine/explain';
+import { areaPhrase, copyProblems, needLine, reasonsFor, saidLine } from '@server/engine/explain';
 import { CONFIDENCE, DIMENSIONS, type Dimension } from '@server/engine/types';
 
 import { costLabel } from '@/components/ClinicianCards';
@@ -218,5 +218,51 @@ describe('results headline', () => {
     if (r?.status !== 'matches') throw new Error('expected matches');
     const explained = r.matches.filter((m) => m.reasons.length > 0).length;
     expect(matchesHeadline(r.matches.length, 'gp', explained)).toMatch(/meet what you asked for/);
+  });
+});
+
+describe('why-they-fit wording', () => {
+  it('names kinds of help and groups of people naturally', () => {
+    expect(needLine('ADHD assessment')).toBe("You're looking for an ADHD assessment.");
+    expect(needLine('Children')).toBe("You're looking for help for a child.");
+    expect(needLine('NDIS support')).toBe("You're looking for support with the NDIS.");
+    expect(needLine('Trauma')).toBe("You're looking for help with trauma.");
+  });
+
+  it("quotes the patient's own words, and keeps scripted second-person quotes plain", () => {
+    expect(saidLine("I've been masking for years")).toBe("You said “I've been masking for years.”");
+    expect(saidLine("you've been masking for years.")).toBe("You said you've been masking for years.");
+    expect(saidLine('my sleep is a mess!')).toBe('You said “My sleep is a mess.”');
+  });
+
+  it('every need line, for every area a clinician lists, passes the copy rules', () => {
+    for (const area of new Set(professionals.flatMap((c) => c.expertise.map((e) => e.area)))) {
+      expect(copyProblems(needLine(area))).toEqual([]);
+      expect(needLine(area)).not.toMatch(/help with (children|young|neurodivergent|refugee|ndis support|parenting support)/i);
+    }
+  });
+});
+
+describe('one reason for several needs', () => {
+  it('names every need the same evidence covers', () => {
+    const jess = professionals.find((c) => c.id === 'jessica-katsamatsas')!;
+    const r = reasonsFor(jess, {
+      clinicalNeeds: [
+        { area: 'Anxiety', confidence: 'high' },
+        { area: 'Burnout', confidence: 'high' },
+        { area: 'Self-esteem', confidence: 'high' },
+      ],
+      preferences: {},
+      constraints: {},
+    });
+    expect(r).toHaveLength(1);
+    expect(r[0].signal).toBe("You're looking for help with anxiety, burnout and self-esteem.");
+    expect(r[0].evidence).toBe('Jess works with anxiety, burnout, self-esteem and relationship difficulties.');
+  });
+
+  it('only names the needs that evidence actually covers', () => {
+    const paula = professionals.find((c) => c.id === 'paula-garrido')!;
+    const r = reasonsFor(paula, { clinicalNeeds: [{ area: 'ADHD', confidence: 'high' }, { area: 'Trauma', confidence: 'medium' }], preferences: {}, constraints: {} });
+    expect(r[0].signal).toBe("You're looking for help with ADHD.");
   });
 });

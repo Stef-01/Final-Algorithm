@@ -74,8 +74,36 @@ export function areaPhrase(area: string) {
   return area.replace(/^([A-Z])([a-z])/, (_m, a: string, b: string) => a.toLowerCase() + b);
 }
 
+/**
+ * "You said …" from a quote. Scripted demos write quotes in the second person ("you've been
+ * masking"); Claude records the patient's own words ("I've been masking"), which read as a
+ * direct quote in quotation marks.
+ */
+export function saidLine(quote: string) {
+  const q = quote.trim().replace(/[.!?]+$/, '');
+  return /^(i|i'm|i’m|i've|i’ve|i'd|i’d|i'll|my|me|we|our)\b/i.test(q) ? `You said “${q.charAt(0).toUpperCase()}${q.slice(1)}.”` : `You said ${q}.`;
+}
+
+/** Areas that name a kind of help or a group of people read better said their own way. */
+const AREA_SIGNAL: Record<string, string> = {
+  'ADHD assessment': "You're looking for an ADHD assessment.",
+  'Autism assessment': "You're looking for an autism assessment.",
+  'Cognitive assessment': "You're looking for a cognitive assessment.",
+  Children: "You're looking for help for a child.",
+  'Young people': "You're looking for help for a young person.",
+  'Young adults': "You're looking for someone who works with young adults.",
+  'Neurodivergent adults': "You're looking for someone who works with neurodivergent adults.",
+  'Refugee and CALD clients': "You're looking for someone experienced with refugee and culturally diverse clients.",
+  'NDIS support': "You're looking for support with the NDIS.",
+  'Parenting support': "You're looking for parenting support.",
+  Disability: "You're looking for disability support.",
+};
+
+/** What the patient asked for, for a clinical need. */
+export const needLine = (area: string) => AREA_SIGNAL[area] ?? `You're looking for help with ${areaPhrase(area)}.`;
+
 function signalFor(d: Dimension, value: string, quote?: string) {
-  if (quote) return `You said ${quote.replace(/[.!?]+$/, '')}.`;
+  if (quote) return saidLine(quote);
   return SIGNAL[d]?.[value];
 }
 
@@ -100,12 +128,16 @@ export function reasonsFor(c: ClinicianRecord, s: PatientSignals, max = MAX_REAS
     candidates.push({ signal, evidenceId: ev.id, evidence: ev.patientFacing, dimension: d, weight });
   }
 
+  // Plainly worded needs ("help with anxiety") that the same evidence line covers, so one reason can
+  // name them all: "You're looking for help with anxiety and burnout."
+  const plainAreas = new Map<string, string[]>();
   for (const need of s.clinicalNeeds) {
     if (expertiseLevel(c, need.area) < 1) continue;
     const e = c.expertise.find((x) => x.area.toLowerCase() === need.area.toLowerCase())!;
     const ev = approvedEvidence(c, e.evidenceIds);
     if (!ev) continue;
-    const signal = need.quote ? `You said ${need.quote.replace(/[.!?]+$/, '')}.` : `You're looking for help with ${areaPhrase(need.area)}.`;
+    if (!need.quote && !AREA_SIGNAL[need.area]) plainAreas.set(ev.patientFacing, [...(plainAreas.get(ev.patientFacing) ?? []), need.area]);
+    const signal = need.quote ? saidLine(need.quote) : needLine(need.area);
     candidates.push({ signal, evidenceId: ev.id, evidence: ev.patientFacing, dimension: 'expertise', weight: 0.8 * CONFIDENCE[need.confidence] });
   }
 
@@ -117,6 +149,11 @@ export function reasonsFor(c: ClinicianRecord, s: PatientSignals, max = MAX_REAS
     if (usedEvidence.has(r.evidenceId) || (r.dimension !== 'expertise' && usedDims.has(r.dimension))) continue;
     // At most one expertise reason, so the card doesn't read as a list of conditions.
     if (r.dimension === 'expertise' && usedDims.has('expertise')) continue;
+    const areas = r.dimension === 'expertise' ? (plainAreas.get(r.evidence) ?? []) : [];
+    if (areas.length > 1 && r.signal === needLine(areas[0])) {
+      const names = areas.map(areaPhrase);
+      r.signal = `You're looking for help with ${names.slice(0, -1).join(', ')} and ${names.at(-1)}.`;
+    }
     usedDims.add(r.dimension);
     usedEvidence.add(r.evidenceId);
     out.push(r);
