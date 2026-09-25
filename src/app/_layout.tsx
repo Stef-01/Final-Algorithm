@@ -4,6 +4,8 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { VercelAnalytics } from '@/components/VercelAnalytics';
+import { SavedProvider } from '@/features/match/saved';
+import { SessionProvider } from '@/features/match/session';
 import { fontAssets } from '@/lib/theme';
 
 export default function RootLayout() {
@@ -12,13 +14,20 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar style="dark" />
-      <VercelAnalytics />
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#fff' } }}>
-        <Stack.Screen name="(tabs)" options={{ animation: 'none' }} />
-        <Stack.Screen name="clinician/[id]" />
-        <Stack.Screen name="safety" options={{ presentation: 'transparentModal', animation: 'fade' }} />
-      </Stack>
+      <SessionProvider>
+        <SavedProvider>
+          <StatusBar style="dark" />
+          <VercelAnalytics />
+          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#fff' } }}>
+            <Stack.Screen name="(tabs)" options={{ animation: 'none' }} />
+            <Stack.Screen name="clinician/[id]" />
+            <Stack.Screen name="dev/states" />
+            {['safety', 'book/[id]'].map((name) => (
+              <Stack.Screen key={name} name={name} options={{ presentation: 'transparentModal', animation: 'fade' }} />
+            ))}
+          </Stack>
+        </SavedProvider>
+      </SessionProvider>
     </SafeAreaProvider>
   );
 }

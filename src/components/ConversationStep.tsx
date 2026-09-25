@@ -69,14 +69,24 @@ export function ConversationStep({ icon, title, children, onNext, nextEnabled = 
   );
 }
 
-export function ChoicePill({ label, onPress }: { label: string; onPress: () => void }) {
+export function ChoicePill({
+  label,
+  onPress,
+  removed,
+}: {
+  label: string;
+  onPress: () => void;
+  /** Shown struck through, e.g. a priority the patient said doesn't matter. */
+  removed?: boolean;
+}) {
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
-      style={({ pressed }) => [styles.pill, pressed && styles.pillPressed]}
+      accessibilityState={removed === undefined ? undefined : { selected: !removed }}
+      style={({ pressed }) => [styles.pill, pressed && styles.pillPressed, removed && styles.pillRemoved]}
     >
-      <Text style={styles.pillText}>{label}</Text>
+      <Text style={[styles.pillText, removed && styles.pillTextRemoved]}>{label}</Text>
     </Pressable>
   );
 }
@@ -108,5 +118,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   pillPressed: { backgroundColor: colors.line },
+  pillRemoved: { backgroundColor: colors.background },
+  pillTextRemoved: { color: colors.line, textDecorationLine: 'line-through' },
   pillText: { fontFamily: fonts.medium, fontSize: 18, color: colors.black },
 });

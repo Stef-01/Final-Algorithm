@@ -9,52 +9,78 @@ import { IconName } from './icons';
 // The profile card language from the Discover screen: white cards on the grey
 // background, each with an optional like button in the bottom-right corner.
 
-type LikeProps = { onLike?: () => void; likeLabel?: string };
+type LikeProps = { onLike?: () => void; likeLabel?: string; liked?: boolean };
 
 export function PhotoCard({
   caption,
   source,
-  onLike,
-  likeLabel,
-}: { caption: string; source: ImageSourcePropType } & LikeProps) {
+  onPress,
+  accessibilityLabel,
+  ...like
+}: { caption: string; source: ImageSourcePropType; onPress?: () => void; accessibilityLabel?: string } & LikeProps) {
+  const image = <Image source={source} style={styles.photo} contentFit="cover" accessibilityIgnoresInvertColors />;
   return (
-    <Card title={caption} onLike={onLike} likeLabel={likeLabel}>
-      <Image source={source} style={styles.photo} contentFit="cover" accessibilityIgnoresInvertColors />
+    <Card title={caption} {...like}>
+      {onPress ? (
+        <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={accessibilityLabel}>
+          {image}
+        </Pressable>
+      ) : (
+        image
+      )}
     </Card>
   );
 }
 
 /** Small title over a large serif answer. */
-export function PromptCard({
-  title,
-  answer,
-  onLike,
-  likeLabel,
-}: { title: string; answer: string } & LikeProps) {
+export function PromptCard({ title, answer, ...like }: { title: string; answer: string } & LikeProps) {
   return (
-    <Card title={title} onLike={onLike} likeLabel={likeLabel} padded>
+    <Card title={title} {...like} padded>
       <Text style={styles.answer}>{answer}</Text>
     </Card>
+  );
+}
+
+/** Small title over regular body text (bios and other longer copy). */
+export function TextCard({ title, body }: { title: string; body: string }) {
+  return (
+    <View style={[styles.card, styles.textCard]}>
+      <Text style={[styles.cardTitle, styles.cardTitlePadded]}>{title}</Text>
+      <Text style={styles.body}>{body}</Text>
+    </View>
   );
 }
 
 export type ChipItem = { icon: IconName; label: string };
 
 /** Horizontal chip row, then optional full-width rows (the Discover "vitals" card). */
-export function ChipsCard({ chips, rows = [] }: { chips: ChipItem[]; rows?: ChipItem[] }) {
+export function ChipsCard({
+  chips,
+  rows = [],
+  rowsTitle,
+}: {
+  chips: ChipItem[];
+  rows?: ChipItem[];
+  rowsTitle?: string;
+}) {
   return (
     <View style={styles.card}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
-        {chips.map((c, i) => (
-          <View key={`${c.icon}-${c.label}`} style={[styles.chip, i > 0 && styles.chipDivider]}>
-            <Icon name={c.icon} size={18} />
-            <Text style={styles.chipText}>{c.label}</Text>
-          </View>
-        ))}
-      </ScrollView>
+      {chips.length > 0 ? (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
+          {chips.map((c, i) => (
+            <View key={`${c.icon}-${c.label}`} style={[styles.chip, i > 0 && styles.chipDivider]}>
+              <Icon name={c.icon} size={18} color={colors.black} />
+              <Text style={styles.chipText}>{c.label}</Text>
+            </View>
+          ))}
+        </ScrollView>
+      ) : null}
+      {rowsTitle && rows.length > 0 ? (
+        <Text style={[styles.rowsTitle, chips.length === 0 && styles.rowsTitleFirst]}>{rowsTitle}</Text>
+      ) : null}
       {rows.map((r) => (
         <View key={`${r.icon}-${r.label}`} style={styles.row}>
-          <Icon name={r.icon} size={18} />
+          <Icon name={r.icon} size={18} color={colors.black} />
           <Text style={styles.chipText}>{r.label}</Text>
         </View>
       ))}
@@ -67,6 +93,7 @@ function Card({
   children,
   onLike,
   likeLabel = 'Like',
+  liked,
   padded,
 }: { title: string; children: ReactNode; padded?: boolean } & LikeProps) {
   return (
@@ -74,8 +101,14 @@ function Card({
       <Text style={[styles.cardTitle, padded && styles.cardTitlePadded]}>{title}</Text>
       {children}
       {onLike ? (
-        <Pressable onPress={onLike} accessibilityRole="button" accessibilityLabel={likeLabel} style={styles.like}>
-          <Icon name="icLike" size={23} />
+        <Pressable
+          onPress={onLike}
+          accessibilityRole="button"
+          accessibilityLabel={likeLabel}
+          accessibilityState={{ selected: !!liked }}
+          style={styles.like}
+        >
+          <Icon name={liked ? 'heartPink' : 'icLike'} size={23} />
         </Pressable>
       ) : null}
     </View>
@@ -121,6 +154,19 @@ const styles = StyleSheet.create({
   chip: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14 },
   chipDivider: { borderLeftWidth: 1, borderLeftColor: colors.chip },
   chipText: { fontFamily: fonts.medium, fontSize: 15, color: colors.black },
+  rowsTitle: {
+    fontFamily: fonts.medium,
+    fontSize: 13,
+    color: colors.line,
+    paddingHorizontal: 29,
+    paddingTop: 14,
+    paddingBottom: 4,
+    borderTopWidth: 1,
+    borderTopColor: colors.background,
+  },
+  rowsTitleFirst: { borderTopWidth: 0, paddingTop: 18 },
+  textCard: { paddingTop: 30, paddingBottom: 24 },
+  body: { fontFamily: fonts.regular, fontSize: 16, lineHeight: 24, color: colors.black, marginHorizontal: 15 },
   row: {
     flexDirection: 'row',
     alignItems: 'center',

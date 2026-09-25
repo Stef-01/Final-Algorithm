@@ -46,11 +46,10 @@ describe('asset seeding', () => {
     },
   );
 
-  it('uses every image in assets/images (no orphaned files)', () => {
+  it('uses every image in assets/images and assets/clinicians (no orphaned files)', () => {
     const used = new Set(requiredAssets.map((r) => r.asset));
-    const orphans = fs
-      .readdirSync(path.join(root, 'assets/images'))
-      .map((f) => path.join(root, 'assets/images', f))
+    const orphans = ['assets/images', 'assets/clinicians']
+      .flatMap((dir) => fs.readdirSync(path.join(root, dir)).map((f) => path.join(root, dir, f)))
       .filter((f) => !used.has(f));
     expect(orphans.map((f) => path.relative(root, f))).toEqual([]);
   });

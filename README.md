@@ -4,7 +4,9 @@ WATL helps you find a GP who fits you. Describe what you need in your own words,
 
 This is a React Native (Expo Router) app, mobile-first on the web and deployed on Vercel. The build plan is in [`docs/PLAN.md`](docs/PLAN.md).
 
-> **Status: Phase 0 of the plan.** The navigation and screens are in place as placeholders. Matching, clinician data and voice arrive in later phases.
+> **Status: Phase 1 of the plan.** Every screen works end to end on fixture data: a scripted stand-in for the matching engine, and four fictional clinicians with illustrated portraits. The real engine (Phase 2), the Claude agent (Phase 3) and voice (Phase 4) come next.
+>
+> **Testing tools are on:** a "Use the demo example" link on the first screen, and Settings → Review screen states (`/dev/states`), which opens any screen state directly. Set `EXPO_PUBLIC_DEV_TOOLS=false` to hide them.
 
 ## Getting started
 
@@ -25,24 +27,29 @@ After adding or removing packages, run `npm run lockfile` before committing. An 
 
 The tests in `__tests__/` cover:
 
-- **Assets:** every image and font the app `require`s exists and is a real file of its type, and every file in `assets/images` is used.
-- **Navigation:** the app opens straight into Find with no sign-in, the three tabs work, the find flow moves forward correctly, clinician detail opens above the tabs, and the safety sheet opens.
+- **Assets:** every image and font the app `require`s exists and is a real file of its type, and every file in `assets/images` and `assets/clinicians` is used.
+- **Matching (fixture):** one follow-up for the PRD demo, preference confirmation only when uncertain, safety pause, hard-constraint filtering without padding, no-strong-match actions, "see more" only on request.
+- **Explanation rules:** every reason is backed by a clinician evidence line, at most 3 reasons, no unsupported adjectives, winner language or percentages, one-sentence agent lines, 2–6-word options.
+- **Screens:** the PRD demo script end to end, stepping through matches, detail and booking handoff, saving to the Saved tab, partial and no-match results, safety, start over, and the review page.
 
 ## What's in the app
 
 Three tabs: **Find**, **Saved** and **Settings**.
 
-| Screen | Route | Status |
+| Screen | Route | What it does |
 | --- | --- | --- |
-| Open conversation | `/` | Placeholder: text input works, voice arrives in Phase 4 |
-| Follow-up question | `/clarify` | Placeholder with the demo question |
-| Preference confirmation | `/confirm` | Placeholder (shown only when needed) |
-| Matching | `/matching` | Placeholder |
-| Top matches | `/matches` | Placeholder; the Discover-style cards arrive in Phase 1 |
-| Clinician detail | `/clinician/[id]` | Placeholder |
-| Safety pause | `/safety` | Placeholder wording, pending clinical review |
-| Saved | `/saved` | Empty state |
-| Settings | `/settings` | Start over, about, help and safety |
+| Open conversation | `/` | Describe what you need (text; voice arrives in Phase 4) |
+| Follow-up question | `/clarify?q=…` | One question at a time; tapping an answer moves on, or answer in your own words |
+| Preference confirmation | `/confirm` | Only when an answer leaves things uncertain; tap a priority to remove it |
+| Matching | `/matching` | Moves on as soon as results are ready |
+| Top matches | `/matches` | Up to 3 clinicians, one at a time, in the Discover card layout: fit label, why they fit, practical details, how they practise. ✕ = next match, ♥ = save |
+| Clinician detail | `/clinician/[id]` | Why I matched you, practice, experience, practical details, bio, qualifications; Book / See next match |
+| Booking handoff | `/book/[id]` | Explains where booking would go (the clinicians are fictional) |
+| Safety pause | `/safety` | Shown on urgent wording; wording pending clinical review |
+| Saved | `/saved` | Clinicians you hearted, kept on this device |
+| Settings | `/settings` | Start over, about, privacy, help and safety, review screen states |
+
+**Fixture triggers** (for testing): the demo text gives 3 matches after one question; answering "Not sure" shows preference confirmation; mentioning "bulk bill" leaves 2 matches; "weekend" + "in person" gives no strong match (then "Include telehealth" finds 1); urgent wording such as "chest pain" pauses for safety.
 
 There's no account and no sign-in.
 
@@ -63,9 +70,11 @@ npx serve -s dist
 
 ```
 src/app/          Expo Router screens (one file per route)
-src/components/   Shared UI: conversation scaffold, Discover-style cards, tab bar, sheets, icons
-src/lib/          Theme (colours, fonts)
-assets/           Images and fonts
+src/components/   Shared UI: conversation scaffold, Discover-style cards, clinician cards, tab bar, sheets, icons
+src/features/match/  Session state, fixture agent, saved clinicians
+src/data/         Fictional clinicians
+src/lib/          Theme (colours, fonts), testing-tools switch
+assets/           Images, clinician portraits (illustrations) and fonts
 docs/PLAN.md      Build plan
 ```
 
