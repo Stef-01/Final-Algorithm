@@ -97,7 +97,7 @@ describe('where', () => {
   it('asks straight after the profession; near a place opens a map to tap', async () => {
     renderRouter(routes, { initialUrl: '/' });
     fireEvent.press(await screen.findByText('Psychologist'));
-    expect(await screen.findByText('Most psychologists offer telehealth.')).toBeOnTheScreen();
+    expect(await screen.findByText(/^\d+ of \d+ psychologists here offer telehealth\.$/)).toBeOnTheScreen();
     fireEvent.press(screen.getByLabelText('Near a place: In person if I can'));
     fireEvent.press(screen.getAllByLabelText('Melbourne')[0]); // the pin on the map
     fireEvent.press(screen.getByLabelText('Next'));

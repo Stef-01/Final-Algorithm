@@ -24,6 +24,7 @@ export default function ConfirmPreferences() {
       icon="icCheck"
       title="Here's what seems to matter most."
       note="Anything wrong? Tap one to remove it."
+      progress={0.92}
     >
       {priorities.map((p) => (
         <ChoicePill

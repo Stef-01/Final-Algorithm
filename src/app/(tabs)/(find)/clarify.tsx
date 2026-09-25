@@ -38,6 +38,7 @@ export default function Clarify() {
       note={question.ack}
       onNext={typing ? () => send(text) : undefined}
       nextEnabled={text.trim().length > 0}
+      progress={Math.min(0.85, 0.5 + number * 0.1)}
     >
       {typing ? (
         <>

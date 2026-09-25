@@ -19,7 +19,7 @@ export default function WhoAreYouLookingFor() {
   const { goals } = useGoals();
 
   return (
-    <ConversationStep icon="icQuestion" title="Who could help?" dots={0}>
+    <ConversationStep icon="icQuestion" title="Who could help?">
       <View style={styles.grid}>
         {PROFESSION_INFO.map((p, i) => (
           <Appear key={p.id} index={i} style={styles.cell}>

@@ -144,6 +144,13 @@ describe('funnel and session', () => {
     expect(core.setWhere(near.state, null).state.input.filters).toEqual({});
   });
 
+  it('says how many here offer telehealth, from the network itself', () => {
+    const { telehealthNote } = require('@/app/(tabs)/(find)/where') as typeof import('@/app/(tabs)/(find)/where');
+    expect(telehealthNote('adhd_coach')).toBe('All the ADHD coaches here offer telehealth.');
+    expect(telehealthNote('physiotherapist')).toBe('The physiotherapists here see people in person.');
+    expect(telehealthNote('psychologist')).toMatch(/^\d+ of \d+ psychologists here offer telehealth\.$/);
+  });
+
   it('only matches the chosen profession', () => {
     for (const p of ['gp', 'psychologist'] as const) {
       const state = core.demoResults(demos.find((d) => d.profession === p)!.id);

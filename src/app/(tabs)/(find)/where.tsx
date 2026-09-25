@@ -7,8 +7,10 @@ import { ConversationStep } from '@/components/ConversationStep';
 import { Icon } from '@/components/Icon';
 import type { IconName } from '@/components/icons';
 import { Appear, PressDepth, PressScale } from '@/components/motion';
+import { pool } from '@/features/match/agent';
 import { AREAS_NEAR, type AreaId } from '@/features/match/filters';
 import { useSession } from '@/features/match/session';
+import type { ProfessionChoice } from '@/features/match/sessionCore';
 import { copyFor } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
 
@@ -21,7 +23,7 @@ export default function Where() {
   const had = state.input.filters?.near ?? null;
   const [near, setNear] = useState(had !== null);
   const [area, setArea] = useState<AreaId | null>(had);
-  const many = copyFor(state.profession).many;
+  const note = telehealthNote(state.profession);
 
   const go = (a: AreaId | null) => router.push(session.setWhere(a));
 
@@ -29,10 +31,10 @@ export default function Where() {
     <ConversationStep
       icon="icLocation"
       title="Does location matter?"
-      note={`Most ${many} offer telehealth.`}
+      note={note}
       onNext={near ? () => area && go(area) : undefined}
       nextEnabled={!!area}
-      dots={1}
+      progress={0.2}
     >
       <View style={styles.options}>
         <Option icon="icVideo" title="Anywhere" sub="Telehealth is fine" on={!near} onPress={() => go(null)} />
@@ -62,6 +64,18 @@ export default function Where() {
       ) : null}
     </ConversationStep>
   );
+}
+
+/** From the network itself: how many of this kind of professional offer telehealth. */
+export function telehealthNote(profession: ProfessionChoice | undefined) {
+  const here = pool.filter((c) => !profession || profession === 'either' || c.profession === profession);
+  const n = here.filter((c) => c.practical.modes.includes('telehealth')).length;
+  const { one, many } = copyFor(profession);
+  if (here.length === 0) return undefined;
+  if (here.length === 1) return n ? `The ${one} here offers telehealth.` : `The ${one} here sees people in person.`;
+  if (n === 0) return `The ${many} here see people in person.`;
+  if (n === here.length) return `All the ${many} here offer telehealth.`;
+  return `${n} of ${here.length} ${many} here offer telehealth.`;
 }
 
 function Option({ icon, title, sub, on, onPress }: { icon: IconName; title: string; sub: string; on: boolean; onPress: () => void }) {

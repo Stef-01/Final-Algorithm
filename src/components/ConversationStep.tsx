@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, fonts } from '@/lib/theme';
 import { Icon } from './Icon';
 import { Appear, PressScale } from './motion';
+import { StepProgress } from './StepProgress';
 import { IconName } from './icons';
 
 type Props = {
@@ -22,14 +23,14 @@ type Props = {
   /** Omit to hide the round "next" button (e.g. choice screens that advance on tap). */
   onNext?: () => void;
   nextEnabled?: boolean;
-  /** Number of grey progress dots after the icon. */
-  dots?: number;
+  /** How far through the search (0–1), as a bar beside the icon. Omit for no bar. */
+  progress?: number;
   /** Short line under the title (e.g. an acknowledgement or subtext). */
   note?: string;
 };
 
 // Shared scaffold for the matching conversation: circled icon, big serif question, round next button.
-export function ConversationStep({ icon, title, children, onNext, nextEnabled = false, dots = 1, note }: Props) {
+export function ConversationStep({ icon, title, children, onNext, nextEnabled = false, progress, note }: Props) {
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -38,9 +39,7 @@ export function ConversationStep({ icon, title, children, onNext, nextEnabled = 
             <View style={styles.iconCircle}>
               <Icon name={icon} size={22} />
             </View>
-            {Array.from({ length: dots }, (_, i) => (
-              <View key={i} style={styles.dot} />
-            ))}
+            {progress === undefined ? null : <StepProgress value={progress} />}
           </View>
           <Appear key={title}>
             <Text style={styles.title} accessibilityRole="header">{title}</Text>
@@ -113,7 +112,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  dot: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.chip },
   title: { fontFamily: fonts.serifSemiBold, fontSize: 30, lineHeight: 38, color: colors.black, marginBottom: 32 },
   note: { fontFamily: fonts.regular, fontSize: 16, lineHeight: 22, color: colors.muted, marginTop: -20, marginBottom: 28 },
   next: { position: 'absolute', right: 28, bottom: 28 },

@@ -50,7 +50,7 @@ export default function Describe() {
       note="In your own words."
       onNext={submit}
       nextEnabled={ready && !reading}
-      dots={1}
+      progress={0.4}
     >
       {demo && draft === null ? (
         <View style={styles.demoNote}>
