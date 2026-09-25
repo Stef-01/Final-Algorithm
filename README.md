@@ -70,6 +70,8 @@ The web build is deployed on Vercel from `main` (see [`vercel.json`](vercel.json
 
 **Claude (optional).** With `ANTHROPIC_API_KEY` set in the Vercel project, [`api/extract.ts`](api/extract.ts) uses Claude to read what patients write. Without it, or whenever a request fails, the app uses its on-device keyword extractor, so nothing breaks. Set `WATL_CLAUDE=off` to switch Claude off without removing the key, and `WATL_CLAUDE_REPLIES=on` to let Claude word the assistant's replies (checked against the facts, else the template is used). The endpoints only accept WATL's own pages and cap each visitor (`server/guard.ts`); set a monthly spend limit on the key too. Details: [`docs/PLAN.md`](docs/PLAN.md) → Phase 8 notes.
 
+**MCP (connect your AI).** [`api/mcp.ts`](api/mcp.ts) is an MCP server (streamable HTTP, JSON responses) with two read-only tools, `find_professionals` and `get_professional`. Add `https://final-algorithm.vercel.app/api/mcp` as a custom connector in Claude or ChatGPT, and the assistant can rank the network using what it already knows about you. The engine does the ranking, exactly as in the app; nothing sent is stored. Profile → Connect your AI walks through it and plays an example chat against the same tool.
+
 To try the production web build locally:
 
 ```bash

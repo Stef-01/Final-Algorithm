@@ -7,14 +7,21 @@ import { AccessibilityInfo, Animated, Easing, Platform, Pressable, PressableProp
 
 const native = Platform.OS !== 'web';
 
+// The last known setting, so screens mounted later start with it instead of animating first.
+let known = false;
+
 export function useReducedMotion() {
-  const [reduced, setReduced] = useState(false);
+  const [reduced, setReduced] = useState(known);
   useEffect(() => {
     let alive = true;
+    const set = (r: boolean) => {
+      known = r;
+      if (alive) setReduced(r);
+    };
     AccessibilityInfo.isReduceMotionEnabled?.()
-      .then((r) => alive && setReduced(r))
+      .then(set)
       .catch(() => {});
-    const sub = AccessibilityInfo.addEventListener?.('reduceMotionChanged', setReduced);
+    const sub = AccessibilityInfo.addEventListener?.('reduceMotionChanged', set);
     return () => {
       alive = false;
       sub?.remove();
@@ -183,5 +190,59 @@ export function PressDepth({
         {children}
       </Animated.View>
     </Pressable>
+  );
+}
+
+/**
+ * A one-off celebration: a ring and a spray of dots out from the centre, then gone. Put it behind
+ * whatever just succeeded (a check, a heart). Changing `fire` replays it.
+ */
+export function Burst({ fire, size = 96, color = '#6B2D5C', count = 10 }: { fire: number; size?: number; color?: string; count?: number }) {
+  const reduced = useReducedMotion();
+  const v = useState(() => new Animated.Value(0))[0];
+  useEffect(() => {
+    if (!fire || reduced) return;
+    v.setValue(0);
+    const a = Animated.timing(v, { toValue: 1, duration: 700, easing: Easing.out(Easing.cubic), useNativeDriver: native });
+    a.start();
+    return () => a.stop();
+  }, [fire, reduced, v]);
+  if (!fire || reduced) return null;
+  const fade = v.interpolate({ inputRange: [0, 0.6, 1], outputRange: [1, 0.8, 0] });
+  return (
+    <Animated.View pointerEvents="none" style={{ position: 'absolute', width: size, height: size, alignItems: 'center', justifyContent: 'center', opacity: fade }}>
+      <Animated.View
+        style={{
+          position: 'absolute',
+          width: size * 0.6,
+          height: size * 0.6,
+          borderRadius: size,
+          borderWidth: 3,
+          borderColor: color,
+          transform: [{ scale: v.interpolate({ inputRange: [0, 1], outputRange: [0.6, 1.7] }) }],
+        }}
+      />
+      {Array.from({ length: count }, (_, i) => {
+        const angle = (i / count) * Math.PI * 2;
+        const r = size * (i % 2 ? 0.62 : 0.8);
+        return (
+          <Animated.View
+            key={i}
+            style={{
+              position: 'absolute',
+              width: i % 3 ? 7 : 10,
+              height: i % 3 ? 7 : 10,
+              borderRadius: 5,
+              backgroundColor: color,
+              transform: [
+                { translateX: v.interpolate({ inputRange: [0, 1], outputRange: [0, Math.cos(angle) * r] }) },
+                { translateY: v.interpolate({ inputRange: [0, 1], outputRange: [0, Math.sin(angle) * r] }) },
+                { scale: v.interpolate({ inputRange: [0, 0.3, 1], outputRange: [0.2, 1.2, 0.4] }) },
+              ],
+            }}
+          />
+        );
+      })}
+    </Animated.View>
   );
 }

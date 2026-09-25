@@ -12,6 +12,7 @@ What WATL does with what a patient tells it, as the code stands. Written for a r
 | Voice | The browser's speech service transcribes it (in Chrome, audio goes to Google). WATL receives only the text | Not stored by WATL | `src/features/voice/` (decision D7) |
 | Analytics events | Vercel Web Analytics | Vercel's retention | `src/lib/analytics.ts` |
 | Join WATL submissions (a professional's name, email, practice, fees and answers) | `/api/portal` → Upstash list `watl:portal`, once connected, as a draft interview for review | The newest 1,000 are kept; delete each once reviewed | `api/portal.ts`, `server/portal.ts` |
+| What an assistant connected over MCP sends (needs, limits, style) | `/api/mcp`, only while ranking | Not stored or logged; the response is ranked profiles only | `api/mcp.ts`, `server/mcp.ts` |
 | Match rating and thumbs (numbers, clinician ids, the day); after a 5 or a 1–2, the reasons tapped and an optional note of up to 300 characters | `/api/feedback` → Upstash Redis, once connected | The newest 5,000 are kept; no time limit yet (see Open 5) | `api/feedback.ts`, `server/feedback.ts` |
 
 ## What never leaves the device

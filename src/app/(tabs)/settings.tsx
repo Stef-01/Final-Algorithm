@@ -6,6 +6,7 @@ import { GoalChips } from '@/components/GoalChips';
 import { ListGroup, ListRow, SectionTitle } from '@/components/ListRow';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { useGoals } from '@/features/care/goals';
+import { CLIENTS, useConnection } from '@/features/connect/connection';
 import { claudeEnabled } from '@/features/match/remoteExtract';
 import { useSession } from '@/features/match/session';
 import { devToolsEnabled } from '@/lib/devtools';
@@ -15,6 +16,7 @@ import { colors } from '@/lib/theme';
 export default function Settings() {
   const session = useSession();
   const { goals, toggle } = useGoals();
+  const { connection: ai } = useConnection();
   const [claude, setClaude] = useState<boolean | null>(null);
   useEffect(() => {
     let alive = true;
@@ -30,6 +32,15 @@ export default function Settings() {
       <ScrollView contentContainerStyle={styles.content}>
         <SectionTitle>Your goals</SectionTitle>
         <GoalChips selected={goals} onToggle={toggle} />
+
+        <SectionTitle>Your AI</SectionTitle>
+        <ListGroup>
+          <ListRow
+            label={ai ? `Connected to ${CLIENTS[ai.client].name}` : 'Connect Claude or ChatGPT'}
+            value={ai ? 'Manage what it can use' : 'Find people with what your AI knows'}
+            onPress={() => router.push('/connect')}
+          />
+        </ListGroup>
 
         <SectionTitle>Your search</SectionTitle>
         <ListGroup>
