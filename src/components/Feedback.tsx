@@ -8,7 +8,7 @@ export function MatchFeedback({ value, onChoose }: { value?: 'up' | 'down'; onCh
   return (
     <View style={styles.row}>
       {value ? (
-        <Text style={styles.thanks}>Thanks, that helps improve matching.</Text>
+        <Text style={styles.thanks}>Thanks — the WATL team reviews these to improve matching.</Text>
       ) : (
         <>
           <Text style={styles.question}>Does this match feel right for you?</Text>
