@@ -33,7 +33,7 @@
       [
         "expo-calendar",
         {
-          "calendarPermission": "WATL adds the reminders you choose, to book your appointments."
+          "calendarPermission": "WATL adds the reminders you choose, and, if you ask it to, checks when you are free to suggest appointment times. Only times are read; nothing leaves your phone."
         }
       ]
     ],

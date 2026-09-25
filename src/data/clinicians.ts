@@ -72,6 +72,7 @@ export function toView(r: ClinicianRecord): Clinician {
       gapAfterMedicare: p.gapAfterMedicare,
       billingNote: p.billingNote,
       weekends: p.weekends,
+      daysUntilAvailable: p.daysUntilAvailable,
     },
     experiencedWith: experiencedWith(r),
     practiceStyle: practiceStyle(r),

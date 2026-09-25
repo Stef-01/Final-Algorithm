@@ -1,9 +1,10 @@
 import { Image } from 'expo-image';
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { router } from 'expo-router';
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { EmptyStateCard } from '@/components/EmptyStateCard';
+import { RatePractitioner } from '@/components/RatePractitioner';
 import { Icon } from '@/components/Icon';
 import { LikeButton } from '@/components/LikeButton';
 import { SectionTitle } from '@/components/ListRow';
@@ -11,12 +12,15 @@ import { Appear, PressScale } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { getClinician } from '@/data/clinicians';
 import { useGoals } from '@/features/care/goals';
+import { loadAsked, markAsked, pickPrompt, promptRoll } from '@/features/care/ratePrompt';
+import { suggestSlot, slotLabel, type Busy } from '@/features/care/slots';
 import { bookingPlan, careTeam, goalsDraft, type Slot, type Step, type TeamMember } from '@/features/care/plan';
 import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
 import type { ProfessionChoice } from '@/features/match/sessionCore';
 import { track } from '@/lib/analytics';
 import { addToCalendar } from '@/lib/calendar';
+import { busyTimes } from '@/lib/deviceCalendar';
 import { article, capitalised, PROFESSION_INFO } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
 
@@ -41,6 +45,33 @@ export default function MyCare() {
   const team = careTeam(members, goals);
   const steps = bookingPlan(team);
   const liked = saved.filter((s) => !s.team && getClinician(s.clinicianId));
+
+  // Now and then, ask how it's going with someone on the team (once per visit at most).
+  const [asking, setAsking] = useState<string | null>(null);
+  const decided = useRef(false);
+  const teamIds = members.map((m) => m.clinicianId).join(',');
+  useEffect(() => {
+    if (decided.current || !teamIds) return;
+    decided.current = true;
+    void loadAsked().then((asked) => {
+      const id = pickPrompt(teamIds.split(','), asked, promptRoll());
+      if (!id) return;
+      void markAsked(id, asked);
+      setAsking(id);
+    });
+  }, [teamIds]);
+  // Your busy times, once you let WATL check your calendar (phones only). null = not checked.
+  const [busy, setBusy] = useState<Busy[] | null>(null);
+  const [checking, setChecking] = useState(false);
+  const closeAsk = useCallback(() => setAsking(null), []);
+  const checkCalendar = async () => {
+    setChecking(true);
+    const now = new Date();
+    const b = await busyTimes(now, new Date(now.getTime() + 70 * 24 * 60 * 60 * 1000));
+    setChecking(false);
+    if (b) setBusy(b);
+    track('calendar_checked', { ok: !!b });
+  };
 
   if (team.length === 0 && liked.length === 0) {
     return (
@@ -93,13 +124,25 @@ export default function MyCare() {
             <View style={styles.steps}>
               {steps.map((s, i) => (
                 <Appear key={s.member.clinicianId} index={i}>
-                  <StepRow step={s} />
+                  <StepRow step={s} busy={busy} />
                 </Appear>
               ))}
             </View>
-            <Text style={styles.fine}>Reminders to book. WATL can’t see your calendar.</Text>
+            {Platform.OS !== 'web' && busy === null ? (
+              <PressScale onPress={checkCalendar} disabled={checking} accessibilityRole="button" style={styles.check} scaleTo={0.96}>
+                <Icon name="icCalendar" size={16} color={colors.black} />
+                <Text style={styles.checkText}>{checking ? 'Checking…' : 'Find times we’re both free'}</Text>
+              </PressScale>
+            ) : null}
+            <Text style={styles.fine}>
+              {busy
+                ? 'Your calendar, and each practice’s wait where they publish one. Confirm the time when you book.'
+                : 'Each practice’s wait, where they publish one. Confirm the time when you book.'}
+            </Text>
           </>
         ) : null}
+
+        {asking ? <RatePractitioner clinicianId={asking} onClose={closeAsk} /> : null}
 
         {liked.length > 0 ? (
           <>
@@ -192,14 +235,16 @@ function LikedRow({ id, onUnlike }: { id: string; onUnlike: () => void }) {
   );
 }
 
-function StepRow({ step }: { step: Step }) {
+function StepRow({ step, busy }: { step: Step; busy: Busy[] | null }) {
   const { member: m } = step;
   const info = infoFor(m.profession);
+  const c = getClinician(m.clinicianId);
+  const slot = c ? suggestSlot({ from: step.on, waitDays: c.practical.daysUntilAvailable, weekends: c.practical.weekends, busy: busy ?? [] }) : null;
   const event = {
     title: `Book ${m.firstName} (${info.one})`,
     start: step.on,
     minutes: 15,
-    details: `A reminder from WATL to book with ${m.name}.`,
+    details: `A reminder from WATL to book with ${m.name}.${slot ? ` Suggested time: ${slotLabel(slot)}.` : ''}`,
     url: m.bookingUrl ?? undefined,
   };
   const [added, setAdded] = useState(false);
@@ -219,7 +264,12 @@ function StepRow({ step }: { step: Step }) {
         <Text style={styles.stepTitle} numberOfLines={1}>
           Book {m.firstName}
         </Text>
-        <Text style={styles.cardRole}>{capitalised(info.one)}</Text>
+        <Text style={[styles.cardRole, styles.left]}>{capitalised(info.one)}</Text>
+        {slot ? (
+          <Text style={styles.slot}>
+            {busy ? 'Both free' : 'Try'} {slotLabel(slot)}
+          </Text>
+        ) : null}
       </PressScale>
       <PressScale onPress={() => add('google')} accessibilityRole="button" accessibilityLabel={`Add a reminder to book ${m.firstName} to Google Calendar`} style={styles.cal} scaleTo={0.9}>
         <Icon name={added ? 'icCheck' : 'icCalendar'} size={18} color={colors.black} />
@@ -259,5 +309,8 @@ const styles = StyleSheet.create({
   likedPhoto: { width: 44, height: 44, borderRadius: 22 },
   fill: { flex: 1 },
   left: { textAlign: 'left' },
+  slot: { fontFamily: fonts.bold, fontSize: 13, color: colors.purpleText, marginTop: 3 },
+  check: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, alignSelf: 'center', minHeight: 44, marginTop: 12, paddingHorizontal: 18, borderRadius: 22, borderWidth: 1, borderColor: colors.black, backgroundColor: colors.white },
+  checkText: { fontFamily: fonts.bold, fontSize: 14, color: colors.black },
   fine: { fontFamily: fonts.regular, fontSize: 12, color: colors.muted, textAlign: 'center', marginTop: 12, paddingHorizontal: 24 },
 });

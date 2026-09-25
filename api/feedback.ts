@@ -1,7 +1,8 @@
-import { parseFeedback, toRecord } from '../server/feedback';
+import { parseFeedback, parsePractitionerRating, toRecord } from '../server/feedback';
 import { allowedOrigin, underLimit } from '../server/guard';
 
-// POST /api/feedback → stores one rating in Upstash Redis (Vercel Marketplace), list `watl:feedback`,
+// POST /api/feedback → stores one rating in Upstash Redis (Vercel Marketplace), list `watl:feedback`
+// (match ratings) or `watl:practitioner` (care-team ratings, `kind: 'practitioner'`),
 // keeping only the newest MAX_KEPT so the list can't grow without limit (retention: docs/privacy.md).
 // Without a store connected it accepts and drops the feedback (202), so the app never waits on it.
 // Upstash's Vercel integration sets KV_REST_API_URL / KV_REST_API_TOKEN.
@@ -21,8 +22,11 @@ export async function POST(request: Request) {
   } catch {
     return json({ error: 'bad request' }, 400);
   }
-  const feedback = parseFeedback(body);
-  if (!feedback) return json({ error: 'bad request' }, 400);
+  const practitioner = parsePractitionerRating(body);
+  const feedback = practitioner ? null : parseFeedback(body);
+  if (!practitioner && !feedback) return json({ error: 'bad request' }, 400);
+  const list = practitioner ? 'watl:practitioner' : 'watl:feedback';
+  const record = practitioner ? { ...practitioner, day: new Date().toISOString().slice(0, 10) } : toRecord(feedback!);
 
   const url = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -34,8 +38,8 @@ export async function POST(request: Request) {
       method: 'POST',
       headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
       body: JSON.stringify([
-        ['LPUSH', 'watl:feedback', JSON.stringify(toRecord(feedback))],
-        ['LTRIM', 'watl:feedback', '0', String(MAX_KEPT - 1)],
+        ['LPUSH', list, JSON.stringify(record)],
+        ['LTRIM', list, '0', String(MAX_KEPT - 1)],
       ]),
       signal: AbortSignal.timeout(4000),
     });

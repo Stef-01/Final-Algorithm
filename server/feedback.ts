@@ -70,3 +70,19 @@ export function parseFeedback(body: unknown): Feedback | null {
 
 /** What's stored: the feedback plus the day (not the time), so entries can't be tied to a session. */
 export const toRecord = (f: Feedback, now = new Date()) => ({ ...f, day: now.toISOString().slice(0, 10) });
+
+/**
+ * How it's going with someone on your care team: 1–5 stars and an optional note (what they do
+ * well, or how their approach could be more neuro-affirming). Anonymous: no patient id, only the
+ * day. Kept private for ranking research; never shown on a profile or sent to the practitioner.
+ */
+export type PractitionerRating = { clinicianId: string; stars: number; note?: string };
+
+export function parsePractitionerRating(body: unknown): PractitionerRating | null {
+  const b = (body ?? {}) as Record<string, unknown>;
+  if (b.kind !== 'practitioner') return null;
+  const stars = int(b.stars, 1, 5);
+  if (typeof b.clinicianId !== 'string' || !ID.test(b.clinicianId) || stars === null) return null;
+  const note = typeof b.note === 'string' ? b.note.replace(/\s+/g, ' ').trim().slice(0, NOTE_MAX) : '';
+  return note ? { clinicianId: b.clinicianId, stars, note } : { clinicianId: b.clinicianId, stars };
+}

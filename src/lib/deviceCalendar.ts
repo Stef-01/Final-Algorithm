@@ -30,3 +30,24 @@ export async function addToDeviceCalendar(e: CalendarEvent): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Busy times from the phone's calendars, to suggest when you're free. Asks for read access (full
+ * access on iOS) only when you tap to check. Times only: titles and details are never read out or
+ * sent anywhere. Null if it can't (refused, web).
+ */
+export async function busyTimes(from: Date, to: Date): Promise<{ start: Date; end: Date }[] | null> {
+  if (Platform.OS === 'web') return null;
+  try {
+    const perm = await Calendar.requestCalendarPermissions(false);
+    if (!perm.granted) return null;
+    const calendars = await Calendar.getCalendars(Calendar.EntityTypes.EVENT);
+    if (!calendars.length) return [];
+    const events = await Calendar.listEvents(calendars, from, to);
+    return events
+      .filter((e) => !e.allDay && e.startDate && e.endDate)
+      .map((e) => ({ start: new Date(e.startDate!), end: new Date(e.endDate!) }));
+  } catch {
+    return null;
+  }
+}

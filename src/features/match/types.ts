@@ -31,6 +31,8 @@ export type Clinician = {
     gapAfterMedicare: number | null;
     billingNote?: string;
     weekends: boolean | null;
+    /** Published wait for a new patient, in days; null = not published. */
+    daysUntilAvailable: number | null;
   };
   /** "Particularly experienced with" — max 4. */
   experiencedWith: string[];

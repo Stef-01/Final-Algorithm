@@ -38,6 +38,8 @@ export type Events = {
   /** Straight after picking a profession: telehealth is fine, or an area (a place name only). */
   where_chosen: { where: string };
   mcp_demo: { step: string; client: string };
+  calendar_checked: { ok: boolean };
+  practitioner_rated: { stars: number; note: boolean };
 };
 
 export type EventName = keyof Events;

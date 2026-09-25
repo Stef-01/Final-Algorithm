@@ -73,4 +73,13 @@ describe('feedback storage (PRD §49)', () => {
     // The list is bounded until a retention period is chosen.
     expect(trim).toEqual(['LTRIM', 'watl:feedback', '0', '4999']);
   });
+
+  it('keeps care-team ratings in their own list, with only the day', async () => {
+    process.env = { ...env, KV_REST_API_URL: 'https://kv.example', KV_REST_API_TOKEN: 't' };
+    const fetchMock = jest.spyOn(global, 'fetch').mockResolvedValue(new Response('{"result":1}', { status: 200 }));
+    await post({ kind: 'practitioner', clinicianId: 'alice-bui', stars: 2, note: 'Could use more neuro-affirming language' });
+    const [[, key, value]] = JSON.parse((fetchMock.mock.calls[0] as [string, RequestInit])[1].body as string);
+    expect(key).toBe('watl:practitioner');
+    expect(Object.keys(JSON.parse(value)).sort()).toEqual(['clinicianId', 'day', 'note', 'stars']);
+  });
 });
