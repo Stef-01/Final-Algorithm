@@ -4,7 +4,6 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { VercelAnalytics } from '@/components/VercelAnalytics';
-import { ProfileProvider } from '@/lib/profile';
 import { fontAssets } from '@/lib/theme';
 
 export default function RootLayout() {
@@ -13,22 +12,13 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <ProfileProvider>
-        <StatusBar style="dark" />
-        <VercelAnalytics />
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#fff' } }}>
-          <Stack.Screen name="(tabs)" options={{ animation: 'none' }} />
-          {['delete-account', 'learn-more', 'roses', 'profile/why-last-name', 'profile/gender-feedback'].map(
-            (name) => (
-              <Stack.Screen
-                key={name}
-                name={name}
-                options={{ presentation: 'transparentModal', animation: 'fade' }}
-              />
-            ),
-          )}
-        </Stack>
-      </ProfileProvider>
+      <StatusBar style="dark" />
+      <VercelAnalytics />
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#fff' } }}>
+        <Stack.Screen name="(tabs)" options={{ animation: 'none' }} />
+        <Stack.Screen name="clinician/[id]" />
+        <Stack.Screen name="safety" options={{ presentation: 'transparentModal', animation: 'fade' }} />
+      </Stack>
     </SafeAreaProvider>
   );
 }

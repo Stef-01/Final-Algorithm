@@ -1,19 +1,17 @@
 # WATL
 
-WATL is a dating app that emphasizes long-term connections. Users can filter matches by traits that matter to them, such as religion or height.
+WATL helps you find a GP who fits you. Describe what you need in your own words, answer at most a few useful questions, and see up to three clinicians with a clear reason why each one fits.
 
-This is a React Native (Expo) app. It was ported from an Android/Java dating-app clone ([diya31656/Hinge](https://github.com/diya31656/Hinge)); that original Java code is kept under [`legacy-android/`](legacy-android) for reference.
+This is a React Native (Expo Router) app, mobile-first on the web and deployed on Vercel. The build plan is in [`docs/PLAN.md`](docs/PLAN.md).
 
-> **Testing phase: sign-in is off.** The app opens straight into Discover as a test user ("Tester"). To bring back the welcome screen and sign-up flow, set `EXPO_PUBLIC_SKIP_SIGN_IN=false` (locally in `.env`, or in Vercel's environment variables), or change the default in [`src/lib/config.ts`](src/lib/config.ts).
+> **Status: Phase 0 of the plan.** The navigation and screens are in place as placeholders. Matching, clinician data and voice arrive in later phases.
 
 ## Getting started
 
 ```bash
 npm install
-npm start          # then press i (iOS simulator), a (Android emulator) or w (web)
+npm start          # then press w (web), i (iOS simulator) or a (Android emulator)
 ```
-
-Every native module used here ships with Expo Go, so you can also scan the QR code with Expo Go on a phone.
 
 Checks (also run by GitHub Actions on every push and pull request):
 
@@ -27,15 +25,32 @@ After adding or removing packages, run `npm run lockfile` before committing. An 
 
 The tests in `__tests__/` cover:
 
-- **Assets:** every image, font and video the app `require`s exists and is a real file of its type, every file in `assets/images` is used, and each seeded profile has 6 captioned photos and 3 prompts.
-- **Profile store:** loading, saving and clearing data on the device.
-- **Screens:** welcome branding and redirect, each sign-up step's validation and saved values, Discover cycling between profiles, and tab navigation.
+- **Assets:** every image and font the app `require`s exists and is a real file of its type, and every file in `assets/images` is used.
+- **Navigation:** the app opens straight into Find with no sign-in, the three tabs work, the find flow moves forward correctly, clinician detail opens above the tabs, and the safety sheet opens.
+
+## What's in the app
+
+Three tabs: **Find**, **Saved** and **Settings**.
+
+| Screen | Route | Status |
+| --- | --- | --- |
+| Open conversation | `/` | Placeholder: text input works, voice arrives in Phase 4 |
+| Follow-up question | `/clarify` | Placeholder with the demo question |
+| Preference confirmation | `/confirm` | Placeholder (shown only when needed) |
+| Matching | `/matching` | Placeholder |
+| Top matches | `/matches` | Placeholder; the Discover-style cards arrive in Phase 1 |
+| Clinician detail | `/clinician/[id]` | Placeholder |
+| Safety pause | `/safety` | Placeholder wording, pending clinical review |
+| Saved | `/saved` | Empty state |
+| Settings | `/settings` | Start over, about, help and safety |
+
+There's no account and no sign-in.
 
 ## Web deployment (Vercel)
 
-The web build is deployed on Vercel from `main` (see [`vercel.json`](vercel.json)): Vercel runs `npx expo export --platform web` and serves `dist/` as a single-page app, so deep links like `/discover` work.
+The web build is deployed on Vercel from `main` (see [`vercel.json`](vercel.json)). Vercel runs `npx expo export --platform web` and serves `dist/` as a single-page app, so deep links work.
 
-[Vercel Web Analytics](https://vercel.com/docs/analytics) records a page view for every screen change on the web build ([`src/components/VercelAnalytics.web.tsx`](src/components/VercelAnalytics.web.tsx)). It does nothing in the iOS and Android apps. Analytics must be enabled once in the Vercel dashboard (project → Analytics → Enable) before data shows up.
+[Vercel Web Analytics](https://vercel.com/docs/analytics) records a page view for every screen change on the web build ([`src/components/VercelAnalytics.web.tsx`](src/components/VercelAnalytics.web.tsx)). It needs to be enabled once in the Vercel dashboard (project → Analytics → Enable) before data shows up.
 
 To try the production web build locally:
 
@@ -44,35 +59,14 @@ npx expo export --platform web
 npx serve -s dist
 ```
 
-## What's in the app
-
-| Area | Route | Notes |
-| --- | --- | --- |
-| Welcome | `/` | Looping background video, sign-up entry. Skips to Discover when a profile is saved. |
-| Sign-up | `/onboarding/*` | Phone → verification code → verified → name → email → date of birth (18+) → ethnicity |
-| Discover | `/discover` | Profile cards (photos, prompts, vitals). Like or pass moves to the next profile. |
-| Standouts | `/standouts` | Empty state, Roses paywall |
-| Likes You | `/likes` | Empty state, upgrade prompt |
-| Matches | `/matches` | Empty state |
-| Settings | `/settings` | Profile card, Preferences, Account, Help Centre |
-| Profile | `/profile`, `/profile/view` | Edit your details and preview your profile |
-| Account | `/account` | Contact details, legal links, log out, delete account |
-
-Profile data is kept on the device with AsyncStorage (the same keys the Android app used in SharedPreferences). There is no backend: any 6-digit verification code is accepted, and Discover cycles through two sample profiles.
-
 ## Project layout
 
 ```
 src/app/          Expo Router screens (one file per route)
-src/components/   Shared UI: onboarding scaffold, profile cards, tab bar, sheets, icons
-src/data/         Sample profiles
-src/lib/          Theme (colours, fonts, links) and the profile store
-assets/           Images, fonts, background video
-legacy-android/   Original Android/Java project (reference only)
+src/components/   Shared UI: conversation scaffold, Discover-style cards, tab bar, sheets, icons
+src/lib/          Theme (colours, fonts)
+assets/           Images and fonts
+docs/PLAN.md      Build plan
 ```
 
-`src/components/icons.ts` was generated from the Android vector drawables.
-
-## Credits
-
-Original Android clone by [lucifernipun22](https://lucifernipun22.medium.com/cloning-of-dating-app-hinge-in-just-3-days-67a3ae89bf55).
+Earlier versions are tagged: `dating-shell` (the dating-app shell) and `legacy-android` (the original Android/Java project).

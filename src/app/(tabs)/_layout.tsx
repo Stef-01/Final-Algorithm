@@ -4,14 +4,9 @@ import { TabBar } from '@/components/TabBar';
 
 export default function TabsLayout() {
   return (
-    <Tabs
-      tabBar={(props) => <TabBar {...props} />}
-      screenOptions={{ headerShown: false, animation: 'none' }}
-    >
-      <Tabs.Screen name="discover" options={{ title: 'Discover' }} />
-      <Tabs.Screen name="standouts" options={{ title: 'Standouts' }} />
-      <Tabs.Screen name="likes" options={{ title: 'Likes You' }} />
-      <Tabs.Screen name="matches" options={{ title: 'Matches' }} />
+    <Tabs tabBar={(props) => <TabBar {...props} />} screenOptions={{ headerShown: false, animation: 'none' }}>
+      <Tabs.Screen name="(find)" options={{ title: 'Find' }} />
+      <Tabs.Screen name="saved" options={{ title: 'Saved' }} />
       <Tabs.Screen name="settings" options={{ title: 'Settings' }} />
     </Tabs>
   );

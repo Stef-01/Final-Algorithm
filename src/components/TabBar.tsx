@@ -8,10 +8,8 @@ import { IconName } from './icons';
 import { WatlLogo } from './WatlLogo';
 
 const tabIcons: Record<string, IconName | 'logo'> = {
-  discover: 'logo',
-  standouts: 'icStarBottomAction',
-  likes: 'icLikeBottomAction',
-  matches: 'icMessageBottomAction',
+  '(find)': 'logo',
+  saved: 'icLikeBottomAction',
   settings: 'icSettingBottomAction',
 };
 

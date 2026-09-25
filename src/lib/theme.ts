@@ -27,11 +27,3 @@ export const fontAssets = {
   [fonts.serif]: require('../../assets/fonts/tiempos_headline_regular.otf'),
   [fonts.serifSemiBold]: require('../../assets/fonts/tiempos_headline_semi_bold.otf'),
 };
-
-export const urls = {
-  terms: 'https://hinge.co/terms.html',
-  privacy: 'https://hinge.co/privacy.html',
-  helpCentre: 'https://hingeapp.zendesk.com/hc/en-us',
-  safeDating: 'https://hingeapp.zendesk.com/hc/en-us/articles/360007194774-Safe-Dating-Advice',
-  licenses: 'https://hingeapp.zendesk.com/hc/en-us/articles/360013413034-Android-Open-Source-Software',
-};

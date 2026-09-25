@@ -38,7 +38,12 @@ Where a PRD rule is about *behaviour* but touches presentation (for example "max
 | 11 No strong match | `/matches` (state) | Standouts empty-state card ("Fresh out of Standouts!") | "I don't have a strong enough match yet." One action: **Answer one more question** / **Expand distance** / **Include telehealth**. |
 | Safety pause (§44) | `/safety` | `Sheet` | Pauses matching and shows the safety message plus urgent-help options before the user can continue. |
 
-**Navigation:** the PRD asks for one continuous task with no tab bar (§41, §4.11). I'll drop the bottom `TabBar` and the Standouts / Likes / Matches / Settings tabs and use the stack with the existing back arrow. **Decision needed from you (§14, D1):** if you want to keep the tab bar because you like the shell, the fallback is two tabs, **Find** and **Saved**.
+**Navigation (decided):** we keep the shell's dark bottom tab bar with three tabs:
+- **Find** (the WATL "W" logo icon): the whole matching flow above, as a stack inside the tab, at `/`, `/clarify`, `/confirm`, `/matching` and `/matches`.
+- **Saved** (heart): clinicians you've hearted, stored on the device.
+- **Settings** (person): start over, how matching works, privacy, help and safety.
+
+Clinician detail (`/clinician/[id]`) and the safety sheet (`/safety`) open above the tabs. This deliberately departs from the PRD's no-tab-bar rule (§4.11, §41); inside Find it's still one continuous task.
 
 ---
 
@@ -230,7 +235,7 @@ The response carries: the acknowledgement (≤1 sentence), the next step, and th
   - If the API isn't available (e.g. Firefox), the mic control hides and text is the default. Text is always fully functional.
   - The transcript is editable before submitting. **Done** / **Cancel** only.
   - A clear note says voice is being transcribed. Auto-stop after silence and at a hard cap of ~90 s.
-  - Audio isn't stored; only the submitted text is sent.
+  - WATL doesn't store audio; only the submitted text is sent to WATL's API. **Note:** in Chrome (and some other browsers), the Web Speech API sends audio to the browser vendor's speech service. Safari can recognise on-device for some languages. The transcription notice must say this plainly. If that's not acceptable, swap in a server-side transcription service WATL controls (decision D7).
 - **Native (later):** a speech recognition module needs a dev build. Out of scope for the web prototype, but the hook interface stays the same.
 - **Latency:** interim results are local, so this meets the <500 ms perceived-transcript target on supported browsers.
 
@@ -256,7 +261,7 @@ No clinician dashboard (non-goal). The prototype uses scripts and JSON files:
 
 **Privacy (§45):**
 - Transcription notice on the open screen.
-- Nothing recorded beyond the session; audio never leaves the browser.
+- Nothing recorded beyond the session; WATL never stores audio (see the browser speech-service caveat in §7).
 - "Delete what I said" before submitting.
 - Server logs strip free text.
 - Clinician excerpts never leave the server.
@@ -290,7 +295,7 @@ No clinician dashboard (non-goal). The prototype uses scripts and JSON files:
 
 ## 11. Codebase changes
 
-**Keep as is:** Expo Router setup, `src/lib/theme.ts`, fonts, `WatlLogo`, `Icon` + `icons.ts`, `ScreenHeader`, `Sheet` + `PillButton`, `ChoicePill` / `OnboardingStep` / `VisibleOnProfile`, `ProfileCards` card primitives, `DatePicker` (unused; delete if still unused at the end), `VercelAnalytics`, Jest / CI / Vercel config.
+**Keep as is:** Expo Router setup, `TabBar` (three tabs: Find / Saved / Settings), `src/lib/theme.ts`, fonts, `WatlLogo`, `Icon` + `icons.ts`, `ScreenHeader`, `Sheet` + `PillButton`, `ChoicePill` + `OnboardingStep` (renamed `ConversationStep`), the `ProfileCards` card primitives (now `src/components/cards.tsx`), `VercelAnalytics`, Jest / CI / Vercel config.
 
 **Repurpose:**
 - `src/app/(tabs)/discover.tsx` → `src/app/matches.tsx`: same layout and like/pass mechanics, fed by the match list.
@@ -300,8 +305,8 @@ No clinician dashboard (non-goal). The prototype uses scripts and JSON files:
 - `profile/view.tsx` layout → `clinician/[id].tsx`.
 
 **Remove:**
-- **Screens:** all sign-up (`onboarding/*`), tabs (`standouts`, `likes`, `settings`, `(tabs)/matches`, `_layout`), `profile/*`, `account`, `delete-account`, `preferences`, `roses`, `learn-more`.
-- **Components and data:** `TabBar`, `ProfileTabs`, `PriceOptions`, `ListRow` (unless reused on detail), `src/data/people.ts`, `src/lib/profile.tsx`, `src/lib/config.ts` (the sign-in switch; sign-in no longer exists), `src/lib/age.ts`.
+- **Screens:** all sign-up (`onboarding/*`), the dating tabs (`standouts`, `likes`, `(tabs)/matches`, `discover`; `settings` is rebuilt), `profile/*`, `account`, `delete-account`, `preferences`, `roses`, `learn-more`.
+- **Components and data:** `ProfileTabs`, `PriceOptions`, `src/data/people.ts`, `src/lib/profile.tsx`, `src/lib/config.ts` (the sign-in switch; sign-in no longer exists), `src/lib/age.ts`.
 - **Assets:** all dating images (including the celebrity photos and Android images), the paywall illustrations, and the background video.
 - **Tests:** the related tests, replaced by the new ones.
 
@@ -315,7 +320,7 @@ Each phase ends deployed on Vercel with CI green.
 
 | Phase | Scope | Done when |
 | --- | --- | --- |
-| **0. Clean slate** | Remove the dating features, tab bar and assets (§11). Tag the legacy code. New route skeleton with placeholder screens in the existing style. | App opens on `/` with no sign-in and no tabs; bundle size and load time recorded; CI green. |
+| **0. Clean slate** | Remove the dating features and assets (§11); rebuild the tab bar as Find / Saved / Settings. Tag the legacy code. New route skeleton with placeholder screens in the existing style. | App opens on `/` (Find tab) with no sign-in; tabs are Find / Saved / Settings; bundle size and load time recorded; CI green. |
 | **1. UI with fixtures** | All screens (§2) wired to a local fixture session: demo patient input (§52), one follow-up, 3 fixture clinicians rendered through `ClinicianCards` in the Discover layout, detail page, no-match, partial results, safety sheet. Text input only. | The PRD demo script runs end to end on Vercel with fixtures; every state reachable; a `/dev/states` page (dev builds only) lists every state for review, standing in for the Figma frames in §51. |
 | **2. Matching engine** | `server/engine/*` + question bank + seed clinician JSON (10–15 fictional). Pure functions with unit tests. | Given hand-written `PatientSignals`, the engine returns the expected top 3, the question to ask, and when to stop; the explanation lints pass; the diversity, partial and empty rules pass. |
 | **3. Agent + API** | Vercel Functions `/api/turn`, `/api/matches`, `/api/feedback`; Claude extraction with a JSON schema; safety classifier; SPA rewrite excluding `/api`. Client switches from fixtures to the API. | Real free text produces sensible follow-ups and matches; p75 latency under 3 s; the extraction eval set (§13) meets its threshold; no medical advice in 50 red-team prompts. |
@@ -349,11 +354,12 @@ Each phase ends deployed on Vercel with CI green.
 ## 14. Decisions needed and risks
 
 **Decisions (defaults in brackets):**
-- **D1:** Tab bar: remove it for one continuous task, per the PRD, or keep a two-tab **Find / Saved** version because you like the shell? [remove]
+- **D1 (decided):** keep the shell's tab bar with three tabs: **Find**, **Saved**, **Settings**.
 - **D2:** Region and clinician pool for testing. [fictional Brisbane GPs]
 - **D3:** Analytics provider for custom events if Vercel's plan doesn't include them. [Vercel if available, else PostHog]
 - **D4:** Feedback storage. [Vercel KV]
 - **D5:** Keep the native iOS/Android builds working, or go web-only for the prototype? [keep them building, test on web]
+- **D7:** Voice transcription: browser speech service (fast, free, but audio goes to the browser vendor in Chrome) or a server-side service WATL controls? [browser for the prototype, with a clear notice]
 - **D6:** What does WATL stand for, and is there a tagline for the open screen? [use the PRD's "Find a GP who fits you." with the WATL logo]
 
 **Risks:**
