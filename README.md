@@ -36,24 +36,25 @@ The tests in `__tests__/` cover:
 
 ## What's in the app
 
-Three tabs: **Find**, **Saved** and **Settings**.
+Three tabs: **Find**, **My care** and **Profile**.
 
 | Screen | Route | What it does |
 | --- | --- | --- |
-| Who are you looking for? | `/` | The funnel: a GP, a psychologist, or not sure yet. Also "Try a demo patient" |
+| Who could help? | `/` | Discovery: a tile for each kind of professional (GP, psychologist, ADHD coach, OT, physio, exercise physiologist, neurotherapy; dietitians "Soon"), or not sure yet |
+| Explore | `/discover` | One swipeable card per kind of professional: what they help with, sessions, rebates |
 | Demo patients | `/demos` | Scripted patients for each profession; each fills in their words, ready to run |
 | Open conversation | `/describe` | Describe what you need by voice (where the browser supports it) or text |
 | Follow-up question | `/clarify?q=…` | Only questions whose answer could change the matches; tap an answer, or use your own words |
 | Preference confirmation | `/confirm` | Only when an uncertain guess would change the matches; tap a priority to remove it |
 | Matching | `/matching` | Moves on as soon as results are ready |
-| Top matches | `/matches` | The three I'd start with, one at a time, in the Discover card layout: fit label, why they fit, practical details, how they practise. ✕ = next match, ♥ = save |
+| Top matches | `/matches` | The three I'd start with, one at a time: swipe left to pass, right to save. The back button steps back, or returns to your search. "Also could help" suggests other professions |
 | Everyone who fits | `/all` | Everyone who meets your requirements, ranked. Unexplained ones are labelled "Possible fit"; unpublished costs are flagged |
 | Refine with WATL | `/refine` | The assistant, from the floating sparkle button on every main screen. Say what to change ("online only", "someone gentler") and the list re-ranks; medical questions get an honest "I can't advise" |
 | Clinician detail | `/clinician/[id]` | Why they fit, practice, experience, practical details (as published), bio, qualifications; Book / See next match |
 | Booking handoff | `/book/[id]` | Opens the practice's own booking page |
 | Safety pause | `/safety` | Shown on urgent wording; wording pending clinical review |
-| Saved | `/saved` | Clinicians you hearted, kept on this device |
-| Settings | `/settings` | Start over, demo patients, about, privacy, help and safety, review screen states |
+| My care | `/saved` | Your team (saved professionals, plus slots your goals suggest) and next steps: when to book each, with Add to calendar |
+| Profile | `/settings` | Your goals (they shape searches and your team), then start over, demos, about, privacy, help |
 
 **Onboarding interviews:** `docs/clinician-interview.md` and `scripts/interview.py` turn a recorded interview into approved traits that replace the profile-sourced ones (see the three mock examples in `server/fixtures/interviews/`).
 

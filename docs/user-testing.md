@@ -16,6 +16,8 @@
 1. "You're looking for a [GP / psychologist] who's a good fit for you. Use this to find one." Stay quiet; note where they hesitate.
 2. When they reach the matches: "Take a look at who it suggested." Let them step through at their own pace.
 3. "Open the one you'd look at first." Then: "What would you do next?"
+5. "You'd also like help getting organised. Where would you look?" See whether they find the discovery grid, Explore, or "Also could help".
+6. "Save two people and plan when you'll book them." See whether My care and Add to calendar make sense without explanation.
 4. "Say one of them isn't quite right for you. How would you change what it's showing?" See whether they find the sparkle button (the assistant), and whether its reply matches what they meant.
 
 Note: time from tapping the arrow on the describe screen to seeing the first match, the number of follow-up questions, whether they used voice, and anything they said out loud.
