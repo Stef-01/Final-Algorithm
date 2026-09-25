@@ -25,7 +25,8 @@ People rarely know which kinds of professional could help them. An ADHD coach fo
 The biggest barrier after "who" is "how much, and when". Most profiles publish neither.
 
 - ✅ Unpublished fees are flagged, never guessed. The no-match screen says when cost is what rules everyone out.
-- **Next: the clinician portal.** A short self-serve form for fees, rebates, wait times and weekends. It uses the interview pipeline's rules: each fact needs the professional's own words.
+- ✅ **Join WATL** (Profile → For professionals). A short form for fees, out-of-pocket cost, wait, weekends, telehealth and new patients. It uses the interview pipeline's rules: consent, and every number in the professional's own words. It's queued as a draft interview for a person to review; nothing shows until approved.
+- **Next: reviewer tools.** Pull the `watl:portal` queue into `scripts/interview.py` (`propose` → `ingest` → `review`), and email the professional when they're live.
 - **Later: live availability.** Read practices' booking systems (Halaxy, HotDoc and Cliniko all have partner APIs) to show real next-available times, and recommend actual slots.
 
 ## 4. Your care team ✅ started
