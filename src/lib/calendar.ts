@@ -39,8 +39,15 @@ export function googleCalendarUrl(e: CalendarEvent): string {
   return `https://calendar.google.com/calendar/render?${q.toString()}`;
 }
 
-/** Download the .ics on web; elsewhere open Google Calendar (which also works in any browser). */
-export function addToCalendar(e: CalendarEvent, how: 'ics' | 'google') {
+/**
+ * Web: download the .ics or open Google Calendar. Phone: the device calendar (asks once), falling
+ * back to Google Calendar if that isn't possible. Resolves to where it went.
+ */
+export async function addToCalendar(e: CalendarEvent, how: 'ics' | 'google'): Promise<'device' | 'ics' | 'google'> {
+  if (Platform.OS !== 'web') {
+    const { addToDeviceCalendar } = await import('./deviceCalendar');
+    if (await addToDeviceCalendar(e)) return 'device';
+  }
   if (how === 'ics' && Platform.OS === 'web' && typeof document !== 'undefined') {
     const blob = new Blob([icsFor(e)], { type: 'text/calendar' });
     const a = document.createElement('a');
@@ -48,7 +55,8 @@ export function addToCalendar(e: CalendarEvent, how: 'ics' | 'google') {
     a.download = `${e.title.replace(/[^\w]+/g, '-').toLowerCase()}.ics`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    return;
+    return 'ics';
   }
   void Linking.openURL(googleCalendarUrl(e));
+  return 'google';
 }

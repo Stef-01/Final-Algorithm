@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { useState } from 'react';
 import { router } from 'expo-router';
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -136,9 +137,12 @@ function StepRow({ step }: { step: Step }) {
     details: `A reminder from WATL to book with ${m.name}.`,
     url: m.bookingUrl ?? undefined,
   };
+  const [added, setAdded] = useState(false);
   const add = (how: 'ics' | 'google') => {
-    track('calendar_added', { profession: m.profession, how });
-    addToCalendar(event, how);
+    void addToCalendar(event, how).then((where) => {
+      track('calendar_added', { profession: m.profession, how: where });
+      setAdded(true);
+    });
   };
   return (
     <View style={styles.step}>
@@ -153,7 +157,7 @@ function StepRow({ step }: { step: Step }) {
         <Text style={styles.cardRole}>{capitalised(info.one)}</Text>
       </PressScale>
       <PressScale onPress={() => add('google')} accessibilityRole="button" accessibilityLabel={`Add a reminder to book ${m.firstName} to Google Calendar`} style={styles.cal} scaleTo={0.9}>
-        <Icon name="icCalendar" size={18} color={colors.black} />
+        <Icon name={added ? 'icCheck' : 'icCalendar'} size={18} color={colors.black} />
       </PressScale>
       {Platform.OS === 'web' ? (
         <PressScale onPress={() => add('ics')} accessibilityRole="button" accessibilityLabel={`Download a calendar reminder to book ${m.firstName}`} style={styles.cal} scaleTo={0.9}>

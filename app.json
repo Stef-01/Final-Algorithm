@@ -29,7 +29,13 @@
       "expo-router",
       "expo-font",
       "expo-image",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "WATL adds the reminders you choose, to book your appointments."
+        }
+      ]
     ],
     "scheme": "watl"
   }

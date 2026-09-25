@@ -7,6 +7,7 @@
     "@react-native-async-storage/async-storage": "2.2.0",
     "@vercel/analytics": "^2.0.1",
     "expo": "~57.0.25",
+    "expo-calendar": "~57.0.5",
     "expo-constants": "~57.0.19",
     "expo-font": "~57.0.4",
     "expo-image": "~57.0.5",
