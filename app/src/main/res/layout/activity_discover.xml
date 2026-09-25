@@ -555,10 +555,10 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/ivHinge"
+        android:id="@+id/ivWATL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_hinge_logo_white"
+        android:src="@drawable/ic_watl_logo_white"
         app:layout_constraintBottom_toBottomOf="@id/bottomActionbarDiscover"
         app:layout_constraintEnd_toStartOf="@+id/ivStar"
         app:layout_constraintHorizontal_bias="0.5"
@@ -573,7 +573,7 @@
         app:layout_constraintBottom_toBottomOf="@id/bottomActionbarDiscover"
         app:layout_constraintEnd_toStartOf="@+id/ivHeart"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/ivHinge"
+        app:layout_constraintStart_toEndOf="@+id/ivWATL"
         app:layout_constraintTop_toTopOf="@id/bottomActionbarDiscover" />
 
     <ImageView

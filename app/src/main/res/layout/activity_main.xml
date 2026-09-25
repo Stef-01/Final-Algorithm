@@ -19,10 +19,10 @@
     <ImageView
         android:id="@+id/imageView"
         style="@style/logo_style"
-        android:src="@drawable/ic_hinge_title"
+        android:src="@drawable/ic_watl_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/hinge_full_logo"
+        android:contentDescription="@string/watl_full_logo"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -36,7 +36,7 @@
         android:id="@+id/textView3"
         style="@style/policy_style"
         android:layout_marginStart="@dimen/policy_margin_start"
-        android:text="@string/by_signing_up_for_hinge_you_agree_to_our"
+        android:text="@string/by_signing_up_for_watl_you_agree_to_our"
         app:layout_constraintBottom_toTopOf="@+id/tvTermsofService"
         app:layout_constraintStart_toStartOf="@+id/cardView2" />
 

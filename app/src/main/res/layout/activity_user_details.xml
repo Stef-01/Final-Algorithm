@@ -231,7 +231,7 @@
                     style="@style/discover_elements_title_textview_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="I'll know it's time to delete Hinge when" />
+                    android:text="I'll know it's time to delete WATL when" />
 
                 <TextView
                     style="@style/discover_elements_title_textview_style"

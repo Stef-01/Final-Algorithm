@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPhoneNumber"
         android:layout_marginStart="30dp"
-        android:text="Hinge will send you a text with a verification code. Message and data rates may apply."
+        android:text="WATL will send you a text with a verification code. Message and data rates may apply."
         android:layout_marginTop="20dp"
         android:textColor="@color/line" />
 

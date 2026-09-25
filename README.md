@@ -1,10 +1,10 @@
-# Hinge Clone
+# WATL Clone
 
 
 Check out the blog post here: https://lucifernipun22.medium.com/cloning-of-dating-app-hinge-in-just-3-days-67a3ae89bf55
 
 
-Hinge is a dating app which bills itself as an only dating app that emphasizes long-term connections between users.
+WATL is a dating app which bills itself as an only dating app that emphasizes long-term connections between users.
 
 
 # Screenshots
@@ -22,7 +22,7 @@ Hinge is a dating app which bills itself as an only dating app that emphasizes l
 
 
 # What does this app do?
-Hinge allows users to filter matches based on traits that are important to them, such as religion or height. Unlike other dating apps, users can message other users without first requiring a "match".
+WATL allows users to filter matches based on traits that are important to them, such as religion or height. Unlike other dating apps, users can message other users without first requiring a "match".
 
 
 # Libraries this app uses:
@@ -31,5 +31,5 @@ Hinge allows users to filter matches based on traits that are important to them,
 2. Android-ScalableVideoView - https://github.com/yqritc/Android-ScalableVideoView
 
 
-[![Watch the video](https://github.com/diya31656/Hinge/blob/master/Screenshot%20(20).png)](https://www.youtube.com/watch?v=M38s3Ut4trY)
+[![Watch the video](Screenshot%20(20).png)](https://www.youtube.com/watch?v=M38s3Ut4trY)
 

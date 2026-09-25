@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/modern_era_regular"
-        android:text="Hinge Member"
+        android:text="WATL Member"
         android:textColor="@color/faceBook_btn_background"
         android:textSize="@dimen/discover_elements_title_textview_textSzie"
         app:layout_constraintEnd_toEndOf="@+id/cardView5"
@@ -276,10 +276,10 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/ivHinge"
+        android:id="@+id/ivWATL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_hinge_logo_greyy"
+        android:src="@drawable/ic_watl_logo_greyy"
         app:layout_constraintBottom_toBottomOf="@id/bottomActionbarDiscover"
         app:layout_constraintEnd_toStartOf="@+id/ivStar"
         app:layout_constraintHorizontal_bias="0.5"
@@ -294,7 +294,7 @@
         app:layout_constraintBottom_toBottomOf="@id/bottomActionbarDiscover"
         app:layout_constraintEnd_toStartOf="@+id/ivHeart"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/ivHinge"
+        app:layout_constraintStart_toEndOf="@+id/ivWATL"
         app:layout_constraintTop_toTopOf="@id/bottomActionbarDiscover" />
 
     <ImageView
