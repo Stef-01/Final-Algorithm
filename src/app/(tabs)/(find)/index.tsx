@@ -4,6 +4,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ConversationStep } from '@/components/ConversationStep';
 import { Icon } from '@/components/Icon';
 import { Appear, PressScale } from '@/components/motion';
+import { useGoals } from '@/features/care/goals';
+import { goalsDraft } from '@/features/care/plan';
 import { useSession } from '@/features/match/session';
 import type { ProfessionChoice } from '@/features/match/sessionCore';
 import { capitalised, PROFESSION_INFO } from '@/lib/professions';
@@ -14,6 +16,7 @@ import { colors, fonts } from '@/lib/theme';
 // shown, marked "Soon", but can't be searched.
 export default function WhoAreYouLookingFor() {
   const session = useSession();
+  const { goals } = useGoals();
 
   return (
     <ConversationStep icon="icQuestion" title="Who could help?" dots={0}>
@@ -21,7 +24,7 @@ export default function WhoAreYouLookingFor() {
         {PROFESSION_INFO.map((p, i) => (
           <Appear key={p.id} index={i} style={styles.cell}>
             <PressScale
-              onPress={p.available ? () => router.push(session.chooseProfession(p.id as ProfessionChoice)) : undefined}
+              onPress={p.available ? () => router.push(session.chooseProfession(p.id as ProfessionChoice, goalsDraft(p.id, goals))) : undefined}
               disabled={!p.available}
               accessibilityRole="button"
               accessibilityLabel={`${capitalised(p.one)}. ${p.for}${p.available ? '' : '. Not in the network yet'}`}

@@ -9,6 +9,8 @@ import { Appear, PressScale } from '@/components/motion';
 import { ProgressDots } from '@/components/ProgressDots';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { Swipeable, type SwipeableHandle } from '@/components/Swipeable';
+import { useGoals } from '@/features/care/goals';
+import { goalsDraft } from '@/features/care/plan';
 import { useSession } from '@/features/match/session';
 import type { ProfessionChoice } from '@/features/match/sessionCore';
 import { capitalised, INTRO, PROFESSION_INFO } from '@/lib/professions';
@@ -18,6 +20,7 @@ import { colors, fonts } from '@/lib/theme';
 // "Find one") to search that kind; left for the next. For people who don't know who could help.
 export default function Discover() {
   const session = useSession();
+  const { goals } = useGoals();
   const insets = useSafeAreaInsets();
   const [i, setI] = useState(0);
   const deck = useRef<SwipeableHandle>(null);
@@ -26,7 +29,7 @@ export default function Discover() {
   const next = () => setI((n) => n + 1);
   const find = () => {
     if (!card?.available) return next();
-    router.push(session.chooseProfession(card.id as ProfessionChoice));
+    router.push(session.chooseProfession(card.id as ProfessionChoice, goalsDraft(card.id, goals)));
   };
 
   if (!card) {
