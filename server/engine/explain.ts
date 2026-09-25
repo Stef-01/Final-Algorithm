@@ -55,7 +55,7 @@ const SIGNAL: Partial<Record<Dimension, Record<string, string>>> = {
     moderate: "You'd like to see the same GP when you can.",
   },
   follow_up_intensity: {
-    proactive: "You'd like your GP to follow up with you.",
+    proactive: "You'd like them to follow up with you between visits.",
     scheduled: "You'd like regular check-ins.",
     as_needed: "You'd like follow-up only when you ask for it.",
   },
