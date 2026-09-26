@@ -3,7 +3,7 @@ import { fireEvent, screen } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 
 import { restoreGoals } from '@/features/care/goals';
-import { bookingPlan, careTeam, type TeamMember } from '@/features/care/plan';
+import { bookingPlan, careTeam, teamTemplate, type TeamMember } from '@/features/care/plan';
 import { googleCalendarUrl, icsFor } from '@/lib/calendar';
 
 jest.mock('expo-font', () => ({ ...jest.requireActual('expo-font'), useFonts: () => [true, null] }));
@@ -23,6 +23,18 @@ describe('care team', () => {
 
   it('a goal already covered by someone saved adds nothing', () => {
     expect(careTeam([jess], ['stress']).map((s) => s.profession)).toEqual(['psychologist']);
+  });
+
+  it('starts from a template: GP, psychiatrist, psychologist, and allied health when opened', () => {
+    expect(teamTemplate([], []).map((s) => s.profession)).toEqual(['gp', 'psychiatrist', 'psychologist']);
+    expect(teamTemplate([jess], []).map((s) => [s.profession, s.member?.firstName])).toEqual([
+      ['gp', undefined],
+      ['psychiatrist', undefined],
+      ['psychologist', 'Jess'],
+    ]);
+    const open = teamTemplate([], [], true).map((s) => s.profession);
+    expect(open).toEqual(expect.arrayContaining(['occupational_therapist', 'physiotherapist', 'exercise_physiologist', 'adhd_coach', 'dietitian']));
+    expect(open.slice(0, 2)).toEqual(['gp', 'psychiatrist']);
   });
 
   it("shows professions the network doesn't have yet, so they can be planned for", () => {
@@ -137,7 +149,13 @@ describe('My care: removing someone', () => {
     expect(await screen.findByLabelText('Unlike Alice')).toBeOnTheScreen();
     expect(screen.queryByText('Book Alice')).toBeNull();
     fireEvent.press(screen.getByLabelText('Unlike Alice'));
-    expect(await screen.findByText('Build your care team.')).toBeOnTheScreen();
+    // Back to the template: outlines for who could be on the team.
+    expect(await screen.findByLabelText('Add a psychologist')).toBeOnTheScreen();
+    expect(screen.getByLabelText('Add a GP')).toBeOnTheScreen();
+    expect(screen.getByLabelText('Psychiatrist: not in the network yet')).toBeOnTheScreen();
+    fireEvent.press(screen.getByLabelText('Allied health: OT, physio and more'));
+    expect(await screen.findByLabelText('Add an occupational therapist')).toBeOnTheScreen();
+    expect(screen.getByLabelText('Add a physiotherapist')).toBeOnTheScreen();
     expect(JSON.parse((await AsyncStorage.getItem('watl_saved'))!)).toEqual([]);
   });
 });

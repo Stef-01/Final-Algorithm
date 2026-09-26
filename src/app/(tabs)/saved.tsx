@@ -3,7 +3,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { router } from 'expo-router';
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { RatePractitioner } from '@/components/RatePractitioner';
 import { Icon } from '@/components/Icon';
 import { LikeButton } from '@/components/LikeButton';
@@ -14,7 +13,7 @@ import { getClinician } from '@/data/clinicians';
 import { useGoals } from '@/features/care/goals';
 import { loadAsked, markAsked, pickPrompt, promptRoll } from '@/features/care/ratePrompt';
 import { suggestSlot, slotLabel, type Busy } from '@/features/care/slots';
-import { bookingPlan, careTeam, goalsDraft, type Slot, type Step, type TeamMember } from '@/features/care/plan';
+import { bookingPlan, goalsDraft, teamTemplate, type Slot, type Step, type TeamMember } from '@/features/care/plan';
 import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
 import type { ProfessionChoice } from '@/features/match/sessionCore';
@@ -42,7 +41,10 @@ export default function MyCare() {
       const c = getClinician(s.clinicianId);
       return c ? [{ clinicianId: c.id, profession: c.profession, name: c.name, firstName: c.firstName, bookingUrl: c.bookingUrl }] : [];
     });
-  const team = careTeam(members, goals);
+  // The team as a template: who's on it, plus outlines for who could be (GP, psychiatrist,
+  // psychologist, and allied health once opened).
+  const [allied, setAllied] = useState(false);
+  const team = teamTemplate(members, goals, allied);
   const steps = bookingPlan(team);
   const liked = saved.filter((s) => !s.team && getClinician(s.clinicianId));
 
@@ -73,39 +75,14 @@ export default function MyCare() {
     track('calendar_checked', { ok: !!b });
   };
 
-  if (team.length === 0 && liked.length === 0) {
-    return (
-      <View style={styles.root}>
-        <ScreenHeader title="My care" />
-        <ScrollView contentContainerStyle={styles.content}>
-          <EmptyStateCard
-            title="Build your care team."
-            body="Like people as you swipe, or pick goals in Profile."
-            action={{ label: 'Find someone', onPress: () => router.navigate('/') }}
-            secondary={{ label: 'Set goals', onPress: () => router.navigate('/settings') }}
-          />
-        </ScrollView>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.root}>
       <ScreenHeader title="My care" />
       <ScrollView contentContainerStyle={styles.content}>
         <SectionTitle>Care team</SectionTitle>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.team}>
-          {members.length === 0 ? (
-            <View style={[styles.card, styles.empty]} accessible accessibilityLabel="Open someone you liked to add them to your team">
-              <View style={styles.emptyIcon}>
-                <Icon name="icUser1" size={24} color={colors.black} />
-              </View>
-              <Text style={styles.cardName}>Open someone you liked</Text>
-              <Text style={styles.cardRole}>Then “Add to care team”</Text>
-            </View>
-          ) : null}
+        <View style={styles.team}>
           {team.map((slot, i) => (
-            <Appear key={slot.member?.clinicianId ?? slot.profession} index={i} distance={10}>
+            <Appear key={slot.member?.clinicianId ?? slot.profession} index={i} distance={10} style={styles.cell}>
               <TeamCard
                 slot={slot}
                 onFind={(p) => router.push(session.chooseProfession(p, goalsDraft(p, goals)))}
@@ -116,7 +93,26 @@ export default function MyCare() {
               />
             </Appear>
           ))}
-        </ScrollView>
+          <Appear index={team.length} distance={10} style={styles.cell}>
+            <PressScale
+              onPress={() => setAllied((a) => !a)}
+              accessibilityRole="button"
+              accessibilityState={{ expanded: allied }}
+              accessibilityLabel={allied ? 'Show fewer' : 'Allied health: OT, physio and more'}
+              style={[styles.card, styles.empty]}
+              scaleTo={0.96}
+            >
+              <View style={styles.emptyIcon}>
+                <Icon name={allied ? 'icClose' : 'icProOt'} size={22} color={colors.black} />
+              </View>
+              <Text style={styles.cardName} numberOfLines={2}>
+                {allied ? 'Fewer' : 'Allied health'}
+              </Text>
+              <Text style={styles.cardRole}>{allied ? 'Hide these' : 'OT, physio, more'}</Text>
+            </PressScale>
+          </Appear>
+        </View>
+        {members.length === 0 && liked.length > 0 ? <Text style={styles.fine}>Open someone you liked, then “Add to care team”.</Text> : null}
 
         {steps.length > 0 ? (
           <>
@@ -286,12 +282,13 @@ function StepRow({ step, busy }: { step: Step; busy: Busy[] | null }) {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   content: { paddingBottom: 100 }, // clear of the floating assistant button
-  team: { paddingHorizontal: 12, gap: 10, paddingBottom: 6 },
-  card: { width: 132, minHeight: 164, backgroundColor: colors.white, borderRadius: 16, padding: 12, alignItems: 'center' },
+  team: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, paddingBottom: 6 },
+  cell: { width: '33.33%', padding: 4 },
+  card: { minHeight: 156, backgroundColor: colors.white, borderRadius: 16, padding: 12, alignItems: 'center' },
   empty: { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.line, borderStyle: 'dashed', justifyContent: 'center' },
   photo: { width: 72, height: 72, borderRadius: 36, marginTop: 6 },
   emptyIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center', marginBottom: 6 },
-  cardName: { fontFamily: fonts.bold, fontSize: 15, color: colors.black, marginTop: 10, textAlign: 'center' },
+  cardName: { fontFamily: fonts.bold, fontSize: 14, lineHeight: 18, color: colors.black, marginTop: 10, textAlign: 'center' },
   cardRole: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted, marginTop: 2, textAlign: 'center' },
   off: { color: colors.muted },
   remove: { position: 'absolute', top: 6, right: 6 },

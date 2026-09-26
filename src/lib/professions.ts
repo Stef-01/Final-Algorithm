@@ -5,7 +5,7 @@ import type { ProfessionChoice } from '@/features/match/sessionCore';
 
 /** Every kind of professional WATL can suggest, as shown on the discovery grid. */
 export type ProfessionInfo = {
-  id: ProfessionChoice | 'dietitian';
+  id: ProfessionChoice | 'dietitian' | 'psychiatrist';
   one: string;
   many: string;
   /** Two or three words on the tile: what they're for. */
@@ -23,6 +23,7 @@ export const PROFESSION_INFO: ProfessionInfo[] = [
   { id: 'physiotherapist', one: 'physiotherapist', many: 'physiotherapists', for: 'Pain, injury', icon: 'icProPhysio', available: true },
   { id: 'exercise_physiologist', one: 'exercise physiologist', many: 'exercise physiologists', for: 'Exercise as medicine', icon: 'icProExercise', available: true },
   { id: 'neurotherapist', one: 'neurotherapy practitioner', many: 'neurotherapy practitioners', for: 'Brain mapping', icon: 'icProNeuro', available: true },
+  { id: 'psychiatrist', one: 'psychiatrist', many: 'psychiatrists', for: 'Specialist, medication', icon: 'icProGp', available: false },
   { id: 'dietitian', one: 'dietitian or nutritionist', many: 'dietitians and nutritionists', for: 'Food, nutrition', icon: 'icProDiet', available: false },
 ];
 
@@ -33,6 +34,7 @@ export const PROFESSION_INFO: ProfessionInfo[] = [
  */
 export const INTRO: Record<Exclude<ProfessionInfo['id'], 'either'>, { helps: string; sessions: string; rebates: string }> = {
   gp: { helps: 'Diagnosis, medication, referrals', sessions: '15–30 min visits', rebates: 'Medicare rebates' },
+  psychiatrist: { helps: 'Specialist diagnosis, medication', sessions: 'Usually by GP referral', rebates: 'Medicare rebates with a referral' },
   psychologist: { helps: 'Talking therapy, assessments', sessions: 'About 50 min', rebates: 'Medicare rebates with a GP plan' },
   adhd_coach: { helps: 'Routines, focus, follow-through', sessions: 'Weekly or fortnightly', rebates: 'Usually no rebates' },
   occupational_therapist: { helps: 'Sensory needs, daily skills', sessions: 'Clinic, home or school', rebates: 'NDIS or private health' },

@@ -6,12 +6,15 @@ import type { IconName } from '@/components/icons';
 // WATL doesn't see anyone's calendar or the practices' availability: the plan suggests when to
 // book, and "Add to calendar" makes a reminder to do it.
 
+/** Everyone who can be on a care team, including kinds not in the network yet. */
+export type TeamRole = Profession | 'dietitian' | 'psychiatrist';
+
 export type Goal = {
   id: string;
   label: string;
   icon: IconName;
   /** Who tends to help, best first. */
-  professions: (Profession | 'dietitian')[];
+  professions: TeamRole[];
   /** Areas a goal quietly adds to a search, at low confidence, so it tilts the ranking. */
   areas?: string[];
 };
@@ -37,8 +40,9 @@ export function goalsDraft(profession: string, goalIds: string[]): string | unde
 }
 
 /** Care usually starts with a GP (assessment, referrals), then therapy, coaching and allied health. */
-export const ORDER: (Profession | 'dietitian')[] = [
+export const ORDER: TeamRole[] = [
   'gp',
+  'psychiatrist',
   'psychologist',
   'adhd_coach',
   'occupational_therapist',
@@ -49,7 +53,7 @@ export const ORDER: (Profession | 'dietitian')[] = [
 ];
 
 export type TeamMember = { clinicianId: string; profession: Profession; name: string; firstName: string; bookingUrl: string | null };
-export type Slot = { profession: Profession | 'dietitian'; member?: TeamMember };
+export type Slot = { profession: TeamRole; member?: TeamMember };
 
 /**
  * The care team: everyone saved, by profession, plus an empty slot for each profession the goals
@@ -80,4 +84,20 @@ export function bookingPlan(team: Slot[], today = new Date()): Step[] {
     const on = weekday(addDays(today, i === 0 ? 2 : 2 + i * 14));
     return { member, on, label: i === 0 ? 'This week' : i === 1 ? 'In 2 weeks' : `In ${i * 2} weeks` };
   });
+}
+
+/** The outline every care team starts from: a GP, a psychiatrist and a psychologist. */
+export const CORE: TeamRole[] = ['gp', 'psychiatrist', 'psychologist'];
+/** Allied health, behind one "Allied health" outline until it's opened. */
+export const ALLIED: TeamRole[] = ['occupational_therapist', 'physiotherapist', 'exercise_physiologist', 'adhd_coach', 'dietitian', 'neurotherapist'];
+
+/**
+ * The team as a template: everyone on it, a slot for each goal, and outlines for the core roles
+ * nobody fills yet. With `allied` open, an outline for each allied role too.
+ */
+export function teamTemplate(team: TeamMember[], goalIds: string[], allied = false): Slot[] {
+  const slots = careTeam(team, goalIds);
+  const want = allied ? [...CORE, ...ALLIED] : CORE;
+  for (const p of want) if (!slots.some((s) => s.profession === p)) slots.push({ profession: p });
+  return slots.sort((a, b) => ORDER.indexOf(a.profession) - ORDER.indexOf(b.profession));
 }
