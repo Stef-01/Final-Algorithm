@@ -108,6 +108,7 @@ export default function Matches() {
   const also = state.index >= matches.length;
   const explained = matches.filter((x) => x.reasons.length > 0).length;
   const subline = matchesSubline(matches.length, explained);
+  const headline = matchesHeadline(matches.length, state.profession, explained);
 
   if (!m) {
     return (
@@ -156,13 +157,8 @@ export default function Matches() {
           <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
             {state.index === 0 ? (
               <View style={styles.intro}>
-                <Text style={styles.introTitle}>{matchesHeadline(matches.length, state.profession, explained)}</Text>
+                {headline ? <Text style={styles.introTitle}>{headline}</Text> : null}
                 {subline ? <Text style={styles.introBody}>{subline}</Text> : null}
-                {explained === 0 ? (
-                  <Text style={styles.seeAll} onPress={() => router.push('/refine')} accessibilityRole="link">
-                    Tell the assistant what matters
-                  </Text>
-                ) : null}
                 {more.length > 0 ? (
                   <Text style={styles.seeAll} onPress={() => router.push('/all')} accessibilityRole="link">
                     See all {matches.length + more.length} who fit

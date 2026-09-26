@@ -241,19 +241,20 @@ describe('demo run-throughs', () => {
 
 describe('results headline', () => {
   it("doesn't claim to recommend when nothing the patient said picks anyone out", () => {
-    expect(matchesHeadline(2, 'gp', 0)).toBe('These GPs meet what you asked for.');
-    expect(matchesSubline(2, 0)).toBe('Nothing picks one out yet.');
+    // Nothing worth saying: no headline, no filler.
+    expect(matchesHeadline(2, 'gp', 0)).toBeNull();
+    expect(matchesSubline(2, 0)).toBeNull();
     expect(matchesHeadline(3, 'psychologist', 2)).toBe("I found 3 psychologists I'd start with.");
     expect(matchesSubline(3, 1)).toBeNull();
     expect(matchesSubline(3, 3)).toBe('Each fits for slightly different reasons.');
   });
 
-  it('a vague search gets the honest headline', () => {
+  it('a vague search gets no headline rather than filler', () => {
     const t = core.submitText(core.initialState('gp'), 'I need a GP');
     const r = core.match(t.state).state.result;
     if (r?.status !== 'matches') throw new Error('expected matches');
     const explained = r.matches.filter((m) => m.reasons.length > 0).length;
-    expect(matchesHeadline(r.matches.length, 'gp', explained)).toMatch(/meet what you asked for/);
+    expect(matchesHeadline(r.matches.length, 'gp', explained)).toBeNull();
   });
 });
 

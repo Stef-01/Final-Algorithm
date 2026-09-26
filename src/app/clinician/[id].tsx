@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AssistantMark } from '@/components/AssistantButton';
 import { ChipsCard, NoteCard, PhotoCard, PromptCard, QualificationsCard, TagsCard, TextCard } from '@/components/cards';
-import { caveatLines, costLabel, noReasonLine, placeLine, placeName, practicalChips, reasonKicker } from '@/components/ClinicianCards';
+import { caveatLines, costLabel, placeLine, placeName, practicalChips, reasonKicker } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { FitLabel } from '@/components/FitLabel';
 import { Icon } from '@/components/Icon';
@@ -68,13 +68,9 @@ export default function ClinicianDetail() {
 
         {match ? (
           <>
-            {match.reasons.length > 0 ? (
-              match.reasons.slice(0, 3).map((r, i, all) => (
-                <PromptCard key={r.evidenceId} kicker={reasonKicker(i, all.length)} title={r.signal} answer={r.evidence} {...like} />
-              ))
-            ) : (
-              <TextCard kicker="Why they're here" title="Meets what you asked for" body={noReasonLine(c)} />
-            )}
+            {match.reasons.slice(0, 3).map((r, i, all) => (
+              <PromptCard key={r.evidenceId} kicker={reasonKicker(i, all.length)} title={r.signal} answer={r.evidence} {...like} />
+            ))}
             {caveatLines(match).map((line) => (
               <NoteCard key={line} title="Worth checking" body={line} />
             ))}

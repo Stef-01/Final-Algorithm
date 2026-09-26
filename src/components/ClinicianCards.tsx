@@ -1,6 +1,6 @@
 import type { Caveat, Clinician, Match } from '@/features/match/types';
 import { Appear } from './motion';
-import { ChipItem, ChipsCard, NoteCard, PhotoCard, PromptCard, TagsCard, TextCard } from './cards';
+import { ChipItem, ChipsCard, NoteCard, PhotoCard, PromptCard, TagsCard } from './cards';
 
 type Props = {
   clinician: Clinician;
@@ -44,10 +44,6 @@ export const reasonKicker = (i: number, n: number) => (n > 1 ? `Why they fit · 
 
 export const caveatLines = (m: Match) => (m.caveats ?? []).map((c) => CAVEAT_TEXT[c]);
 
-/** Shown instead of reasons when nothing the patient said matches a specific part of the profile. */
-export const noReasonLine = (c: Clinician) =>
-  `Nothing you've mentioned matches a specific part of ${c.firstName}'s profile yet, but ${c.firstName} meets your requirements.`;
-
 // A match in the Discover card layout, content in PRD §34 priority order:
 // who → why they fit (max 3) → practical details + experience → how they practise.
 export function ClinicianCards({ clinician: c, match, onOpen, onSave, saved }: Props) {
@@ -69,17 +65,11 @@ export function ClinicianCards({ clinician: c, match, onOpen, onSave, saved }: P
           {...like}
         />
       </Appear>
-      {match.reasons.length > 0 ? (
-        match.reasons.slice(0, 3).map((r, n, all) => (
-          <Appear key={r.evidenceId} index={step()}>
-            <PromptCard kicker={reasonKicker(n, all.length)} title={r.signal} answer={r.evidence} {...like} />
-          </Appear>
-        ))
-      ) : (
-        <Appear index={step()}>
-          <TextCard kicker="Why they're here" title="Meets what you asked for" body={noReasonLine(c)} />
+      {match.reasons.slice(0, 3).map((r, n, all) => (
+        <Appear key={r.evidenceId} index={step()}>
+          <PromptCard kicker={reasonKicker(n, all.length)} title={r.signal} answer={r.evidence} {...like} />
         </Appear>
-      )}
+      ))}
       {caveatLines(match).map((line) => (
         <Appear key={line} index={step()}>
           <NoteCard title="Worth checking" body={line} />

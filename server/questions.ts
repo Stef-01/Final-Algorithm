@@ -153,17 +153,6 @@ export const QUESTIONS: BankQuestion[] = [
     ],
   },
   {
-    id: 'affirming',
-    professions: ['psychologist'],
-    target: { kind: 'preference', dimension: 'neurodiversity_affirming' },
-    text: 'Would you like someone who treats ADHD, autism and other neurodivergence as a difference rather than something to fix?',
-    options: [
-      { label: 'Yes, that matters to me', apply: pref('neurodiversity_affirming', 'high') },
-      { label: "I don't mind either way", apply: pref('neurodiversity_affirming', 'moderate') },
-      { label: NOT_SURE },
-    ],
-  },
-  {
     id: 'cost',
     target: { kind: 'constraint', key: 'maxGap' },
     text: 'Do you need to keep the out-of-pocket cost below a certain amount?',
