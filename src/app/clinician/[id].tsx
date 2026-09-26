@@ -10,11 +10,13 @@ import { Icon } from '@/components/Icon';
 import { FitLabel } from '@/components/FitLabel';
 import { ScreenIn } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
+import { ShareButton } from '@/components/ShareButton';
 import { PillButton } from '@/components/Sheet';
 import { getClinician } from '@/data/clinicians';
 import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
 import { deckOf, findMatch } from '@/features/match/sessionCore';
+import { markViewed } from '@/features/match/recent';
 import { track } from '@/lib/analytics';
 import { colors, fonts } from '@/lib/theme';
 import { goBack } from '@/lib/nav';
@@ -34,7 +36,9 @@ export default function ClinicianDetail() {
   const likeTarget = match ?? savedItem;
 
   useEffect(() => {
-    if (c) track('clinician_viewed', { clinician: c.id, fit });
+    if (!c) return;
+    track('clinician_viewed', { clinician: c.id, fit });
+    void markViewed(c.id);
   }, [c, fit]);
 
   if (!c) {
@@ -59,7 +63,16 @@ export default function ClinicianDetail() {
 
   return (
     <View style={styles.root}>
-      <ScreenHeader title={c.name} back right={fit !== 'none' ? <FitLabel fit={fit} /> : undefined} />
+      <ScreenHeader
+        title={c.name}
+        back
+        right={
+          <View style={styles.headRight}>
+            {fit !== 'none' ? <FitLabel fit={fit} /> : null}
+            <ShareButton id={c.id} name={c.name} />
+          </View>
+        }
+      />
       <ScreenIn>
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: 140 + insets.bottom }]}>
         <PhotoCard caption={placeLine(c)} source={c.photo} {...like} />
@@ -134,6 +147,7 @@ function RegistrationChecked({ on }: { on: string }) {
 }
 
 const styles = StyleSheet.create({
+  headRight: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   reg: { flexDirection: 'row', alignItems: 'center', gap: 8, marginHorizontal: 12, marginTop: 14, minHeight: 44, paddingHorizontal: 17 },
   regText: { fontFamily: fonts.bold, fontSize: 14, color: colors.purpleText },
   root: { flex: 1, backgroundColor: colors.background },

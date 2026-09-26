@@ -16,7 +16,7 @@ const SIZE = 56;
 /** Resting size: small enough to sit in the header's corner. */
 const SMALL = 36;
 /** Screens where it would cover something, or where a conversation makes no sense. */
-const HIDDEN = [/^\/refine/, /^\/matching/, /^\/safety/, /^\/book\//, /^\/dev\//, /^\/clinician\//, /^\/discover/, /^\/join/, /^\/filters/, /^\/rate/, /^\/connect/, /^\/settings/, /^\/saved/];
+const HIDDEN = [/^\/refine/, /^\/matching/, /^\/safety/, /^\/book\//, /^\/dev\//, /^\/clinician\//, /^\/discover/, /^\/join/, /^\/filters/, /^\/rate/, /^\/connect/, /^\/settings/, /^\/saved/, /^\/compare/];
 
 /** Whether the floating assistant shows on this route (headers leave room for it when it does). */
 export const assistantShownOn = (path: string) => !HIDDEN.some((re) => re.test(path));

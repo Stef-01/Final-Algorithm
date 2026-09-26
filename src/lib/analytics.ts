@@ -39,6 +39,8 @@ export type Events = {
   where_chosen: { where: string };
   mcp_demo: { step: string; client: string };
   calendar_checked: { ok: boolean };
+  profile_shared: { clinician: string };
+  compared: { count: number };
   practitioner_rated: { stars: number; note: boolean };
 };
 

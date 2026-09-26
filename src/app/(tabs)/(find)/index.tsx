@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ConversationStep } from '@/components/ConversationStep';
 import { Icon } from '@/components/Icon';
+import { PickUp } from '@/components/PickUp';
 import { Appear, PressDepth } from '@/components/motion';
 import { useGoals } from '@/features/care/goals';
 import { goalsDraft } from '@/features/care/plan';
@@ -30,6 +31,7 @@ export default function WhoAreYouLookingFor() {
         <Icon name="icSparkle" size={20} color={colors.white} />
         <Text style={styles.findText}>Find someone</Text>
       </PressDepth>
+      <PickUp />
 
       <Text style={styles.section} accessibilityRole="header">
         Who could help?

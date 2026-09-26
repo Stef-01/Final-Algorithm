@@ -6,7 +6,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, fireEvent, screen } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
-import { AccessibilityInfo, Linking } from 'react-native';
+import { AccessibilityInfo, Linking, Share } from 'react-native';
 
 import { demoResults } from '@/features/match/sessionCore';
 
@@ -36,6 +36,7 @@ const routes = {
   'clinician/[id]': require('@/app/clinician/[id]').default,
   'book/[id]': require('@/app/book/[id]').default,
   connect: require('@/app/connect').default,
+  compare: require('@/app/compare').default,
   filters: require('@/app/filters').default,
   join: require('@/app/join').default,
   rate: require('@/app/rate').default,
@@ -99,11 +100,13 @@ const SCREENS: [string, string][] = [
   ['Booking', '/book/paula-garrido'],
   ['Join', '/join'],
   ['Explore', '/discover'],
+  ['Compare', '/compare?ids=paula-garrido,alice-bui'],
 ];
 
 beforeEach(() => {
   jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(true);
   jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
+  jest.spyOn(Share, 'share').mockResolvedValue({ action: 'sharedAction' });
 });
 afterEach(() => jest.restoreAllMocks());
 
@@ -120,7 +123,7 @@ describe('every button does something', () => {
       await open(url);
       const before = JSON.stringify(screen.toJSON());
       const path = pathname();
-      const calls = (Linking.openURL as jest.Mock).mock.calls.length;
+      const calls = (Linking.openURL as jest.Mock).mock.calls.length + (Share.share as jest.Mock).mock.calls.length;
       const target = screen.queryAllByRole(c.role).filter((n) => !n.props.accessibilityState?.disabled && !n.props['aria-disabled'])[c.i];
       if (!target) {
         screen.unmount(); // the screen changed between renders (e.g. a timed element): skip
@@ -129,7 +132,7 @@ describe('every button does something', () => {
       if (c.role === 'switch') fireEvent(target, 'valueChange', !target.props.value);
       else fireEvent.press(target);
       await settle();
-      const changed = pathname() !== path || JSON.stringify(screen.toJSON()) !== before || (Linking.openURL as jest.Mock).mock.calls.length > calls;
+      const changed = pathname() !== path || JSON.stringify(screen.toJSON()) !== before || (Linking.openURL as jest.Mock).mock.calls.length + (Share.share as jest.Mock).mock.calls.length > calls;
       // The tab for the page you're on (at its start) is meant to do nothing.
       const ownTab = c.role === 'tab' && ((c.label === 'My care' && url === '/saved') || (c.label === 'Profile' && url === '/settings') || (c.label === 'Find' && url === '/'));
       if (!changed && !ownTab) dead.push(`${c.role} "${c.label}"`);

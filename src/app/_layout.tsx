@@ -38,6 +38,7 @@ export default function RootLayout() {
               <Stack.Screen name="filters" />
               <Stack.Screen name="rate" options={{ animation: 'slide_from_bottom' }} />
               <Stack.Screen name="connect" />
+              <Stack.Screen name="compare" />
               {['safety', 'book/[id]', 'refine'].map((name) => (
                 <Stack.Screen key={name} name={name} options={{ presentation: 'transparentModal', animation: 'fade' }} />
               ))}
