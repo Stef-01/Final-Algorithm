@@ -456,6 +456,19 @@ The direction is set out in [`docs/VISION.md`](VISION.md): concierge care, for e
   2. calendar connect (free/busy only, with consent);
   3. patient-reported fit, after checking it against AHPRA's advertising rules (VISION §2).
 
+### Phase 10 notes (26 Sep)
+
+- **Built:**
+  - `interview.py live <id> [--send]`, the go-live email (Resend when `RESEND_API_KEY` and `WATL_EMAIL_FROM` are set);
+  - both-free times on the web from a calendar file (`src/features/care/ics.ts`);
+  - registration checks: `scripts/registration.py` records a person's check of AHPRA's register and the profile shows the date;
+  - `scripts/ratings.py`, the team's summary of care-team ratings.
+- **Needs:**
+  - an email service key;
+  - Google or Microsoft OAuth credentials for calendar sign-in;
+  - a person to do the registration checks;
+  - the AHPRA advertising check before any ratings are shown to patients.
+
 ## 13. Testing strategy
 
 - **Engine unit tests (Jest):**

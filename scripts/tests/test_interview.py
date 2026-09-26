@@ -11,6 +11,12 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / 'scripts' / 'interview.py'
 FIXTURES = ROOT / 'server' / 'fixtures' / 'interviews'
 
+import importlib.util  # noqa: E402
+
+_spec = importlib.util.spec_from_file_location('interview', SCRIPT)
+MOD = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(MOD)
+
 
 def run(*args):
     return subprocess.run([sys.executable, str(SCRIPT), *args], capture_output=True, text=True)
@@ -238,3 +244,22 @@ class PullFromJoinWatl(unittest.TestCase):
         self.assertEqual(skipped, ['sam-lee'])
         self.assertEqual(json.loads((self.dir / 'sam-lee' / 'interview.json').read_text()), {'kept': True})
         self.assertFalse((self.dir.parent / 'etc').exists() and (self.dir.parent / 'etc' / 'interview.json').exists())
+
+
+class LiveEmail(unittest.TestCase):
+    doc = {'clinicianId': 'sam-lee', 'contact': {'email': 'sam@example.com'}}
+    live = {'sam-lee': {'practical': {'fee': 180, 'gapAfterMedicare': None, 'daysUntilAvailable': 7}}}
+
+    def test_names_them_links_the_profile_and_lists_what_shows(self):
+        e = MOD.live_email(self.doc, self.live)
+        self.assertEqual(e['to'], 'sam@example.com')
+        self.assertIn('Hi Sam,', e['text'])
+        self.assertIn('/clinician/sam-lee', e['text'])
+        self.assertIn('your fee, wait for new patients', e['text'])
+        self.assertNotIn('out-of-pocket', e['text'])
+
+    def test_only_once_they_are_live_and_only_with_an_email(self):
+        with self.assertRaises(SystemExit):
+            MOD.live_email(self.doc, {})
+        with self.assertRaises(SystemExit):
+            MOD.live_email({'clinicianId': 'sam-lee', 'contact': {}}, self.live)

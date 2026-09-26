@@ -8,6 +8,7 @@
     python3 scripts/interview.py review <id>                   # approve   -> <dir>/<id>/approved.json (interactive)
     python3 scripts/interview.py review <id> --decisions f.json  # approve non-interactively
     python3 scripts/interview.py collect                       # all approved.json -> server/data/interviews.json
+    python3 scripts/interview.py live <id> [--send]            # the "you're live" email (prints it; --send needs RESEND_API_KEY, WATL_EMAIL_FROM)
 
 --dir defaults to server/data/interviews. Every excerpt must appear word for word in the recorded answer,
 every value must be on the dimension's scale, and patient-facing lines must follow the copy rules. Nothing
@@ -390,6 +391,61 @@ def cmd_collect(args):
     print(f'{len(collected)} approved interviews -> {out}')
 
 
+SITE = 'https://final-algorithm.vercel.app'
+
+
+def live_email(doc, collected):
+    """The "you're live" email for an approved Join WATL professional, or fail() if they aren't live."""
+    cid = doc.get('clinicianId', '')
+    if cid not in collected:
+        fail(f'{cid} is not live yet: approve their interview and run collect first')
+    to = (doc.get('contact') or {}).get('email', '').strip()
+    if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', to):
+        fail(f'{cid} has no contact email (only Join WATL submissions do)')
+    name = first_name(cid)
+    shown = [k for k, v in (collected[cid].get('practical') or {}).items() if v is not None]
+    lines = [
+        f'Hi {name},',
+        '',
+        'Your WATL profile is live:',
+        f'{SITE}/clinician/{cid}',
+        '',
+        'What patients now see, in your own words: ' + (', '.join(LABELS.get(k, k) for k in shown) or 'how you work') + '.',
+        'Anything wrong or out of date? Reply to this email, or send an update through Join WATL:',
+        f'{SITE}/join',
+        '',
+        'WATL receives no part of what patients pay you.',
+        '',
+        'The WATL team',
+    ]
+    return {'to': to, 'subject': 'You’re live on WATL', 'text': '\n'.join(lines)}
+
+
+LABELS = {'fee': 'your fee', 'gapAfterMedicare': 'out-of-pocket cost', 'daysUntilAvailable': 'wait for new patients',
+          'weekends': 'weekend appointments', 'newPatients': 'new patients', 'initialConsultMins': 'first appointment length'}
+
+
+def cmd_live(args):
+    f = pathlib.Path(args.dir) / args.id / 'interview.json'
+    if not f.exists():
+        fail(f'no interview for {args.id}')
+    collected = json.loads(COLLECTED.read_text()) if COLLECTED.exists() else {}
+    email = live_email(json.loads(f.read_text()), collected)
+    if not args.send:
+        print(f"To: {email['to']}\nSubject: {email['subject']}\n\n{email['text']}")
+        return
+    import os
+    import urllib.request
+    key, sender = os.environ.get('RESEND_API_KEY'), os.environ.get('WATL_EMAIL_FROM')
+    if not key or not sender:
+        fail('set RESEND_API_KEY and WATL_EMAIL_FROM to send (or leave off --send and send it yourself)')
+    body = json.dumps({'from': sender, 'to': [email['to']], 'subject': email['subject'], 'text': email['text']}).encode()
+    req = urllib.request.Request('https://api.resend.com/emails', data=body, method='POST',
+                                 headers={'Authorization': f'Bearer {key}', 'Content-Type': 'application/json'})
+    with urllib.request.urlopen(req, timeout=15) as r:
+        print(f"sent to {email['to']} ({r.status})")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--dir', default=str(DEFAULT_DIR))
@@ -408,8 +464,11 @@ def main(argv=None):
     r.add_argument('--decisions')
     c = sub.add_parser('collect')
     c.add_argument('--out', default=str(COLLECTED))
+    lv = sub.add_parser('live')
+    lv.add_argument('id')
+    lv.add_argument('--send', action='store_true')
     args = ap.parse_args(argv)
-    {'new': cmd_new, 'pull': cmd_pull, 'propose': cmd_propose, 'ingest': cmd_ingest, 'review': cmd_review, 'collect': cmd_collect}[args.cmd](args)
+    {'new': cmd_new, 'pull': cmd_pull, 'propose': cmd_propose, 'ingest': cmd_ingest, 'review': cmd_review, 'collect': cmd_collect, 'live': cmd_live}[args.cmd](args)
 
 
 if __name__ == '__main__':

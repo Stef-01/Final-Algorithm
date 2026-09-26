@@ -164,6 +164,7 @@ export function getProfessional(id: unknown) {
     experienced_with: c.expertise.map((e) => e.area),
     how_they_work: c.evidence.filter((e) => e.trait !== 'expertise').map((e) => e.patientFacing).slice(0, 6),
     qualifications: (c.qualifications ?? []).map((q) => [q.title, q.detail].filter(Boolean).join(', ')),
+    registration_checked: c.registration ? { register: 'AHPRA', on: c.registration.checkedOn } : null,
     profile: `${SITE}/clinician/${c.id}`,
     booking: c.bookingUrl,
   };

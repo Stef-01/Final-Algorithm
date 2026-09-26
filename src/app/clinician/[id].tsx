@@ -1,11 +1,12 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ChipsCard, NoteCard, PhotoCard, PromptCard, QualificationsCard, TagsCard, TextCard } from '@/components/cards';
 import { caveatLines, placeLine, practicalChips, reasonKicker } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
+import { Icon } from '@/components/Icon';
 import { FitLabel } from '@/components/FitLabel';
 import { ScreenIn } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
@@ -90,6 +91,7 @@ export default function ClinicianDetail() {
             ...(p.billingNote ? [{ icon: 'icCost' as const, label: p.billingNote }] : []),
           ]}
         />
+        {c.registrationChecked ? <RegistrationChecked on={c.registrationChecked} /> : null}
         <TextCard title={`About ${c.firstName}`} body={c.bio} lines={4} />
         <QualificationsCard items={c.qualifications} />
       </ScrollView>
@@ -118,7 +120,22 @@ export default function ClinicianDetail() {
   );
 }
 
+const REGISTER = 'https://www.ahpra.gov.au/Registration/Registers-of-Practitioners.aspx';
+
+/** "Registration checked · 26 Sept 2026", linking to the public register so anyone can check too. */
+function RegistrationChecked({ on }: { on: string }) {
+  const date = new Date(`${on}T00:00:00`).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+  return (
+    <Pressable onPress={() => void Linking.openURL(REGISTER)} accessibilityRole="link" style={styles.reg}>
+      <Icon name="icSecurity" size={16} color={colors.purpleText} />
+      <Text style={styles.regText}>Registration checked · {date}</Text>
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
+  reg: { flexDirection: 'row', alignItems: 'center', gap: 8, marginHorizontal: 12, marginTop: 14, minHeight: 44, paddingHorizontal: 17 },
+  regText: { fontFamily: fonts.bold, fontSize: 14, color: colors.purpleText },
   root: { flex: 1, backgroundColor: colors.background },
   content: {},
   footerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },

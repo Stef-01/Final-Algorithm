@@ -64,6 +64,7 @@ export function toView(r: ClinicianRecord): Clinician {
     credentials: r.credentials,
     qualifications: r.qualifications ?? [],
     bookingUrl: r.bookingUrl,
+    registrationChecked: r.registration?.checkedOn ?? null,
     practical: {
       nextAvailableShort: availabilityShort(p.daysUntilAvailable),
       nextAvailable: p.nextAvailable,

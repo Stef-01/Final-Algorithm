@@ -22,6 +22,8 @@ export type Clinician = {
   credentials: string[];
   qualifications: Qualification[];
   bookingUrl: string | null;
+  /** When someone checked their registration on AHPRA's register, if they have. */
+  registrationChecked: string | null;
   practical: {
     nextAvailableShort: string;
     nextAvailable: string;

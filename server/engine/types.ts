@@ -119,6 +119,8 @@ export type ClinicianRecord = {
   /** Qualifications as separate items, in the profile's own words (scripts/import-adhdme.py). */
   qualifications?: Qualification[];
   bookingUrl: string | null;
+  /** Set only after a person checked it on AHPRA's public register (scripts/registration.py). */
+  registration?: { body: 'AHPRA'; number: string; checkedOn: string };
   practical: {
     nextAvailable: string;
     /** null = not published. */

@@ -10,15 +10,17 @@ People rarely know which kinds of professional could help them. An ADHD coach fo
 
 - ✅ **The discovery grid.** Every kind of professional the network has, as tiles (icon, name, two words on what they're for). Kinds nobody offers yet (dietitians) show as "Soon", honestly.
 - ✅ **Goals to professions.** Goals in Profile suggest who's missing from your team (`src/features/care/plan.ts`).
-- **Next: "Also could help".** After results, a row of other kinds of professional who suit what you said. A psychologist search about focus would also suggest an ADHD coach. Driven by the same areas the engine already matches.
-- **Next: a discovery queue.** A swipeable run of one-card introductions to each kind of professional (what they do, when people see one, cost range), before any search. Minimal text, one idea per card.
+- ✅ **"Also could help".** After results, other kinds of professional who suit what you said (a psychologist search about focus also suggests an ADHD coach).
+- ✅ **A discovery queue.** Explore who does what: one swipeable card per kind of professional.
 
 ## 2. Trust you can check ✅ foundations
 
 - ✅ Every reason is quoted word for word from the professional's own profile or interview, and every fact (fees, rebates, suburbs) is checked against its source before it's shown.
 - ✅ Honest labels: "Possible fit" when nothing specific matches; "Worth checking" when a fact isn't published.
-- **Next: patient-reported fit.** Aggregate the 1–5 fit ratings (already collected, `/api/feedback`) into a per-professional signal. Show it only with enough ratings, and never as stars.
-- **Next: verification badges.** Check each registration against the national register (AHPRA for registered professions) and show a small "Registration checked" mark with the date.
+- ✅ **Care-team ratings, collected.** Anonymous 1–5 and a note, now and then, in My care; `scripts/ratings.py` summarises them for the team.
+- **Next: patient-reported fit.** Show a per-professional signal only with enough ratings, never as stars, and only after checking AHPRA's advertising rules.
+- ✅ **Registration checked** (plumbing). A reviewer records a check of AHPRA's public register with `scripts/registration.py`; the profile then shows "Registration checked" and the date, linking to the register. None recorded yet.
+- **Next:** do the checks (a person, on the register).
 
 ## 3. Price and availability, upfront
 
@@ -27,14 +29,15 @@ The biggest barrier after "who" is "how much, and when". Most profiles publish n
 - ✅ Unpublished fees are flagged, never guessed. The no-match screen says when cost is what rules everyone out.
 - ✅ **Join WATL** (Profile → For professionals). A short form for fees, out-of-pocket cost, wait, weekends, telehealth and new patients. It uses the interview pipeline's rules: consent, and every number in the professional's own words. It's queued as a draft interview for a person to review; nothing shows until approved.
 - ✅ **Reviewer tools.** `scripts/interview.py pull` turns the queue into draft interviews, then `propose` → `ingest` → `review`.
-- **Next:** email the professional when they're live.
+- ✅ **"You're live" email.** `scripts/interview.py live <id>` writes it; `--send` sends it once an email service (Resend) is connected.
 - **Later: live availability.** Read practices' booking systems (Halaxy, HotDoc and Cliniko all have partner APIs) to show real next-available times, and recommend actual slots.
 
 ## 4. Your care team ✅ started
 
 - ✅ **My care.** People you add from their profile become your team, ordered the way care usually starts; everyone else you liked waits below. Goals add slots for who's missing.
 - ✅ **Next steps.** A suggested booking order, each addable to your calendar as a reminder.
-- **Next: calendar connect.** With your permission (Google or Microsoft sign-in), read only free/busy times to suggest when to book. Later, match those against practices' live availability for a one-tap booking.
+- ✅ **Both free.** Phones read busy times from the calendar (with permission); the web reads a calendar file you pick. Only times, and they never leave the device.
+- **Next: calendar sign-in** (Google or Microsoft free/busy) so the web needn't use a file. Needs OAuth credentials. Later, match against practices' live availability for one-tap booking.
 - **Later: a shared plan.** With consent, share your goals and team with the people in it, so a GP, psychologist and coach see the same plan. Nothing is shared by default.
 
 ## 4b. Your AI, as your concierge ✅ started
