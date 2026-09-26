@@ -35,7 +35,8 @@ export const GOALS: Goal[] = [
 
 /** Words to start a search with, from the goals this profession helps with ("I'd like help to: …"). */
 export function goalsDraft(profession: string, goalIds: string[]): string | undefined {
-  const labels = GOALS.filter((g) => goalIds.includes(g.id) && g.professions.includes(profession as Profession)).map((g) => g.label.charAt(0).toLowerCase() + g.label.slice(1));
+  // Searching everyone ("either"): every goal counts.
+  const labels = GOALS.filter((g) => goalIds.includes(g.id) && (profession === 'either' || g.professions.includes(profession as Profession))).map((g) => g.label.charAt(0).toLowerCase() + g.label.slice(1));
   return labels.length ? `I'd like help to: ${labels.join(', ')}.` : undefined;
 }
 

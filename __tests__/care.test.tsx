@@ -3,7 +3,7 @@ import { fireEvent, screen } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 
 import { restoreGoals } from '@/features/care/goals';
-import { bookingPlan, careTeam, teamTemplate, type TeamMember } from '@/features/care/plan';
+import { bookingPlan, careTeam, goalsDraft, teamTemplate, type TeamMember } from '@/features/care/plan';
 import { googleCalendarUrl, icsFor } from '@/lib/calendar';
 
 jest.mock('expo-font', () => ({ ...jest.requireActual('expo-font'), useFonts: () => [true, null] }));
@@ -161,6 +161,10 @@ describe('My care: removing someone', () => {
 });
 
 describe('starting a search from your team', () => {
+  it('searching everyone starts from all your goals', () => {
+    expect(goalsDraft('either', ['organised', 'sleep'])).toBe("I'd like help to: get organised, sleep better.");
+  });
+
   it('prefills the words from the goals that profession helps with', () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { goalsDraft } = require('@/features/care/plan') as typeof import('@/features/care/plan');
