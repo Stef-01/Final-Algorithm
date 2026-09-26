@@ -13,6 +13,7 @@ import { getClinician } from '@/data/clinicians';
 import { useGoals } from '@/features/care/goals';
 import { nextDue } from '@/features/care/plans';
 import { loadAsked, markAsked, pickPrompt, promptRoll } from '@/features/care/ratePrompt';
+import { pickCalendarFile } from '@/features/care/ics';
 import { suggestSlot, slotLabel, type Busy } from '@/features/care/slots';
 import { bookingPlan, CORE, goalsDraft, teamTemplate, type Slot, type Step, type TeamMember } from '@/features/care/plan';
 import { useSaved } from '@/features/match/saved';
@@ -77,7 +78,8 @@ export default function MyCare() {
   const checkCalendar = async () => {
     setChecking(true);
     const now = new Date();
-    const b = await busyTimes(now, new Date(now.getTime() + 70 * 24 * 60 * 60 * 1000));
+    // Phones read the calendar itself; the web reads a calendar file you pick (.ics), on the device.
+    const b = Platform.OS === 'web' ? await pickCalendarFile() : await busyTimes(now, new Date(now.getTime() + 70 * 24 * 60 * 60 * 1000));
     setChecking(false);
     if (b) setBusy(b);
     track('calendar_checked', { ok: !!b });
@@ -131,12 +133,13 @@ export default function MyCare() {
                 </Appear>
               ))}
             </View>
-            {Platform.OS !== 'web' && busy === null ? (
+            {busy === null ? (
               <PressScale onPress={checkCalendar} disabled={checking} accessibilityRole="button" style={styles.check} scaleTo={0.96}>
                 <Icon name="icCalendar" size={16} color={colors.black} />
                 <Text style={styles.checkText}>{checking ? 'Checking…' : 'Find times we’re both free'}</Text>
               </PressScale>
             ) : null}
+            {busy === null && Platform.OS === 'web' ? <Text style={styles.fine}>Uses a calendar file (.ics). It stays on this device.</Text> : null}
             <Text style={styles.fine}>
               {busy
                 ? 'From your calendar and each practice’s wait. Confirm when booking.'

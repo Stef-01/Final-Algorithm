@@ -15,7 +15,7 @@ What WATL does with what a patient tells it, as the code stands. Written for a r
 | Join WATL submissions (a professional's name, email, practice, fees and answers) | `/api/portal` → Upstash list `watl:portal`, once connected, as a draft interview for review | The newest 1,000 are kept; delete each once reviewed | `api/portal.ts`, `server/portal.ts` |
 | What an assistant connected over MCP sends (needs, limits, style) | `/api/mcp`, only while ranking | Not stored or logged; the response is ranked profiles only | `api/mcp.ts`, `server/mcp.ts` |
 | Care-team ratings (clinician id, 1–5 stars, optional note of up to 300 characters, the day) | `/api/feedback` → Upstash list `watl:practitioner`, once connected | Newest 5,000; no patient id; never shown on profiles or sent to the practitioner (see Open 5) | `server/feedback.ts`, `src/features/care/ratePrompt.ts` |
-| Your calendar's busy times, if you tap “Find times we’re both free” (phones only) | On the phone, for that screen | Not stored or sent; titles and details aren't read | `src/lib/deviceCalendar.ts` |
+| Your calendar's busy times, if you tap “Find times we’re both free” (phones: the calendar itself; web: a calendar file you pick) | On the device, for that screen | Not stored or sent; titles and details aren't read | `src/lib/deviceCalendar.ts`, `src/features/care/ics.ts` |
 | Match rating and thumbs (numbers, clinician ids, the day); after a 5 or a 1–2, the reasons tapped and an optional note of up to 300 characters | `/api/feedback` → Upstash Redis, once connected | The newest 5,000 are kept; no time limit yet (see Open 5) | `api/feedback.ts`, `server/feedback.ts` |
 
 ## What never leaves the device
