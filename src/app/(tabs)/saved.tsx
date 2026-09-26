@@ -134,12 +134,18 @@ export default function MyCare() {
               ))}
             </View>
             {busy === null ? (
-              <PressScale onPress={checkCalendar} disabled={checking} accessibilityRole="button" style={styles.check} scaleTo={0.96}>
+              <PressScale
+                onPress={checkCalendar}
+                disabled={checking}
+                accessibilityRole="button"
+                accessibilityHint={Platform.OS === 'web' ? 'Asks for a calendar file, read on this device only' : 'Reads busy times on this phone only'}
+                style={styles.check}
+                scaleTo={0.96}
+              >
                 <Icon name="icCalendar" size={16} color={colors.black} />
                 <Text style={styles.checkText}>{checking ? 'Checking…' : 'Find times we’re both free'}</Text>
               </PressScale>
             ) : null}
-            {busy === null && Platform.OS === 'web' ? <Text style={styles.fine}>Uses a calendar file (.ics). It stays on this device.</Text> : null}
             <Text style={styles.fine}>
               {busy
                 ? 'From your calendar and each practice’s wait. Confirm when booking.'
@@ -248,7 +254,6 @@ function LikedRow({ id, onUnlike }: { id: string; onUnlike: () => void }) {
           </Text>
           <Text style={[styles.cardRole, styles.left]}>{capitalised(info.one)}</Text>
         </View>
-        <Icon name="icRightArrow" size={14} color={colors.muted} />
       </PressScale>
       <LikeButton liked onPress={onUnlike} label={`Unlike ${c.firstName}`} size={34} />
     </View>
@@ -302,11 +307,12 @@ const styles = StyleSheet.create({
   content: { paddingBottom: 100 }, // clear of the floating assistant button
   team: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, paddingBottom: 6 },
   cell: { width: '33.33%', padding: 4 },
-  card: { height: 164, backgroundColor: colors.white, borderRadius: 16, padding: 12, alignItems: 'center' },
+  // One height for filled and empty cards alike, with room for photo, name, role and actions.
+  card: { height: 188, backgroundColor: colors.white, borderRadius: 16, padding: 10, alignItems: 'center', justifyContent: 'center' },
   empty: { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.line, borderStyle: 'dashed', justifyContent: 'center' },
-  photo: { width: 72, height: 72, borderRadius: 36, marginTop: 6 },
+  photo: { width: 60, height: 60, borderRadius: 30 },
   emptyIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center', marginBottom: 6 },
-  cardName: { fontFamily: fonts.bold, fontSize: 14, lineHeight: 18, color: colors.black, marginTop: 10, textAlign: 'center' },
+  cardName: { fontFamily: fonts.bold, fontSize: 14, lineHeight: 18, color: colors.black, marginTop: 8, textAlign: 'center' },
   cardRole: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted, marginTop: 2, textAlign: 'center' },
   off: { color: colors.muted },
   teamHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingRight: 12 },
