@@ -139,11 +139,14 @@ export function ChipsCard({
   rows = [],
   rowsTitle,
   kicker,
+  tags = [],
 }: {
   chips: ChipItem[];
   rows?: ChipItem[];
   rowsTitle?: string;
   kicker?: string;
+  /** Short items shown as light pills under the title (e.g. what they're experienced with). */
+  tags?: string[];
 }) {
   return (
     <View style={styles.card}>
@@ -158,8 +161,17 @@ export function ChipsCard({
           ))}
         </ScrollView>
       ) : null}
-      {rowsTitle && rows.length > 0 ? (
+      {rowsTitle && (rows.length > 0 || tags.length > 0) ? (
         <Text style={[styles.rowsTitle, chips.length === 0 && !kicker && styles.rowsTitleFirst]}>{rowsTitle}</Text>
+      ) : null}
+      {tags.length > 0 ? (
+        <View style={[styles.tags, styles.tagsInChips]}>
+          {tags.map((t) => (
+            <View key={t} style={styles.tag}>
+              <Text style={styles.tagText}>{t}</Text>
+            </View>
+          ))}
+        </View>
       ) : null}
       {rows.map((r) => (
         <View key={`${r.icon}-${r.label}`} style={styles.row}>
@@ -276,6 +288,7 @@ const styles = StyleSheet.create({
   badge: { borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 8, paddingVertical: 2, marginTop: 1 },
   badgeText: { fontFamily: fonts.bold, fontSize: 11, color: colors.black },
   tags: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginHorizontal: 15 },
+  tagsInChips: { marginHorizontal: 24, marginBottom: 16, marginTop: 4 },
   tag: { maxWidth: '100%', backgroundColor: colors.background, borderRadius: 30, paddingHorizontal: 12, paddingVertical: 7 },
   tagText: { fontFamily: fonts.medium, fontSize: 14, color: colors.black },
   body: { fontFamily: fonts.regular, fontSize: 16, lineHeight: 24, color: colors.black, marginHorizontal: 15 },

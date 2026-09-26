@@ -12,6 +12,7 @@ import { useSpeechToText } from '@/features/voice/useSpeechToText';
 import { track, wordCount } from '@/lib/analytics';
 import { refineGreeting } from '@/features/match/sessionCore';
 import { colors, fonts } from '@/lib/theme';
+import { goBack } from '@/lib/nav';
 
 // The refine conversation, opened from the floating assistant button. Say what to change and the
 // list re-ranks; every reply says exactly what changed and how many now fit.
@@ -39,7 +40,7 @@ export default function Refine() {
   useEffect(() => {
     if (Platform.OS !== 'web' || typeof window === 'undefined') return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') router.back();
+      if (e.key === 'Escape') goBack('/matches');
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -63,20 +64,20 @@ export default function Refine() {
       const route = await session.refine(text, extracted, rewordRemote);
       setPending(null);
       if (route !== '/refine') {
-        router.back();
+        goBack('/matches');
         router.push(route as never);
       }
     });
   };
 
   const seeMatches = () => {
-    router.back();
+    goBack('/matches');
     router.navigate('/matches');
   };
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.scrim}>
-      <Pressable style={StyleSheet.absoluteFill} onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Close" />
+      <Pressable style={StyleSheet.absoluteFill} onPress={() => goBack('/matches')} accessibilityRole="button" accessibilityLabel="Close" />
       <Appear distance={40} style={[styles.card, { paddingBottom: insets.bottom + 12, marginTop: insets.top + 60 }]}>
         <View style={styles.header}>
           <View style={styles.badge}>
@@ -85,7 +86,7 @@ export default function Refine() {
           <Text style={styles.title} accessibilityRole="header">
             Refine with WATL
           </Text>
-          <Pressable onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Close" style={styles.close}>
+          <Pressable onPress={() => goBack('/matches')} accessibilityRole="button" accessibilityLabel="Close" style={styles.close}>
             <Icon name="icClose" size={16} />
           </Pressable>
         </View>

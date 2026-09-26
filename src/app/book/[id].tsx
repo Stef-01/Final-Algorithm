@@ -1,5 +1,5 @@
 import * as Linking from 'expo-linking';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { Text } from 'react-native';
 
 import { PillButton, Sheet, sheetText } from '@/components/Sheet';
@@ -8,6 +8,7 @@ import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
 import { findMatch } from '@/features/match/sessionCore';
 import { track } from '@/lib/analytics';
+import { goBack } from '@/lib/nav';
 
 // Booking hands off to the practice's own booking page (PRD §7). WATL takes no part of the fee.
 export default function BookingHandoff() {
@@ -34,11 +35,11 @@ export default function BookingHandoff() {
             // Booking puts them in your care team and marks today as a visit.
             booked({ clinicianId: c.id, fit: findMatch(session.state, c.id)?.fit ?? saved.find((s) => s.clinicianId === c.id)?.fit ?? 'Possible fit' });
             Linking.openURL(c.bookingUrl!);
-            router.back();
+            goBack('/saved');
           }}
         />
       ) : null}
-      <PillButton label="Not now" variant="text" onPress={() => router.back()} />
+      <PillButton label="Not now" variant="text" onPress={() => goBack('/saved')} />
     </Sheet>
   );
 }

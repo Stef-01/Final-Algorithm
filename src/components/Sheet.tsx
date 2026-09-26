@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import { ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -6,20 +5,21 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, fonts } from '@/lib/theme';
 import { Icon } from './Icon';
 import { Appear, PressDepth } from './motion';
+import { goBack } from '@/lib/nav';
 
 // Grey scrim + white rounded card, the pattern the Android "dialog" activities used.
 export function Sheet({ children, closeButton }: { children: ReactNode; closeButton?: boolean }) {
   const insets = useSafeAreaInsets();
   return (
     <View style={styles.scrim}>
-      <Pressable style={StyleSheet.absoluteFill} onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Close" />
+      <Pressable style={StyleSheet.absoluteFill} onPress={() => goBack()} accessibilityRole="button" accessibilityLabel="Close" />
       {/* The card rises into place with a spring as the scrim fades in. */}
       <Appear distance={90} style={[styles.card, { marginTop: insets.top + 40 }]}>
         <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 32 }]}>
           {children}
         </ScrollView>
         {closeButton ? (
-          <Pressable onPress={() => router.back()} hitSlop={12} accessibilityRole="button" accessibilityLabel="Close" style={styles.close}>
+          <Pressable onPress={() => goBack()} hitSlop={12} accessibilityRole="button" accessibilityLabel="Close" style={styles.close}>
             <Icon name="icClose" size={18} />
           </Pressable>
         ) : null}

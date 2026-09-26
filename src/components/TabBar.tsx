@@ -1,3 +1,4 @@
+import { router, usePathname } from 'expo-router';
 import type { BottomTabBarProps } from 'expo-router/tabs';
 import { useEffect, useState } from 'react';
 import { Animated, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -21,6 +22,7 @@ const tabIcons: Record<string, IconName | 'logo'> = {
 // Dark bottom bar from the Android layouts: active icon white, the rest grey.
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
+  const path = usePathname();
   const { saved } = useSaved();
   const reduced = useReducedMotion();
   const [width, setWidth] = useState(0);
@@ -45,7 +47,10 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
         const icon = tabIcons[route.name];
         const onPress = () => {
           const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
-          if (!focused && !event.defaultPrevented) navigation.navigate(route.name);
+          if (event.defaultPrevented) return;
+          if (!focused) navigation.navigate(route.name);
+          // Tapping Find again, mid-search, goes back to its start (the usual tab-bar behaviour).
+          else if (route.name === '(find)' && path !== '/') router.navigate('/');
         };
         return (
           <Pressable

@@ -17,6 +17,7 @@ import { track } from '@/lib/analytics';
 import { localDay } from '@/lib/day';
 import { tap } from '@/lib/haptics';
 import { colors, fonts } from '@/lib/theme';
+import { goBack } from '@/lib/nav';
 
 // Connect your AI (MCP). WATL is an MCP server at MCP_URL: add it to Claude or ChatGPT as a custom
 // connector and the assistant can search WATL with what it already knows about you. These screens
@@ -54,7 +55,7 @@ export default function Connect() {
 
   return (
     <View style={styles.root}>
-      <ScreenHeader title="Connect your AI" onBack={step === 'how' ? () => go('pick') : () => router.back()} backLabel="Back" />
+      <ScreenHeader title="Connect your AI" onBack={step === 'how' ? () => go('pick') : () => goBack('/settings')} backLabel="Back" />
       <ScrollView
         ref={scroller}
         contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 48 }]}

@@ -1,5 +1,7 @@
 import { Linking, Platform } from 'react-native';
 
+import { addToDeviceCalendar } from './deviceCalendar';
+
 // "Add to calendar" without asking for calendar access: an .ics file (Apple Calendar, Outlook,
 // and most others open it) or a prefilled Google Calendar page. The event is a reminder to book.
 
@@ -44,10 +46,7 @@ export function googleCalendarUrl(e: CalendarEvent): string {
  * back to Google Calendar if that isn't possible. Resolves to where it went.
  */
 export async function addToCalendar(e: CalendarEvent, how: 'ics' | 'google'): Promise<'device' | 'ics' | 'google'> {
-  if (Platform.OS !== 'web') {
-    const { addToDeviceCalendar } = await import('./deviceCalendar');
-    if (await addToDeviceCalendar(e)) return 'device';
-  }
+  if (Platform.OS !== 'web' && (await addToDeviceCalendar(e))) return 'device';
   if (how === 'ics' && Platform.OS === 'web' && typeof document !== 'undefined') {
     const blob = new Blob([icsFor(e)], { type: 'text/calendar' });
     const a = document.createElement('a');

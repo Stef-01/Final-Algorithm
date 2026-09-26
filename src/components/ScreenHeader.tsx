@@ -1,4 +1,4 @@
-import { router, usePathname } from 'expo-router';
+import { usePathname } from 'expo-router';
 import { ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, fonts } from '@/lib/theme';
 import { assistantShownOn } from './AssistantButton';
 import { Icon } from './Icon';
+import { goBack } from '@/lib/nav';
 
 type Props = {
   title: string;
@@ -24,7 +25,7 @@ export function ScreenHeader({ title, back, onBack: custom, backLabel = 'Back', 
   const onBack = () => {
     if (custom) return custom();
     if (typeof back === 'function') back();
-    router.back();
+    goBack();
   };
   const showBack = !!back || !!custom;
 

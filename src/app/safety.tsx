@@ -4,6 +4,7 @@ import { Text } from 'react-native';
 import { PillButton, Sheet, sheetText } from '@/components/Sheet';
 import { signalsFor } from '@/features/match/agent';
 import { useSession } from '@/features/match/session';
+import { goBack } from '@/lib/nav';
 
 // Safety pause (PRD §44). Wording and numbers must be reviewed by a clinical advisor before real users.
 export default function Safety() {
@@ -14,7 +15,7 @@ export default function Safety() {
 
   const continueFlow = () => {
     const next = session.acknowledgeSafety();
-    router.back();
+    goBack();
     router.push(next);
   };
 
@@ -28,10 +29,10 @@ export default function Safety() {
       {pausedFlow ? (
         <>
           <PillButton label="Continue my search" onPress={continueFlow} />
-          <PillButton label="Go back" variant="text" onPress={() => router.back()} />
+          <PillButton label="Go back" variant="text" onPress={() => goBack()} />
         </>
       ) : (
-        <PillButton label="Done" onPress={() => router.back()} />
+        <PillButton label="Done" onPress={() => goBack()} />
       )}
     </Sheet>
   );

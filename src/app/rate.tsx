@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -10,6 +10,7 @@ import { Appear, PressDepth, PressScale } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { useSession } from '@/features/match/session';
 import { colors, fonts } from '@/lib/theme';
+import { goBack } from '@/lib/nav';
 
 // After a 5 ("What was good?") or a 1–2 ("What was off?"): tap any that apply, or Other to say it
 // in your words. Skip sends the rating on its own. Nothing is sent until you choose.
@@ -25,7 +26,7 @@ export default function Rate() {
 
   const done = (why?: { reasons: string[]; note?: string }) => {
     session.rateMatches(rating, why);
-    router.back();
+    goBack('/matches');
   };
 
   if (!kind) {

@@ -79,7 +79,7 @@ export function ClinicianCards({ clinician: c, match, onOpen, onSave, saved }: P
         <ChipsCard
           chips={practicalChips(c)}
           rowsTitle="Experienced with"
-          rows={c.experiencedWith.slice(0, 4).map((area) => ({ icon: 'icCheck', label: area }))}
+          tags={c.experiencedWith.slice(0, 4)}
         />
       </Appear>
       <Appear index={step()}>

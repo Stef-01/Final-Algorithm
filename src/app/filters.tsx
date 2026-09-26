@@ -11,6 +11,7 @@ import { currentValues, filterDefs, type Filters } from '@/features/match/filter
 import { useSession } from '@/features/match/session';
 import { countWithFilters } from '@/features/match/sessionCore';
 import { colors, fonts } from '@/lib/theme';
+import { goBack } from '@/lib/nav';
 
 // Filters: the old app's Preferences screen, for health. A row per filter showing its current value
 // ("Open to all" by default); tap to choose. "Show N" updates as you go.
@@ -102,7 +103,7 @@ export default function FiltersScreen() {
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
         <PressDepth
           onPress={() => {
-            router.back();
+            goBack('/matches');
             router.navigate(session.setFilters(draft) as never);
           }}
           disabled={count === 0}

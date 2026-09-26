@@ -16,6 +16,7 @@ import { useSession } from '@/features/match/session';
 import { deckOf, findMatch } from '@/features/match/sessionCore';
 import { track } from '@/lib/analytics';
 import { colors, fonts } from '@/lib/theme';
+import { goBack } from '@/lib/nav';
 
 // Screen 06 — clinician detail, in the same card language as the matches.
 // Layer 1: who and why they fit. Layer 2: practice, experience, costs. Layer 3: bio and qualifications.
@@ -77,7 +78,7 @@ export default function ClinicianDetail() {
         <ChipsCard
           chips={practicalChips(c)}
           rowsTitle="Experienced with"
-          rows={c.experiencedWith.slice(0, 4).map((area) => ({ icon: 'icCheck', label: area }))}
+          tags={c.experiencedWith.slice(0, 4)}
         />
         {/* Only what the chips above don't already say. */}
         <ChipsCard
@@ -104,7 +105,7 @@ export default function ClinicianDetail() {
           <Pressable
             onPress={() => {
               session.nextMatch();
-              router.back();
+              goBack('/matches');
             }}
             accessibilityRole="button"
             hitSlop={8}
