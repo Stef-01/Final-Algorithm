@@ -184,15 +184,68 @@ const STYLE_LABEL: Partial<Record<Dimension, Record<string, string>>> = {
   neurodiversity_affirming: { high: 'Neurodiversity-affirming' },
 };
 
-/** "How they practise": up to 5 behaviours, most confident first. */
+/**
+ * Named approaches: therapies, methods and tools a professional's own profile names, word for word.
+ * Much more telling than a trait almost everyone shares ("collaborative").
+ */
+const APPROACHES: [string, RegExp][] = [
+  ['CBT', /\bCBT\b|cognitive behaviou?ral therapy/i],
+  ['ACT', /\bACT\b|acceptance and commitment/],
+  ['DBT', /\bDBT\b|dialectical behaviou?r/i],
+  ['Schema therapy', /schema therapy|\bschema\b/i],
+  ['EMDR', /\bEMDR\b/],
+  ['Motivational interviewing', /motivational interviewing/i],
+  ['Solution-focused', /solution[- ]focused/i],
+  ['Narrative therapy', /narrative therapy/i],
+  ['Interpersonal therapy', /interpersonal (psycho)?therapy|\bIPT\b/i],
+  ['Mindfulness', /\bmindfulness\b/i],
+  ['Somatic', /\bsomatic\b/i],
+  ['Attachment-focused', /attachment[- ](focused|based)/i],
+  ['PCIT', /\bPCIT\b|parent[- ]child interaction/i],
+  ['Play therapy', /play therapy/i],
+  ['Sensory work', /\bsensory\b/i],
+  ['Neurofeedback', /neurofeedback/i],
+  ['QEEG brain mapping', /\bQEEG\b|brain mapping/i],
+  ['Standardised assessments', /\b(WISC|WAIS|WIAT|MIGDAS)\b/],
+  ['Measures, then reviews', /measurement rather than impression/i],
+  ['Functional medicine', /functional medicine/i],
+  ['Home visits', /home visits/i],
+  ['Pilates', /\bpilates\b/i],
+  ['Hydrotherapy', /hydrotherapy/i],
+  ['Functional Range Conditioning', /functional range conditioning/i],
+  ['Sports rehab', /sports rehab/i],
+  ['Orthopaedic rehab', /orthopaedic/i],
+  ['Musculoskeletal', /musculoskeletal/i],
+  ['Strength and conditioning', /strength and conditioning/i],
+  ['Occupational rehab', /occupational rehabilitation/i],
+  ['Psychology with movement', /psychology, movement/i],
+  ['Trauma-informed', /trauma[- ]informed/i],
+  ['Neurodiversity-affirming', /neuro(diversity|divergent)?[- ]?affirming/i],
+  ['Strengths-based', /strengths[- ]based/i],
+];
+
+export function approaches(c: ClinicianRecord): string[] {
+  return APPROACHES.filter(([, re]) => re.test(c.bio)).map(([label]) => label);
+}
+
+/** Traits too common to tell anyone apart. */
+const GENERIC = new Set(['Collaborative']);
+
+/** "How they practise": named approaches first, then telling traits; up to `max`. */
 export function practiceStyle(c: ClinicianRecord, max = 5): string[] {
+  const named = approaches(c);
+  const traits = traitStyle(c).filter((t) => !GENERIC.has(t) && !named.includes(t));
+  return [...named, ...traits].slice(0, max);
+}
+
+/** Behaviours from the practice-style traits, most confident first. */
+function traitStyle(c: ClinicianRecord): string[] {
   return (Object.keys(c.phenotype) as Dimension[])
     .map((d) => ({ d, t: usableTrait(c, d) }))
     .filter((x): x is { d: Dimension; t: NonNullable<ReturnType<typeof usableTrait>> } => !!x.t)
     .map((x) => ({ label: STYLE_LABEL[x.d]?.[x.t.value], conf: CONFIDENCE[x.t.confidence], imp: IMPORTANCE[x.d] }))
     .filter((x): x is { label: string; conf: number; imp: number } => !!x.label)
     .sort((a, b) => b.conf - a.conf || b.imp - a.imp)
-    .slice(0, max)
     .map((x) => x.label);
 }
 

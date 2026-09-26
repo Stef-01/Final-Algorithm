@@ -1,3 +1,4 @@
+import { professionals } from '../server/data/professionals';
 import { fixtureClinicians as cs } from '../server/fixtures/clinicians';
 import { decide, preferencesToConfirm, recommend, type PatientSignals, type Scored } from '../server/engine';
 import { NEAR_TIE, selectTop } from '../server/engine/diversity';
@@ -385,5 +386,17 @@ describe('question bank (PRD §13–16)', () => {
 
   it('"Not sure" changes nothing', () => {
     expect(applyAnswer(demoSignals, 'decision_style', NOT_SURE)).toBe(demoSignals);
+  });
+});
+
+describe('how they practise', () => {
+  const find = (id: string) => professionals.find((c) => c.id === id)!;
+  it('leads with the approaches their own profile names, and drops traits everyone shares', () => {
+    expect(practiceStyle(find('alice-bui')).slice(0, 4)).toEqual(['CBT', 'ACT', 'DBT', 'Narrative therapy']);
+    expect(practiceStyle(find('lauren-poulos'))).toContain('PCIT');
+    expect(practiceStyle(find('sarah-savage'))).toEqual(['Pilates', 'Hydrotherapy', 'Functional Range Conditioning']);
+    // "interpersonal difficulties" is a presenting issue, not interpersonal therapy.
+    expect(practiceStyle(find('lachlan-avent'))).not.toContain('Interpersonal therapy');
+    for (const c of professionals) expect(practiceStyle(c)).not.toContain('Collaborative');
   });
 });
