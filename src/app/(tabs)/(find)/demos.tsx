@@ -23,14 +23,14 @@ export default function Demos() {
       <ScreenHeader title="Demo patients" back />
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.note}>
-          Fills in a patient&apos;s words. Replaces your current search.
+          Replaces your current search.
         </Text>
         {GROUPS.map((g) => (
           <View key={g.title}>
             <SectionTitle>{g.title}</SectionTitle>
             <ListGroup>
               {demos.filter(g.filter).map((d) => (
-                <ListRow key={d.id} label={d.title} value={d.shows} onPress={() => router.push(session.startDemo(d.id))} />
+                <ListRow key={d.id} label={d.title} onPress={() => router.push(session.startDemo(d.id))} />
               ))}
             </ListGroup>
           </View>

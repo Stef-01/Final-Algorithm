@@ -26,7 +26,6 @@ export default function AllMatches() {
       <ScreenHeader title={`All ${all.length} ${many}`} back />
       <ScreenIn>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.note}>Everyone who fits, best first.</Text>
         <View style={styles.filters}>
           <FiltersButton />
         </View>
@@ -52,7 +51,7 @@ export default function AllMatches() {
 }
 
 const styles = StyleSheet.create({
-  filters: { marginHorizontal: 12, marginTop: 4, marginBottom: 4 },
+  filters: { marginHorizontal: 12, marginTop: 16, marginBottom: 4 },
   root: { flex: 1, backgroundColor: colors.background },
   content: { paddingBottom: 100 }, // clear of the floating assistant button
   note: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 20, color: colors.black, margin: 20, marginBottom: 4 },

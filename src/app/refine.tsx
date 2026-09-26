@@ -168,7 +168,7 @@ export default function Refine() {
         </View>
         {speech.error ? <Text style={styles.error}>{speech.error}</Text> : null}
         <Text style={styles.fine}>
-          Suggestions only. The assistant re-ranks your list; it doesn&apos;t give medical advice.
+          Re-ranks your list. Not medical advice.
           {speech.supported ? ' Voice is transcribed by your browser’s speech service.' : ''}
         </Text>
       </Appear>
