@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { ReactNode, useState } from 'react';
-import { ImageSourcePropType, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ImageSourcePropType, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { Qualification } from '@server/engine/types';
 
@@ -107,7 +107,7 @@ export function QualificationsCard({ items }: { items: Qualification[] }) {
   if (items.length === 0) return null;
   return (
     <View style={styles.card}>
-      <Kicker label="Qualifications" style={styles.kickerChips} />
+      <Text style={styles.cardTitle}>Qualifications</Text>
       {items.map((q, i) => (
         <View key={`${q.title}-${i}`} style={[styles.qual, i === 0 && styles.qualFirst]}>
           <Icon name={QUAL_ICON[q.kind]} size={18} color={colors.black} />
@@ -152,17 +152,19 @@ export function ChipsCard({
     <View style={styles.card}>
       {kicker ? <Kicker label={kicker} style={styles.kickerChips} /> : null}
       {chips.length > 0 ? (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={[styles.chips, kicker ? styles.chipsAfterKicker : null]}>
-          {chips.map((c, i) => (
-            <View key={`${c.icon}-${c.label}`} style={[styles.chip, i > 0 && styles.chipDivider]}>
+        // Wraps rather than scrolling sideways, so no chip is ever cut off at the edge.
+        <View style={[styles.chips, kicker ? styles.chipsAfterKicker : null]}>
+          {chips.map((c) => (
+            <View key={`${c.icon}-${c.label}`} style={styles.chip}>
               <Icon name={c.icon} size={18} color={colors.black} />
               <Text style={styles.chipText}>{c.label}</Text>
             </View>
           ))}
-        </ScrollView>
+        </View>
       ) : null}
       {rowsTitle && (rows.length > 0 || tags.length > 0) ? (
-        <Text style={[styles.rowsTitle, chips.length === 0 && !kicker && styles.rowsTitleFirst]}>{rowsTitle}</Text>
+        // First thing in the card: a card title like the others. After chips: a small section label.
+        <Text style={chips.length === 0 && !kicker ? styles.cardTitle : styles.rowsTitle}>{rowsTitle}</Text>
       ) : null}
       {tags.length > 0 ? (
         <View style={[styles.tags, styles.tagsInChips]}>
@@ -232,8 +234,8 @@ const styles = StyleSheet.create({
   },
   like: { position: 'absolute', right: 15, bottom: 15 },
   likeTop: { position: 'absolute', right: 15, top: 15 },
-  chips: { paddingHorizontal: 15, paddingVertical: 18 },
-  chip: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14 },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', rowGap: 12, columnGap: 22, paddingHorizontal: 24, paddingVertical: 18 },
+  chip: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   chipDivider: { borderLeftWidth: 1, borderLeftColor: colors.chip },
   chipText: { fontFamily: fonts.medium, fontSize: 15, color: colors.black },
   rowsTitle: {
@@ -249,7 +251,7 @@ const styles = StyleSheet.create({
     borderTopColor: colors.background,
   },
   rowsTitleFirst: { borderTopWidth: 0, paddingTop: 18 },
-  textCard: { paddingTop: 30, paddingBottom: 24 },
+  textCard: { paddingTop: 18, paddingBottom: 10 },
   more: { alignSelf: 'flex-start', minWidth: 44, minHeight: 44, justifyContent: 'center', marginHorizontal: 15, marginTop: 4 },
   moreText: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText },
   kicker: {
