@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   content: { paddingBottom: 100 }, // clear of the floating assistant button
   team: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, paddingBottom: 6 },
   cell: { width: '33.33%', padding: 4 },
-  card: { minHeight: 156, backgroundColor: colors.white, borderRadius: 16, padding: 12, alignItems: 'center' },
+  card: { height: 164, backgroundColor: colors.white, borderRadius: 16, padding: 12, alignItems: 'center' },
   empty: { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.line, borderStyle: 'dashed', justifyContent: 'center' },
   photo: { width: 72, height: 72, borderRadius: 36, marginTop: 6 },
   emptyIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center', marginBottom: 6 },

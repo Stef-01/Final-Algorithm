@@ -50,10 +50,15 @@ export function ConversationStep({ icon, title, children, onNext, nextEnabled = 
                 <Icon name="icBaselineArrowBackIos24" size={20} />
               </PressScale>
             )}
-            <View style={styles.iconCircle}>
-              <Icon name={icon} size={22} />
-            </View>
-            {progress === undefined ? null : <StepProgress value={progress} />}
+            {/* The first screen (no progress yet) needs no step icon: the title says it all. */}
+            {progress === undefined ? null : (
+              <>
+                <View style={styles.iconCircle}>
+                  <Icon name={icon} size={22} />
+                </View>
+                <StepProgress value={progress} />
+              </>
+            )}
           </View>
           <Appear key={title}>
             <Text style={styles.title} accessibilityRole="header">{title}</Text>

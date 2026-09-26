@@ -67,7 +67,7 @@ export default function ClinicianDetail() {
         {match ? (
           <>
             {match.reasons.slice(0, 3).map((r, i, all) => (
-              <PromptCard key={r.evidenceId} kicker={reasonKicker(i, all.length)} title={r.signal} answer={r.evidence} {...like} />
+              <PromptCard key={r.evidenceId} kicker={reasonKicker(i, all.length)} title={r.signal} answer={r.evidence} />
             ))}
             {caveatLines(match).map((line) => (
               <NoteCard key={line} title="Worth checking" body={line} />

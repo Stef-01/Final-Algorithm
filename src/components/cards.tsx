@@ -48,7 +48,7 @@ export function PhotoCard({
 /** Small title over a large serif answer. */
 export function PromptCard({ title, answer, kicker, ...like }: { title: string; answer: string; kicker?: string } & LikeProps) {
   return (
-    <Card title={title} kicker={kicker} {...like} padded>
+    <Card title={title} kicker={kicker} {...like} padded tight={!like.onLike}>
       <Text style={styles.answer}>{answer}</Text>
     </Card>
   );

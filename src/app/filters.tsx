@@ -51,7 +51,8 @@ export default function FiltersScreen() {
       <ScreenIn>
       <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 110 }}>
         <View style={styles.group}>
-          {defs.map((d, i) => {
+          {/* Distance only means something once there's a place to measure from. */}
+          {defs.filter((d) => d.key !== 'distance' || values.near).map((d, i) => {
             const v = values[d.key];
             const label = d.options.find((o) => o.value === v)?.label ?? (d.key === 'near' ? 'Anywhere' : 'Open to all');
             const expanded = open === d.key;

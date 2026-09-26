@@ -67,7 +67,7 @@ export function ClinicianCards({ clinician: c, match, onOpen, onSave, saved }: P
       </Appear>
       {match.reasons.slice(0, 3).map((r, n, all) => (
         <Appear key={r.evidenceId} index={step()}>
-          <PromptCard kicker={reasonKicker(n, all.length)} title={r.signal} answer={r.evidence} {...like} />
+          <PromptCard kicker={reasonKicker(n, all.length)} title={r.signal} answer={r.evidence} />
         </Appear>
       ))}
       {caveatLines(match).map((line) => (
@@ -83,7 +83,7 @@ export function ClinicianCards({ clinician: c, match, onOpen, onSave, saved }: P
         />
       </Appear>
       <Appear index={step()}>
-        <TagsCard title="How they practise" tags={c.practiceStyle.slice(0, 5)} {...like} />
+        <TagsCard title="How they practise" tags={c.practiceStyle.slice(0, 5)} />
       </Appear>
     </>
   );

@@ -83,8 +83,9 @@ describe('Filters screen', () => {
 
   it('distance waits for somewhere to measure from', async () => {
     renderRouter(routes, { initialUrl: '/filters' });
-    expect(await screen.findByLabelText('Distance: pick Near first')).toBeOnTheScreen();
-    fireEvent.press(screen.getByLabelText('Near: Anywhere'));
+    // Hidden until there's a place to measure from.
+    fireEvent.press(await screen.findByLabelText('Near: Anywhere'));
+    expect(screen.queryByLabelText(/^Distance/)).toBeNull();
     fireEvent.press(screen.getByLabelText('Near: Brisbane'));
     expect(await screen.findByLabelText('Distance: 50 km')).toBeOnTheScreen();
   });

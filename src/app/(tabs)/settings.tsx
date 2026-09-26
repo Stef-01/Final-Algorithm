@@ -19,6 +19,7 @@ export default function Settings() {
   const { goals, toggle } = useGoals();
   const { connection: ai } = useConnection();
   const [claude, setClaude] = useState<boolean | null>(null);
+  const [about, setAbout] = useState(false);
   useEffect(() => {
     let alive = true;
     void claudeEnabled().then((on) => alive && setClaude(on));
@@ -46,63 +47,29 @@ export default function Settings() {
           />
         </ListGroup>
 
-        <SectionTitle>Your search</SectionTitle>
+        <SectionTitle>More</SectionTitle>
         <ListGroup>
+          <ListRow label="Try a demo patient" onPress={() => router.push('/demos')} />
+          <ListRow label="Join WATL" value="For professionals" onPress={() => router.push('/join')} />
+          <ListRow label="Help and safety" onPress={() => router.push('/safety')} />
+          <ListRow label="About and privacy" value={about ? undefined : 'How matching and privacy work'} onPress={() => setAbout((a) => !a)} />
+          {about ? (
+            <>
+              <ListRow label="Matching" value="Best fits first, with reasons" />
+              <ListRow label="What you write" value={claude === null ? 'Checking…' : claude ? 'Claude reads it; fixed rules rank' : 'Stays on this device'} />
+              <ListRow label="Profiles" value="The ADHDme network" />
+              <ListRow label="Privacy" value={`No account · searches kept 24 hours${claude ? ' · Claude doesn’t store them' : ''}`} />
+            </>
+          ) : null}
           <ListRow
             label="Start over"
-            value="Clears your search"
             onPress={() => {
               session.reset();
               router.navigate('/');
             }}
           />
+          {devToolsEnabled ? <ListRow label="Review screen states" onPress={() => router.push('/dev/states')} /> : null}
         </ListGroup>
-
-        <SectionTitle>For professionals</SectionTitle>
-        <ListGroup>
-          <ListRow label="Join WATL" value="Publish fees and availability" onPress={() => router.push('/join')} />
-        </ListGroup>
-
-        <SectionTitle>Demo</SectionTitle>
-        <ListGroup>
-          <ListRow label="Try a demo patient" onPress={() => router.push('/demos')} />
-        </ListGroup>
-
-        <SectionTitle>About</SectionTitle>
-        <ListGroup>
-          <ListRow
-            label="How matching works"
-            value="Best fits first, with reasons"
-          />
-          <ListRow
-            label="Reading what you write"
-            value={
-              claude === null
-                ? 'Checking…'
-                : claude
-                  ? 'Claude reads it; fixed rules rank'
-                  : 'Stays on this device'
-            }
-          />
-          <ListRow
-            label="Where profiles come from"
-            value="The ADHDme network"
-          />
-          <ListRow
-            label="Privacy"
-            value={`No account · searches kept 24 hours${claude ? ' · Claude doesn’t store them' : ''}`}
-          />
-          <ListRow label="Help and safety" onPress={() => router.push('/safety')} />
-        </ListGroup>
-
-        {devToolsEnabled ? (
-          <>
-            <SectionTitle>Testing</SectionTitle>
-            <ListGroup>
-              <ListRow label="Review screen states" onPress={() => router.push('/dev/states')} />
-            </ListGroup>
-          </>
-        ) : null}
       </ScrollView>
     </View>
   );
