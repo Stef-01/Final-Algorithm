@@ -3,23 +3,37 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 
 import type { FitLabel, Match } from './types';
 
-// Clinicians the patient hearted (Liked), and those they chose for their care team: liking someone
-// doesn't put them in the team; you add them from their profile. Kept on this device only; no
-// account (PRD §4.12).
+// Clinicians the patient hearted (Liked), and their care team: opening someone's booking page puts
+// them in the team and records the day (so the care plan can show when you last saw them). Kept on
+// this device only; no account (PRD §4.12).
 // Only the id, the fit label and the date are kept: a match's reasons repeat what the patient
 // said about their health, and those stay with the search (24 h), not here (docs/privacy.md).
 
 const STORAGE_KEY = 'watl_saved';
 
-export type SavedItem = { clinicianId: string; fit: FitLabel; savedAt: string; /** In the care team, not just liked. */ team?: true };
+export type SavedItem = {
+  clinicianId: string;
+  fit: FitLabel;
+  savedAt: string;
+  /** In the care team, not just liked. */
+  team?: true;
+  /** Days you opened their booking page, oldest first (YYYY-MM-DD). */
+  visits?: string[];
+};
+
+const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 /** Keep only what Saved needs (also strips reasons from anything saved by an older version). */
-export const toSavedItem = (m: Pick<Match, 'clinicianId' | 'fit'> & { savedAt?: string; team?: boolean }, now = new Date()): SavedItem => ({
-  clinicianId: m.clinicianId,
-  fit: m.fit,
-  savedAt: m.savedAt ?? now.toISOString().slice(0, 10),
-  ...(m.team ? { team: true as const } : {}),
-});
+export const toSavedItem = (m: Pick<Match, 'clinicianId' | 'fit'> & { savedAt?: string; team?: boolean; visits?: unknown }, now = new Date()): SavedItem => {
+  const visits = Array.isArray(m.visits) ? m.visits.filter((d): d is string => typeof d === 'string' && DAY_RE.test(d)).slice(-50) : [];
+  return {
+    clinicianId: m.clinicianId,
+    fit: m.fit,
+    savedAt: m.savedAt ?? now.toISOString().slice(0, 10),
+    ...(m.team ? { team: true as const } : {}),
+    ...(visits.length ? { visits } : {}),
+  };
+};
 
 const FITS: FitLabel[] = ['Strong fit', 'Good fit', 'Worth considering', 'Possible fit'];
 
@@ -30,7 +44,7 @@ export function restoreSaved(raw: unknown): SavedItem[] {
   for (const m of raw as Partial<SavedItem>[]) {
     if (!m || typeof m.clinicianId !== 'string' || !m.fit || !FITS.includes(m.fit)) continue;
     if (out.some((x) => x.clinicianId === m.clinicianId)) continue;
-    out.push(toSavedItem({ clinicianId: m.clinicianId, fit: m.fit, savedAt: typeof m.savedAt === 'string' ? m.savedAt : undefined, team: m.team === true }));
+    out.push(toSavedItem({ clinicianId: m.clinicianId, fit: m.fit, savedAt: typeof m.savedAt === 'string' ? m.savedAt : undefined, team: m.team === true, visits: m.visits }));
   }
   return out;
 }
@@ -42,6 +56,8 @@ type Saved = {
   inTeam: (clinicianId: string) => boolean;
   /** Add to the care team (liking them too if they weren't already), or take them out of it (still liked). */
   setTeam: (match: Pick<Match, 'clinicianId' | 'fit'>, on: boolean) => void;
+  /** You opened their booking page: into the care team, with today's date recorded. */
+  booked: (match: Pick<Match, 'clinicianId' | 'fit'>, day?: string) => void;
 };
 
 const SavedContext = createContext<Saved | null>(null);
@@ -85,15 +101,26 @@ export function SavedProvider({ children }: { children: ReactNode }) {
     [write],
   );
 
+  const booked = useCallback(
+    (match: Pick<Match, 'clinicianId' | 'fit'>, day = new Date().toISOString().slice(0, 10)) => {
+      const had = current.current.find((m) => m.clinicianId === match.clinicianId);
+      const visits = [...(had?.visits ?? []).filter((d) => d !== day), day];
+      const item = toSavedItem({ ...(had ?? match), team: true, visits });
+      write(had ? current.current.map((m) => (m === had ? item : m)) : [...current.current, item]);
+    },
+    [write],
+  );
+
   const value = useMemo<Saved>(
     () => ({
       saved,
       toggle,
       setTeam,
+      booked,
       isSaved: (id) => saved.some((m) => m.clinicianId === id),
       inTeam: (id) => saved.some((m) => m.clinicianId === id && m.team),
     }),
-    [saved, toggle, setTeam],
+    [saved, toggle, setTeam, booked],
   );
 
   return <SavedContext.Provider value={value}>{children}</SavedContext.Provider>;

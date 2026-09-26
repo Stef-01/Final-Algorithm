@@ -61,6 +61,11 @@ describe('restoring Saved', () => {
     ).toEqual([{ clinicianId: 'alice-bui', fit: 'Good fit', savedAt: '2026-09-20' }]);
   });
 
+  it('keeps the days you opened someone’s booking page, and only real dates', () => {
+    const { restoreSaved } = require('@/features/match/saved') as typeof import('@/features/match/saved');
+    expect(restoreSaved([{ clinicianId: 'alice-bui', fit: 'Good fit', savedAt: '2026-09-20', team: true, visits: ['2026-09-21', 'soon', 3] }])[0].visits).toEqual(['2026-09-21']);
+  });
+
   it('keeps who is in the care team, and only a real yes', () => {
     const { restoreSaved } = require('@/features/match/saved') as typeof import('@/features/match/saved');
     expect(

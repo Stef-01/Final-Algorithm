@@ -102,6 +102,10 @@ describe('goals', () => {
     fireEvent.press(await screen.findByLabelText('Get organised'));
     expect(screen.getByLabelText('Get organised').props.accessibilityState).toMatchObject({ selected: true });
     fireEvent.press(screen.getByLabelText('My care'));
+    // Collapsed, only the GP, psychiatrist and psychologist show; the goal's slot is one tap away.
+    expect(await screen.findByLabelText('Add a GP')).toBeOnTheScreen();
+    expect(screen.queryByLabelText('Add an ADHD coach')).toBeNull();
+    fireEvent.press(screen.getByLabelText(/^Expand the care team/));
     expect(await screen.findByLabelText('Add an ADHD coach')).toBeOnTheScreen();
   });
 });
@@ -153,7 +157,7 @@ describe('My care: removing someone', () => {
     expect(await screen.findByLabelText('Add a psychologist')).toBeOnTheScreen();
     expect(screen.getByLabelText('Add a GP')).toBeOnTheScreen();
     expect(screen.getByLabelText('Psychiatrist: not in the network yet')).toBeOnTheScreen();
-    fireEvent.press(screen.getByLabelText('Allied health: OT, physio and more'));
+    fireEvent.press(screen.getByLabelText(/^Expand the care team/));
     expect(await screen.findByLabelText('Add an occupational therapist')).toBeOnTheScreen();
     expect(screen.getByLabelText('Add a physiotherapist')).toBeOnTheScreen();
     expect(JSON.parse((await AsyncStorage.getItem('watl_saved'))!)).toEqual([]);

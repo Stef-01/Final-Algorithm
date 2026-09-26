@@ -13,7 +13,7 @@ import { getClinician } from '@/data/clinicians';
 import { useGoals } from '@/features/care/goals';
 import { loadAsked, markAsked, pickPrompt, promptRoll } from '@/features/care/ratePrompt';
 import { suggestSlot, slotLabel, type Busy } from '@/features/care/slots';
-import { bookingPlan, goalsDraft, teamTemplate, type Slot, type Step, type TeamMember } from '@/features/care/plan';
+import { bookingPlan, CORE, goalsDraft, teamTemplate, type Slot, type Step, type TeamMember } from '@/features/care/plan';
 import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
 import type { ProfessionChoice } from '@/features/match/sessionCore';
@@ -42,9 +42,11 @@ export default function MyCare() {
       return c ? [{ clinicianId: c.id, profession: c.profession, name: c.name, firstName: c.firstName, bookingUrl: c.bookingUrl }] : [];
     });
   // The team as a template: who's on it, plus outlines for who could be (GP, psychiatrist,
-  // psychologist, and allied health once opened).
-  const [allied, setAllied] = useState(false);
-  const team = teamTemplate(members, goals, allied);
+  // psychologist). Collapsed, only those three show; Expand reveals everyone else and allied health.
+  const [expanded, setExpanded] = useState(false);
+  const full = teamTemplate(members, goals, true);
+  const team = expanded ? full : full.filter((s) => CORE.includes(s.profession));
+  const more = full.length - team.length;
   const steps = bookingPlan(team);
   const liked = saved.filter((s) => !s.team && getClinician(s.clinicianId));
 
@@ -79,7 +81,20 @@ export default function MyCare() {
     <View style={styles.root}>
       <ScreenHeader title="My care" />
       <ScrollView contentContainerStyle={styles.content}>
-        <SectionTitle>Care team</SectionTitle>
+        <View style={styles.teamHead}>
+          <SectionTitle>Care team</SectionTitle>
+          <PressScale
+            onPress={() => setExpanded((e) => !e)}
+            accessibilityRole="button"
+            accessibilityState={{ expanded }}
+            accessibilityLabel={expanded ? 'Collapse the care team' : `Expand the care team, ${more} more`}
+            style={styles.expand}
+            scaleTo={0.92}
+          >
+            <Text style={styles.expandText}>{expanded ? 'Less' : `+${more}`}</Text>
+            <Icon name="icDownArrow" size={12} color={colors.black} style={expanded ? styles.flip : undefined} />
+          </PressScale>
+        </View>
         <View style={styles.team}>
           {team.map((slot, i) => (
             <Appear key={slot.member?.clinicianId ?? slot.profession} index={i} distance={10} style={styles.cell}>
@@ -90,29 +105,15 @@ export default function MyCare() {
                   const item = saved.find((x) => x.clinicianId === id);
                   if (item) setTeam(item, false);
                 }}
+                onReplace={(id, p) => {
+                  const item = saved.find((x) => x.clinicianId === id);
+                  if (item) setTeam(item, false);
+                  router.push(session.chooseProfession(p, goalsDraft(p, goals)));
+                }}
               />
             </Appear>
           ))}
-          <Appear index={team.length} distance={10} style={styles.cell}>
-            <PressScale
-              onPress={() => setAllied((a) => !a)}
-              accessibilityRole="button"
-              accessibilityState={{ expanded: allied }}
-              accessibilityLabel={allied ? 'Show fewer' : 'Allied health: OT, physio and more'}
-              style={[styles.card, styles.empty]}
-              scaleTo={0.96}
-            >
-              <View style={styles.emptyIcon}>
-                <Icon name={allied ? 'icClose' : 'icProOt'} size={22} color={colors.black} />
-              </View>
-              <Text style={styles.cardName} numberOfLines={2}>
-                {allied ? 'Fewer' : 'Allied health'}
-              </Text>
-              <Text style={styles.cardRole}>{allied ? 'Hide these' : 'OT, physio, more'}</Text>
-            </PressScale>
-          </Appear>
         </View>
-        {members.length === 0 && liked.length > 0 ? <Text style={styles.fine}>Open someone you liked, then “Add to care team”.</Text> : null}
 
         {steps.length > 0 ? (
           <>
@@ -157,7 +158,17 @@ export default function MyCare() {
   );
 }
 
-function TeamCard({ slot, onFind, onRemove }: { slot: Slot; onFind: (p: ProfessionChoice) => void; onRemove: (id: string) => void }) {
+function TeamCard({
+  slot,
+  onFind,
+  onRemove,
+  onReplace,
+}: {
+  slot: Slot;
+  onFind: (p: ProfessionChoice) => void;
+  onRemove: (id: string) => void;
+  onReplace: (id: string, p: ProfessionChoice) => void;
+}) {
   const info = infoFor(slot.profession);
   const m = slot.member;
   if (m) {
@@ -177,9 +188,13 @@ function TeamCard({ slot, onFind, onRemove }: { slot: Slot; onFind: (p: Professi
         <Text style={styles.cardRole} numberOfLines={1}>
           {capitalised(info.one)}
         </Text>
-        {/* The same filled heart as elsewhere: tap to take them off your team. */}
-        <View style={styles.remove}>
-          <LikeButton liked onPress={() => onRemove(m.clinicianId)} label={`Remove ${m.firstName} from your team`} size={34} />
+        <View style={styles.actions}>
+          <PressScale onPress={() => onReplace(m.clinicianId, m.profession)} accessibilityRole="button" accessibilityLabel={`Swap ${m.firstName} for someone else`} style={styles.action} scaleTo={0.88}>
+            <Text style={styles.actionText}>Swap</Text>
+          </PressScale>
+          <PressScale onPress={() => onRemove(m.clinicianId)} accessibilityRole="button" accessibilityLabel={`Remove ${m.firstName} from your team`} style={styles.action} scaleTo={0.88}>
+            <Icon name="icClose" size={10} color={colors.black} />
+          </PressScale>
         </View>
       </PressScale>
     );
@@ -291,7 +306,13 @@ const styles = StyleSheet.create({
   cardName: { fontFamily: fonts.bold, fontSize: 14, lineHeight: 18, color: colors.black, marginTop: 10, textAlign: 'center' },
   cardRole: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted, marginTop: 2, textAlign: 'center' },
   off: { color: colors.muted },
-  remove: { position: 'absolute', top: 6, right: 6 },
+  teamHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingRight: 12 },
+  expand: { flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 36, paddingHorizontal: 12, borderRadius: 18, backgroundColor: colors.white },
+  expandText: { fontFamily: fonts.bold, fontSize: 13, color: colors.black },
+  flip: { transform: [{ rotate: '180deg' }] },
+  actions: { flexDirection: 'row', gap: 6, marginTop: 8 },
+  action: { minWidth: 32, height: 28, borderRadius: 14, paddingHorizontal: 10, borderWidth: 1, borderColor: colors.line, alignItems: 'center', justifyContent: 'center' },
+  actionText: { fontFamily: fonts.bold, fontSize: 12, color: colors.black },
   steps: { marginHorizontal: 12, backgroundColor: colors.white, borderRadius: 16, overflow: 'hidden' },
   // Wraps at large text sizes: the calendar buttons drop to a second line.
   step: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 12, borderTopWidth: 1, borderTopColor: colors.background },

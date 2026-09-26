@@ -193,7 +193,8 @@ describe('demo run-throughs', () => {
     await waitFor(() => expect(screen.getByText(/\?$/)).toBeOnTheScreen());
   });
 
-  it('liking puts someone in Liked; adding them from their profile puts them in your care team', async () => {
+  it('liking puts someone in Liked; opening their booking page puts them in your care team', async () => {
+    const openURL = jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
     await startDemo('Straight talk about work pressure, Gold Coast');
     expect(await screen.findByText('Bart Traynor')).toBeOnTheScreen();
     fireEvent.press(screen.getAllByLabelText('Save Bart')[0]);
@@ -201,13 +202,19 @@ describe('demo run-throughs', () => {
     expect(await screen.findByText('Liked')).toBeOnTheScreen();
     expect(screen.queryByText('Book Bart')).toBeNull();
     fireEvent.press(screen.getByLabelText('Bart Traynor, Psychologist'));
-    const toggle = await screen.findByLabelText('Bart in your care team');
-    expect(toggle.props.accessibilityState).toMatchObject({ checked: false });
-    fireEvent.press(toggle);
-    expect(await screen.findByText('In your care team')).toBeOnTheScreen();
+    // No "add to care team" clutter on the profile: booking does it.
+    expect(screen.queryByText(/care team/i)).toBeNull();
+    fireEvent.press(await screen.findByText('Book with Bart'));
+    fireEvent.press(await screen.findByText('Open booking page'));
+    expect(openURL).toHaveBeenCalled();
+    await waitFor(async () => {
+      const bart = JSON.parse((await AsyncStorage.getItem('watl_saved'))!).find((x: { clinicianId: string }) => x.clinicianId === 'bart-traynor');
+      expect(bart).toMatchObject({ team: true, visits: [new Date().toISOString().slice(0, 10)] });
+    });
     fireEvent.press(screen.getByLabelText('Back'));
     expect(await screen.findByText('Book Bart')).toBeOnTheScreen();
     expect(screen.queryByText('Liked')).toBeNull();
+    openURL.mockRestore();
   });
 });
 

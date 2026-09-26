@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -8,8 +8,7 @@ import { ChipsCard, NoteCard, PhotoCard, PromptCard, QualificationsCard, TagsCar
 import { caveatLines, costLabel, placeLine, placeName, practicalChips, reasonKicker } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { FitLabel } from '@/components/FitLabel';
-import { Icon } from '@/components/Icon';
-import { Burst, PressScale, ScreenIn } from '@/components/motion';
+import { ScreenIn } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { PillButton } from '@/components/Sheet';
 import { getClinician } from '@/data/clinicians';
@@ -17,7 +16,6 @@ import { useSaved } from '@/features/match/saved';
 import { useSession } from '@/features/match/session';
 import { deckOf, findMatch } from '@/features/match/sessionCore';
 import { track } from '@/lib/analytics';
-import { tap } from '@/lib/haptics';
 import { colors, fonts } from '@/lib/theme';
 
 // Screen 06 — clinician detail, in the same card language as the matches.
@@ -25,7 +23,7 @@ import { colors, fonts } from '@/lib/theme';
 export default function ClinicianDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const session = useSession();
-  const { saved, isSaved, toggle, inTeam, setTeam } = useSaved();
+  const { saved, isSaved, toggle } = useSaved();
   const insets = useSafeAreaInsets();
   const c = getClinician(id);
   // Why they fit comes only from the current search; Saved keeps the label, not the reasons.
@@ -64,7 +62,6 @@ export default function ClinicianDetail() {
       <ScreenIn>
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: 140 + insets.bottom }]}>
         <PhotoCard caption={placeLine(c)} source={c.photo} {...like} />
-        {likeTarget ? <TeamToggle name={c.firstName} on={inTeam(c.id)} onPress={() => setTeam(likeTarget, !inTeam(c.id))} /> : null}
 
         {match ? (
           <>
@@ -124,53 +121,8 @@ export default function ClinicianDetail() {
   );
 }
 
-/** Liking someone keeps them in Liked; this puts them in your care team (and likes them too). */
-function TeamToggle({ name, on, onPress }: { name: string; on: boolean; onPress: () => void }) {
-  const [fire, setFire] = useState(0);
-  return (
-    <PressScale
-      onPress={() => {
-        if (!on) {
-          setFire((n) => n + 1);
-          tap('save');
-        }
-        onPress();
-      }}
-      popOn={on}
-      accessibilityRole="switch"
-      accessibilityState={{ checked: on }}
-      accessibilityLabel={`${name} in your care team`}
-      style={[styles.team, on && styles.teamOn]}
-      scaleTo={0.97}
-    >
-      <View style={styles.teamIcon}>
-        <Burst fire={fire} size={70} />
-        <Icon name={on ? 'icCheck' : 'icUser1'} size={16} color={on ? colors.white : colors.black} />
-      </View>
-      <Text style={[styles.teamText, on && styles.teamTextOn]}>{on ? 'In your care team' : 'Add to care team'}</Text>
-    </PressScale>
-  );
-}
-
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  team: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    minHeight: 48,
-    marginHorizontal: 12,
-    marginTop: 12,
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: colors.black,
-    backgroundColor: colors.white,
-  },
-  teamIcon: { alignItems: 'center', justifyContent: 'center' },
-  teamOn: { backgroundColor: colors.purple, borderColor: colors.purple },
-  teamText: { fontFamily: fonts.bold, fontSize: 15, color: colors.black },
-  teamTextOn: { color: colors.white },
   content: {},
   footerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   book: { flex: 1, marginTop: -8 },

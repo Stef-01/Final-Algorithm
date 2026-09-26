@@ -4,12 +4,17 @@ import { Text } from 'react-native';
 
 import { PillButton, Sheet, sheetText } from '@/components/Sheet';
 import { getClinician } from '@/data/clinicians';
+import { useSaved } from '@/features/match/saved';
+import { useSession } from '@/features/match/session';
+import { findMatch } from '@/features/match/sessionCore';
 import { track } from '@/lib/analytics';
 
 // Booking hands off to the practice's own booking page (PRD §7). WATL takes no part of the fee.
 export default function BookingHandoff() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const c = getClinician(id);
+  const session = useSession();
+  const { saved, booked } = useSaved();
   const name = c?.firstName ?? 'this clinician';
   const practice = c?.practice ?? 'the practice';
 
@@ -26,6 +31,8 @@ export default function BookingHandoff() {
           label="Open booking page"
           onPress={() => {
             track('booking_clicked', { clinician: c.id });
+            // Booking puts them in your care team and marks today as a visit.
+            booked({ clinicianId: c.id, fit: findMatch(session.state, c.id)?.fit ?? saved.find((s) => s.clinicianId === c.id)?.fit ?? 'Possible fit' });
             Linking.openURL(c.bookingUrl!);
             router.back();
           }}
