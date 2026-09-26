@@ -3,6 +3,8 @@ import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { renderRouter } from 'expo-router/testing-library';
 import { Linking } from 'react-native';
 
+import { localDay } from '@/lib/day';
+
 import RootLayout from '@/app/_layout';
 import TabsLayout from '@/app/(tabs)/_layout';
 import FindLayout from '@/app/(tabs)/(find)/_layout';
@@ -209,7 +211,7 @@ describe('demo run-throughs', () => {
     expect(openURL).toHaveBeenCalled();
     await waitFor(async () => {
       const bart = JSON.parse((await AsyncStorage.getItem('watl_saved'))!).find((x: { clinicianId: string }) => x.clinicianId === 'bart-traynor');
-      expect(bart).toMatchObject({ team: true, visits: [new Date().toISOString().slice(0, 10)] });
+      expect(bart).toMatchObject({ team: true, visits: [localDay()] });
     });
     fireEvent.press(screen.getByLabelText('Back'));
     expect(await screen.findByText('Book Bart')).toBeOnTheScreen();

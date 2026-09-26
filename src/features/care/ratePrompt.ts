@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { API_BASE } from '@/features/match/remoteExtract';
+import { localDay } from '@/lib/day';
 
 // Now and then, when you open My care, WATL asks how it's going with one person on your team.
 // At most one ask per visit, a 40% chance, and never the same person twice within two weeks.
@@ -32,7 +33,7 @@ export async function loadAsked(): Promise<Asked> {
 }
 
 export async function markAsked(id: string, asked: Asked, today = new Date()) {
-  await AsyncStorage.setItem(KEY, JSON.stringify({ ...asked, [id]: today.toISOString().slice(0, 10) })).catch(() => {});
+  await AsyncStorage.setItem(KEY, JSON.stringify({ ...asked, [id]: localDay(today) })).catch(() => {});
 }
 
 /** Fire and forget, like the match rating. */

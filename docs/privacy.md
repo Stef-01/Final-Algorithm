@@ -7,7 +7,8 @@ What WATL does with what a patient tells it, as the code stands. Written for a r
 | Data | Where it goes | How long | Code |
 |---|---|---|---|
 | What the patient types or says, answers, refinements | The device only (`AsyncStorage`, key `watl_session`) | Discarded and deleted 24 hours after it was last used (tested); **Start over** in Settings clears it at once | `src/features/match/session.tsx` |
-| Saved clinicians: id, fit label, date saved (no reasons, since those repeat what the patient said) | The device only (`watl_saved`) | Until removed | `src/features/match/saved.tsx` |
+| Saved clinicians: id, fit label, date saved, whether they're in your care team, and the days you opened their booking page (no reasons, since those repeat what the patient said) | The device only (`watl_saved`) | Until removed | `src/features/match/saved.tsx` |
+| Which care plans you have (mental health, chronic care) | The device only (`watl_plans`) | Until changed | `src/features/care/plans.ts` |
 | Typed text, when Claude is on | Sent to `/api/extract`, then to Anthropic's API, to be read into signals | Not stored or logged by WATL. Anthropic's retention applies (see Open 1) | `api/extract.ts`, `server/claude/extract.ts` |
 | Voice | The browser's speech service transcribes it (in Chrome, audio goes to Google). WATL receives only the text | Not stored by WATL | `src/features/voice/` (decision D7) |
 | Analytics events | Vercel Web Analytics | Vercel's retention | `src/lib/analytics.ts` |

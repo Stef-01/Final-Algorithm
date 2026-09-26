@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
+import { CarePlans } from '@/components/CarePlans';
 import { GoalChips } from '@/components/GoalChips';
 import { ListGroup, ListRow, SectionTitle } from '@/components/ListRow';
 import { ScreenHeader } from '@/components/ScreenHeader';
@@ -12,7 +13,7 @@ import { useSession } from '@/features/match/session';
 import { devToolsEnabled } from '@/lib/devtools';
 import { colors } from '@/lib/theme';
 
-// Profile: your goals first (they shape your care team), then settings.
+// Profile: your goals first (they shape your care team), your care plans, then settings.
 export default function Settings() {
   const session = useSession();
   const { goals, toggle } = useGoals();
@@ -32,6 +33,9 @@ export default function Settings() {
       <ScrollView contentContainerStyle={styles.content}>
         <SectionTitle>Your goals</SectionTitle>
         <GoalChips selected={goals} onToggle={toggle} />
+
+        <SectionTitle>Care plans</SectionTitle>
+        <CarePlans />
 
         <SectionTitle>Your AI</SectionTitle>
         <ListGroup>

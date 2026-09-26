@@ -11,6 +11,7 @@ import { Appear, PressScale } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { getClinician } from '@/data/clinicians';
 import { useGoals } from '@/features/care/goals';
+import { nextDue } from '@/features/care/plans';
 import { loadAsked, markAsked, pickPrompt, promptRoll } from '@/features/care/ratePrompt';
 import { suggestSlot, slotLabel, type Busy } from '@/features/care/slots';
 import { bookingPlan, CORE, goalsDraft, teamTemplate, type Slot, type Step, type TeamMember } from '@/features/care/plan';
@@ -47,7 +48,12 @@ export default function MyCare() {
   const full = teamTemplate(members, goals, true);
   const team = expanded ? full : full.filter((s) => CORE.includes(s.profession));
   const more = full.length - team.length;
-  const steps = bookingPlan(team);
+  // Someone you've already booked: the next step is when you're due to see them again (as in Profile).
+  const steps = bookingPlan(full).map((st) => {
+    const item = saved.find((x) => x.clinicianId === st.member.clinicianId);
+    const due = item ? nextDue(item, st.member.profession) : null;
+    return due ? { ...st, on: new Date(`${due}T09:00:00`), label: 'Next visit' } : st;
+  }).sort((a, b) => a.on.getTime() - b.on.getTime());
   const liked = saved.filter((s) => !s.team && getClinician(s.clinicianId));
 
   // Now and then, ask how it's going with someone on the team (once per visit at most).

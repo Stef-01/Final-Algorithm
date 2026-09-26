@@ -32,4 +32,5 @@ WATL finds clinicians; it doesn't give medical advice. This is what protects a p
 3. Review Claude's `urgent` instruction in `server/claude/extract.ts` (`SYSTEM`).
 4. Confirm the services listed are right for every region WATL will serve (currently Australian numbers only).
 5. Review the discovery queue's short facts (what each profession helps with, sessions, rebates) in `INTRO`, `src/lib/professions.ts`. They're general Australian information and need checking for accuracy.
-6. Sign off on the assistant's disclaimer and the match-page copy rules (`BANNED_ADJECTIVES`, `copyProblems` in `server/engine/explain.ts`).
+6. Review the care plan rules in Profile (`src/features/care/plans.ts`): 10 psychology sessions a year with a GP review after 6 (mental health plan); 5 allied health visits a year (chronic condition management plan), and which professions each covers. The in-app psychiatrist facts (`INTRO`) too.
+7. Sign off on the assistant's disclaimer and the match-page copy rules (`BANNED_ADJECTIVES`, `copyProblems` in `server/engine/explain.ts`).

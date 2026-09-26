@@ -14,6 +14,7 @@ import { useGoals } from '@/features/care/goals';
 import { CLIENTS, MCP_URL, SHARES, useConnection, type Client, type Share } from '@/features/connect/connection';
 import { buildConversation, snippet, type Turn } from '@/features/connect/demoChat';
 import { track } from '@/lib/analytics';
+import { localDay } from '@/lib/day';
 import { tap } from '@/lib/haptics';
 import { colors, fonts } from '@/lib/theme';
 
@@ -127,7 +128,7 @@ export default function Connect() {
           <Connecting
             name={name}
             onDone={() => {
-              save({ client, since: new Date().toISOString().slice(0, 10), shares });
+              save({ client, since: localDay(), shares });
               go('chat');
             }}
           />

@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
+import { localDay } from '@/lib/day';
+
 import type { FitLabel, Match } from './types';
 
 // Clinicians the patient hearted (Liked), and their care team: opening someone's booking page puts
@@ -29,7 +31,7 @@ export const toSavedItem = (m: Pick<Match, 'clinicianId' | 'fit'> & { savedAt?: 
   return {
     clinicianId: m.clinicianId,
     fit: m.fit,
-    savedAt: m.savedAt ?? now.toISOString().slice(0, 10),
+    savedAt: m.savedAt ?? localDay(now),
     ...(m.team ? { team: true as const } : {}),
     ...(visits.length ? { visits } : {}),
   };
@@ -102,7 +104,7 @@ export function SavedProvider({ children }: { children: ReactNode }) {
   );
 
   const booked = useCallback(
-    (match: Pick<Match, 'clinicianId' | 'fit'>, day = new Date().toISOString().slice(0, 10)) => {
+    (match: Pick<Match, 'clinicianId' | 'fit'>, day = localDay()) => {
       const had = current.current.find((m) => m.clinicianId === match.clinicianId);
       const visits = [...(had?.visits ?? []).filter((d) => d !== day), day];
       const item = toSavedItem({ ...(had ?? match), team: true, visits });
