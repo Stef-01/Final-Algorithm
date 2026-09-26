@@ -42,8 +42,9 @@ export function buildConversation(shares: Share[], goals: string[]): Turn[] {
   const needs = ['Stress', 'Career and performance'];
   const base: Record<string, unknown> = { needs, limit: 4 };
   if (shares.includes('practical')) base.mode = 'any';
+  // Only goals that bear on this conversation (work stress): an unrelated goal would skew the search.
   const goalAreas = shares.includes('goals')
-    ? GOALS.filter((g) => goals.includes(g.id) && g.areas?.length).map((g) => ({ label: g.label, area: g.areas![0] }))
+    ? GOALS.filter((g) => goals.includes(g.id) && ['stress', 'focus'].includes(g.id)).map((g) => ({ label: g.label, area: g.areas![0] }))
     : [];
   for (const g of goalAreas) if (!needs.includes(g.area)) needs.push(g.area);
 

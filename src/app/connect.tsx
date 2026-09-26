@@ -388,17 +388,25 @@ function ChatTurn({ turn, instant, onDone }: { turn: Turn; instant: boolean; onD
   useEffect(() => {
     finish.current = onDone;
   });
+  // Each step waits for the one before: the message finishes typing, WATL runs, results land,
+  // the reply finishes typing, and only then does the next message start.
+  const typedAsk = asked.length === turn.ask.length;
+  const typedReply = said.length === turn.reply.length;
   useEffect(() => {
     if (instant) return;
-    const at = [turn.ask.length * 9 + 400, 1000, 900, 900];
-    let total = 0;
-    const ids = at.map((ms, i) => {
-      total += ms;
-      return setTimeout(() => setPhase(i + 1), total);
-    });
-    ids.push(setTimeout(() => finish.current(), total + turn.reply.length * 6 + 900));
-    return () => ids.forEach(clearTimeout);
-  }, [instant, turn]);
+    if (p === 0 && typedAsk) {
+      const t = setTimeout(() => setPhase(1), 350);
+      return () => clearTimeout(t);
+    }
+    if (p > 0 && p < 4) {
+      const t = setTimeout(() => setPhase(p + 1), 850);
+      return () => clearTimeout(t);
+    }
+    if (p === 4 && typedReply) {
+      const t = setTimeout(() => finish.current(), 1100);
+      return () => clearTimeout(t);
+    }
+  }, [instant, p, typedAsk, typedReply]);
 
   return (
     <View style={styles.turn}>

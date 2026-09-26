@@ -39,6 +39,12 @@ describe('the Connect your AI example chat', () => {
     }
   });
 
+  it('uses only the goals that bear on the conversation', () => {
+    const t = buildConversation([...all], ['assessed', 'pain', 'stress'])[0];
+    expect(t.args.needs).toEqual(['Stress', 'Career and performance']);
+    expect(t.used.filter((u) => u.from === 'WATL goal').map((u) => u.label)).toEqual(['Manage stress']);
+  });
+
   it('only uses chat history if you let it', () => {
     const off = buildConversation(['goals', 'practical'], []);
     expect(off.flatMap((t) => t.used.map((u) => u.from))).not.toContain('Your chats');
