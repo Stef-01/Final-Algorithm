@@ -380,6 +380,64 @@ function Chat({ name, turns, onDone }: { name: string; turns: Turn[]; onDone: ()
   );
 }
 
+/**
+ * One call to WATL, as a small bar ("WATL · find_professionals ✓"). Tap it to see what the
+ * assistant used: what you said, and which earlier chats it drew on (title and date), plus the
+ * request itself.
+ */
+function ToolCall({ turn, running }: { turn: Turn; running: boolean }) {
+  const [open, setOpen] = useState(false);
+  const said = turn.used.filter((u) => u.from !== 'Your chats');
+  const chats = turn.used.filter((u) => u.from === 'Your chats');
+  return (
+    <Appear style={styles.toolCard}>
+      <PressScale
+        onPress={() => setOpen((o) => !o)}
+        accessibilityRole="button"
+        accessibilityState={{ expanded: open }}
+        accessibilityLabel={`WATL find professionals${running ? ', running' : ''}. ${open ? 'Hide' : 'Show'} what it used`}
+        style={styles.toolRow}
+        scaleTo={0.98}
+      >
+        <View style={styles.toolW}>
+          <Text style={styles.toolWText}>W</Text>
+        </View>
+        <Text style={styles.toolTitle}>WATL · find_professionals</Text>
+        {running ? <Text style={styles.running}>running</Text> : <Icon name="icCheck" size={14} color={colors.purpleText} />}
+        <Icon name="icDownArrow" size={10} color={colors.muted} style={open ? styles.flip : undefined} />
+      </PressScale>
+      {open ? (
+        <Appear distance={6}>
+          {said.map((u) => (
+            <View key={u.label} style={styles.usedRow}>
+              <Text style={styles.usedFrom}>{u.from}</Text>
+              <Text style={styles.usedLabel}>{u.label}</Text>
+            </View>
+          ))}
+          {chats.length ? <Text style={[styles.usedFrom, styles.chatsHead]}>Your chats</Text> : null}
+          {chats.map((u) => (
+            <View key={u.label} style={styles.chatRow}>
+              <Icon name="icText" size={14} color={colors.purpleText} />
+              <View style={styles.fill}>
+                <View style={styles.chatTop}>
+                  <Text style={styles.chatTitle2} numberOfLines={1}>
+                    {u.chat?.title}
+                  </Text>
+                  <Text style={styles.chatDate}>{u.chat?.date}</Text>
+                </View>
+                <Text style={styles.chatUsed}>{u.label}</Text>
+              </View>
+            </View>
+          ))}
+          <Text style={styles.args} selectable>
+            {JSON.stringify(turn.args)}
+          </Text>
+        </Appear>
+      ) : null}
+    </Appear>
+  );
+}
+
 function ChatTurn({ turn, instant, onDone }: { turn: Turn; instant: boolean; onDone: () => void }) {
   const [phase, setPhase] = useState(instant ? 4 : 0);
   const p = instant ? 4 : phase;
@@ -415,34 +473,7 @@ function ChatTurn({ turn, instant, onDone }: { turn: Turn; instant: boolean; onD
         <Text style={styles.userText}>{instant ? turn.ask : asked}</Text>
       </Appear>
 
-      {p >= 1 ? (
-        <Appear style={styles.toolCard}>
-          <View style={styles.toolRow}>
-            <View style={styles.toolW}>
-              <Text style={styles.toolWText}>W</Text>
-            </View>
-            <Text style={styles.toolTitle}>WATL · find_professionals</Text>
-            {p < 3 ? <Text style={styles.running}>running</Text> : <Icon name="icCheck" size={14} color={colors.purpleText} />}
-          </View>
-          {p >= 2 ? (
-            <Appear>
-              <View style={styles.used}>
-                {turn.used.map((u, i) => (
-                  <Appear key={u.label} index={i} distance={6}>
-                    <View style={[styles.usedChip, u.from === 'Your chats' && styles.usedChats]}>
-                      <Text style={styles.usedFrom}>{u.from}</Text>
-                      <Text style={styles.usedLabel}>{u.label}</Text>
-                    </View>
-                  </Appear>
-                ))}
-              </View>
-              <Text style={styles.args} selectable>
-                {JSON.stringify(turn.args)}
-              </Text>
-            </Appear>
-          ) : null}
-        </Appear>
-      ) : null}
+      {p >= 1 ? <ToolCall turn={turn} running={p < 3} /> : null}
 
       {p >= 3
         ? turn.results.slice(0, 3).map((r, i) => {
@@ -534,20 +565,25 @@ const styles = StyleSheet.create({
   turn: { marginBottom: 18 },
   skip: { minHeight: 36, justifyContent: 'center', paddingHorizontal: 12, borderRadius: 18, backgroundColor: colors.white, marginLeft: 8 },
   skipText: { fontFamily: fonts.bold, fontSize: 13, color: colors.purpleText },
-  usedChats: { backgroundColor: '#EFE6EE' },
   chatHead: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 4, marginBottom: 14 },
   chatTitle: { fontFamily: fonts.bold, fontSize: 16, color: colors.black, flex: 1 },
   example: { fontFamily: fonts.medium, fontSize: 12, color: colors.muted },
   userBubble: { alignSelf: 'flex-end', maxWidth: '86%', backgroundColor: colors.black, borderRadius: 20, borderBottomRightRadius: 6, padding: 14, minHeight: 48 },
   userText: { fontFamily: fonts.regular, fontSize: 15, lineHeight: 21, color: colors.white },
-  toolCard: { backgroundColor: colors.white, borderRadius: 16, padding: 14, marginTop: 14, borderWidth: 1, borderColor: colors.line },
+  toolCard: { alignSelf: 'flex-start', maxWidth: '100%', backgroundColor: colors.white, borderRadius: 14, paddingHorizontal: 12, paddingVertical: 8, marginTop: 12, borderWidth: 1, borderColor: colors.line },
+  flip: { transform: [{ rotate: '180deg' }] },
+  usedRow: { marginTop: 10 },
+  chatsHead: { marginTop: 12 },
+  chatRow: { flexDirection: 'row', gap: 8, marginTop: 8, backgroundColor: '#F6F0F5', borderRadius: 10, padding: 10 },
+  chatTop: { flexDirection: 'row', alignItems: 'baseline', gap: 8 },
+  chatTitle2: { flex: 1, fontFamily: fonts.bold, fontSize: 13, color: colors.black },
+  chatDate: { fontFamily: fonts.medium, fontSize: 11, color: colors.muted },
+  chatUsed: { fontFamily: fonts.regular, fontSize: 13, color: colors.black, marginTop: 2 },
   toolRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   toolW: { width: 22, height: 22, borderRadius: 6, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' },
   toolWText: { fontFamily: fonts.serifSemiBold, fontSize: 13, color: colors.black },
-  toolTitle: { flex: 1, fontFamily: fonts.bold, fontSize: 14, color: colors.black },
+  toolTitle: { fontFamily: fonts.bold, fontSize: 13, color: colors.black },
   running: { fontFamily: fonts.medium, fontSize: 12, color: colors.muted },
-  used: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 12 },
-  usedChip: { backgroundColor: colors.background, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 6 },
   usedFrom: { fontFamily: fonts.medium, fontSize: 10, color: colors.muted, textTransform: 'uppercase', letterSpacing: 0.5 },
   usedLabel: { fontFamily: fonts.bold, fontSize: 13, color: colors.black },
   args: { fontFamily: MONO, fontSize: 11, lineHeight: 16, color: colors.muted, marginTop: 10 },

@@ -39,8 +39,11 @@ describe('connect your AI (MCP)', () => {
     expect(await screen.findAllByText('WATL · find_professionals', {}, { timeout: 6000 })).toHaveLength(4);
     expect(screen.getByText(/executives like me/)).toBeOnTheScreen();
     expect(screen.getByText(/None of them mention executives/)).toBeOnTheScreen();
+    // Each call is a small bar; tap it to see what the assistant used.
+    expect(screen.queryByText('You said')).toBeNull();
+    fireEvent.press(screen.getAllByLabelText(/^WATL find professionals/)[1]);
+    expect(await screen.findByText('Works with executives')).toBeOnTheScreen();
     // Without chat history, only what was said goes to WATL.
-    expect(screen.getAllByText('You said')).toHaveLength(4);
     expect(screen.queryByText('Your chats')).toBeNull();
     expect(screen.getAllByLabelText(/, (Strong fit|Good fit|Worth considering|Possible fit)$/).length).toBeGreaterThan(0);
     fireEvent.press(screen.getByText('Done'));

@@ -70,6 +70,8 @@ describe('rating someone on your care team', () => {
     fireEvent.changeText(screen.getByLabelText('Feedback (optional)'), 'Explains things clearly');
     fireEvent.press(screen.getByRole('button', { name: 'Send' }));
     expect(await screen.findByText('Thank you.')).toBeOnTheScreen();
+    // No assistant bubble on My care.
+    expect(screen.queryByLabelText(/assistant/)).toBeNull();
     await waitFor(async () => expect(JSON.parse((await AsyncStorage.getItem('watl_rate_asked'))!)).toHaveProperty('alice-bui'));
   });
 });

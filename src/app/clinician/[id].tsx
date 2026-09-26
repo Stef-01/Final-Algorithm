@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { AssistantMark } from '@/components/AssistantButton';
 import { ChipsCard, NoteCard, PhotoCard, PromptCard, QualificationsCard, TagsCard, TextCard } from '@/components/cards';
 import { caveatLines, costLabel, placeLine, placeName, practicalChips, reasonKicker } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
@@ -99,7 +98,6 @@ export default function ClinicianDetail() {
 
       <View style={[styles.footer, { paddingBottom: 12 + insets.bottom }]}>
         <View style={styles.footerRow}>
-          <AssistantMark />
           <View style={styles.book}>
             <PillButton label={`Book with ${c.firstName}`} onPress={() => router.push(`/book/${c.id}`)} />
           </View>

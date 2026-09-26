@@ -11,7 +11,11 @@ import type { Share } from './connection';
 // throughout: first names clash (two Kates). If nobody's
 // profile says something (like "executives"), the reply says so.
 
-export type Used = { label: string; from: 'You said' | 'Your chats' | 'WATL goal' | 'Your limits' };
+/** Something the assistant used; from past chats, it names the conversation it came from. */
+export type Used = { label: string; from: 'You said' | 'Your chats' | 'WATL goal' | 'Your limits'; chat?: { title: string; date: string } };
+
+// The example person's earlier conversations with their assistant (made up for the demo).
+const chat = (label: string, title: string, date: string): Used => ({ label, from: 'Your chats', chat: { title, date } });
 type Result = ReturnType<typeof findProfessionals>['results'][number];
 export type Turn = { ask: string; used: Used[]; args: Record<string, unknown>; results: Result[]; reply: string };
 
@@ -59,7 +63,7 @@ export function buildConversation(shares: Share[], goals: string[]): Turn[] {
       ask: 'Find someone who understands the recent stress I’ve been going through with the work drama.',
       used: [
         { label: 'Stress at work', from: 'You said' },
-        ...(chats ? [{ label: 'Conflict with the leadership team', from: 'Your chats' } as Used, { label: 'Going on two months', from: 'Your chats' } as Used] : []),
+        ...(chats ? [chat('Conflict with the leadership team', 'Handling the leadership team fallout', '18 Sep 2026'), chat('Going on two months', 'Work stress, week by week', '2 Aug 2026')] : []),
         ...goalAreas.map((g) => ({ label: g.label, from: 'WATL goal' }) as Used),
       ],
       args,
@@ -79,7 +83,7 @@ export function buildConversation(shares: Share[], goals: string[]): Turn[] {
     const near = saying(results, lead.filter((x) => x !== 'executives'));
     turns.push({
       ask: 'Out of these options, I want someone who’s versed in working with executives like me.',
-      used: [{ label: 'Works with executives', from: 'You said' }, ...(chats ? [{ label: 'You lead a team of 40', from: 'Your chats' } as Used] : [])],
+      used: [{ label: 'Works with executives', from: 'You said' }, ...(chats ? [chat('You lead a team of 40', 'Restructure plan for my team', '9 Jul 2026')] : [])],
       args,
       results,
       reply: exec.length
@@ -96,7 +100,7 @@ export function buildConversation(shares: Share[], goals: string[]): Turn[] {
     const mums = saying(results, mum);
     turns.push({
       ask: 'I want someone who understands also having to manage the responsibilities I face as a mother.',
-      used: [{ label: 'Being a mum', from: 'You said' }, ...(chats ? [{ label: 'Two kids at primary school', from: 'Your chats' } as Used] : [])],
+      used: [{ label: 'Being a mum', from: 'You said' }, ...(chats ? [chat('Two kids at primary school', 'School holiday juggling', '21 Jun 2026')] : [])],
       args,
       results,
       reply: mums.length
@@ -117,18 +121,19 @@ export function buildConversation(shares: Share[], goals: string[]): Turn[] {
     const results = findProfessionals(args).results;
     const strong = saying(results, strengths);
     const both = strong.filter(({ r }) => (r.profile_mentions ?? []).some((x) => mum.includes(x.phrase)));
-    // "Byron" could be the place or the person: check both.
-    const byron = results.some((r) => /byron/i.test(`${r.name} ${r.where}`));
     turns.push({
       ask: 'Find someone who has that strengths-based mindset I was telling you about before, after the issues I had with that other Byron psychologist last year.',
       used: [
         { label: 'Strengths-based', from: 'You said' },
-        ...(chats ? [{ label: 'Last one felt deficit-focused', from: 'Your chats' } as Used, { label: 'Not last year’s psychologist', from: 'Your chats' } as Used] : []),
+        ...(chats ? [
+              chat('Last psychologist felt deficit-focused', 'Bad experience with the Byron psychologist', '3 Nov 2025'),
+              chat('Wants strengths-based care', 'What I want from therapy next time', '10 Jan 2026'),
+            ] : []),
       ],
       args,
       results,
       reply: strong.length
-        ? `${list(strong.slice(0, 2).map(({ r, m }) => `${r.name}: “${snippet(m.quote, m.phrase)}”`))}.${both.length ? ` ${both[0].r.name} also mentions mums, so I’d start there.` : ''}${byron ? '' : ' And none of them is the Byron psychologist from last year.'}`
+        ? `${list(strong.slice(0, 2).map(({ r, m }) => `${r.name}: “${snippet(m.quote, m.phrase)}”`))}.${both.length ? ` ${both[0].r.name} also mentions mums, so I’d start there.` : ''}${chats ? ' Strengths-based is a different starting point from the deficit focus you described last year.' : ''}`
         : 'None of these say “strengths-based” in their profiles. I can ask WATL for more people.',
     });
   }

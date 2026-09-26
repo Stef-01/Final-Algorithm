@@ -7,7 +7,7 @@ import { useSession } from '@/features/match/session';
 import { track } from '@/lib/analytics';
 import { colors } from '@/lib/theme';
 import { Icon } from './Icon';
-import { PressScale, Pulse, useReducedMotion } from './motion';
+import { Pulse, useReducedMotion } from './motion';
 
 // The always-there assistant: a small floating button, top-right on every main screen, that opens
 // the refine conversation.
@@ -16,33 +16,13 @@ const SIZE = 56;
 /** Resting size: small enough to sit in the header's corner. */
 const SMALL = 36;
 /** Screens where it would cover something, or where a conversation makes no sense. */
-const HIDDEN = [/^\/refine/, /^\/matching/, /^\/safety/, /^\/book\//, /^\/dev\//, /^\/clinician\//, /^\/discover/, /^\/join/, /^\/filters/, /^\/rate/, /^\/connect/];
-
-/** The assistant's round sparkle button on its own, for screens with a footer (the profile page). */
-export function AssistantMark() {
-  const { state } = useSession();
-  const hasResults = state.result?.status === 'matches';
-  return (
-    <PressScale
-      onPress={() => {
-        track('assistant_opened', { hasResults });
-        router.push('/refine');
-      }}
-      accessibilityRole="button"
-      accessibilityLabel={hasResults ? 'Refine your matches with the assistant' : 'Ask the assistant'}
-      style={[styles.button, styles.flat]}
-      scaleTo={0.9}
-    >
-      <Icon name="icSparkle" size={24} color={colors.white} />
-    </PressScale>
-  );
-}
+const HIDDEN = [/^\/refine/, /^\/matching/, /^\/safety/, /^\/book\//, /^\/dev\//, /^\/clinician\//, /^\/discover/, /^\/join/, /^\/filters/, /^\/rate/, /^\/connect/, /^\/settings/, /^\/saved/];
 
 /** Whether the floating assistant shows on this route (headers leave room for it when it does). */
 export const assistantShownOn = (path: string) => !HIDDEN.some((re) => re.test(path));
 
-// Floating top-right on every main screen: small, grows to full size under the pointer, and opens
-// the conversation on click (a tap on phones). On the profile page it sits in the footer instead.
+// Floating top-right on the search and matches screens: small, grows to full size under the pointer,
+// and opens the conversation on click (a tap on phones). Not on profiles, My care or Profile.
 export function AssistantButton() {
   const path = usePathname();
   const insets = useSafeAreaInsets();
@@ -95,7 +75,6 @@ export function AssistantButton() {
 const styles = StyleSheet.create({
   wrap: { position: 'absolute', zIndex: 20 },
   pulse: { position: 'absolute', top: 0, right: 0, width: SMALL, height: SMALL, alignItems: 'center', justifyContent: 'center' },
-  flat: { shadowOpacity: 0, elevation: 0 },
   button: {
     width: SIZE,
     height: SIZE,

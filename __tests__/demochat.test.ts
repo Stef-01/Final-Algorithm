@@ -45,6 +45,14 @@ describe('the Connect your AI example chat', () => {
     expect(t.used.filter((u) => u.from === 'WATL goal').map((u) => u.label)).toEqual(['Manage stress']);
   });
 
+  it('names the earlier chats it drew on, with dates; last year is context, not a search', () => {
+    const chats = turns.flatMap((t) => t.used.filter((u) => u.from === 'Your chats'));
+    expect(chats.length).toBeGreaterThan(3);
+    for (const u of chats) expect(u.chat).toEqual({ title: expect.any(String), date: expect.stringMatching(/^\d{1,2} [A-Z][a-z]{2} \d{4}$/) });
+    expect(chats.map((u) => u.chat!.title)).toContain('Bad experience with the Byron psychologist');
+    expect(turns[3].reply).toMatch(/deficit focus you described last year/);
+  });
+
   it('only uses chat history if you let it', () => {
     const off = buildConversation(['goals', 'practical'], []);
     expect(off.flatMap((t) => t.used.map((u) => u.from))).not.toContain('Your chats');
