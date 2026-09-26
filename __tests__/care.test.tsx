@@ -85,6 +85,27 @@ describe('goals', () => {
     expect(restoreGoals({})).toEqual([]);
   });
 
+  it('once goals are chosen, Profile shows just those, with +N for the rest', async () => {
+    await AsyncStorage.clear();
+    await AsyncStorage.setItem('watl_goals', JSON.stringify(['organised']));
+    /* eslint-disable @typescript-eslint/no-require-imports */
+    renderRouter(
+      {
+        _layout: require('@/app/_layout'),
+        '(tabs)/_layout': require('@/app/(tabs)/_layout').default,
+        '(tabs)/(find)/_layout': require('@/app/(tabs)/(find)/_layout').default,
+        '(tabs)/(find)/index': () => null,
+        '(tabs)/saved': () => null,
+        '(tabs)/settings': require('@/app/(tabs)/settings').default,
+      },
+      { initialUrl: '/settings' },
+    );
+    expect(await screen.findByLabelText('Get organised')).toBeOnTheScreen();
+    expect(screen.queryByLabelText('Sleep better')).toBeNull();
+    fireEvent.press(screen.getByLabelText('Show 10 more goals'));
+    expect(screen.getByLabelText('Sleep better')).toBeOnTheScreen();
+  });
+
   it('picking a goal adds a slot to My care', async () => {
     await AsyncStorage.clear();
     /* eslint-disable @typescript-eslint/no-require-imports */
