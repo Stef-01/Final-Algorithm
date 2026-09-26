@@ -2,27 +2,10 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { colors, fonts } from '@/lib/theme';
 import { Icon } from './Icon';
-import { Appear, Burst, PressDepth, PressScale } from './motion';
+import { Appear, Burst, PressDepth } from './motion';
 
-// In-app validation (PRD §49), in the card style: a per-match thumbs row and the 1–5 credibility question.
-
-export function MatchFeedback({ value, onChoose }: { value?: 'up' | 'down'; onChoose: (dir: 'up' | 'down') => void }) {
-  return (
-    <View style={styles.row}>
-      {value ? (
-        <Text style={styles.thanks}>Thanks — the WATL team reviews these to improve matching.</Text>
-      ) : (
-        <>
-          <Text style={styles.question}>Does this match feel right for you?</Text>
-          <View style={styles.choices}>
-            <Chip label="Yes" onPress={() => onChoose('up')} />
-            <Chip label="Not really" onPress={() => onChoose('down')} />
-          </View>
-        </>
-      )}
-    </View>
-  );
-}
+// In-app validation (PRD §49), in the card style: the 1–5 credibility question. (Per-match thumbs come
+// from swiping: right is yes, left is no.)
 
 const SCALE: [number, string][] = [
   [1, 'Not at all'],
@@ -70,14 +53,6 @@ export function RatingCard({ value, onRate }: { value?: number; onRate: (n: numb
         </>
       )}
     </View>
-  );
-}
-
-function Chip({ label, onPress }: { label: string; onPress: () => void }) {
-  return (
-    <PressScale onPress={onPress} accessibilityRole="button" style={styles.chip} scaleTo={0.92}>
-      <Text style={styles.chipText}>{label}</Text>
-    </PressScale>
   );
 }
 

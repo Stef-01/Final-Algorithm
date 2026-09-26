@@ -9,7 +9,7 @@ import { ProgressDots } from '@/components/ProgressDots';
 import { Appear, Burst, PressScale } from '@/components/motion';
 import { Swipeable, type SwipeableHandle } from '@/components/Swipeable';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
-import { MatchFeedback, RatingCard } from '@/components/Feedback';
+import { RatingCard } from '@/components/Feedback';
 import { FitLabel } from '@/components/FitLabel';
 import { Icon } from '@/components/Icon';
 import { ScreenHeader } from '@/components/ScreenHeader';
@@ -194,7 +194,6 @@ export default function Matches() {
             <View style={styles.view}>
               <PillButton label={`View ${clinician.firstName}`} onPress={open} />
             </View>
-            <MatchFeedback value={state.feedback.thumbs[clinician.id]} onChoose={(dir) => session.thumb(clinician.id, dir)} />
           </ScrollView>
         </Appear>
       </Swipeable>

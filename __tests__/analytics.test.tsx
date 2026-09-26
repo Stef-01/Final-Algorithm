@@ -79,7 +79,6 @@ describe('events through a run-through (PRD §48)', () => {
     await answerUntilMatches();
     await screen.findByText('Jessica Katsamatsas');
 
-    fireEvent.press(screen.getByText('Yes'));
     fireEvent.press(screen.getByText('View Jess'));
     fireEvent.press(await screen.findByText('Book with Jess'));
     fireEvent.press(await screen.findByText('Open booking page'));
@@ -92,7 +91,6 @@ describe('events through a run-through (PRD §48)', () => {
       'followup_asked',
       'followup_answered',
       'matching_completed',
-      'match_feedback_positive',
       'clinician_viewed',
       'booking_clicked',
     ]) {
