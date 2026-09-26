@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/Icon';
 import type { IconName } from '@/components/icons';
-import { Appear, PressScale } from '@/components/motion';
+import { Appear, PressDepth, PressScale } from '@/components/motion';
 import { ProgressDots } from '@/components/ProgressDots';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { Swipeable, type SwipeableHandle } from '@/components/Swipeable';
@@ -13,7 +13,7 @@ import { useGoals } from '@/features/care/goals';
 import { goalsDraft } from '@/features/care/plan';
 import { useSession } from '@/features/match/session';
 import type { ProfessionChoice } from '@/features/match/sessionCore';
-import { capitalised, INTRO, PROFESSION_INFO } from '@/lib/professions';
+import { article, capitalised, INTRO, PROFESSION_INFO } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
 
 // The discovery queue: one card per kind of professional, three short facts each. Swipe right (or
@@ -83,16 +83,19 @@ export default function Discover() {
         <PressScale onPress={() => deck.current?.fling(-1)} accessibilityRole="button" accessibilityLabel="Next" style={styles.round} scaleTo={0.9}>
           <Icon name="icClose" size={20} color={colors.black} />
         </PressScale>
-        <PressScale
+        <PressDepth
           onPress={() => (card.available ? deck.current?.fling(1) : next())}
           accessibilityRole="button"
           accessibilityLabel={card.available ? `Find ${card.many}` : 'Next'}
           style={[styles.primary, !card.available && styles.primaryOff]}
           containerStyle={styles.grow}
-          scaleTo={0.96}
+          radius={28}
+          lipColor={card.available ? colors.purpleLip : '#3A3A3A'}
         >
-          <Text style={styles.primaryText}>{card.available ? `Find ${card.one === 'GP' ? 'a GP' : 'one'}` : 'Next'}</Text>
-        </PressScale>
+          <Text style={styles.primaryText} numberOfLines={1}>
+            {card.available ? `Find ${article(card.one)} ${card.one}` : 'Next'}
+          </Text>
+        </PressDepth>
       </View>
     </View>
   );

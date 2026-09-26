@@ -127,12 +127,10 @@ const styles = StyleSheet.create({
     gap: 6,
     minHeight: 44,
     borderRadius: 30,
-    borderWidth: 1,
-    borderColor: colors.black,
     backgroundColor: colors.white,
     paddingHorizontal: 16,
   },
-  chipOn: { backgroundColor: colors.purple, borderColor: colors.purple },
+  chipOn: { backgroundColor: colors.purple },
   chipText: { fontFamily: fonts.medium, fontSize: 15, color: colors.black },
   chipTextOn: { color: colors.white },
   input: {
