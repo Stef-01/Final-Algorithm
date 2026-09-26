@@ -11,15 +11,30 @@ import type { ProfessionChoice } from '@/features/match/sessionCore';
 import { capitalised, PROFESSION_INFO } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
 
-// Discovery: every kind of professional who might help, as a grid of tiles (icon, name, what for).
-// Tap one to search it; "Not sure yet" searches everyone. Kinds with nobody in the network yet are
-// shown, marked "Soon", but can't be searched.
+// Home. One big "Find someone" first, the quickest way in: describe what you need and WATL searches
+// every kind of professional. Below it, "Who could help?": a tile per kind (icon, name, what for)
+// to search just that kind. Kinds with nobody in the network yet show as "Soon".
 export default function WhoAreYouLookingFor() {
   const session = useSession();
   const { goals } = useGoals();
 
   return (
-    <ConversationStep icon="icQuestion" title="Who could help?">
+    <ConversationStep icon="icSparkle" title="Find someone who fits you.">
+      <PressDepth
+        onPress={() => router.push(session.chooseProfession('either'))}
+        accessibilityRole="button"
+        radius={30}
+        lipColor={colors.purpleLip}
+        style={styles.find}
+      >
+        <Icon name="icSparkle" size={20} color={colors.white} />
+        <Text style={styles.findText}>Find someone</Text>
+      </PressDepth>
+      <Text style={styles.findSub}>Say what you need. We’ll search every kind of professional.</Text>
+
+      <Text style={styles.section} accessibilityRole="header">
+        Who could help?
+      </Text>
       <View style={styles.grid}>
         {PROFESSION_INFO.map((p, i) => (
           <Appear key={p.id} index={i} style={styles.cell}>
@@ -43,11 +58,6 @@ export default function WhoAreYouLookingFor() {
           </Appear>
         ))}
       </View>
-      <Appear index={PROFESSION_INFO.length}>
-        <PressDepth onPress={() => router.push(session.chooseProfession('either'))} accessibilityRole="button" style={styles.unsure} radius={150} lipColor={colors.black} depth={3} containerStyle={styles.unsureWrap}>
-          <Text style={styles.unsureText}>Not sure yet</Text>
-        </PressDepth>
-      </Appear>
       <Pressable onPress={() => router.push('/discover')} accessibilityRole="button">
         <Text style={styles.demo}>Explore who does what</Text>
       </Pressable>
@@ -68,8 +78,9 @@ const styles = StyleSheet.create({
   off: { color: colors.muted },
   for: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted, marginTop: 2 },
   soon: { fontFamily: fonts.bold, fontSize: 11, color: colors.muted, borderWidth: 1, borderColor: colors.line, borderRadius: 20, paddingHorizontal: 7, paddingVertical: 1 },
-  unsureWrap: { marginTop: 10 },
-  unsure: { backgroundColor: colors.white, borderRadius: 150, borderWidth: 1, borderColor: colors.black, paddingVertical: 16, alignItems: 'center' },
-  unsureText: { fontFamily: fonts.bold, fontSize: 16, color: colors.black },
+  find: { height: 60, backgroundColor: colors.purple, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'center' },
+  findText: { fontFamily: fonts.bold, fontSize: 18, color: colors.white },
+  findSub: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, textAlign: 'center', marginTop: 10 },
+  section: { fontFamily: fonts.serifSemiBold, fontSize: 24, lineHeight: 30, color: colors.black, marginTop: 36, marginBottom: 12 },
   demo: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, marginTop: 8, paddingVertical: 12 },
 });

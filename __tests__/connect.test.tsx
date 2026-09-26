@@ -35,9 +35,12 @@ describe('connect your AI (MCP)', () => {
     expect(screen.getAllByText('https://final-algorithm.vercel.app/api/mcp')[0]).toBeOnTheScreen();
     fireEvent(screen.getByLabelText('What you’ve told your AI'), 'valueChange', false);
     fireEvent.press(screen.getByText('Connect Claude'));
-    expect(await screen.findByText('WATL · find_professionals', {}, { timeout: 6000 })).toBeOnTheScreen();
-    // Without chat history, only what was said (and the limits) goes to WATL.
-    expect(screen.getAllByText('You said')).toHaveLength(2);
+    // Four messages back and forth, each with its own call to WATL.
+    expect(await screen.findAllByText('WATL · find_professionals', {}, { timeout: 6000 })).toHaveLength(4);
+    expect(screen.getByText(/executives like me/)).toBeOnTheScreen();
+    expect(screen.getByText(/None of them mention executives/)).toBeOnTheScreen();
+    // Without chat history, only what was said goes to WATL.
+    expect(screen.getAllByText('You said')).toHaveLength(4);
     expect(screen.queryByText('Your chats')).toBeNull();
     expect(screen.getAllByLabelText(/, (Strong fit|Good fit|Worth considering|Possible fit)$/).length).toBeGreaterThan(0);
     fireEvent.press(screen.getByText('Done'));

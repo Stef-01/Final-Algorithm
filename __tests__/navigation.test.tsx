@@ -66,10 +66,11 @@ async function startDemo(title: string) {
 }
 
 describe('app shell', () => {
-  it('opens on the funnel: who are you looking for?', async () => {
+  it('opens on Find someone, with who could help underneath', async () => {
     renderRouter(routes, { initialUrl: '/' });
-    expect(await screen.findByText('Who could help?')).toBeOnTheScreen();
-    for (const o of ['GP', 'Psychologist', 'ADHD coach', 'Physiotherapist', 'Not sure yet']) expect(screen.getByText(o)).toBeOnTheScreen();
+    expect(await screen.findByText('Find someone')).toBeOnTheScreen();
+    expect(screen.getByText('Who could help?')).toBeOnTheScreen();
+    for (const o of ['GP', 'Psychologist', 'ADHD coach', 'Physiotherapist']) expect(screen.getByText(o)).toBeOnTheScreen();
     // Kinds with nobody in the network yet are shown but can't be searched.
     expect(screen.getByLabelText('Dietitian or nutritionist. Food, nutrition. Not in the network yet').props.accessibilityState).toMatchObject({ disabled: true });
     expect(screen.queryByText(/sign in|sign up|hinge|adhdme/i)).toBeNull();
@@ -228,6 +229,14 @@ describe('typed searches', () => {
     fireEvent.press(screen.getByLabelText('Profile'));
     fireEvent.press(await screen.findByText('Start over'));
     expect(await screen.findByText('Who could help?')).toBeOnTheScreen();
+  });
+
+  it('Find someone goes straight in, searching every kind of professional', async () => {
+    renderRouter(routes, { initialUrl: '/' });
+    fireEvent.press(await screen.findByText('Find someone'));
+    fireEvent.press(await screen.findByLabelText('Anywhere: Telehealth is fine'));
+    await screen.findByLabelText("What you're looking for");
+    await waitFor(async () => expect(JSON.parse((await AsyncStorage.getItem('watl_session'))!).profession).toBe('either'));
   });
 });
 

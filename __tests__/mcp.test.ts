@@ -2,7 +2,8 @@
  * @jest-environment node
  */
 import { POST } from '../api/mcp';
-import { findProfessionals, getProfessional, handle, TOOLS, toSignals } from '../server/mcp';
+import { professionals } from '../server/data/professionals';
+import { findProfessionals, getProfessional, handle, mentions, TOOLS, toSignals } from '../server/mcp';
 
 const rpc = (body: unknown) => POST(new Request('http://x/api/mcp', { method: 'POST', body: JSON.stringify(body) }));
 
@@ -47,5 +48,15 @@ describe('WATL as an MCP server', () => {
     expect(getProfessional('alice-bui')).toMatchObject({ name: 'Alice Bui' });
     expect(getProfessional('nobody')).toBeNull();
     expect(TOOLS.every((t) => t.annotations.readOnlyHint)).toBe(true);
+  });
+
+  it('finds phrases in a profile word for word, and never stretches them', () => {
+    const kate = professionals.find((c) => c.id === 'kate-dallimore')!;
+    // Her profile says "executive functioning", not executives.
+    expect(mentions(kate, ['executives'])).toEqual([]);
+    expect(mentions(kate, ['strengths based'])[0].quote).toMatch(/collaborative and strengths-based/);
+    const out = findProfessionals({ needs: ['Stress'], look_for: ['mums'], limit: 10 });
+    const first = out.results[0];
+    expect(first.profile_mentions?.[0]).toMatchObject({ phrase: 'mums' });
   });
 });

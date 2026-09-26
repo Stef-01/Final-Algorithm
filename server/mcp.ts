@@ -42,6 +42,12 @@ export const TOOLS = [
         language: { type: 'string' },
         weekends: { type: 'boolean', description: 'They need weekend appointments.' },
         style: { type: 'object', properties: STYLE, description: 'How they like to be treated, only where they said so.' },
+        look_for: {
+          type: 'array',
+          items: { type: 'string' },
+          description:
+            'Up to 6 words or phrases to find in each professional’s own profile, e.g. "executives", "mums", "strengths-based". Whole words only. Anyone whose profile says one comes first, with the sentence quoted under profile_mentions. Nobody mentioning a phrase means their profile doesn’t say it: never assume they do.',
+        },
         limit: { type: 'number', description: 'How many to return (1–10, default 5).' },
       },
     },
@@ -90,7 +96,25 @@ const CAVEAT: Record<Caveat, string> = {
   weekend_hours_unpublished: 'Weekend hours aren’t published: ask when booking.',
 };
 
-const summary = (m: EngineMatch) => {
+const sentences = (c: ClinicianRecord) => [...c.bio.split(/(?<=[.!?])\s+/), ...c.evidence.map((e) => e.patientFacing)];
+const norm = (t: string) => t.toLowerCase().replace(/[-‐–]/g, ' ').replace(/’/g, "'");
+const escape = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** Sentences in this professional's own profile that contain a phrase, word for word. */
+export function mentions(c: ClinicianRecord, phrases: string[]) {
+  const out: { phrase: string; quote: string }[] = [];
+  for (const phrase of phrases) {
+    const re = new RegExp(`\\b${escape(norm(phrase.trim()))}\\b`);
+    const quote = sentences(c).find((x) => re.test(norm(x)));
+    if (quote) out.push({ phrase, quote });
+  }
+  return out;
+}
+
+const lookFor = (a: Record<string, unknown>) =>
+  Array.isArray(a.look_for) ? a.look_for.filter((x): x is string => typeof x === 'string' && x.trim().length > 1).slice(0, 6).map((x) => x.slice(0, 40)) : [];
+
+const summary = (m: EngineMatch, phrases: string[] = []) => {
   const c = byId.get(m.clinicianId)!;
   return {
     id: c.id,
@@ -105,6 +129,7 @@ const summary = (m: EngineMatch) => {
     next_available: c.practical.nextAvailable,
     profile: `${SITE}/clinician/${c.id}`,
     booking: c.bookingUrl,
+    ...(phrases.length ? { profile_mentions: mentions(c, phrases) } : {}),
   };
 };
 
@@ -113,8 +138,13 @@ export function findProfessionals(a: Record<string, unknown>) {
   const r = recommend(s, professionals);
   const limit = typeof a.limit === 'number' ? Math.max(1, Math.min(10, Math.round(a.limit))) : 5;
   if (r.status === 'none') return { results: [], total: 0, could_loosen: r.actions };
-  const all = [...r.matches, ...r.more];
-  return { results: all.slice(0, limit).map(summary), total: all.length, note: 'Ranked by WATL’s fixed rules. Not medical advice; check anything under worth_checking before booking.' };
+  const phrases = lookFor(a);
+  // With phrases, anyone whose own profile says one moves up (most phrases first); the engine's
+  // order holds otherwise.
+  const ranked = [...r.matches, ...r.more];
+  const count = (m: EngineMatch) => mentions(byId.get(m.clinicianId)!, phrases).length;
+  const all = phrases.length ? ranked.map((m, i) => ({ m, i, n: count(m) })).sort((x, y) => y.n - x.n || x.i - y.i).map((x) => x.m) : ranked;
+  return { results: all.slice(0, limit).map((m) => summary(m, phrases)), total: all.length, note: 'Ranked by WATL’s fixed rules. Not medical advice; check anything under worth_checking before booking.' };
 }
 
 export function getProfessional(id: unknown) {

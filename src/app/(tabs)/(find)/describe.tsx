@@ -7,6 +7,7 @@ import { VoiceInput } from '@/components/VoiceInput';
 import { demoById } from '@/features/match/demos';
 import { claudeEnabled, extractRemote } from '@/features/match/remoteExtract';
 import { useGoals } from '@/features/care/goals';
+import { goalsDraft } from '@/features/care/plan';
 import { useSession } from '@/features/match/session';
 import { copyFor } from '@/lib/professions';
 import { colors, fonts } from '@/lib/theme';
@@ -21,7 +22,8 @@ export default function Describe() {
 
   // Shows a demo patient's words, or what was said before, until the patient starts typing.
   const [draft, setText] = useState<string | null>(null);
-  const text = draft ?? state.draft ?? state.input.texts[0] ?? '';
+  // Your goals start the words off if nothing else has (they may load after the tap that got here).
+  const text = draft ?? state.draft ?? state.input.texts[0] ?? goalsDraft(state.profession ?? 'either', goals) ?? '';
   const ready = text.trim().length > 0;
 
   const [reading, setReading] = useState(false);

@@ -1,20 +1,18 @@
 import * as Clipboard from 'expo-clipboard';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Animated, Easing, Platform, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import { findProfessionals } from '@server/mcp';
 
 import { FitLabel } from '@/components/FitLabel';
 import { Icon } from '@/components/Icon';
 import { Appear, Burst, PressDepth, PressScale, useReducedMotion } from '@/components/motion';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { getClinician } from '@/data/clinicians';
-import { GOALS } from '@/features/care/plan';
 import { useGoals } from '@/features/care/goals';
 import { CLIENTS, MCP_URL, SHARES, useConnection, type Client, type Share } from '@/features/connect/connection';
+import { buildConversation, snippet, type Turn } from '@/features/connect/demoChat';
 import { track } from '@/lib/analytics';
 import { tap } from '@/lib/haptics';
 import { colors, fonts } from '@/lib/theme';
@@ -31,33 +29,7 @@ const MONO = Platform.select({ ios: 'Menlo', android: 'monospace', default: 'ui-
 // react-native-web colours the "on" thumb separately.
 const webThumb = { activeThumbColor: colors.white } as object;
 
-const ASK = 'Can you find me a psychologist for burnout on the Gold Coast? Someone who’ll be straight with me.';
-
-/** The tool call the assistant makes: the message, plus whatever you let it bring from context. */
-function scenario(shares: Share[], goals: string[]) {
-  const args: Record<string, unknown> = { profession: 'psychologist', needs: ['Burnout'], near: 'gold-coast', limit: 3 };
-  const used: { label: string; from: string }[] = [
-    { label: 'Burnout', from: 'You said' },
-    { label: 'Gold Coast', from: 'You said' },
-  ];
-  if (shares.includes('chats')) {
-    args.style = { communication_directness: 'direct' };
-    (args.needs as string[]).push('Career and performance');
-    used.push({ label: 'Prefers direct', from: 'Your chats' }, { label: 'Work pressure', from: 'Your chats' });
-  }
-  if (shares.includes('practical')) {
-    args.max_out_of_pocket = 150;
-    used.push({ label: 'Under $150 a session', from: 'Your limits' });
-  }
-  if (shares.includes('goals')) {
-    for (const g of GOALS.filter((x) => goals.includes(x.id) && x.areas?.length && x.professions.includes('psychologist'))) {
-      const area = g.areas![0];
-      if (!(args.needs as string[]).includes(area)) (args.needs as string[]).push(area);
-      used.push({ label: g.label, from: 'WATL goal' });
-    }
-  }
-  return { args, used, out: findProfessionals(args) };
-}
+const ASK = 'Find someone who understands the stress I’ve been going through with work.';
 
 export default function Connect() {
   const insets = useSafeAreaInsets();
@@ -77,11 +49,17 @@ export default function Connect() {
     setStep(s);
   };
   const name = CLIENTS[client].name;
+  const scroller = useRef<ScrollView>(null);
 
   return (
     <View style={styles.root}>
       <ScreenHeader title="Connect your AI" onBack={step === 'how' ? () => go('pick') : () => router.back()} backLabel="Back" />
-      <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 48 }]}>
+      <ScrollView
+        ref={scroller}
+        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 48 }]}
+        // The example chat grows as it plays: follow it.
+        onContentSizeChange={() => step === 'chat' && scroller.current?.scrollToEnd({ animated: true })}
+      >
         {step === 'pick' ? (
           <Appear key="pick" from="right" distance={40}>
             <Hero />
@@ -155,7 +133,7 @@ export default function Connect() {
           />
         ) : null}
 
-        {step === 'chat' ? <Chat key={shares.join()} name={name} {...scenario(shares, goals)} onDone={() => go('manage')} /> : null}
+        {step === 'chat' ? <Chat key={shares.join()} name={name} turns={buildConversation(shares, goals)} onDone={() => go('manage')} /> : null}
 
         {step === 'manage' ? (
           <Appear key="manage" from="right" distance={40}>
@@ -361,27 +339,12 @@ function useTyped(text: string, start: boolean, cps = 60) {
   return reduced && start ? text : text.slice(0, n);
 }
 
-function Chat({ name, args, used, out, onDone }: { name: string; onDone: () => void } & ReturnType<typeof scenario>) {
+/** The example chat: each turn plays in order (Skip shows them all), then Done. */
+function Chat({ name, turns, onDone }: { name: string; turns: Turn[]; onDone: () => void }) {
   const reduced = useReducedMotion();
-  const [phase, setPhase] = useState(reduced ? 4 : 0);
-  const asked = useTyped(ASK, phase >= 0, 90);
-  const top = out.results;
-  const answer = useMemo(
-    () =>
-      top.length
-        ? `Here ${top.length === 1 ? 'is one' : `are ${top.length}`} from WATL. ${top[0].name} is the strongest: ${top[0].why[0]?.evidence ?? 'meets what you asked for'}`
-        : 'Nobody fits all of that yet. Want me to widen the search?',
-    [top],
-  );
-  const said = useTyped(answer, phase >= 4, 120);
-
-  useEffect(() => {
-    if (reduced) return;
-    const at = [1300, 2300, 3200, 4200];
-    const ids = at.map((ms, i) => setTimeout(() => setPhase(i + 1), ms));
-    return () => ids.forEach(clearTimeout);
-  }, [reduced]);
-
+  const [shown, setShown] = useState(reduced ? turns.length : 1);
+  const [all, setAll] = useState(reduced);
+  const finished = all || shown > turns.length;
   return (
     <Appear key="chat" from="right" distance={40}>
       <View style={styles.chatHead}>
@@ -390,27 +353,74 @@ function Chat({ name, args, used, out, onDone }: { name: string; onDone: () => v
         </View>
         <Text style={styles.chatTitle}>{name}</Text>
         <Text style={styles.example}>Example chat</Text>
+        {!finished ? (
+          <PressScale
+            onPress={() => {
+              setAll(true);
+              setShown(turns.length + 1);
+            }}
+            accessibilityRole="button"
+            style={styles.skip}
+          >
+            <Text style={styles.skipText}>Skip</Text>
+          </PressScale>
+        ) : null}
       </View>
+      {turns.slice(0, Math.min(shown, turns.length)).map((t, i) => (
+        <ChatTurn key={i} turn={t} instant={all} onDone={() => setShown((n) => Math.max(n, i + 2))} />
+      ))}
+      {finished ? (
+        <Appear delay={300}>
+          <Text style={styles.fine}>Every claim above is a reason WATL gave or a line quoted from the professional’s own profile.</Text>
+          <Big label="Done" onPress={onDone} />
+        </Appear>
+      ) : null}
+    </Appear>
+  );
+}
 
-      <View style={styles.userBubble}>
-        <Text style={styles.userText}>{asked}</Text>
-      </View>
+function ChatTurn({ turn, instant, onDone }: { turn: Turn; instant: boolean; onDone: () => void }) {
+  const [phase, setPhase] = useState(instant ? 4 : 0);
+  const p = instant ? 4 : phase;
+  const asked = useTyped(turn.ask, true, 110);
+  const said = useTyped(turn.reply, p >= 4, 160);
+  const finish = useRef(onDone);
+  useEffect(() => {
+    finish.current = onDone;
+  });
+  useEffect(() => {
+    if (instant) return;
+    const at = [turn.ask.length * 9 + 400, 1000, 900, 900];
+    let total = 0;
+    const ids = at.map((ms, i) => {
+      total += ms;
+      return setTimeout(() => setPhase(i + 1), total);
+    });
+    ids.push(setTimeout(() => finish.current(), total + turn.reply.length * 6 + 900));
+    return () => ids.forEach(clearTimeout);
+  }, [instant, turn]);
 
-      {phase >= 1 ? (
+  return (
+    <View style={styles.turn}>
+      <Appear style={styles.userBubble}>
+        <Text style={styles.userText}>{instant ? turn.ask : asked}</Text>
+      </Appear>
+
+      {p >= 1 ? (
         <Appear style={styles.toolCard}>
           <View style={styles.toolRow}>
             <View style={styles.toolW}>
               <Text style={styles.toolWText}>W</Text>
             </View>
             <Text style={styles.toolTitle}>WATL · find_professionals</Text>
-            {phase < 3 ? <Text style={styles.running}>running</Text> : <Icon name="icCheck" size={14} color={colors.purpleText} />}
+            {p < 3 ? <Text style={styles.running}>running</Text> : <Icon name="icCheck" size={14} color={colors.purpleText} />}
           </View>
-          {phase >= 2 ? (
+          {p >= 2 ? (
             <Appear>
               <View style={styles.used}>
-                {used.map((u, i) => (
+                {turn.used.map((u, i) => (
                   <Appear key={u.label} index={i} distance={6}>
-                    <View style={styles.usedChip}>
+                    <View style={[styles.usedChip, u.from === 'Your chats' && styles.usedChats]}>
                       <Text style={styles.usedFrom}>{u.from}</Text>
                       <Text style={styles.usedLabel}>{u.label}</Text>
                     </View>
@@ -418,16 +428,17 @@ function Chat({ name, args, used, out, onDone }: { name: string; onDone: () => v
                 ))}
               </View>
               <Text style={styles.args} selectable>
-                {JSON.stringify(args)}
+                {JSON.stringify(turn.args)}
               </Text>
             </Appear>
           ) : null}
         </Appear>
       ) : null}
 
-      {phase >= 3
-        ? top.map((r, i) => {
+      {p >= 3
+        ? turn.results.slice(0, 3).map((r, i) => {
             const c = getClinician(r.id);
+            const m = r.profile_mentions?.[0];
             return (
               <Appear key={r.id} index={i}>
                 <PressScale onPress={() => router.push(`/clinician/${r.id}`)} accessibilityRole="button" accessibilityLabel={`${r.name}, ${r.fit}`} style={styles.result} scaleTo={0.98}>
@@ -437,7 +448,7 @@ function Chat({ name, args, used, out, onDone }: { name: string; onDone: () => v
                       {r.name}
                     </Text>
                     <Text style={styles.resultWhy} numberOfLines={2}>
-                      {r.why[0]?.evidence ?? r.where}
+                      {m ? `“${snippet(m.quote, m.phrase, 5)}”` : (r.why[0]?.evidence ?? r.where)}
                     </Text>
                   </View>
                   <FitLabel fit={r.fit} />
@@ -447,18 +458,12 @@ function Chat({ name, args, used, out, onDone }: { name: string; onDone: () => v
           })
         : null}
 
-      {phase >= 4 ? (
+      {p >= 4 ? (
         <Appear style={styles.aiBubble}>
-          <Text style={styles.aiText}>{said}</Text>
+          <Text style={styles.aiText}>{instant ? turn.reply : said}</Text>
         </Appear>
       ) : null}
-
-      {phase >= 4 ? (
-        <Appear delay={400}>
-          <Big label="Done" onPress={onDone} />
-        </Appear>
-      ) : null}
-    </Appear>
+    </View>
   );
 }
 
@@ -517,6 +522,10 @@ const styles = StyleSheet.create({
   link: { alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 20, marginTop: 8 },
   linkText: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText },
   fine: { fontFamily: fonts.regular, fontSize: 12, color: colors.muted, textAlign: 'center', marginTop: 6, paddingHorizontal: 16 },
+  turn: { marginBottom: 18 },
+  skip: { minHeight: 36, justifyContent: 'center', paddingHorizontal: 12, borderRadius: 18, backgroundColor: colors.white, marginLeft: 8 },
+  skipText: { fontFamily: fonts.bold, fontSize: 13, color: colors.purpleText },
+  usedChats: { backgroundColor: '#EFE6EE' },
   chatHead: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 4, marginBottom: 14 },
   chatTitle: { fontFamily: fonts.bold, fontSize: 16, color: colors.black, flex: 1 },
   example: { fontFamily: fonts.medium, fontSize: 12, color: colors.muted },
