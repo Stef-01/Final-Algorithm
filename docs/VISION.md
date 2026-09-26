@@ -18,9 +18,9 @@ People rarely know which kinds of professional could help them. An ADHD coach fo
 - ✅ Every reason is quoted word for word from the professional's own profile or interview, and every fact (fees, rebates, suburbs) is checked against its source before it's shown.
 - ✅ Honest labels: "Possible fit" when nothing specific matches; "Worth checking" when a fact isn't published.
 - ✅ **Care-team ratings, collected.** Anonymous 1–5 and a note, now and then, in My care; `scripts/ratings.py` summarises them for the team.
-- **Next: patient-reported fit.** Show a per-professional signal only with enough ratings, never as stars, and only after checking AHPRA's advertising rules.
+- **Next: patient-reported fit.** Show a per-professional signal only with enough ratings, never as stars. AHPRA matters are handled by the team.
 - ✅ **Registration checked** (plumbing). A reviewer records a check of AHPRA's public register with `scripts/registration.py`; the profile then shows "Registration checked" and the date, linking to the register. None recorded yet.
-- **Next:** do the checks (a person, on the register).
+- The team does the checks by hand and records each one.
 
 ## 3. Price and availability, upfront
 

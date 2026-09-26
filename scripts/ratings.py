@@ -4,9 +4,8 @@
     python3 scripts/ratings.py            # needs KV_REST_API_URL / KV_REST_API_TOKEN (Vercel → Storage → Upstash)
     python3 scripts/ratings.py --min 5    # only professionals with at least 5 ratings
 
-Per professional: how many ratings, the average, the spread of stars, and the notes to read. Showing
-anything like this to patients waits on the AHPRA check (docs/privacy.md, VISION §2); notes may
-contain health details and should be read by a person, not published.
+Per professional: how many ratings, the average, the spread of stars, and the notes to read. Notes
+may contain health details and should be read by a person, not published.
 """
 import argparse
 import json

@@ -466,8 +466,7 @@ The direction is set out in [`docs/VISION.md`](VISION.md): concierge care, for e
 - **Needs:**
   - an email service key;
   - Google or Microsoft OAuth credentials for calendar sign-in;
-  - a person to do the registration checks;
-  - the AHPRA advertising check before any ratings are shown to patients.
+  - (AHPRA checks are done by hand by the team, recorded with `scripts/registration.py`.)
 
 ## 13. Testing strategy
 
