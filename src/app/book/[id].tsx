@@ -24,7 +24,7 @@ export default function BookingHandoff() {
       <Text style={sheetText.heading} accessibilityRole="header">Booking with {name}</Text>
       <Text style={sheetText.body}>
         {c?.bookingUrl
-          ? `This opens ${practice}'s booking page. Fees and times are set by the practice, and WATL receives no part of what you pay.`
+          ? `Opens ${practice}'s booking page. The practice sets fees and times; WATL receives no part of what you pay.`
           : `${practice} arranges appointments directly. Fees and times are set by the practice.`}
       </Text>
       {c?.bookingUrl ? (

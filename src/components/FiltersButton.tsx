@@ -32,7 +32,7 @@ export function FiltersButton() {
 }
 
 const styles = StyleSheet.create({
-  pill: { flexDirection: 'row', alignItems: 'center', gap: 8, alignSelf: 'flex-start', borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 14, minHeight: 44, backgroundColor: colors.white },
+  pill: { flexDirection: 'row', alignItems: 'center', gap: 8, alignSelf: 'flex-start', borderRadius: 30, paddingHorizontal: 14, minHeight: 44, backgroundColor: colors.white },
   text: { fontFamily: fonts.bold, fontSize: 14, color: colors.black },
   badge: { minWidth: 20, height: 20, borderRadius: 10, backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5 },
   badgeText: { fontFamily: fonts.bold, fontSize: 12, color: colors.white },

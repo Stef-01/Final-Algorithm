@@ -65,7 +65,7 @@ export default function Connect() {
         {step === 'pick' ? (
           <Appear key="pick" from="right" distance={40}>
             <Hero />
-            <Text style={styles.h1}>Your AI already knows you.</Text>
+            <Text style={styles.h1}>Your AI knows you.</Text>
             <Text style={styles.lead}>Let it find professionals who fit.</Text>
             <View style={styles.clients}>
               {(Object.keys(CLIENTS) as Client[]).map((c, i) => (
@@ -78,7 +78,7 @@ export default function Connect() {
                     }}
                     accessibilityRole="button"
                     accessibilityLabel={`Connect ${CLIENTS[c].name}`}
-                    lipColor={colors.line}
+                    lipColor={colors.chip}
                     style={styles.client}
                   >
                     <View style={[styles.clientMark, c === 'chatgpt' && styles.clientMarkAlt]}>
@@ -523,7 +523,7 @@ const styles = StyleSheet.create({
   heroLine: { width: 90, height: 3, borderRadius: 2, backgroundColor: colors.line, overflow: 'hidden' },
   heroPulse: { position: 'absolute', top: 0, width: 14, height: 3, borderRadius: 2, backgroundColor: colors.purple },
   clients: { flexDirection: 'row', gap: 12, marginTop: 24 },
-  client: { backgroundColor: colors.white, padding: 18, alignItems: 'center', minHeight: 150, justifyContent: 'center', borderWidth: 2, borderColor: colors.line },
+  client: { backgroundColor: colors.white, padding: 18, alignItems: 'center', minHeight: 150, justifyContent: 'center' },
   clientMark: { width: 52, height: 52, borderRadius: 16, backgroundColor: '#C96442', alignItems: 'center', justifyContent: 'center' },
   clientMarkAlt: { backgroundColor: colors.black },
   clientInitial: { fontFamily: fonts.bold, fontSize: 15, color: colors.white },
