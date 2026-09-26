@@ -1,9 +1,10 @@
-import { router } from 'expo-router';
+import { router, usePathname } from 'expo-router';
 import { ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors, fonts } from '@/lib/theme';
+import { assistantShownOn } from './AssistantButton';
 import { Icon } from './Icon';
 
 type Props = {
@@ -19,6 +20,7 @@ type Props = {
 
 export function ScreenHeader({ title, back, onBack: custom, backLabel = 'Back', right, children }: Props) {
   const insets = useSafeAreaInsets();
+  const path = usePathname();
   const onBack = () => {
     if (custom) return custom();
     if (typeof back === 'function') back();
@@ -37,7 +39,8 @@ export function ScreenHeader({ title, back, onBack: custom, backLabel = 'Back', 
         <Text style={[styles.title, !showBack && styles.titleNoBack]} numberOfLines={1} accessibilityRole="header">
           {title}
         </Text>
-        <View style={styles.right}>{right}</View>
+        {/* Room for the floating assistant in the top-right corner, where it shows. */}
+        <View style={[styles.right, assistantShownOn(path) && styles.roomForAssistant]}>{right}</View>
       </View>
       {children}
     </View>
@@ -59,4 +62,5 @@ const styles = StyleSheet.create({
   title: { flex: 1, fontFamily: fonts.bold, fontSize: 23, color: colors.black },
   titleNoBack: { marginLeft: 25 },
   right: { paddingRight: 17 },
+  roomForAssistant: { paddingRight: 60 },
 });

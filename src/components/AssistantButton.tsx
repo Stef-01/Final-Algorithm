@@ -1,6 +1,6 @@
 import { router, usePathname } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Animated, Platform, StyleSheet, View } from 'react-native';
+import { Animated, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useSession } from '@/features/match/session';
@@ -9,15 +9,14 @@ import { colors } from '@/lib/theme';
 import { Icon } from './Icon';
 import { PressScale, Pulse, useReducedMotion } from './motion';
 
-// The always-there assistant: a floating button on every main screen that opens the refine
-// conversation. Sits bottom-right, lifted clear of each screen's own bottom controls.
+// The always-there assistant: a small floating button, top-right on every main screen, that opens
+// the refine conversation.
 
 const SIZE = 56;
-const TAB_BAR = 58;
+/** Resting size: small enough to sit in the header's corner. */
+const SMALL = 36;
 /** Screens where it would cover something, or where a conversation makes no sense. */
-const HIDDEN = [/^\/refine/, /^\/matching/, /^\/safety/, /^\/book\//, /^\/dev\//, /^\/clinician\//, /^\/discover/, /^\/join/, /^\/filters/, /^\/rate/, /^\/connect/, /^\/where/];
-/** Screens with the round Next button bottom-right (ConversationStep). */
-const HAS_NEXT = ['/', '/describe', '/clarify', '/confirm'];
+const HIDDEN = [/^\/refine/, /^\/matching/, /^\/safety/, /^\/book\//, /^\/dev\//, /^\/clinician\//, /^\/discover/, /^\/join/, /^\/filters/, /^\/rate/, /^\/connect/];
 
 /** The assistant's round sparkle button on its own, for screens with a footer (the profile page). */
 export function AssistantMark() {
@@ -39,54 +38,63 @@ export function AssistantMark() {
   );
 }
 
-// Floating on every main screen except the profile page, where it sits in the footer instead
-// (floating there, it crowded the photo card's save button).
+/** Whether the floating assistant shows on this route (headers leave room for it when it does). */
+export const assistantShownOn = (path: string) => !HIDDEN.some((re) => re.test(path));
+
+// Floating top-right on every main screen: small, grows to full size under the pointer, and opens
+// the conversation on click (a tap on phones). On the profile page it sits in the footer instead.
 export function AssistantButton() {
   const path = usePathname();
   const insets = useSafeAreaInsets();
   const { state, loaded } = useSession();
   const reduced = useReducedMotion();
   const enter = useState(() => new Animated.Value(0))[0];
-  const hidden = !loaded || HIDDEN.some((re) => re.test(path));
+  const grow = useState(() => new Animated.Value(0))[0];
+  const hidden = !loaded || !assistantShownOn(path);
 
   useEffect(() => {
     if (hidden) return;
     enter.setValue(reduced ? 1 : 0);
-    if (!reduced) Animated.spring(enter, { toValue: 1, damping: 14, stiffness: 180, delay: 250, useNativeDriver: Platform.OS !== 'web' }).start();
+    if (!reduced) Animated.spring(enter, { toValue: 1, damping: 14, stiffness: 180, delay: 250, useNativeDriver: false }).start();
   }, [hidden, reduced, enter]);
 
   if (hidden) return null;
 
-  const bottom = insets.bottom + TAB_BAR + (HAS_NEXT.includes(path) ? 112 : 20);
-  // On a match, the cards' save hearts sit bottom-right, so the assistant sits beside the ✕ instead.
-  const side = path === '/matches' ? { left: 96 } : { right: 20 };
   const hasResults = state.result?.status === 'matches';
   // Draw the eye once results arrive and the patient hasn't used it yet.
-  const invite = hasResults && !(state.chat?.length) && path === '/matches';
+  const invite = hasResults && !state.chat?.length && path === '/matches';
+  const to = (v: number) => (reduced ? grow.setValue(v) : Animated.spring(grow, { toValue: v, damping: 13, stiffness: 260, useNativeDriver: false }).start());
+  const size = grow.interpolate({ inputRange: [0, 1], outputRange: [SMALL, SIZE] });
 
   return (
-    <View pointerEvents="box-none" style={[styles.wrap, side, { bottom: bottom + (path === '/matches' ? 2 : 0) }]}>
-      <Animated.View style={{ transform: [{ scale: enter }], opacity: enter, alignItems: 'center', justifyContent: 'center' }}>
-        <Pulse size={SIZE} active={invite} />
-        <PressScale
+    <View pointerEvents="box-none" style={[styles.wrap, { top: insets.top + (55 - SMALL) / 2, right: 12 }]}>
+      <Animated.View style={{ transform: [{ scale: enter }], opacity: enter, alignItems: 'flex-end' }}>
+        <View style={styles.pulse} pointerEvents="none">
+          <Pulse size={SMALL} active={invite} />
+        </View>
+        <Pressable
+          onHoverIn={() => to(1)}
+          onHoverOut={() => to(0)}
           onPress={() => {
             track('assistant_opened', { hasResults });
             router.push('/refine');
           }}
           accessibilityRole="button"
           accessibilityLabel={hasResults ? 'Refine your matches with the assistant' : 'Ask the assistant'}
-          style={styles.button}
-          scaleTo={0.9}
+          hitSlop={6}
         >
-          <Icon name="icSparkle" size={24} color={colors.white} />
-        </PressScale>
+          <Animated.View style={[styles.button, { width: size, height: size, borderRadius: SIZE }]}>
+            <Icon name="icSparkle" size={18} color={colors.white} />
+          </Animated.View>
+        </Pressable>
       </Animated.View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { position: 'absolute' },
+  wrap: { position: 'absolute', zIndex: 20 },
+  pulse: { position: 'absolute', top: 0, right: 0, width: SMALL, height: SMALL, alignItems: 'center', justifyContent: 'center' },
   flat: { shadowOpacity: 0, elevation: 0 },
   button: {
     width: SIZE,
