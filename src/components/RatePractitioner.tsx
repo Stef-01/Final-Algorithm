@@ -172,7 +172,7 @@ export function RatePractitioner({
 }
 
 const styles = StyleSheet.create({
-  scrim: { flex: 1, backgroundColor: "rgba(0,0,0,0.45)" },
+  scrim: { flex: 1, backgroundColor: colors.scrim },
   bottom: { flex: 1, justifyContent: "flex-end" },
   card: {
     backgroundColor: colors.white,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
   sub: {
     fontFamily: fonts.regular,
-    fontSize: 15,
+    fontSize: 16,
     color: colors.muted,
     marginTop: 4,
     textAlign: "center",
@@ -233,11 +233,11 @@ const styles = StyleSheet.create({
   input: {
     marginTop: 14,
     minHeight: 88,
-    borderRadius: 14,
+    borderRadius: 12,
     backgroundColor: colors.background,
     padding: 14,
     fontFamily: fonts.regular,
-    fontSize: 15,
+    fontSize: 16,
     color: colors.black,
     textAlignVertical: "top",
   },
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 4,
   },
-  laterText: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText },
+  laterText: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText },
   done: { alignItems: "center", paddingVertical: 20 },
   doneMark: {
     width: 64,

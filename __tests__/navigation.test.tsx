@@ -126,7 +126,7 @@ describe('demo run-throughs', () => {
     await answerUntilMatches();
     expect(await screen.findByText('Alice Bui')).toBeOnTheScreen();
     expect(screen.getByText(/^See all \d+ who fit$/)).toBeOnTheScreen();
-    expect(screen.getByText("I found 3 psychologists I'd start with.")).toBeOnTheScreen();
+    expect(screen.getByText(/^\d+ psychologists, best first\.$/)).toBeOnTheScreen();
     expect(screen.getByLabelText('Strong fit')).toBeOnTheScreen();
     expect(screen.getByText("You're looking for help with trauma.")).toBeOnTheScreen();
     expect(screen.getByText('Alice describes her therapy style as trauma-informed and collaborative.')).toBeOnTheScreen();
@@ -159,7 +159,7 @@ describe('demo run-throughs', () => {
   it('female GP: one match, without padding', async () => {
     await startDemo('A female GP for ADHD and women’s health');
     expect(await screen.findByText('Dr Anu Saxena')).toBeOnTheScreen();
-    expect(screen.getByText("I found 1 GP I'd recommend.")).toBeOnTheScreen();
+    expect(screen.getByText('1 GP fits.')).toBeOnTheScreen();
     expect(screen.getByText('$299, no rebate')).toBeOnTheScreen();
   });
 

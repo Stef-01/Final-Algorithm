@@ -72,11 +72,11 @@ const styles = StyleSheet.create({
   input: {
     minHeight: 100,
     fontFamily: fonts.regular,
-    fontSize: 20,
+    fontSize: 22,
     lineHeight: 28,
     color: colors.black,
     borderBottomWidth: 1,
-    borderBottomColor: '#B0B0B0',
+    borderBottomColor: colors.inputLine,
     paddingVertical: 8,
     textAlignVertical: 'top',
   },

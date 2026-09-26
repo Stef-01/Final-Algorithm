@@ -1,6 +1,8 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { AccessibilityInfo, Animated, Easing, Platform, Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
 
+import { colors } from '@/lib/theme';
+
 // Small motion kit on React Native's Animated (works on web and native, no extra bundle).
 // Springs rather than linear tweens, short distances, and everything is skipped when the
 // patient has asked their device to reduce motion.
@@ -54,7 +56,8 @@ export function Appear({
       v.setValue(1);
       return;
     }
-    const a = Animated.spring(v, { toValue: 1, delay: delay + Math.min(index, 6) * 70, damping: 18, stiffness: 160, mass: 0.9, useNativeDriver: native });
+    // A short stagger (three steps at most), never a queue.
+    const a = Animated.spring(v, { toValue: 1, delay: delay + Math.min(index, 3) * 60, damping: 18, stiffness: 160, mass: 0.9, useNativeDriver: native });
     a.start();
     return () => a.stop();
   }, [v, reduced, index, delay]);
@@ -211,7 +214,7 @@ export function PressDepth({
  * A one-off celebration: a ring and a spray of dots out from the centre, then gone. Put it behind
  * whatever just succeeded (a check, a heart). Changing `fire` replays it.
  */
-export function Burst({ fire, size = 96, color = '#6B2D5C', count = 10 }: { fire: number; size?: number; color?: string; count?: number }) {
+export function Burst({ fire, size = 96, color = colors.purple, count = 10 }: { fire: number; size?: number; color?: string; count?: number }) {
   const reduced = useReducedMotion();
   const v = useState(() => new Animated.Value(0))[0];
   useEffect(() => {

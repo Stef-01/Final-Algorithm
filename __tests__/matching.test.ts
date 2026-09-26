@@ -244,7 +244,8 @@ describe('results headline', () => {
     // Nothing worth saying: no headline, no filler.
     expect(matchesHeadline(2, 'gp', 0)).toBeNull();
     expect(matchesSubline(2, 0)).toBeNull();
-    expect(matchesHeadline(3, 'psychologist', 2)).toBe("I found 3 psychologists I'd start with.");
+    expect(matchesHeadline(12, 'psychologist', 2)).toBe('12 psychologists, best first.');
+    expect(matchesHeadline(1, 'gp', 1)).toBe('1 GP fits.');
     expect(matchesSubline(3, 1)).toBeNull();
     expect(matchesSubline(3, 3)).toBe('Each fits for slightly different reasons.');
   });

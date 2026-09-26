@@ -106,5 +106,5 @@ const styles = StyleSheet.create({
   tab: { flex: 1, height: 58, alignItems: 'center', justifyContent: 'center' },
   indicator: { position: 'absolute', top: 0, left: 0, width: INDICATOR, height: 3, borderBottomLeftRadius: 3, borderBottomRightRadius: 3, backgroundColor: colors.white },
   badge: { position: 'absolute', top: -6, right: -10, minWidth: 18, height: 18, borderRadius: 9, paddingHorizontal: 4, backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.tabBar },
-  badgeText: { fontFamily: fonts.bold, fontSize: 10, color: colors.white },
+  badgeText: { fontFamily: fonts.bold, fontSize: 11, color: colors.white },
 });

@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     marginTop: 12,
     padding: 14,
-    borderRadius: 10,
+    borderRadius: 16,
     backgroundColor: colors.white,
   },
   pressed: { backgroundColor: colors.background },
@@ -53,6 +53,6 @@ const styles = StyleSheet.create({
   text: { flex: 1, gap: 3 },
   titleRow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   name: { flexShrink: 1, fontFamily: fonts.bold, fontSize: 16, color: colors.black },
-  place: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted },
+  place: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted },
   summary: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 19, color: colors.black },
 });

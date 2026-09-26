@@ -82,7 +82,7 @@ export default function Connect() {
                     style={styles.client}
                   >
                     <View style={[styles.clientMark, c === 'chatgpt' && styles.clientMarkAlt]}>
-                      {c === 'claude' ? <Icon name="icSparkle" size={24} color={colors.white} /> : <Text style={styles.clientInitial}>GPT</Text>}
+                      <Text style={styles.clientInitial}>{c === 'claude' ? 'C' : 'GPT'}</Text>
                     </View>
                     <Text style={styles.clientName}>{CLIENTS[c].name}</Text>
                     <Text style={styles.clientSub}>Connect</Text>
@@ -204,7 +204,7 @@ function Hero() {
   return (
     <View style={styles.hero} accessible={false}>
       <View style={[styles.heroMark, styles.heroAi]}>
-        <Icon name="icSparkle" size={26} color={colors.white} />
+        <Icon name="icText" size={26} color={colors.white} />
       </View>
       <View style={styles.heroLine}>
         <Animated.View style={[styles.heroPulse, { left: v.interpolate({ inputRange: [0, 1], outputRange: ['0%', '85%'] }) }]} />
@@ -351,7 +351,7 @@ function Chat({ name, turns, onDone }: { name: string; turns: Turn[]; onDone: ()
     <Appear key="chat" from="right" distance={40}>
       <View style={styles.chatHead}>
         <View style={[styles.okDot, styles.aiDot]}>
-          <Icon name="icSparkle" size={12} color={colors.white} />
+          <Icon name="icText" size={12} color={colors.white} />
         </View>
         <Text style={styles.chatTitle}>{name}</Text>
         <Text style={styles.example}>Example chat</Text>
@@ -524,30 +524,30 @@ const styles = StyleSheet.create({
   heroPulse: { position: 'absolute', top: 0, width: 14, height: 3, borderRadius: 2, backgroundColor: colors.purple },
   clients: { flexDirection: 'row', gap: 12, marginTop: 24 },
   client: { backgroundColor: colors.white, padding: 18, alignItems: 'center', minHeight: 150, justifyContent: 'center' },
-  clientMark: { width: 52, height: 52, borderRadius: 16, backgroundColor: '#C96442', alignItems: 'center', justifyContent: 'center' },
+  clientMark: { width: 52, height: 52, borderRadius: 16, backgroundColor: colors.claude, alignItems: 'center', justifyContent: 'center' },
   clientMarkAlt: { backgroundColor: colors.black },
-  clientInitial: { fontFamily: fonts.bold, fontSize: 15, color: colors.white },
-  clientName: { fontFamily: fonts.bold, fontSize: 17, color: colors.black, marginTop: 12 },
-  clientSub: { fontFamily: fonts.medium, fontSize: 13, color: colors.purpleText, marginTop: 2 },
+  clientInitial: { fontFamily: fonts.bold, fontSize: 16, color: colors.white },
+  clientName: { fontFamily: fonts.bold, fontSize: 18, color: colors.black, marginTop: 12 },
+  clientSub: { fontFamily: fonts.medium, fontSize: 14, color: colors.purpleText, marginTop: 2 },
   how: { flexDirection: 'row', gap: 14, marginTop: 20 },
   rail: { alignItems: 'center', width: 32 },
   num: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center' },
-  numText: { fontFamily: fonts.bold, fontSize: 15, color: colors.white },
+  numText: { fontFamily: fonts.bold, fontSize: 16, color: colors.white },
   railLine: { flex: 1, width: 2, backgroundColor: colors.line, marginTop: 6 },
   howBody: { paddingBottom: 4 },
-  howTitle: { fontFamily: fonts.bold, fontSize: 17, color: colors.black, marginTop: 5, marginBottom: 10 },
+  howTitle: { fontFamily: fonts.bold, fontSize: 18, color: colors.black, marginTop: 5, marginBottom: 10 },
   path: { fontFamily: fonts.medium, fontSize: 14, color: colors.muted, marginBottom: 10 },
-  url: { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: colors.white, borderRadius: 14, paddingLeft: 14, paddingRight: 6, minHeight: 52 },
-  urlText: { flex: 1, fontFamily: MONO, fontSize: 13, color: colors.black },
+  url: { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: colors.white, borderRadius: 16, paddingLeft: 14, paddingRight: 6, minHeight: 52 },
+  urlText: { flex: 1, fontFamily: MONO, fontSize: 14, color: colors.black },
   copy: { minWidth: 76, height: 40, borderRadius: 20, backgroundColor: colors.black, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 14 },
   copyText: { fontFamily: fonts.bold, fontSize: 14, color: colors.white },
   share: { flexDirection: 'row', alignItems: 'center', gap: 12, minHeight: 56, paddingVertical: 8 },
-  shareLabel: { fontFamily: fonts.bold, fontSize: 15, color: colors.black },
-  shareSub: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted, marginTop: 2 },
+  shareLabel: { fontFamily: fonts.bold, fontSize: 16, color: colors.black },
+  shareSub: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, marginTop: 2 },
   quote: { fontFamily: fonts.serifSemiBold, fontSize: 18, lineHeight: 25, color: colors.black },
   bigWrap: { marginTop: 28 },
   big: { height: 56, backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center' },
-  bigText: { fontFamily: fonts.bold, fontSize: 17, color: colors.white },
+  bigText: { fontFamily: fonts.bold, fontSize: 18, color: colors.white },
   connecting: { alignItems: 'center', paddingTop: 80 },
   connectBox: { width: 140, height: 140, alignItems: 'center', justifyContent: 'center' },
   dots: { flexDirection: 'row', gap: 10 },
@@ -556,42 +556,42 @@ const styles = StyleSheet.create({
   connected: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 8 },
   okDot: { width: 24, height: 24, borderRadius: 12, backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center' },
   aiDot: { backgroundColor: colors.black },
-  connectedText: { fontFamily: fonts.serifSemiBold, fontSize: 24, color: colors.black },
+  connectedText: { fontFamily: fonts.serifSemiBold, fontSize: 22, color: colors.black },
   kicker: { fontFamily: fonts.bold, fontSize: 12, letterSpacing: 1, textTransform: 'uppercase', color: colors.muted, marginTop: 24, marginBottom: 8 },
-  card: { backgroundColor: colors.white, borderRadius: 14, paddingHorizontal: 14 },
-  toolName: { fontFamily: MONO, fontSize: 13, color: colors.black },
+  card: { backgroundColor: colors.white, borderRadius: 16, paddingHorizontal: 14 },
+  toolName: { fontFamily: MONO, fontSize: 14, color: colors.black },
   link: { alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 20, marginTop: 8 },
-  linkText: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText },
+  linkText: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText },
   fine: { fontFamily: fonts.regular, fontSize: 12, color: colors.muted, textAlign: 'center', marginTop: 6, paddingHorizontal: 16 },
   turn: { marginBottom: 18 },
   skip: { minHeight: 36, justifyContent: 'center', paddingHorizontal: 12, borderRadius: 18, backgroundColor: colors.white, marginLeft: 8 },
-  skipText: { fontFamily: fonts.bold, fontSize: 13, color: colors.purpleText },
+  skipText: { fontFamily: fonts.bold, fontSize: 14, color: colors.purpleText },
   chatHead: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 4, marginBottom: 14 },
   chatTitle: { fontFamily: fonts.bold, fontSize: 16, color: colors.black, flex: 1 },
   example: { fontFamily: fonts.medium, fontSize: 12, color: colors.muted },
   userBubble: { alignSelf: 'flex-end', maxWidth: '86%', backgroundColor: colors.black, borderRadius: 20, borderBottomRightRadius: 6, padding: 14, minHeight: 48 },
-  userText: { fontFamily: fonts.regular, fontSize: 15, lineHeight: 21, color: colors.white },
+  userText: { fontFamily: fonts.regular, fontSize: 16, lineHeight: 21, color: colors.white },
   toolCard: { alignSelf: 'flex-start', maxWidth: '100%', backgroundColor: colors.white, borderRadius: 14, paddingHorizontal: 12, paddingVertical: 8, marginTop: 12, borderWidth: 1, borderColor: colors.line },
   flip: { transform: [{ rotate: '180deg' }] },
   usedRow: { marginTop: 10 },
   chatsHead: { marginTop: 12 },
-  chatRow: { flexDirection: 'row', gap: 8, marginTop: 8, backgroundColor: '#F6F0F5', borderRadius: 10, padding: 10 },
+  chatRow: { flexDirection: 'row', gap: 8, marginTop: 8, backgroundColor: colors.purpleTint, borderRadius: 12, padding: 10 },
   chatTop: { flexDirection: 'row', alignItems: 'baseline', gap: 8 },
-  chatTitle2: { flex: 1, fontFamily: fonts.bold, fontSize: 13, color: colors.black },
+  chatTitle2: { flex: 1, fontFamily: fonts.bold, fontSize: 14, color: colors.black },
   chatDate: { fontFamily: fonts.medium, fontSize: 11, color: colors.muted },
-  chatUsed: { fontFamily: fonts.regular, fontSize: 13, color: colors.black, marginTop: 2 },
+  chatUsed: { fontFamily: fonts.regular, fontSize: 14, color: colors.black, marginTop: 2 },
   toolRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   toolW: { width: 22, height: 22, borderRadius: 6, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' },
-  toolWText: { fontFamily: fonts.serifSemiBold, fontSize: 13, color: colors.black },
-  toolTitle: { fontFamily: fonts.bold, fontSize: 13, color: colors.black },
+  toolWText: { fontFamily: fonts.serifSemiBold, fontSize: 14, color: colors.black },
+  toolTitle: { fontFamily: fonts.bold, fontSize: 14, color: colors.black },
   running: { fontFamily: fonts.medium, fontSize: 12, color: colors.muted },
-  usedFrom: { fontFamily: fonts.medium, fontSize: 10, color: colors.muted, textTransform: 'uppercase', letterSpacing: 0.5 },
-  usedLabel: { fontFamily: fonts.bold, fontSize: 13, color: colors.black },
+  usedFrom: { fontFamily: fonts.medium, fontSize: 11, color: colors.muted, textTransform: 'uppercase', letterSpacing: 0.5 },
+  usedLabel: { fontFamily: fonts.bold, fontSize: 14, color: colors.black },
   args: { fontFamily: MONO, fontSize: 11, lineHeight: 16, color: colors.muted, marginTop: 10 },
   result: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.white, borderRadius: 16, padding: 12, marginTop: 10 },
   resultPhoto: { width: 48, height: 48, borderRadius: 24 },
-  resultName: { fontFamily: fonts.bold, fontSize: 15, color: colors.black },
-  resultWhy: { fontFamily: fonts.regular, fontSize: 13, lineHeight: 18, color: colors.muted, marginTop: 2 },
+  resultName: { fontFamily: fonts.bold, fontSize: 16, color: colors.black },
+  resultWhy: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 18, color: colors.muted, marginTop: 2 },
   aiBubble: { alignSelf: 'flex-start', maxWidth: '92%', marginTop: 14, backgroundColor: colors.white, borderRadius: 20, borderBottomLeftRadius: 6, padding: 14 },
-  aiText: { fontFamily: fonts.regular, fontSize: 15, lineHeight: 21, color: colors.black },
+  aiText: { fontFamily: fonts.regular, fontSize: 16, lineHeight: 21, color: colors.black },
 });

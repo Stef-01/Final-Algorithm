@@ -277,7 +277,7 @@ export function refineGreeting(state: SessionState): string {
   const { many } = copyFor(state.profession);
   if (r?.status === 'matches') {
     const n = r.matches.length + r.more.length;
-    return `I've found ${n} ${n === 1 ? copyFor(state.profession).one : many} who fit. Tell me what to change and I'll re-rank them — or pick one of these.`;
+    return `I've found ${n} ${n === 1 ? copyFor(state.profession).one : many} who fit. Tell me what to change and I'll re-rank them, or pick one of these.`;
   }
   if (r?.status === 'none') return "Nobody fits everything yet. Tell me what you could be flexible on and I'll look again.";
   return "Tell me what you're looking for, in your own words, and I'll find people who fit.";
@@ -298,7 +298,7 @@ export function refine(state: SessionState, message: string, extracted?: Extract
     // A medical question isn't a description of who they're looking for: answer it honestly, keep waiting.
     if (advice && !isUrgent(words)) return { state: say(state, you, { from: 'agent', text: ADVICE_REPLY }), route: '/refine' };
     const t = submitText({ ...state, input: { ...state.input, demoId: undefined } }, words, extracted);
-    const reply: ChatTurn = { from: 'agent', text: 'Thanks — let me find people who fit that.' };
+    const reply: ChatTurn = { from: 'agent', text: 'Thanks. Let me find people who fit that.' };
     return { state: say(t.state, ...(state.chat ?? []), you, reply), route: t.route };
   }
 
@@ -361,7 +361,7 @@ export function refine(state: SessionState, message: string, extracted?: Extract
   const noun = n === 1 ? one : many;
   const reply: ChatTurn = {
     from: 'agent',
-    text: `${advice ? "I can't give medical advice — a clinician can help with that part. " : ''}Done — now ${what}. ${n} ${noun} fit, and ${first} is first.`,
+    text: `${advice ? "I can't give medical advice; a clinician can help with that part. " : ''}Done: now ${what}. ${n} ${noun} fit, and ${first} is first.`,
     action: 'see_matches',
     facts: advice ? undefined : { said: text, changes, switched: switched ? `${copyFor(switchTo).many} instead` : undefined, count: n, noun, first },
   };

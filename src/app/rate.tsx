@@ -119,7 +119,7 @@ export default function Rate() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   content: { padding: 16, paddingTop: 28 },
-  title: { fontFamily: fonts.serifSemiBold, fontSize: 28, lineHeight: 34, color: colors.black, marginBottom: 20 },
+  title: { fontFamily: fonts.serifSemiBold, fontSize: 30, lineHeight: 38, color: colors.black, marginBottom: 20 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   chip: {
     flexDirection: 'row',
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   chipOn: { backgroundColor: colors.purple },
-  chipText: { fontFamily: fonts.medium, fontSize: 15, color: colors.black },
+  chipText: { fontFamily: fonts.medium, fontSize: 16, color: colors.black },
   chipTextOn: { color: colors.white },
   input: {
     marginTop: 16,
@@ -149,5 +149,5 @@ const styles = StyleSheet.create({
   sendOff: { opacity: 0.4 },
   sendText: { fontFamily: fonts.bold, fontSize: 16, color: colors.white },
   skip: { alignSelf: 'center', minHeight: 44, justifyContent: 'center', paddingHorizontal: 20, marginTop: 8 },
-  skipText: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText },
+  skipText: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText },
 });

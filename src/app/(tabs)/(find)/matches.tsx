@@ -108,7 +108,7 @@ export default function Matches() {
   const also = state.index >= matches.length;
   const explained = matches.filter((x) => x.reasons.length > 0).length;
   const subline = matchesSubline(matches.length, explained);
-  const headline = matchesHeadline(matches.length, state.profession, explained);
+  const headline = matchesHeadline(deckList.length, state.profession, explained);
 
   if (!m) {
     return (
@@ -241,12 +241,12 @@ const styles = StyleSheet.create({
   filters: { marginHorizontal: 12, marginTop: 14 },
   content: { paddingBottom: 110 },
   intro: { marginHorizontal: 12, marginTop: 20, paddingHorizontal: 15 },
-  introTitle: { fontFamily: fonts.serifSemiBold, fontSize: 24, lineHeight: 30, color: colors.black },
-  introBody: { fontFamily: fonts.regular, fontSize: 15, color: colors.black, marginTop: 6 },
-  seeAll: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, marginTop: 2, paddingVertical: 14 },
+  introTitle: { fontFamily: fonts.serifSemiBold, fontSize: 22, lineHeight: 30, color: colors.black },
+  introBody: { fontFamily: fonts.regular, fontSize: 16, color: colors.black, marginTop: 6 },
+  seeAll: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, marginTop: 2, paddingVertical: 14 },
   position: { marginTop: 16, marginHorizontal: 27 },
   count: { fontFamily: fonts.medium, fontSize: 14, color: colors.muted },
-  also: { fontFamily: fonts.bold, fontSize: 13, color: colors.purpleText, marginTop: 6 },
+  also: { fontFamily: fonts.bold, fontSize: 14, color: colors.purpleText, marginTop: 6 },
   corner: { position: 'absolute', bottom: 20 },
   no: { left: 20 },
   yes: { right: 20 },

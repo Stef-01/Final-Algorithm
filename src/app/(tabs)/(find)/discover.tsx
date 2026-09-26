@@ -90,7 +90,7 @@ export default function Discover() {
           style={[styles.primary, !card.available && styles.primaryOff]}
           containerStyle={styles.grow}
           radius={28}
-          lipColor={card.available ? colors.purpleLip : '#3A3A3A'}
+          lipColor={card.available ? colors.purpleLip : colors.blackLip}
         >
           <Text style={styles.primaryText} numberOfLines={1}>
             {card.available ? `Find ${article(card.one)} ${card.one}` : 'Next'}
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   stage: { flex: 1, justifyContent: 'center', paddingHorizontal: 20 },
   card: { backgroundColor: colors.white, borderRadius: 24, paddingVertical: 36, paddingHorizontal: 24, alignItems: 'center' },
   iconWrap: { width: 96, height: 96, borderRadius: 48, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' },
-  name: { fontFamily: fonts.serifSemiBold, fontSize: 28, lineHeight: 34, color: colors.black, textAlign: 'center', marginTop: 18 },
+  name: { fontFamily: fonts.serifSemiBold, fontSize: 30, lineHeight: 38, color: colors.black, textAlign: 'center', marginTop: 18 },
   soon: { fontFamily: fonts.bold, fontSize: 12, color: colors.muted, marginTop: 6 },
   facts: { alignSelf: 'stretch', marginTop: 24, gap: 14 },
   fact: { flexDirection: 'row', alignItems: 'center', gap: 12 },
@@ -120,5 +120,5 @@ const styles = StyleSheet.create({
   done: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 },
   doneTitle: { fontFamily: fonts.serifSemiBold, fontSize: 26, color: colors.black },
   secondary: { borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 22, paddingVertical: 14 },
-  secondaryText: { fontFamily: fonts.bold, fontSize: 15, color: colors.black },
+  secondaryText: { fontFamily: fonts.bold, fontSize: 16, color: colors.black },
 });

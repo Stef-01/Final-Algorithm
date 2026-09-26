@@ -91,8 +91,8 @@ function toQuestion(q: BankQuestion, input: SessionInput): Question {
     q.target.kind === 'constraint'
       ? 'One practical thing to check.'
       : first
-        ? 'That helps — one thing would narrow this down.'
-        : 'Thanks — one more thing would help.';
+        ? 'That helps. One thing would narrow this down.'
+        : 'Thanks. One more thing would help.';
   // "{clinician}" follows the profession chosen in the funnel.
   const who = input.profession ? `your ${copyFor(input.profession).one}` : 'whoever you see';
   return { id: q.id, ack, text: q.text.replace('{clinician}', who), options: q.options.map((o) => o.label) };

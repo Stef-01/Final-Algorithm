@@ -93,12 +93,8 @@ export default function ClinicianDetail() {
           chips={practicalChips(c)}
           rowsTitle="Experienced with"
           tags={c.experiencedWith.slice(0, 4)}
-        />
-        {/* Only what the chips above don't already say. */}
-        <ChipsCard
-          chips={[]}
-          rowsTitle="Details"
-          rows={[
+          // The logistics the chips don't already say, in the same card.
+          details={[
             ...(c.practice ? [{ icon: 'icHometown' as const, label: c.practice }] : []),
             { icon: 'icCalendar', label: p.nextAvailable },
             ...(p.billingNote ? [{ icon: 'icCost' as const, label: p.billingNote }] : []),
@@ -165,5 +161,5 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.background,
   },
-  nextText: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, textAlign: 'center', paddingVertical: 14 },
+  nextText: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, textAlign: 'center', paddingVertical: 14 },
 });

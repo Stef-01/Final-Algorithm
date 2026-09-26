@@ -113,11 +113,11 @@ const styles = StyleSheet.create({
   labels: { gap: 2, flexShrink: 1 }, // wraps at large text sizes
   label: { fontFamily: fonts.bold, fontSize: 18, color: colors.black },
   orType: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted },
-  transcript: { fontFamily: fonts.regular, fontSize: 20, lineHeight: 28, color: colors.black, marginBottom: 16, minHeight: 28 },
+  transcript: { fontFamily: fonts.regular, fontSize: 22, lineHeight: 28, color: colors.black, marginBottom: 16, minHeight: 28 },
   actions: { flexDirection: 'row', alignItems: 'center', gap: 20 },
   done: { backgroundColor: colors.black, borderRadius: 30, paddingVertical: 12, paddingHorizontal: 28 },
-  doneText: { fontFamily: fonts.bold, fontSize: 15, color: colors.white },
-  cancel: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, paddingVertical: 12, paddingHorizontal: 8 },
-  error: { fontFamily: fonts.regular, fontSize: 14, color: '#C62828', marginTop: 10 },
+  doneText: { fontFamily: fonts.bold, fontSize: 16, color: colors.white },
+  cancel: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, paddingVertical: 12, paddingHorizontal: 8 },
+  error: { fontFamily: fonts.regular, fontSize: 14, color: colors.error, marginTop: 10 },
   notice: { fontFamily: fonts.regular, fontSize: 12, lineHeight: 17, color: colors.muted, marginTop: 10 },
 });

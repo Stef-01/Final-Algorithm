@@ -108,7 +108,7 @@ export default function AllMatches() {
 
 const styles = StyleSheet.create({
   compare: { minHeight: 40, justifyContent: 'center', paddingHorizontal: 6 },
-  compareText: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText },
+  compareText: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText },
   tick: { position: 'absolute', top: 14, right: 26, width: 24, height: 24, borderRadius: 12, borderWidth: 2, borderColor: colors.line, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center' },
   tickOn: { backgroundColor: colors.purple, borderColor: colors.purple },
   bar: { position: 'absolute', left: 16, right: 16, bottom: 24 },
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   note: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 20, color: colors.black, margin: 20, marginBottom: 4 },
   section: {
     fontFamily: fonts.bold,
-    fontSize: 13,
+    fontSize: 14,
     color: colors.muted,
     textTransform: 'uppercase',
     letterSpacing: 0.5,

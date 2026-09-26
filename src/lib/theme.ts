@@ -14,6 +14,17 @@ export const colors = {
   tabInactive: '#7A7A7A', // ≥3:1 on the tab bar (WCAG non-text contrast)
   rose: '#C6B5C7',
   background: '#F1F1F1',
+  /** The darker edge a black button sits on (PressDepth). */
+  blackLip: '#3A3A3A',
+  /** Behind sheets and pop-ups. */
+  scrim: 'rgba(0,0,0,0.45)',
+  /** The underline of a text box. */
+  inputLine: '#B0B0B0',
+  /** A soft purple wash (the assistant's memory in the example chat). */
+  purpleTint: '#F6F0F5',
+  error: '#C62828',
+  /** The Claude card on Connect your AI. */
+  claude: '#C96442',
 };
 
 export const fonts = {

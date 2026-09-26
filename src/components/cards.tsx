@@ -140,6 +140,7 @@ export function ChipsCard({
   rowsTitle,
   kicker,
   tags = [],
+  details = [],
 }: {
   chips: ChipItem[];
   rows?: ChipItem[];
@@ -147,6 +148,8 @@ export function ChipsCard({
   kicker?: string;
   /** Short items shown as light pills under the title (e.g. what they're experienced with). */
   tags?: string[];
+  /** Logistics rows at the end of the same card (practice, sessions, billing), after a divider. */
+  details?: ChipItem[];
 }) {
   return (
     <View style={styles.card}>
@@ -178,6 +181,14 @@ export function ChipsCard({
       {rows.map((r) => (
         <View key={`${r.icon}-${r.label}`} style={styles.row}>
           {/* Fixed size: long text wraps beside it instead of squashing the icon. */}
+          <View style={styles.rowIcon}>
+            <Icon name={r.icon} size={18} color={colors.black} />
+          </View>
+          <Text style={[styles.chipText, styles.rowText]}>{r.label}</Text>
+        </View>
+      ))}
+      {details.map((r) => (
+        <View key={`${r.icon}-${r.label}`} style={styles.row}>
           <View style={styles.rowIcon}>
             <Icon name={r.icon} size={18} color={colors.black} />
           </View>
@@ -216,13 +227,13 @@ const styles = StyleSheet.create({
   card: {
     marginHorizontal: 12,
     marginTop: 20,
-    borderRadius: 10,
+    borderRadius: 16,
     backgroundColor: colors.white,
     overflow: 'hidden',
   },
   cardPadded: { paddingBottom: 60, paddingTop: 30 },
   cardTight: { paddingBottom: 18, paddingTop: 18 },
-  cardTitle: { fontFamily: fonts.medium, fontSize: 15, color: colors.black, margin: 15 },
+  cardTitle: { fontFamily: fonts.medium, fontSize: 16, color: colors.black, margin: 15 },
   cardTitlePadded: { marginTop: 0 },
   photo: { width: '100%', height: 370 },
   answer: {
@@ -237,7 +248,7 @@ const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', rowGap: 12, columnGap: 22, paddingHorizontal: 24, paddingVertical: 18 },
   chip: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   chipDivider: { borderLeftWidth: 1, borderLeftColor: colors.chip },
-  chipText: { fontFamily: fonts.medium, fontSize: 15, color: colors.black },
+  chipText: { fontFamily: fonts.medium, fontSize: 16, color: colors.black },
   rowsTitle: {
     fontFamily: fonts.bold,
     fontSize: 11,
@@ -253,7 +264,7 @@ const styles = StyleSheet.create({
   rowsTitleFirst: { borderTopWidth: 0, paddingTop: 18 },
   textCard: { paddingTop: 18, paddingBottom: 10 },
   more: { alignSelf: 'flex-start', minWidth: 44, minHeight: 44, justifyContent: 'center', marginHorizontal: 15, marginTop: 4 },
-  moreText: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText },
+  moreText: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText },
   kicker: {
     fontFamily: fonts.bold,
     fontSize: 11,
@@ -272,8 +283,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 16,
   },
-  noteTitle: { fontFamily: fonts.bold, fontSize: 13, letterSpacing: 0.3, color: colors.black, marginBottom: 6 },
-  noteBody: { fontFamily: fonts.regular, fontSize: 15, lineHeight: 22, color: colors.black },
+  noteTitle: { fontFamily: fonts.bold, fontSize: 14, letterSpacing: 0.3, color: colors.black, marginBottom: 6 },
+  noteBody: { fontFamily: fonts.regular, fontSize: 16, lineHeight: 22, color: colors.black },
   qual: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -285,8 +296,8 @@ const styles = StyleSheet.create({
   },
   qualFirst: { borderTopWidth: 0, paddingTop: 12 },
   qualText: { flex: 1, gap: 2 },
-  qualTitle: { fontFamily: fonts.medium, fontSize: 15, lineHeight: 20, color: colors.black },
-  qualDetail: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted },
+  qualTitle: { fontFamily: fonts.medium, fontSize: 16, lineHeight: 20, color: colors.black },
+  qualDetail: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted },
   badge: { borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 8, paddingVertical: 2, marginTop: 1 },
   badgeText: { fontFamily: fonts.bold, fontSize: 11, color: colors.black },
   tags: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginHorizontal: 15 },

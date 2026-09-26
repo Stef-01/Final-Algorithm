@@ -61,13 +61,13 @@ const styles = StyleSheet.create({
   question: { fontFamily: fonts.medium, fontSize: 14, color: colors.black },
   choices: { flexDirection: 'row', gap: 10 },
   chip: { backgroundColor: colors.chip, borderRadius: 150, paddingVertical: 12, paddingHorizontal: 20, minHeight: 44 },
-  chipText: { fontFamily: fonts.medium, fontSize: 15, color: colors.black },
+  chipText: { fontFamily: fonts.medium, fontSize: 16, color: colors.black },
   thanks: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, paddingVertical: 12 },
   done: { alignItems: 'center', gap: 14, paddingVertical: 6 },
   doneMark: { width: 56, height: 56, alignItems: 'center', justifyContent: 'center' },
   doneCheck: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.purple, alignItems: 'center', justifyContent: 'center' },
-  card: { marginHorizontal: 12, marginTop: 20, borderRadius: 10, backgroundColor: colors.white, padding: 20 },
-  cardTitle: { fontFamily: fonts.serifSemiBold, fontSize: 20, lineHeight: 26, color: colors.black, textAlign: 'center' },
+  card: { marginHorizontal: 12, marginTop: 20, borderRadius: 16, backgroundColor: colors.white, padding: 20 },
+  cardTitle: { fontFamily: fonts.serifSemiBold, fontSize: 22, lineHeight: 26, color: colors.black, textAlign: 'center' },
   scale: { flexDirection: 'row', flexWrap: 'wrap', rowGap: 10, justifyContent: 'space-between', marginTop: 18 }, // wraps at large text sizes
   point: {
     width: 48,
@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  pointNumber: { fontFamily: fonts.bold, fontSize: 17, color: colors.black },
+  pointNumber: { fontFamily: fonts.bold, fontSize: 18, color: colors.black },
   ends: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
   endLabel: { fontFamily: fonts.regular, fontSize: 12, color: colors.muted },
-  thanksLarge: { fontFamily: fonts.serifSemiBold, fontSize: 20, color: colors.black, textAlign: 'center' },
+  thanksLarge: { fontFamily: fonts.serifSemiBold, fontSize: 22, color: colors.black, textAlign: 'center' },
 });

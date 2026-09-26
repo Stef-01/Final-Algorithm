@@ -57,7 +57,7 @@ export const withoutAdvice = (text: string) =>
     .trim();
 
 export const ADVICE_REPLY =
-  "I can't give medical advice, but a clinician can talk that through with you properly. I can help you find one who fits — tell me what matters to you, or pick a suggestion below.";
+  "I can't give medical advice, but a clinician can talk that through with you properly. I can help you find one who fits. Tell me what matters to you, or pick a suggestion below.";
 
 /** Asking for someone nearer, with or without saying where. */
 export const CLOSER = /\b(closer|nearer|near me|close by|nearby|not so far|less travel)\b/;

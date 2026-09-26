@@ -41,8 +41,8 @@ export function AppError({ error, retry }: ErrorBoundaryProps) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.white, justifyContent: 'center', padding: 32 },
-  title: { fontSize: 28, fontWeight: '600', color: colors.black, marginBottom: 12 },
-  body: { fontSize: 17, lineHeight: 24, color: colors.black, marginBottom: 28 },
+  title: { fontSize: 30, fontWeight: '600', color: colors.black, marginBottom: 12 },
+  body: { fontSize: 18, lineHeight: 24, color: colors.black, marginBottom: 28 },
   primary: { backgroundColor: colors.purple, borderRadius: 30, paddingVertical: 18, alignItems: 'center' },
   primaryText: { fontSize: 16, fontWeight: '700', color: colors.white },
   secondary: { paddingVertical: 16, alignItems: 'center', marginTop: 4 },

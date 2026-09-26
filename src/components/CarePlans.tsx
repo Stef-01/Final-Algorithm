@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   row: { flexDirection: "row", justifyContent: "space-between", marginTop: 10 },
   name: { fontFamily: fonts.medium, fontSize: 14, color: colors.black },
   value: { fontFamily: fonts.bold, fontSize: 14, color: colors.black },
-  muted: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted },
+  muted: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted },
   emptyRow: { minHeight: 44, justifyContent: "center" },
   person: {
     flexDirection: "row",
@@ -191,11 +191,11 @@ const styles = StyleSheet.create({
   when: { alignItems: "flex-end", minWidth: 52 },
   whenLabel: {
     fontFamily: fonts.medium,
-    fontSize: 10,
+    fontSize: 11,
     letterSpacing: 0.5,
     textTransform: "uppercase",
     color: colors.muted,
   },
-  whenValue: { fontFamily: fonts.bold, fontSize: 13, color: colors.black },
+  whenValue: { fontFamily: fonts.bold, fontSize: 14, color: colors.black },
   next: { color: colors.purpleText },
 });

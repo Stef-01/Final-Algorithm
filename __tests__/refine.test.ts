@@ -17,7 +17,7 @@ describe('refine assistant', () => {
     const t = core.refine(start(), 'Online only');
     expect(t.route).toBe('/refine');
     expect(last(t.state)).toMatchObject({ from: 'agent', action: 'see_matches' });
-    expect(last(t.state).text).toMatch(/^Done — now online sessions only\. \d+ psychologists fit, and \w+ is first\.$/);
+    expect(last(t.state).text).toMatch(/^Done: now online sessions only\. \d+ psychologists fit, and \w+ is first\.$/);
     for (const m of all(t.state)) expect(byId.get(m.clinicianId)!.practical.modes).toContain('telehealth');
     expect(t.state.index).toBe(0);
   });
@@ -100,7 +100,7 @@ describe('refine assistant: where', () => {
     const k = signalsFor(t.state.input).constraints;
     expect(k.originLabel).toBe('Southport');
     expect(k.maxKm).toBe(15);
-    expect(last(t.state).text).toMatch(/^Done — now within 15 km of Southport\./);
+    expect(last(t.state).text).toMatch(/^Done: now within 15 km of Southport\./);
   });
 
   it('"closer" halves the distance when a place is known', () => {

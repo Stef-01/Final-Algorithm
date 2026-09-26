@@ -28,7 +28,7 @@ describe('review states (/dev/states)', () => {
   });
 
   it('assistant states show a change and a declined medical question', () => {
-    expect(byId('assistant-refined').state.chat!.at(-1)!.text).toMatch(/^Done — now online sessions only/);
+    expect(byId('assistant-refined').state.chat!.at(-1)!.text).toMatch(/^Done: now online sessions only/);
     expect(byId('assistant-advice').state.chat!.at(-1)!.text).toBe(ADVICE_REPLY);
     expect(byId('safety').route).toBe('/safety');
   });

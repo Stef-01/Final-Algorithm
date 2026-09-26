@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     marginTop: 20,
     minHeight: 360,
-    borderRadius: 10,
+    borderRadius: 16,
     backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   button: { backgroundColor: colors.purple, borderRadius: 30, paddingVertical: 16, paddingHorizontal: 36 },
-  buttonText: { fontFamily: fonts.bold, fontSize: 15, color: colors.white },
-  secondary: { fontFamily: fonts.bold, fontSize: 15, color: colors.purpleText, marginTop: 8, paddingVertical: 12 },
+  buttonText: { fontFamily: fonts.bold, fontSize: 16, color: colors.white },
+  secondary: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, marginTop: 8, paddingVertical: 12 },
 });

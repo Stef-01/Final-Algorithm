@@ -85,5 +85,5 @@ const styles = StyleSheet.create({
   name: { fontFamily: fonts.bold, fontSize: 14, lineHeight: 18, color: colors.black, textAlign: 'center' },
   block: { backgroundColor: colors.white, borderRadius: 16, padding: 12, marginTop: 10 },
   label: { fontFamily: fonts.bold, fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', color: colors.muted, marginBottom: 8 },
-  value: { fontFamily: fonts.regular, fontSize: 13, lineHeight: 18, color: colors.black },
+  value: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 18, color: colors.black },
 });

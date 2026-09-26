@@ -28,7 +28,6 @@ export default function WhoAreYouLookingFor() {
         lipColor={colors.purpleLip}
         style={styles.find}
       >
-        <Icon name="icSparkle" size={20} color={colors.white} />
         <Text style={styles.findText}>Find someone</Text>
       </PressDepth>
       <PickUp />
@@ -75,12 +74,12 @@ const styles = StyleSheet.create({
   tile: { backgroundColor: colors.background, borderRadius: 16, padding: 14, minHeight: 128, justifyContent: 'space-between' },
   tileOff: { backgroundColor: colors.white, borderWidth: 1, borderColor: colors.chip, borderStyle: 'dashed' },
   tileTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  name: { fontFamily: fonts.bold, fontSize: 15, lineHeight: 19, color: colors.black, marginTop: 10 },
+  name: { fontFamily: fonts.bold, fontSize: 16, lineHeight: 19, color: colors.black, marginTop: 10 },
   off: { color: colors.muted },
-  for: { fontFamily: fonts.regular, fontSize: 13, color: colors.muted, marginTop: 2 },
+  for: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, marginTop: 2 },
   soon: { fontFamily: fonts.bold, fontSize: 11, color: colors.muted, borderWidth: 1, borderColor: colors.line, borderRadius: 20, paddingHorizontal: 7, paddingVertical: 1 },
   find: { height: 60, backgroundColor: colors.purple, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'center' },
   findText: { fontFamily: fonts.bold, fontSize: 18, color: colors.white },
-  section: { fontFamily: fonts.serifSemiBold, fontSize: 24, lineHeight: 30, color: colors.black, marginTop: 36, marginBottom: 12 },
+  section: { fontFamily: fonts.serifSemiBold, fontSize: 22, lineHeight: 30, color: colors.black, marginTop: 36, marginBottom: 12 },
   demo: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, marginTop: 8, paddingVertical: 12 },
 });

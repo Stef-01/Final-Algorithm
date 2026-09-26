@@ -32,7 +32,7 @@ describe('floating assistant', () => {
     expect((await screen.findAllByText(/who fit\. Tell me what to change/))[0]).toBeOnTheScreen();
 
     fireEvent.press(screen.getByText('Online only'));
-    expect((await screen.findAllByText(/^Done — now online sessions only\./, {}, { timeout: 3000 }))[0]).toBeOnTheScreen();
+    expect((await screen.findAllByText(/^Done: now online sessions only\./, {}, { timeout: 3000 }))[0]).toBeOnTheScreen();
 
     fireEvent.changeText(screen.getByLabelText('Message the assistant'), 'hmm not sure');
     fireEvent.press(screen.getByLabelText('Send'));
@@ -60,7 +60,7 @@ describe('assistant accessibility', () => {
     fireEvent.press(await screen.findByText('Online only'));
     await waitFor(() => {
       const live = screen.UNSAFE_root.findAll((n) => n.props.accessibilityLiveRegion === 'polite' && typeof n.props.children === 'string');
-      expect(live.some((n) => /^Done — now online sessions only/.test(n.props.children))).toBe(true);
+      expect(live.some((n) => /^Done: now online sessions only/.test(n.props.children))).toBe(true);
     }, { timeout: 3000 });
   });
 });

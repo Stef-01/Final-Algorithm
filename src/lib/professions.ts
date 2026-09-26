@@ -67,12 +67,14 @@ export function copyFor(p?: ProfessionChoice) {
  * The results headline. `explained` = how many of the featured matches have an evidence-backed
  * reason. With none, nothing the patient said picks one out yet, so it doesn't claim to recommend.
  */
-/** The headline over the matches, or null when no reason picks anyone out (nothing worth saying). */
-export function matchesHeadline(count: number, p?: ProfessionChoice, explained = count): string | null {
+/**
+ * The headline over the matches: how many you can swipe through, best first. Null when no reason
+ * picks anyone out (nothing worth saying).
+ */
+export function matchesHeadline(total: number, p?: ProfessionChoice, explained = total): string | null {
   const { one, many } = copyFor(p);
   if (explained === 0) return null;
-  if (count === 3) return `I found 3 ${many} I'd start with.`;
-  return count === 1 ? `I found 1 ${one} I'd recommend.` : `I found ${count} ${many} I'd recommend.`;
+  return total === 1 ? `1 ${one} fits.` : `${total} ${many}, best first.`;
 }
 
 /** The line under the headline, or null. Never says "different reasons" when there aren't any. */

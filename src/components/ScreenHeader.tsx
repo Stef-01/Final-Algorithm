@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   row: { height: 55, flexDirection: 'row', alignItems: 'center' },
   back: { paddingHorizontal: 17, minHeight: 44, justifyContent: 'center' },
-  title: { flex: 1, fontFamily: fonts.bold, fontSize: 23, color: colors.black },
+  title: { flex: 1, fontFamily: fonts.bold, fontSize: 22, color: colors.black },
   titleNoBack: { marginLeft: 25 },
   right: { paddingRight: 17 },
   roomForAssistant: { paddingRight: 60 },

@@ -209,7 +209,7 @@ function Typing() {
 
 const styles = StyleSheet.create({
   srOnly: { position: 'absolute', width: 1, height: 1, overflow: 'hidden', opacity: 0 },
-  scrim: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'flex-end' },
+  scrim: { flex: 1, backgroundColor: colors.scrim, justifyContent: 'flex-end' },
   card: { flexShrink: 1, maxHeight: '88%', backgroundColor: colors.white, borderTopLeftRadius: 18, borderTopRightRadius: 18 },
   header: {
     flexDirection: 'row',
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.background,
   },
   badge: { width: 28, height: 28, borderRadius: 14, backgroundColor: colors.black, alignItems: 'center', justifyContent: 'center' },
-  title: { flex: 1, fontFamily: fonts.serifSemiBold, fontSize: 20, color: colors.black },
+  title: { flex: 1, fontFamily: fonts.serifSemiBold, fontSize: 22, color: colors.black },
   close: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: -12 },
   thread: { flexGrow: 0, minHeight: 180 },
   threadContent: { padding: 16, gap: 10 },
@@ -255,6 +255,6 @@ const styles = StyleSheet.create({
   micOn: { backgroundColor: colors.black },
   send: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.black, alignItems: 'center', justifyContent: 'center' },
   sendOff: { opacity: 0.35 },
-  error: { fontFamily: fonts.regular, fontSize: 13, color: colors.black, textAlign: 'center', marginTop: 8, paddingHorizontal: 24 },
+  error: { fontFamily: fonts.regular, fontSize: 14, color: colors.black, textAlign: 'center', marginTop: 8, paddingHorizontal: 24 },
   fine: { fontFamily: fonts.regular, fontSize: 12, color: colors.muted, textAlign: 'center', marginTop: 10, paddingHorizontal: 24 },
 });

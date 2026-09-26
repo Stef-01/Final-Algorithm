@@ -43,7 +43,7 @@ export function PillButton({
       accessibilityRole="button"
       radius={30}
       depth={variant === 'text' ? 0 : 4}
-      lipColor={variant === 'black' ? '#3A3A3A' : variant === 'text' ? 'transparent' : colors.purpleLip}
+      lipColor={variant === 'black' ? colors.blackLip : variant === 'text' ? 'transparent' : colors.purpleLip}
       containerStyle={styles.pillWrap}
       style={[styles.pill, variant === 'black' && styles.pillBlack, variant === 'text' && styles.pillText]}
     >
@@ -55,7 +55,7 @@ export function PillButton({
 export const sheetText = StyleSheet.create({
   heading: {
     fontFamily: fonts.serifSemiBold,
-    fontSize: 32,
+    fontSize: 30,
     lineHeight: 40,
     color: colors.black,
     textAlign: 'center',
@@ -63,7 +63,7 @@ export const sheetText = StyleSheet.create({
   },
   body: {
     fontFamily: fonts.regular,
-    fontSize: 17,
+    fontSize: 18,
     lineHeight: 24,
     color: colors.black,
     textAlign: 'center',
@@ -72,7 +72,7 @@ export const sheetText = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
-  scrim: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'flex-end' },
+  scrim: { flex: 1, backgroundColor: colors.scrim, justifyContent: 'flex-end' },
   card: {
     flexShrink: 1,
     backgroundColor: colors.white,

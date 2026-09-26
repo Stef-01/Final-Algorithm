@@ -36,7 +36,7 @@ export function ListGroup({ children }: { children: React.ReactNode }) {
 const styles = StyleSheet.create({
   section: {
     fontFamily: fonts.bold,
-    fontSize: 13,
+    fontSize: 14,
     color: colors.muted,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -52,6 +52,6 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.background,
   },
   pressed: { backgroundColor: colors.background },
-  label: { fontFamily: fonts.medium, fontSize: 17, color: colors.black },
-  value: { fontFamily: fonts.regular, fontSize: 15, color: colors.muted, marginTop: 4 },
+  label: { fontFamily: fonts.medium, fontSize: 18, color: colors.black },
+  value: { fontFamily: fonts.regular, fontSize: 16, color: colors.muted, marginTop: 4 },
 });
