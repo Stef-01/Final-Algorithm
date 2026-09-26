@@ -94,7 +94,6 @@ export function VoiceInput({ onTranscript, onStart, compact }: Props) {
         </Pressable>
         <View style={styles.labels}>
           <Text style={styles.label}>Tap to speak</Text>
-          <Text style={styles.orType}>or type below</Text>
         </View>
       </View>
       {speech.error ? <Text style={styles.error}>{speech.error}</Text> : null}
@@ -104,8 +103,7 @@ export function VoiceInput({ onTranscript, onStart, compact }: Props) {
 }
 
 // PRD §45: say plainly that voice is transcribed, and by whom (docs/PLAN.md §7, decision D7).
-const NOTICE =
-  "Voice is turned into text by your browser's speech service. You can edit the text before sending, and WATL keeps only what you send.";
+const NOTICE = "Your browser's speech service turns voice into text. WATL keeps only what you send.";
 
 const styles = StyleSheet.create({
   block: { marginBottom: 20 },

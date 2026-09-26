@@ -71,7 +71,7 @@ export default function Describe() {
         accessibilityLabel="What you're looking for"
       />
       <Text style={styles.hint} accessibilityLiveRegion="polite">
-        {reading ? 'Reading what you wrote…' : 'Takes about a minute'}
+        {reading ? 'Reading what you wrote…' : ' '}
       </Text>
       {claude ? (
         <Text style={styles.notice}>Read by Claude (Anthropic). Not stored by WATL.</Text>

@@ -35,7 +35,7 @@ export const placeName = (c: Clinician) => (c.suburb === c.city ? c.city : `${c.
 export const placeLine = (c: Clinician) => `${c.role} · ${placeName(c)}`;
 
 const CAVEAT_TEXT: Record<Caveat, string> = {
-  fee_unpublished: "The out-of-pocket cost isn't published, so it can't be checked against your budget. Ask the practice.",
+  fee_unpublished: "Out-of-pocket cost isn't published. Ask the practice.",
   weekend_hours_unpublished: "Weekend hours aren't published. Ask the practice.",
 };
 
@@ -77,14 +77,13 @@ export function ClinicianCards({ clinician: c, match, onOpen, onSave, saved }: P
       ))}
       <Appear index={step()}>
         <ChipsCard
-          kicker="The practicals"
           chips={practicalChips(c)}
-          rowsTitle="Particularly experienced with"
+          rowsTitle="Experienced with"
           rows={c.experiencedWith.slice(0, 4).map((area) => ({ icon: 'icCheck', label: area }))}
         />
       </Appear>
       <Appear index={step()}>
-        <TagsCard kicker="How they practise" title={`How ${c.firstName} works`} tags={c.practiceStyle.slice(0, 5)} {...like} />
+        <TagsCard title="How they practise" tags={c.practiceStyle.slice(0, 5)} {...like} />
       </Appear>
     </>
   );

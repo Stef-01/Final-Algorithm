@@ -139,8 +139,8 @@ export default function MyCare() {
             ) : null}
             <Text style={styles.fine}>
               {busy
-                ? 'Your calendar, and each practice’s wait where they publish one. Confirm the time when you book.'
-                : 'Each practice’s wait, where they publish one. Confirm the time when you book.'}
+                ? 'From your calendar and each practice’s wait. Confirm when booking.'
+                : 'From each practice’s wait. Confirm when booking.'}
             </Text>
           </>
         ) : null}
@@ -275,18 +275,12 @@ function StepRow({ step, busy }: { step: Step; busy: Busy[] | null }) {
     <View style={styles.step}>
       <View style={styles.when}>
         <Text style={styles.whenLabel}>{step.label}</Text>
-        <Text style={styles.whenDate}>{DAY.format(step.on)}</Text>
       </View>
       <PressScale onPress={() => router.push(`/book/${m.clinicianId}`)} accessibilityRole="button" style={styles.stepMain} scaleTo={0.98}>
         <Text style={styles.stepTitle} numberOfLines={1}>
           Book {m.firstName}
         </Text>
-        <Text style={[styles.cardRole, styles.left]}>{capitalised(info.one)}</Text>
-        {slot ? (
-          <Text style={styles.slot}>
-            {busy ? 'Both free' : 'Try'} {slotLabel(slot)}
-          </Text>
-        ) : null}
+        <Text style={styles.slot}>{slot ? `${busy ? 'Both free · ' : ''}${slotLabel(slot)}` : DAY.format(step.on)}</Text>
       </PressScale>
       <PressScale onPress={() => add('google')} accessibilityRole="button" accessibilityLabel={`Add a reminder to book ${m.firstName} to Google Calendar`} style={styles.cal} scaleTo={0.9}>
         <Icon name={added ? 'icCheck' : 'icCalendar'} size={18} color={colors.black} />
@@ -322,7 +316,7 @@ const styles = StyleSheet.create({
   steps: { marginHorizontal: 12, backgroundColor: colors.white, borderRadius: 16, overflow: 'hidden' },
   // Wraps at large text sizes: the calendar buttons drop to a second line.
   step: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 12, borderTopWidth: 1, borderTopColor: colors.background },
-  when: { width: 78 },
+  when: { width: 66 },
   whenLabel: { fontFamily: fonts.bold, fontSize: 12, color: colors.black },
   whenDate: { fontFamily: fonts.regular, fontSize: 12, color: colors.muted, marginTop: 2 },
   stepMain: { flex: 1, minWidth: 110, minHeight: 44, justifyContent: 'center' },

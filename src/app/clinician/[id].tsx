@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ChipsCard, NoteCard, PhotoCard, PromptCard, QualificationsCard, TagsCard, TextCard } from '@/components/cards';
-import { caveatLines, costLabel, placeLine, placeName, practicalChips, reasonKicker } from '@/components/ClinicianCards';
+import { caveatLines, placeLine, practicalChips, reasonKicker } from '@/components/ClinicianCards';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { FitLabel } from '@/components/FitLabel';
 import { ScreenIn } from '@/components/motion';
@@ -73,25 +73,23 @@ export default function ClinicianDetail() {
           </>
         ) : null}
 
-        <TagsCard kicker="How they practise" title={`How ${c.firstName} works`} tags={c.practiceStyle.slice(0, 5)} />
+        <TagsCard title="How they practise" tags={c.practiceStyle.slice(0, 5)} />
         <ChipsCard
-          kicker="The practicals"
           chips={practicalChips(c)}
-          rowsTitle="Particularly experienced with"
+          rowsTitle="Experienced with"
           rows={c.experiencedWith.slice(0, 4).map((area) => ({ icon: 'icCheck', label: area }))}
         />
+        {/* Only what the chips above don't already say. */}
         <ChipsCard
           chips={[]}
-          rowsTitle="Practical details"
+          rowsTitle="Details"
           rows={[
             ...(c.practice ? [{ icon: 'icHometown' as const, label: c.practice }] : []),
             { icon: 'icCalendar', label: p.nextAvailable },
-            { icon: 'icVideo', label: p.modes.join(' · ') },
-            { icon: 'icCost', label: p.billingNote ?? costLabel(c) },
-            { icon: 'icLocation', label: placeName(c) },
+            ...(p.billingNote ? [{ icon: 'icCost' as const, label: p.billingNote }] : []),
           ]}
         />
-        <TextCard kicker="In their words" title={`About ${c.firstName}`} body={c.bio} lines={4} />
+        <TextCard title={`About ${c.firstName}`} body={c.bio} lines={4} />
         <QualificationsCard items={c.qualifications} />
       </ScrollView>
       </ScreenIn>

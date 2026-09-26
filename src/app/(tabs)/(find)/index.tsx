@@ -30,7 +30,6 @@ export default function WhoAreYouLookingFor() {
         <Icon name="icSparkle" size={20} color={colors.white} />
         <Text style={styles.findText}>Find someone</Text>
       </PressDepth>
-      <Text style={styles.findSub}>Say what you need. We’ll search every kind of professional.</Text>
 
       <Text style={styles.section} accessibilityRole="header">
         Who could help?
@@ -80,7 +79,6 @@ const styles = StyleSheet.create({
   soon: { fontFamily: fonts.bold, fontSize: 11, color: colors.muted, borderWidth: 1, borderColor: colors.line, borderRadius: 20, paddingHorizontal: 7, paddingVertical: 1 },
   find: { height: 60, backgroundColor: colors.purple, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'center' },
   findText: { fontFamily: fonts.bold, fontSize: 18, color: colors.white },
-  findSub: { fontFamily: fonts.regular, fontSize: 14, color: colors.muted, textAlign: 'center', marginTop: 10 },
   section: { fontFamily: fonts.serifSemiBold, fontSize: 24, lineHeight: 30, color: colors.black, marginTop: 36, marginBottom: 12 },
   demo: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, marginTop: 8, paddingVertical: 12 },
 });

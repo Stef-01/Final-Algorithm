@@ -60,19 +60,19 @@ export default function Settings() {
 
         <SectionTitle>For professionals</SectionTitle>
         <ListGroup>
-          <ListRow label="Join WATL" value="Publish your fees and availability" onPress={() => router.push('/join')} />
+          <ListRow label="Join WATL" value="Publish fees and availability" onPress={() => router.push('/join')} />
         </ListGroup>
 
         <SectionTitle>Demo</SectionTitle>
         <ListGroup>
-          <ListRow label="Try a demo patient" value="Scripted searches to try" onPress={() => router.push('/demos')} />
+          <ListRow label="Try a demo patient" onPress={() => router.push('/demos')} />
         </ListGroup>
 
         <SectionTitle>About</SectionTitle>
         <ListGroup>
           <ListRow
             label="How matching works"
-            value="Best fits first, each with its reason."
+            value="Best fits first, with reasons"
           />
           <ListRow
             label="Reading what you write"
@@ -80,17 +80,17 @@ export default function Settings() {
               claude === null
                 ? 'Checking…'
                 : claude
-                  ? 'Claude reads your words. Fixed rules do the ranking.'
-                  : 'On this device. Nothing you write leaves it.'
+                  ? 'Claude reads it; fixed rules rank'
+                  : 'Stays on this device'
             }
           />
           <ListRow
             label="Where profiles come from"
-            value="The ADHDme network. Reasons quote their own profiles."
+            value="The ADHDme network"
           />
           <ListRow
             label="Privacy"
-            value={`No account. Your search stays on this device for 24 hours.${claude ? ' Claude (Anthropic) reads your words; WATL doesn’t store them.' : ''}`}
+            value={`No account · searches kept 24 hours${claude ? ' · Claude doesn’t store them' : ''}`}
           />
           <ListRow label="Help and safety" onPress={() => router.push('/safety')} />
         </ListGroup>

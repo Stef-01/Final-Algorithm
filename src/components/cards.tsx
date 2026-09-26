@@ -88,7 +88,7 @@ export function NoteCard({ title, body }: { title: string; body: string }) {
 export function TagsCard({ title, tags, kicker, ...like }: { title: string; tags: string[]; kicker?: string } & LikeProps) {
   if (tags.length === 0) return null;
   return (
-    <Card title={title} kicker={kicker} {...like} padded>
+    <Card title={title} kicker={kicker} {...like} padded tight={!like.onLike}>
       <View style={styles.tags}>
         {tags.map((t) => (
           <View key={t} style={styles.tag}>
@@ -181,10 +181,11 @@ function Card({
   likeLabel = 'Like',
   liked,
   padded,
+  tight,
   kicker,
-}: { title: string; children: ReactNode; padded?: boolean; kicker?: string } & LikeProps) {
+}: { title: string; children: ReactNode; padded?: boolean; /** No like button, so no room kept for it. */ tight?: boolean; kicker?: string } & LikeProps) {
   return (
-    <View style={[styles.card, padded && styles.cardPadded]}>
+    <View style={[styles.card, padded && styles.cardPadded, tight && styles.cardTight]}>
       {kicker ? <Kicker label={kicker} /> : null}
       <Text style={[styles.cardTitle, padded && styles.cardTitlePadded]}>{title}</Text>
       {children}
@@ -206,6 +207,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   cardPadded: { paddingBottom: 60, paddingTop: 30 },
+  cardTight: { paddingBottom: 18, paddingTop: 18 },
   cardTitle: { fontFamily: fonts.medium, fontSize: 15, color: colors.black, margin: 15 },
   cardTitlePadded: { marginTop: 0 },
   photo: { width: '100%', height: 370 },
@@ -274,8 +276,8 @@ const styles = StyleSheet.create({
   badge: { borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 8, paddingVertical: 2, marginTop: 1 },
   badgeText: { fontFamily: fonts.bold, fontSize: 11, color: colors.black },
   tags: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginHorizontal: 15 },
-  tag: { maxWidth: '100%', borderWidth: 1, borderColor: colors.black, borderRadius: 30, paddingHorizontal: 14, paddingVertical: 8 },
-  tagText: { fontFamily: fonts.medium, fontSize: 15, color: colors.black },
+  tag: { maxWidth: '100%', backgroundColor: colors.background, borderRadius: 30, paddingHorizontal: 12, paddingVertical: 7 },
+  tagText: { fontFamily: fonts.medium, fontSize: 14, color: colors.black },
   body: { fontFamily: fonts.regular, fontSize: 16, lineHeight: 24, color: colors.black, marginHorizontal: 15 },
   rowIcon: { width: 18, height: 18, flexShrink: 0, marginTop: 1 },
   rowText: { flex: 1, lineHeight: 20 },

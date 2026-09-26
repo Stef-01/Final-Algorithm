@@ -175,7 +175,7 @@ describe('demo run-throughs', () => {
     await startDemo('A bulk-billed psychologist');
     await answerUntilMatches();
     await waitFor(() => expect(screen).toHavePathname('/matches'));
-    expect(screen.getAllByText(/out-of-pocket cost isn't published/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/out-of-pocket cost isn't published/i).length).toBeGreaterThan(0);
   });
 
   it('shows everyone who fits, ranked, on the "See all" list', async () => {
