@@ -91,24 +91,16 @@ describe('Filters screen', () => {
   });
 });
 
-describe('swiping a match (through the screen-reader actions, which drive the same fly-off)', () => {
+describe('matches list', () => {
   beforeEach(async () => {
     await AsyncStorage.clear();
     await AsyncStorage.setItem('watl_session', JSON.stringify({ ...core.demoResults('psych-trauma-online'), updatedAt: Date.now() }));
   });
 
-  it('right is yes (like, then booking); left is no (thumbs down, next)', async () => {
+  it('shows every match in one scrolling list, no swiping', async () => {
     renderRouter(routes, { initialUrl: '/matches' });
-    const deck = () => screen.UNSAFE_root.findAll((n) => Array.isArray(n.props.accessibilityActions) && n.props.accessibilityActions.some((a: { name: string }) => a.name === 'save'))[0];
-    await screen.findAllByText('Alice Bui');
-    fireEvent(deck(), 'accessibilityAction', { nativeEvent: { actionName: 'pass' } });
-    expect(await screen.findByLabelText('Previous match')).toBeOnTheScreen();
-    await waitFor(async () => expect(JSON.parse((await AsyncStorage.getItem('watl_session'))!).feedback.thumbs['alice-bui']).toBe('down'));
-    fireEvent(deck(), 'accessibilityAction', { nativeEvent: { actionName: 'save' } });
-    await waitFor(() => expect(screen).toHavePathname('/book/paula-garrido'));
-    const s = JSON.parse((await AsyncStorage.getItem('watl_session'))!);
-    expect(s.index).toBe(2);
-    expect(Object.values(s.feedback.thumbs)).toEqual(['down', 'up']);
-    expect(JSON.parse((await AsyncStorage.getItem('watl_saved'))!)).toHaveLength(1);
+    expect((await screen.findAllByText('Alice Bui')).length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Paula Garrido').length).toBeGreaterThan(0);
+    expect(screen.queryByLabelText('Not for me')).toBeNull();
   });
 });

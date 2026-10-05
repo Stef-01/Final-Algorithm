@@ -127,15 +127,14 @@ describe('demo run-throughs', () => {
     expect(await screen.findByText('Alice Bui')).toBeOnTheScreen();
     expect(screen.getByText(/^See all \d+ who fit$/)).toBeOnTheScreen();
     expect(screen.getByText(/^\d+ psychologists, best first\.$/)).toBeOnTheScreen();
-    expect(screen.getByLabelText('Strong fit')).toBeOnTheScreen();
-    expect(screen.getByText("You're looking for help with trauma.")).toBeOnTheScreen();
-    expect(screen.getByText('Alice describes her therapy style as trauma-informed and collaborative.')).toBeOnTheScreen();
-    expect(screen.getByText('Fee on request')).toBeOnTheScreen();
-    expect(screen.getByText('Telehealth')).toBeOnTheScreen();
+    expect(screen.getAllByLabelText('Strong fit')[0]).toBeOnTheScreen();
+    expect(screen.getAllByText("You're looking for help with trauma.")[0]).toBeOnTheScreen();
+    expect(screen.getAllByText('Alice describes her therapy style as trauma-informed and collaborative.')[0]).toBeOnTheScreen();
+    expect(screen.getAllByText('Fee on request')[0]).toBeOnTheScreen();
+    expect(screen.getAllByText('Telehealth')[0]).toBeOnTheScreen();
     expect(screen.queryByText(/%/)).toBeNull();
 
-    fireEvent.press(screen.getByLabelText('Not for me'));
-    expect(await screen.findByText('Paula Garrido')).toBeOnTheScreen();
+    expect(screen.getByText('Paula Garrido')).toBeOnTheScreen();
     expect(screen.getByText('$104 after rebate')).toBeOnTheScreen();
   });
 
@@ -143,7 +142,6 @@ describe('demo run-throughs', () => {
     await startDemo('Trauma, online sessions only');
     await answerUntilMatches();
     await screen.findByText('Alice Bui');
-    fireEvent.press(screen.getByLabelText('Not for me'));
     fireEvent.press(await screen.findByText('View Paula'));
     await waitFor(() => expect(screen).toHavePathname('/clinician/paula-garrido'));
     expect(screen.getAllByText(/^Why they fit/)[0]).toBeOnTheScreen();
@@ -257,6 +255,5 @@ describe('review page', () => {
     }
     fireEvent.press(screen.getByText('Match 2'));
     await waitFor(() => expect(screen).toHavePathname('/matches'));
-    expect(screen.getByLabelText(/^Match 2 of \d+$/)).toBeOnTheScreen();
   });
 });

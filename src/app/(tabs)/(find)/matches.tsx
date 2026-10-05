@@ -1,17 +1,12 @@
-import { useRef, useState } from 'react';
 import { router } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { ClinicianCards } from '@/components/ClinicianCards';
 import { AlsoCouldHelp } from '@/components/AlsoCouldHelp';
 import { FiltersButton } from '@/components/FiltersButton';
-import { ProgressDots } from '@/components/ProgressDots';
-import { Appear, Burst, PressScale } from '@/components/motion';
-import { Swipeable, type SwipeableHandle } from '@/components/Swipeable';
 import { EmptyStateCard } from '@/components/EmptyStateCard';
 import { RatingCard } from '@/components/Feedback';
 import { FitLabel } from '@/components/FitLabel';
-import { Icon } from '@/components/Icon';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { PillButton } from '@/components/Sheet';
 import { whyKind } from '@server/feedback';
@@ -54,11 +49,9 @@ function blocker(action: NoMatchAction | undefined, many: string) {
 }
 
 
-// Screen 05 — top matches, one clinician at a time in the Discover layout.
+// Screen 05 — top matches as one vertical list, best first.
 export default function Matches() {
   const session = useSession();
-  const deck = useRef<SwipeableHandle>(null);
-  const [yes, setYes] = useState(0);
   const { isSaved, toggle } = useSaved();
   const { state } = session;
 
@@ -104,123 +97,65 @@ export default function Matches() {
   const { matches, more } = result;
   // The whole list, best first: the top matches, then everyone else who fits.
   const deckList = deckOf(state);
-  const m = deckList[state.index];
-  const also = state.index >= matches.length;
   const explained = matches.filter((x) => x.reasons.length > 0).length;
   const subline = matchesSubline(matches.length, explained);
   const headline = matchesHeadline(deckList.length, state.profession, explained);
 
-  if (!m) {
+  if (deckList.length === 0) {
     return (
       <Shell title="Your matches">
-        <EmptyStateCard
-          title="That's everyone who fits."
-          body="Anyone you liked is in My care."
-          action={deckList.length > 1 ? { label: `See all ${deckList.length}`, onPress: () => router.push('/all') } : undefined}
-          secondary={{ label: 'Start over', onPress: startOver }}
-        />
+        <EmptyStateCard title="That's everyone who fits." body="Anyone you liked is in My care." secondary={{ label: 'Start over', onPress: startOver }} />
         <AlsoCouldHelp />
-        <RatingCard value={state.feedback.rating} onRate={(n) => (whyKind(n) ? router.push(`/rate?n=${n}`) : session.rateMatches(n))} />
       </Shell>
     );
   }
 
-  const clinician = getClinician(m.clinicianId)!;
-  const open = () => router.push(`/clinician/${clinician.id}`);
-
+  // Everyone who fits, best first, in one list: scroll down for the next profile.
   return (
     <View style={styles.root}>
-      <ScreenHeader
-        title={clinician.name}
-        right={<FitLabel fit={m.fit} />}
-        // Always a way back: the previous match, or from the first one, back to the search to redo it.
-        onBack={state.index > 0 ? session.prevMatch : () => router.navigate('/describe')}
-        backLabel={state.index > 0 ? 'Previous match' : 'Back to your search'}
-      />
-      <Swipeable
-        key={state.index}
-        ref={deck}
-        // Left is no; right is yes: like them, and go straight to booking.
-        onLeft={() => {
-          session.thumb(m.clinicianId, 'down');
-          session.nextMatch();
-        }}
-        onRight={() => {
-          if (!isSaved(m.clinicianId)) toggle(m);
-          session.thumb(m.clinicianId, 'up');
-          session.nextMatch();
-          router.push(`/book/${m.clinicianId}`);
-        }}
-      >
-        {/* The next match slides in from where the last one went. */}
-        <Appear from="right" distance={state.index > 0 ? 60 : 0} style={styles.fill}>
-          <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-            {state.index === 0 ? (
-              <View style={styles.intro}>
-                {headline ? <Text style={styles.introTitle}>{headline}</Text> : null}
-                {subline ? <Text style={styles.introBody}>{subline}</Text> : null}
-                {more.length > 0 ? (
-                  <Text style={styles.seeAll} onPress={() => router.push('/all')} accessibilityRole="link">
-                    See all {matches.length + more.length} who fit
-                  </Text>
-                ) : null}
-              </View>
-            ) : (
+      <ScreenHeader title="Your matches" onBack={() => router.navigate('/describe')} backLabel="Back to your search" />
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <View style={styles.intro}>
+          {headline ? <Text style={styles.introTitle}>{headline}</Text> : null}
+          {subline ? <Text style={styles.introBody}>{subline}</Text> : null}
+          {more.length > 0 ? (
+            <Text style={styles.seeAll} onPress={() => router.push('/all')} accessibilityRole="link">
+              See all {matches.length + more.length} who fit
+            </Text>
+          ) : null}
+        </View>
+        <View style={styles.filters}>
+          <FiltersButton />
+        </View>
+        <AlsoCouldHelp />
+        {deckList.map((m, n) => {
+          const clinician = getClinician(m.clinicianId);
+          if (!clinician) return null;
+          const open = () => router.push(`/clinician/${clinician.id}`);
+          return (
+            <View key={clinician.id} style={styles.profile}>
               <View style={styles.position}>
-                {deckList.length <= 15 ? (
-                  <ProgressDots count={deckList.length} index={state.index} label={`Match ${state.index + 1} of ${deckList.length}`} />
-                ) : (
-                  <Text style={styles.count}>
-                    {state.index + 1} / {deckList.length}
-                  </Text>
-                )}
-                {also ? <Text style={styles.also}>Also a fit</Text> : null}
+                <Text style={styles.name} accessibilityRole="header">
+                  {clinician.name}
+                </Text>
+                <FitLabel fit={m.fit} />
               </View>
-            )}
-            {state.index === 0 ? (
-              <View style={styles.filters}>
-                <FiltersButton />
+              {n === matches.length ? <Text style={[styles.also, styles.position]}>Also a fit</Text> : null}
+              <ClinicianCards clinician={clinician} match={m} onOpen={open} saved={isSaved(clinician.id)} onSave={() => toggle(m)} />
+              <View style={styles.view}>
+                <PillButton label={`View ${clinician.firstName}`} onPress={open} />
               </View>
-            ) : null}
-            {state.index === 0 ? <AlsoCouldHelp /> : null}
-            <ClinicianCards
-              key={clinician.id}
-              clinician={clinician}
-              match={m}
-              onOpen={open}
-              saved={isSaved(clinician.id)}
-              onSave={() => toggle(m)}
-            />
-            <View style={styles.view}>
-              <PillButton label={`View ${clinician.firstName}`} onPress={open} />
             </View>
-          </ScrollView>
-        </Appear>
-      </Swipeable>
-      <PressScale
-        onPress={() => deck.current?.fling(-1)}
-        accessibilityRole="button"
-        accessibilityLabel="Not for me"
-        containerStyle={[styles.corner, styles.no]}
-        style={styles.next}
-        scaleTo={0.84}
-      >
-        <Icon name="icDecline" size={24} />
-      </PressScale>
-      <PressScale
-        onPress={() => {
-          setYes((n) => n + 1);
-          deck.current?.fling(1);
-        }}
-        accessibilityRole="button"
-        accessibilityLabel={`Yes: book ${clinician.firstName}`}
-        containerStyle={[styles.corner, styles.yes]}
-        style={[styles.next, styles.yesFace]}
-        scaleTo={0.84}
-      >
-        <Burst fire={yes} size={100} />
-        <Icon name="icCheck" size={26} color={colors.white} />
-      </PressScale>
+          );
+        })}
+        <View style={styles.end}>
+          <Text style={styles.introBody}>That’s everyone who fits.</Text>
+          <Text style={styles.seeAll} onPress={startOver} accessibilityRole="link">
+            Start over
+          </Text>
+        </View>
+        <RatingCard value={state.feedback.rating} onRate={(n) => (whyKind(n) ? router.push(`/rate?n=${n}`) : session.rateMatches(n))} />
+      </ScrollView>
     </View>
   );
 }
@@ -237,32 +172,17 @@ function Shell({ title, children }: { title: string; children: React.ReactNode }
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  fill: { flex: 1 },
   filters: { marginHorizontal: 12, marginTop: 14 },
   content: { paddingBottom: 110 },
   intro: { marginHorizontal: 12, marginTop: 20, paddingHorizontal: 15 },
   introTitle: { fontFamily: fonts.serifSemiBold, fontSize: 22, lineHeight: 30, color: colors.black },
   introBody: { fontFamily: fonts.regular, fontSize: 16, color: colors.black, marginTop: 6 },
   seeAll: { fontFamily: fonts.bold, fontSize: 16, color: colors.purpleText, marginTop: 2, paddingVertical: 14 },
-  position: { marginTop: 16, marginHorizontal: 27 },
+  name: { flex: 1, fontFamily: fonts.serifSemiBold, fontSize: 20, color: colors.black },
   count: { fontFamily: fonts.medium, fontSize: 14, color: colors.muted },
   also: { fontFamily: fonts.bold, fontSize: 14, color: colors.purpleText, marginTop: 6 },
-  corner: { position: 'absolute', bottom: 20 },
-  no: { left: 20 },
-  yes: { right: 20 },
-  yesFace: { backgroundColor: colors.purple },
   view: { marginHorizontal: 12, marginTop: 24 },
-  next: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 6,
-  },
+  profile: { marginTop: 32 },
+  position: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 27, marginBottom: 8 },
+  end: { alignItems: 'center', marginTop: 40 },
 });

@@ -21,29 +21,26 @@ const routes = {
 
 beforeEach(() => AsyncStorage.clear());
 
-describe('discovery queue', () => {
-  it('steps through every kind of professional, then offers to start again', async () => {
+describe('who could help grid', () => {
+  it('shows a box for every kind of professional', async () => {
     renderRouter(routes, { initialUrl: '/' });
     fireEvent.press(await screen.findByText('Explore who does what'));
+    expect(await screen.findByText('Who could help?')).toBeOnTheScreen();
     for (const p of PROFESSION_INFO) {
-      expect(await screen.findByText(p.one === 'GP' ? 'GP' : p.one.charAt(0).toUpperCase() + p.one.slice(1))).toBeOnTheScreen();
-      fireEvent.press(screen.getAllByLabelText('Next')[0]);
+      expect(screen.getByText(p.one === 'GP' ? 'GP' : p.one.charAt(0).toUpperCase() + p.one.slice(1))).toBeOnTheScreen();
     }
-    expect(await screen.findByText('That’s everyone.')).toBeOnTheScreen();
   });
 
-  it('"Find one" searches that kind of professional', async () => {
+  it('tapping a box searches that kind of professional', async () => {
     renderRouter(routes, { initialUrl: '/discover' });
-    fireEvent.press(screen.getAllByLabelText('Next')[0]); // skip GPs
     fireEvent.press(await screen.findByLabelText('Find psychologists'));
     fireEvent.press(await screen.findByLabelText('Anywhere: Telehealth is fine'));
     expect(await screen.findByText('Find a psychologist who fits you.')).toBeOnTheScreen();
   });
 
-  it("dietitians can be read about but not searched yet", async () => {
+  it('dietitians are shown as coming soon, not searchable', async () => {
     renderRouter(routes, { initialUrl: '/discover' });
-    for (let i = 0; i < PROFESSION_INFO.findIndex((p) => p.id === 'dietitian'); i++) fireEvent.press(screen.getAllByLabelText('Next')[0]);
-    expect(await screen.findByText('Not in the network yet')).toBeOnTheScreen();
+    expect(await screen.findByLabelText('Dietitian or nutritionist, coming soon')).toBeOnTheScreen();
     expect(screen.queryByLabelText('Find dietitians and nutritionists')).toBeNull();
   });
 });
